@@ -116,11 +116,13 @@ public:
 //***********************************************************
 class Punch : public HTNPrimitive
 {
+    int targetPlayerIndex;
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[]);
     std::string ToString();
+    Punch();
 };
 
 //***********************************************************
@@ -303,6 +305,55 @@ class AttackCompound : public HTNCompound
 {
 public:
     AttackCompound();
+};
+
+//***********************************************************
+class DoMissionMethod1 : public HTNMethod
+{
+public:
+    DoMissionMethod1();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class DoMissionMethod2 : public HTNMethod
+{
+public:
+    DoMissionMethod2();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class DoMissionMethod3 : public HTNMethod
+{
+public:
+    DoMissionMethod3();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class DoMissionCompound : public HTNCompound
+{
+public:
+    DoMissionCompound();
+};
+
+//***********************************************************
+class DoMissionMethod : public HTNMethod
+{
+public:
+    DoMissionMethod();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class IncreaseIntelligenceMethod : public HTNMethod
+{
+public:
+    IncreaseIntelligenceMethod();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class PrisonerBehaviourCompound : public HTNCompound
+{
+public:
+    PrisonerBehaviourCompound();
 };
 
 #endif /* HTNDomain_hpp */

@@ -213,10 +213,10 @@ void Simulate()
         player[playerIndex].m_playerIndex = playerIndex;
     }
     World world;
-    player[0].name = "Ben";
-    player[1].name = "Tom";
+    player[0].name = "Thomas";
+    player[1].name = "Vita";
 //    player[2].name = "Zog";
-    player[0].aiController = AIController(AI::doNothingAI);
+    player[0].aiController = AIController(AI::humanAI);
     player[1].aiController = AIController(AI::htnAI);
 //    player[2].aiController = AIController(AI::aggroAI);
     for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)

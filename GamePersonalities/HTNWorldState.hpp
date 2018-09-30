@@ -22,6 +22,7 @@ enum WorldE
     punches,
     
     location,
+    mission,
     last
 };
 

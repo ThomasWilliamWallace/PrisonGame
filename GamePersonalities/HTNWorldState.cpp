@@ -21,6 +21,7 @@ HTNWorldState::HTNWorldState(): m_v(WorldE::last, 0)
     m_v.at(WorldE::intelligence) = 70;
     m_v.at(WorldE::punches) = 0;
     m_v.at(WorldE::location) = static_cast<int>(Locations::bedroom);
+    m_v.at(WorldE::mission) = static_cast<int>(Missions::noMission);
 }
 
 HTNWorldState::HTNWorldState(int playerIndex, Player player[]): m_v(WorldE::last, 0)
@@ -32,6 +33,7 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[]): m_v(WorldE::last
     m_v.at(WorldE::intelligence) = round(player[playerIndex].stats.getIntelligence());
     m_v.at(WorldE::punches) = 0;
     m_v.at(WorldE::location) = static_cast<int>(player[playerIndex].locationClass.location);
+    m_v.at(WorldE::mission) = static_cast<int>(player[playerIndex].missionClass.mission);
 }
 
 HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v) {}

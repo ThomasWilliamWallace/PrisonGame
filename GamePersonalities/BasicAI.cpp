@@ -281,22 +281,7 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool p
     {
         //make new plan
         std::cout << "Make a new plan\n";
-        HTNCompound* missionPtr;
-        switch(player[playerIndex].missionClass.mission)
-        {
-            case Missions::increaseAgility:
-                missionPtr = new IncreaseAgilityCompound();
-                break;
-            case Missions::increaseIntelligence:
-                missionPtr = new IncreaseIntelligenceCompound();
-                break;
-            case Missions::increaseStrength:
-                missionPtr = new IncreaseStrengthCompound();
-                break;
-            case Missions::noMission:
-                missionPtr = new IncreaseIntelligenceCompound(); //TODO allow a 'no missions' state of some kind?
-                break;
-        }
+        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
         HTNWorldState htnWorldStateDFSCopy(htnWorldState);
         htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
         

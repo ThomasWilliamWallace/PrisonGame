@@ -10,7 +10,7 @@
 #include "Locations.hpp"
 #include "Player.hpp"
 
-//Start HTNtasks*****************************************************
+//Start HTNPrimitives****************************************
 //***********************************************************
 void Study::Effect(HTNWorldState &htnWorldState)
 {
@@ -242,6 +242,11 @@ std::string Drink::ToString()
 }
 
 //***********************************************************
+Punch::Punch()
+{
+    targetPlayerIndex = 0; //TODO choose properly
+}
+
 void Punch::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::punches) += 1;
@@ -249,8 +254,7 @@ void Punch::Effect(HTNWorldState &htnWorldState)
 
 Actions Punch::Operator(int playerIndex, Player player[])
 {
-    //TODO pass in target player during planning
-    player[playerIndex].playerTarget = 0;
+    player[playerIndex].playerTarget = targetPlayerIndex;
     return Actions::attack;
 }
 
@@ -265,6 +269,7 @@ std::string Punch::ToString()
     return name;
 }
 
+//Start HTNCompounds*****************************************
 //***********************************************************
 GoToLibraryMethod1::GoToLibraryMethod1()
 {
@@ -501,9 +506,72 @@ bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-//***********************************************************
 AttackCompound::AttackCompound()
 {
     m_methods.push_back(new AttackMethod1());
 }
-//End HTNtasks*****************************************************
+
+//***********************************************************
+DoMissionMethod1::DoMissionMethod1()
+{
+    AddTask(new IncreaseStrengthCompound());
+}
+
+bool DoMissionMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_v.at(WorldE::mission) == static_cast<int>(Missions::increaseStrength);
+}
+
+DoMissionMethod2::DoMissionMethod2()
+{
+    AddTask(new IncreaseAgilityCompound());
+}
+
+bool DoMissionMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_v.at(WorldE::mission) == static_cast<int>(Missions::increaseAgility);
+}
+
+DoMissionMethod3::DoMissionMethod3()
+{
+    AddTask(new IncreaseIntelligenceCompound());
+}
+
+bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_v.at(WorldE::mission) == static_cast<int>(Missions::increaseIntelligence);
+}
+
+DoMissionCompound::DoMissionCompound()
+{
+    m_methods.push_back(new DoMissionMethod1());
+    m_methods.push_back(new DoMissionMethod2());
+    m_methods.push_back(new DoMissionMethod3());
+}
+
+//***********************************************************
+DoMissionMethod::DoMissionMethod()
+{
+    AddTask(new DoMissionCompound());
+}
+
+bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_v.at(WorldE::mission) != static_cast<int>(Missions::noMission);
+}
+
+IncreaseIntelligenceMethod::IncreaseIntelligenceMethod()
+{
+    AddTask(new IncreaseIntelligenceCompound());
+}
+
+bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+PrisonerBehaviourCompound::PrisonerBehaviourCompound()
+{
+    m_methods.push_back(new DoMissionMethod());
+    m_methods.push_back(new IncreaseIntelligenceMethod());
+}
