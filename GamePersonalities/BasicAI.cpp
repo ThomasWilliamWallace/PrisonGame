@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include "Constants.hpp"
 #include "Evaluate.hpp"
+#include "HTNDomain.hpp"
 
 Actions AIController::ChooseRoom(int playerIndex, Player player[])
 {
@@ -53,6 +54,8 @@ Actions AIController::ChooseAction(int playerIndex, Player player[])
     
     switch(player[playerIndex].aiController.algo)
     {
+        case(AI::doNothingAI):
+            return DoNothingAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
         case(AI::randomAI):
             return RandomAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
         case(AI::aggroAI):
@@ -102,6 +105,11 @@ int AIController::TargetForMakeFriend(Player player[], int playerIndex, bool pla
         }
     }
     throw std::out_of_range("Failed to pick a player in reach to make friends with.");
+}
+
+Actions AIController::DoNothingAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach)
+{
+    return Actions::noAction;
 }
 
 Actions AIController::RandomAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach)
@@ -256,13 +264,60 @@ Actions AIController::greedyAIChooseAction(int playerIndex, Player player[], boo
     return maxActionUtilityIndex;
 }
 
-void Plan()//(State currentstate, Task currentTask, int searchDepth) //returns plan
-{
-}
-
 Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach)
 {
-    return Actions::noAction;
+    std::cout << "Enter htnAIChooseAction\n";
+    //update worldstate from real world
+    HTNWorldState htnWorldState(1, player);
+    
+    bool hasValidPlan = false;
+    // check if next step of the plan is valid.
+    if (htnPlan.size() > 0)
+    {
+        std::cout << "htnPlan.size() > 0\n";
+        hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
+        if (hasValidPlan)
+        {
+            std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = true\n";
+        } else {
+            std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = false\n";
+        }
+    }
+    
+    //If plan is not valid, abandon it and try to make a new plan
+    if (!hasValidPlan)
+    {
+        //make new plan
+        std::cout << "Make a new plan\n";
+        IncreaseIntelligenceCompound increaseIntelligenceCompound;
+        HTNWorldState htnWorldStateDFSCopy(htnWorldState);
+        htnPlan = HTNdfs(htnWorldStateDFSCopy, increaseIntelligenceCompound, 0);
+        
+        //once again, check if next step of the plan is valid.
+        if (htnPlan.size() > 0)
+        {
+            std::cout << "htnPlan.size() > 0\n";
+            hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
+            if (hasValidPlan)
+            {
+                std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = true\n";
+            } else {
+                std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = false\n";
+            }
+        }
+    }
+    
+    if (!hasValidPlan)
+    {
+        std::cout << "Return failure state\n";
+        return Actions::noAction; //If next step of the plan is still not valid, then return failure state
+    } else {
+        std::cout << "Continue with current plan\n";
+        //continue with current plan
+        HTNPrimitive* currentPlanStep = htnPlan.front();
+        htnPlan.pop_front();
+        return currentPlanStep->Operator(playerIndex, player);
+    }
 }
 
 Actions AIController::humanAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach)

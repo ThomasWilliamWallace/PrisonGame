@@ -27,12 +27,15 @@ enum WorldE
 
 std::string WorldEToString(WorldE worldE);
 
+class Player;
+
 class HTNWorldState
 {
 public:
     std::vector<int> m_v;
     HTNWorldState();
     HTNWorldState(HTNWorldState &ws2);
+    HTNWorldState(int playerIndex, Player player[]);
     void Print();
     void CopyFrom(HTNWorldState &ws2);
 };

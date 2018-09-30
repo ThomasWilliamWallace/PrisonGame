@@ -9,15 +9,18 @@
 #ifndef BasicAI_hpp
 #define BasicAI_hpp
 
-#include "Actions.hpp"
+#include "Actions.hpp" //todo remove
 #include "Constants.hpp"
+#include "HTN.hpp"
 
-class Stats;
+class Stats; //todo remove
 
 class AIController
 {
     AI algo;
+    HTNPrimitiveList htnPlan;
     Actions ChooseRoom(int playerIndex, Player player[]);
+    Actions DoNothingAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions RandomAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions aggroAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions humanAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);

@@ -9,14 +9,14 @@
 #include "HTN.hpp"
 #include "HTNDomain.hpp"
 
-//HTNTask*****************************************************
+//*******************************************************************
 HTNTask::HTNTask():m_htnPrimitive(0), m_htnCompound(0), m_isPrimitive(false){}
 
 HTNTask::HTNTask(HTNPrimitive* htnPrimitive):m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true){}
 
 HTNTask::HTNTask(HTNCompound* htnCompound):m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false){}
 
-//HTNPrimitive*****************************************************
+//*******************************************************************
 bool HTNPrimitive::Preconditions(HTNWorldState &htnWorldState)
 {
     return true;
@@ -27,9 +27,9 @@ void HTNPrimitive::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void HTNPrimitive::Operator()
+Actions HTNPrimitive::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::noAction;
 }
 
 std::string HTNPrimitive::ToString()
@@ -38,7 +38,7 @@ std::string HTNPrimitive::ToString()
     return name;
 }
 
-//HTNMethod*****************************************************
+//*******************************************************************
 bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
 {
     return true;
@@ -54,7 +54,7 @@ void HTNMethod::AddTask(HTNCompound* htnCompound)
     m_taskList.push_back(new HTNTask(htnCompound));
 }
 
-//HTNdfs*****************************************************
+//*******************************************************************
 constexpr int c_MaxSearchDepth = 5;
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth)
@@ -118,8 +118,8 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
     return htnPlan3; //return failure state of empty plan
 }
 
-//ComposeHTNPlan*****************************************************
-void ComposeHTNPlan()
+//*******************************************************************
+HTNPrimitiveList ComposeHTNPlan()
 {
     HTNWorldState htnWorldState;
     IncreaseIntelligenceCompound increaseIntelligenceCompound;
@@ -131,4 +131,5 @@ void ComposeHTNPlan()
     std::cout << "\nFinal world state:\n";
     htnWorldState.Print();
     std::cout <<"\n";
+    return htnPlan;
 }

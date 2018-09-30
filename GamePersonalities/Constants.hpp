@@ -22,6 +22,7 @@ constexpr double c_aggroCooldown = 0.15;
 
 enum class AI
 {
+    doNothingAI, //does nothing
     randomAI, //basic set of random actions.
     aggroAI, //uses aggro to determine attacks
     humanAI, //decisions come from player input

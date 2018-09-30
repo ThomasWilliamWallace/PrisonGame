@@ -8,6 +8,7 @@
 
 #include "HTNDomain.hpp"
 #include "Locations.hpp"
+#include "Player.hpp"
 
 //Start HTNtasks*****************************************************
 //***********************************************************
@@ -17,9 +18,9 @@ void Study::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void Study::Operator()
+Actions Study::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::useRoom;
 }
 
 bool Study::Preconditions(HTNWorldState &htnWorldState)
@@ -40,9 +41,9 @@ void Sleep::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void Sleep::Operator()
+Actions Sleep::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::useRoom;
 }
 
 bool Sleep::Preconditions(HTNWorldState &htnWorldState)
@@ -63,9 +64,9 @@ void UseGym::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void UseGym::Operator()
+Actions UseGym::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::useRoom;
 }
 
 bool UseGym::Preconditions(HTNWorldState &htnWorldState)
@@ -86,9 +87,9 @@ void RunCircuits::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void RunCircuits::Operator()
+Actions RunCircuits::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::useRoom;
 }
 
 bool RunCircuits::Preconditions(HTNWorldState &htnWorldState)
@@ -109,9 +110,9 @@ void GoToGym::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void GoToGym::Operator()
+Actions GoToGym::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::goToGym;
 }
 
 bool GoToGym::Preconditions(HTNWorldState &htnWorldState)
@@ -132,9 +133,9 @@ void GoToLibrary::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void GoToLibrary::Operator()
+Actions GoToLibrary::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::goToLibrary;
 }
 
 bool GoToLibrary::Preconditions(HTNWorldState &htnWorldState)
@@ -155,9 +156,9 @@ void GoToBedroom::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void GoToBedroom::Operator()
+Actions GoToBedroom::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::goToBedroom;
 }
 
 bool GoToBedroom::Preconditions(HTNWorldState &htnWorldState)
@@ -178,9 +179,9 @@ void GoToCircuitTrack::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void GoToCircuitTrack::Operator()
+Actions GoToCircuitTrack::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::goToCircuitTrack;
 }
 
 bool GoToCircuitTrack::Preconditions(HTNWorldState &htnWorldState)
@@ -201,9 +202,9 @@ void GoToMainHall::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void GoToMainHall::Operator()
+Actions GoToMainHall::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::goToMainHall;
 }
 
 bool GoToMainHall::Preconditions(HTNWorldState &htnWorldState)
@@ -224,9 +225,9 @@ void Drink::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-void Drink::Operator()
+Actions Drink::Operator(int playerIndex, Player player[])
 {
-    return;
+    return Actions::noAction;
 }
 
 bool Drink::Preconditions(HTNWorldState &htnWorldState)
@@ -246,9 +247,11 @@ void Punch::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_v.at(WorldE::punches) += 1;
 }
 
-void Punch::Operator()
+Actions Punch::Operator(int playerIndex, Player player[])
 {
-    return;
+    //TODO pass in target player during planning
+    player[playerIndex].playerTarget = 0;
+    return Actions::attack;
 }
 
 bool Punch::Preconditions(HTNWorldState &htnWorldState)

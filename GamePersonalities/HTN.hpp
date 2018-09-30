@@ -9,8 +9,10 @@
 #ifndef HTN_hpp
 #define HTN_hpp
 #include <vector>
+#include <deque>
 #include <iostream>
 #include "HTNWorldState.hpp"
+#include "Actions.hpp"
 
 class HTNPrimitive;
 class HTNCompound;
@@ -34,11 +36,11 @@ class HTNPrimitive
 public:
     virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
     virtual void Effect(HTNWorldState &htnWorldState); //simplified, predicted effect of taking this action. Will be applied to the simulated world during planning.
-    void Operator();  //actual code that will be run to control the player when taking this action
+    virtual Actions Operator(int playerIndex, Player player[]);  //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
     virtual std::string ToString();
 };
 
-typedef std::vector< HTNPrimitive* > HTNPrimitiveList;
+typedef std::deque< HTNPrimitive* > HTNPrimitiveList;
 
 class HTNMethod
 {
@@ -69,6 +71,6 @@ public:
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth);
 
-void ComposeHTNPlan();
+HTNPrimitiveList ComposeHTNPlan();
 
 #endif /* HTN_hpp */

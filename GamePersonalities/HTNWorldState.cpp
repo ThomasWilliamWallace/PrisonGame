@@ -8,6 +8,8 @@
 
 #include "HTNWorldState.hpp"
 #include "Locations.hpp"
+#include "Player.hpp"
+#include <cmath>
 
 //***********************************************************
 HTNWorldState::HTNWorldState(): m_v(WorldE::last, 0)
@@ -19,6 +21,17 @@ HTNWorldState::HTNWorldState(): m_v(WorldE::last, 0)
     m_v.at(WorldE::intelligence) = 70;
     m_v.at(WorldE::punches) = 0;
     m_v.at(WorldE::location) = static_cast<int>(Locations::bedroom);
+}
+
+HTNWorldState::HTNWorldState(int playerIndex, Player player[]): m_v(WorldE::last, 0)
+{
+    m_v.at(WorldE::health) = round(player[playerIndex].stats.getHealth());
+    m_v.at(WorldE::sanity) = round(player[playerIndex].stats.getSanity());
+    m_v.at(WorldE::strength) = round(player[playerIndex].stats.getStrength());
+    m_v.at(WorldE::agility) = round(player[playerIndex].stats.getAgility());
+    m_v.at(WorldE::intelligence) = round(player[playerIndex].stats.getIntelligence());
+    m_v.at(WorldE::punches) = 0;
+    m_v.at(WorldE::location) = static_cast<int>(player[playerIndex].locationClass.location);
 }
 
 HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v) {}

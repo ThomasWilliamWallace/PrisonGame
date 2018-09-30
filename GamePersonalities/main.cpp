@@ -216,8 +216,8 @@ void Simulate()
     player[0].name = "Ben";
     player[1].name = "Tom";
 //    player[2].name = "Zog";
-    player[0].aiController = AIController(AI::greedyAI);
-    player[1].aiController = AIController(AI::humanAI);
+    player[0].aiController = AIController(AI::doNothingAI);
+    player[1].aiController = AIController(AI::htnAI);
 //    player[2].aiController = AIController(AI::aggroAI);
     for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)
     {
@@ -225,7 +225,7 @@ void Simulate()
     }
     
     // loop one time step at a time
-    for (int frame=0; frame<50; frame++)
+    for (int frame=0; frame<15; frame++)
     {
         CleanUpFrame(player);
         world.Clean();
@@ -252,9 +252,8 @@ void Simulate()
 
 int main(int argc, char **argv)
 {
-    ComposeHTNPlan();
+    //ComposeHTNPlan();
     
-    /*
     unsigned int randomSeed = static_cast<unsigned int>(time(NULL));
     randomSeed = 1536439609;
     srand(randomSeed);
@@ -262,6 +261,5 @@ int main(int argc, char **argv)
     Simulate();
     //char s1[50];
     //std::cin >> s1;
-     */
     return 0;
 }
