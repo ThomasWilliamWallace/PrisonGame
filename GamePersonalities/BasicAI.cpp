@@ -266,7 +266,6 @@ Actions AIController::greedyAIChooseAction(int playerIndex, Player player[], boo
 
 Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach)
 {
-    std::cout << "Enter htnAIChooseAction\n";
     //update worldstate from real world
     HTNWorldState htnWorldState(1, player);
     
@@ -274,14 +273,7 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool p
     // check if next step of the plan is valid.
     if (htnPlan.size() > 0)
     {
-        std::cout << "htnPlan.size() > 0\n";
         hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
-        if (hasValidPlan)
-        {
-            std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = true\n";
-        } else {
-            std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = false\n";
-        }
     }
     
     //If plan is not valid, abandon it and try to make a new plan
@@ -296,23 +288,14 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool p
         //once again, check if next step of the plan is valid.
         if (htnPlan.size() > 0)
         {
-            std::cout << "htnPlan.size() > 0\n";
             hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
-            if (hasValidPlan)
-            {
-                std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = true\n";
-            } else {
-                std::cout << "htnPlan.at(0)->Preconditions(htnWorldState) = false\n";
-            }
         }
     }
     
     if (!hasValidPlan)
     {
-        std::cout << "Return failure state\n";
         return Actions::noAction; //If next step of the plan is still not valid, then return failure state
     } else {
-        std::cout << "Continue with current plan\n";
         //continue with current plan
         HTNPrimitive* currentPlanStep = htnPlan.front();
         htnPlan.pop_front();
