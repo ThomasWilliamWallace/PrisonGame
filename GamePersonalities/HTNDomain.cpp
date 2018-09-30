@@ -266,49 +266,6 @@ std::string Punch::ToString()
 }
 
 //***********************************************************
-IncreaseIntelligenceMethod1::IncreaseIntelligenceMethod1()
-{
-    AddTask(new Study());
-}
-
-bool IncreaseIntelligenceMethod1::Preconditions(HTNWorldState &htnWorldState)
-{
-    return true;
-}
-
-//***********************************************************
-IncreaseIntelligenceMethod2::IncreaseIntelligenceMethod2()
-{
-    AddTask(new GoToLibraryCompound());
-    AddTask(new Study());
-}
-
-bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
-{
-    return true;
-}
-
-//***********************************************************
-IncreaseIntelligenceMethod3::IncreaseIntelligenceMethod3()
-{
-    AddTask(new Drink());
-    AddTask(new AttackCompound());
-}
-
-bool IncreaseIntelligenceMethod3::Preconditions(HTNWorldState &htnWorldState)
-{
-    return true;
-}
-
-//***********************************************************
-IncreaseIntelligenceCompound::IncreaseIntelligenceCompound()
-{
-    m_methods.push_back(new IncreaseIntelligenceMethod1());
-    m_methods.push_back(new IncreaseIntelligenceMethod2());
-    m_methods.push_back(new IncreaseIntelligenceMethod3());
-}
-
-//***********************************************************
 GoToLibraryMethod1::GoToLibraryMethod1()
 {
     AddTask(new GoToLibrary());
@@ -319,7 +276,6 @@ bool GoToLibraryMethod1::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-//***********************************************************
 GoToLibraryMethod2::GoToLibraryMethod2()
 {
     AddTask(new GoToMainHall());
@@ -331,11 +287,206 @@ bool GoToLibraryMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-//***********************************************************
 GoToLibraryCompound::GoToLibraryCompound()
 {
     m_methods.push_back(new GoToLibraryMethod1());
     m_methods.push_back(new GoToLibraryMethod2());
+}
+
+//***********************************************************
+GoToGymMethod1::GoToGymMethod1()
+{
+    AddTask(new GoToGym());
+}
+
+bool GoToGymMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+GoToGymMethod2::GoToGymMethod2()
+{
+    AddTask(new GoToMainHall());
+    AddTask(new GoToGym());
+}
+
+bool GoToGymMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+GoToGymCompound::GoToGymCompound()
+{
+    m_methods.push_back(new GoToGymMethod1());
+    m_methods.push_back(new GoToGymMethod2());
+}
+
+//***********************************************************
+GoToCircuitTrackMethod1::GoToCircuitTrackMethod1()
+{
+    AddTask(new GoToCircuitTrack());
+}
+
+bool GoToCircuitTrackMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+GoToCircuitTrackMethod2::GoToCircuitTrackMethod2()
+{
+    AddTask(new GoToMainHall());
+    AddTask(new GoToCircuitTrack());
+}
+
+bool GoToCircuitTrackMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+GoToCircuitTrackCompound::GoToCircuitTrackCompound()
+{
+    m_methods.push_back(new GoToCircuitTrackMethod1());
+    m_methods.push_back(new GoToCircuitTrackMethod2());
+}
+
+//***********************************************************
+GoToBedroomMethod1::GoToBedroomMethod1()
+{
+    AddTask(new GoToBedroom());
+}
+
+bool GoToBedroomMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+GoToBedroomMethod2::GoToBedroomMethod2()
+{
+    AddTask(new GoToMainHall());
+    AddTask(new GoToBedroom());
+}
+
+bool GoToBedroomMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+GoToBedroomCompound::GoToBedroomCompound()
+{
+    m_methods.push_back(new GoToBedroomMethod1());
+    m_methods.push_back(new GoToBedroomMethod2());
+}
+
+//***********************************************************
+IncreaseHealthMethod1::IncreaseHealthMethod1()
+{
+    AddTask(new Sleep());
+}
+
+bool IncreaseHealthMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseHealthMethod2::IncreaseHealthMethod2()
+{
+    AddTask(new GoToBedroomCompound());
+    AddTask(new Sleep());
+}
+
+bool IncreaseHealthMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseHealthCompound::IncreaseHealthCompound()
+{
+    m_methods.push_back(new IncreaseHealthMethod1());
+    m_methods.push_back(new IncreaseHealthMethod2());
+}
+
+//***********************************************************
+IncreaseStrengthMethod1::IncreaseStrengthMethod1()
+{
+    AddTask(new UseGym());
+}
+
+bool IncreaseStrengthMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseStrengthMethod2::IncreaseStrengthMethod2()
+{
+    AddTask(new GoToGymCompound());
+    AddTask(new UseGym());
+}
+
+bool IncreaseStrengthMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseStrengthCompound::IncreaseStrengthCompound()
+{
+    m_methods.push_back(new IncreaseStrengthMethod1());
+    m_methods.push_back(new IncreaseStrengthMethod2());
+}
+
+//***********************************************************
+IncreaseAgilityMethod1::IncreaseAgilityMethod1()
+{
+    AddTask(new RunCircuits());
+}
+
+bool IncreaseAgilityMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseAgilityMethod2::IncreaseAgilityMethod2()
+{
+    AddTask(new GoToCircuitTrackCompound());
+    AddTask(new RunCircuits());
+}
+
+bool IncreaseAgilityMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseAgilityCompound::IncreaseAgilityCompound()
+{
+    m_methods.push_back(new IncreaseAgilityMethod1());
+    m_methods.push_back(new IncreaseAgilityMethod2());
+}
+
+//***********************************************************
+IncreaseIntelligenceMethod1::IncreaseIntelligenceMethod1()
+{
+    AddTask(new Study());
+}
+
+bool IncreaseIntelligenceMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseIntelligenceMethod2::IncreaseIntelligenceMethod2()
+{
+    AddTask(new GoToLibraryCompound());
+    AddTask(new Study());
+}
+
+bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+IncreaseIntelligenceCompound::IncreaseIntelligenceCompound()
+{
+    m_methods.push_back(new IncreaseIntelligenceMethod1());
+    m_methods.push_back(new IncreaseIntelligenceMethod2());
 }
 
 //***********************************************************

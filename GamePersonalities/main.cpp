@@ -251,9 +251,7 @@ void Simulate()
 }
 
 int main(int argc, char **argv)
-{
-    //ComposeHTNPlan();
-    
+{    
     unsigned int randomSeed = static_cast<unsigned int>(time(NULL));
     randomSeed = 1536439609;
     srand(randomSeed);

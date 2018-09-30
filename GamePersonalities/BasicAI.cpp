@@ -281,9 +281,24 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool p
     {
         //make new plan
         std::cout << "Make a new plan\n";
-        IncreaseIntelligenceCompound increaseIntelligenceCompound;
+        HTNCompound* missionPtr;
+        switch(player[playerIndex].missionClass.mission)
+        {
+            case Missions::increaseAgility:
+                missionPtr = new IncreaseAgilityCompound();
+                break;
+            case Missions::increaseIntelligence:
+                missionPtr = new IncreaseIntelligenceCompound();
+                break;
+            case Missions::increaseStrength:
+                missionPtr = new IncreaseStrengthCompound();
+                break;
+            case Missions::noMission:
+                missionPtr = new IncreaseIntelligenceCompound(); //TODO allow a 'no missions' state of some kind?
+                break;
+        }
         HTNWorldState htnWorldStateDFSCopy(htnWorldState);
-        htnPlan = HTNdfs(htnWorldStateDFSCopy, increaseIntelligenceCompound, 0);
+        htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
         
         //once again, check if next step of the plan is valid.
         if (htnPlan.size() > 0)
