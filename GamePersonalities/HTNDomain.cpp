@@ -244,7 +244,12 @@ std::string Drink::ToString()
 //***********************************************************
 Punch::Punch()
 {
-    targetPlayerIndex = 0; //TODO choose properly
+    targetPlayerIndex = -1;
+}
+
+Punch::Punch(int playerIndex)
+{
+    targetPlayerIndex = playerIndex;
 }
 
 void Punch::Effect(HTNWorldState &htnWorldState)
@@ -266,6 +271,28 @@ bool Punch::Preconditions(HTNWorldState &htnWorldState)
 std::string Punch::ToString()
 {
     std::string name = "Punch";
+    return name;
+}
+
+//***********************************************************
+void Evade::Effect(HTNWorldState &htnWorldState)
+{
+    htnWorldState.m_v.at(WorldE::evading) = 1;
+}
+
+Actions Evade::Operator(int playerIndex, Player player[])
+{
+    return Actions::evade;
+}
+
+bool Evade::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+std::string Evade::ToString()
+{
+    std::string name = "Evade";
     return name;
 }
 
@@ -495,20 +522,36 @@ IncreaseIntelligenceCompound::IncreaseIntelligenceCompound()
 }
 
 //***********************************************************
-AttackMethod1::AttackMethod1()
+AttackMethod::AttackMethod()
 {
-    AddTask(new Punch());
-    AddTask(new Punch());
+    AddTask(new Punch(0));
 }
 
-bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
+bool AttackMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return true;
+    return htnWorldState.m_v.at(WorldE::inSameRoom);
 }
 
 AttackCompound::AttackCompound()
 {
-    m_methods.push_back(new AttackMethod1());
+    m_methods.push_back(new AttackMethod());
+}
+
+//***********************************************************
+EvadeMethod::EvadeMethod()
+{
+    AddTask(new Evade());
+}
+
+bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
+{
+    return (htnWorldState.m_v.at(WorldE::health) < 66) && htnWorldState.m_v.at(WorldE::inSameRoom);
+}
+
+CombatCompound::CombatCompound()
+{
+    m_methods.push_back(new EvadeMethod());
+    m_methods.push_back(new AttackMethod());
 }
 
 //***********************************************************
@@ -550,6 +593,16 @@ DoMissionCompound::DoMissionCompound()
 }
 
 //***********************************************************
+CombatMethod::CombatMethod()
+{
+    AddTask(new CombatCompound());
+}
+
+bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_v.at(WorldE::health) < 68;
+}
+
 DoMissionMethod::DoMissionMethod()
 {
     AddTask(new DoMissionCompound());
@@ -572,6 +625,7 @@ bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
 
 PrisonerBehaviourCompound::PrisonerBehaviourCompound()
 {
+    m_methods.push_back(new CombatMethod());
     m_methods.push_back(new DoMissionMethod());
     m_methods.push_back(new IncreaseIntelligenceMethod());
 }

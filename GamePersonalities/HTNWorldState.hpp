@@ -20,9 +20,11 @@ enum WorldE
     intelligence,
     
     punches,
+    evading,
     
     location,
     mission,
+    inSameRoom,  //TODO adapt this to multiple players
     last
 };
 

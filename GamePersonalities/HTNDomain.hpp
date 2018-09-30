@@ -123,6 +123,17 @@ public:
     Actions Operator(int playerIndex, Player player[]);
     std::string ToString();
     Punch();
+    Punch(int playerIndex);
+};
+
+//***********************************************************
+class Evade : public HTNPrimitive
+{
+public:
+    bool Preconditions(HTNWorldState &htnWorldState);
+    void Effect(HTNWorldState &htnWorldState);
+    Actions Operator(int playerIndex, Player player[]);
+    std::string ToString();
 };
 
 //***********************************************************
@@ -294,10 +305,10 @@ public:
 };
 
 //***********************************************************
-class AttackMethod1 : public HTNMethod
+class AttackMethod : public HTNMethod
 {
 public:
-    AttackMethod1();
+    AttackMethod();
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -336,6 +347,27 @@ public:
 };
 
 //***********************************************************
+class EvadeMethod : public HTNMethod
+{
+public:
+    EvadeMethod();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class CombatCompound : public HTNCompound
+{
+public:
+    CombatCompound();
+};
+
+//***********************************************************
+class CombatMethod : public HTNMethod
+{
+public:
+    CombatMethod();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
 class DoMissionMethod : public HTNMethod
 {
 public:

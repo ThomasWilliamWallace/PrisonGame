@@ -20,8 +20,10 @@ HTNWorldState::HTNWorldState(): m_v(WorldE::last, 0)
     m_v.at(WorldE::agility) = 70;
     m_v.at(WorldE::intelligence) = 70;
     m_v.at(WorldE::punches) = 0;
+    m_v.at(WorldE::evading) = 0;
     m_v.at(WorldE::location) = static_cast<int>(Locations::bedroom);
     m_v.at(WorldE::mission) = static_cast<int>(Missions::noMission);
+    m_v.at(WorldE::inSameRoom) = false;
 }
 
 HTNWorldState::HTNWorldState(int playerIndex, Player player[]): m_v(WorldE::last, 0)
@@ -32,8 +34,10 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[]): m_v(WorldE::last
     m_v.at(WorldE::agility) = round(player[playerIndex].stats.getAgility());
     m_v.at(WorldE::intelligence) = round(player[playerIndex].stats.getIntelligence());
     m_v.at(WorldE::punches) = 0;
+    m_v.at(WorldE::evading) = player[playerIndex].lastAction == Actions::evade;
     m_v.at(WorldE::location) = static_cast<int>(player[playerIndex].locationClass.location);
     m_v.at(WorldE::mission) = static_cast<int>(player[playerIndex].missionClass.mission);
+    m_v.at(WorldE::inSameRoom) = player[playerIndex].locationClass.location == player[0].locationClass.location;
 }
 
 HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v) {}
