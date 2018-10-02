@@ -10,23 +10,10 @@
 #include "Locations.hpp"
 #include "Player.hpp"
 #include <cmath>
+#include "World.hpp"
 
 //***********************************************************
-HTNWorldState::HTNWorldState(): m_v(WorldE::last, 0)
-{
-    m_v.at(WorldE::health) = 70;
-    m_v.at(WorldE::sanity) = 70;
-    m_v.at(WorldE::strength) = 70;
-    m_v.at(WorldE::agility) = 70;
-    m_v.at(WorldE::intelligence) = 70;
-    m_v.at(WorldE::punches) = 0;
-    m_v.at(WorldE::evading) = 0;
-    m_v.at(WorldE::location) = static_cast<int>(Locations::bedroom);
-    m_v.at(WorldE::mission) = static_cast<int>(Missions::noMission);
-    m_v.at(WorldE::inSameRoom) = false;
-}
-
-HTNWorldState::HTNWorldState(int playerIndex, Player player[]): m_v(WorldE::last, 0)
+HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world): m_v(WorldE::last, 0), m_ptrToSelf(&(player[playerIndex]))
 {
     m_v.at(WorldE::health) = round(player[playerIndex].stats.getHealth());
     m_v.at(WorldE::sanity) = round(player[playerIndex].stats.getSanity());
@@ -38,9 +25,22 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[]): m_v(WorldE::last
     m_v.at(WorldE::location) = static_cast<int>(player[playerIndex].locationClass.location);
     m_v.at(WorldE::mission) = static_cast<int>(player[playerIndex].missionClass.mission);
     m_v.at(WorldE::inSameRoom) = player[playerIndex].locationClass.location == player[0].locationClass.location;
+    
+    //TODO reflect players sensors rather than being hardwired to the world
+    for (auto &item : world.items)
+    {
+        m_items.push_back(new Item(item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
+    }
 }
 
-HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v) {}
+HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_items(ws2.m_items), m_ptrToSelf(ws2.m_ptrToSelf) {}
+
+void HTNWorldState::CopyFrom(HTNWorldState &ws2)
+{
+    m_v = ws2.m_v;
+    m_items = ws2.m_items;
+    m_ptrToSelf = ws2.m_ptrToSelf;
+}
 
 void HTNWorldState::Print()
 {
@@ -48,11 +48,11 @@ void HTNWorldState::Print()
     {
         std::cout << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
     }
-}
-
-void HTNWorldState::CopyFrom(HTNWorldState &ws2)
-{
-    m_v = ws2.m_v;
+    std::cout << "m_ptrToSelf:" << m_ptrToSelf << "\n";
+    for (auto &item : m_items)
+    {
+        std::cout << "Item: " << item->ToString() << " in the " << item->m_locationClass.ToString() << "\n";
+    }
 }
 
 std::string WorldEToString(WorldE worldE)
@@ -65,7 +65,10 @@ std::string WorldEToString(WorldE worldE)
         case WorldE::agility: return "agility";
         case WorldE::intelligence: return "intelligence";
         case WorldE::punches: return "punches";
+        case WorldE::evading: return "evading";
         case WorldE::location: return "location";
+        case WorldE::mission: return "mission";
+        case WorldE::inSameRoom: return "inSameRoom";
         case WorldE::last: return "LAST";
         default: return "ERROR_NO_WORLDE_STRING_FOUND";
     }

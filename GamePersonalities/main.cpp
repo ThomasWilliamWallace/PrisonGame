@@ -40,6 +40,10 @@ void PriorityActions(int frame, Player player[], World &world)
                 break;
             case Actions::offerMission:
                 break;
+            case Actions::pickUpItem:
+                break;
+            case Actions::dropItem:
+                break;
             case Actions::evade:
                 player[playerIndex].narrative = "evade";
                 break;
@@ -139,13 +143,19 @@ void Act(int playerIndex, int frame, Player player[], World &world)
             }
             break;
         case Actions::useRoom:
-            UseRoom(playerIndex, player, world);
+            UseRoomAction(playerIndex, player, world);
             break;
         case Actions::makeFriends:
-            MakeFriends(playerIndex, player, world);
+            MakeFriendsAction(playerIndex, player, world);
             break;
         case Actions::offerMission:
-            OfferMission(playerIndex, player, world);
+            OfferMissionAction(playerIndex, player, world);
+            break;
+        case Actions::pickUpItem:
+            PickUpItemAction(playerIndex, player, world);
+            break;
+        case Actions::dropItem:
+            DropItemAction(playerIndex, player, world);
             break;
         case Actions::noAction:
             player[playerIndex].narrative = "ERROR NO ACTION.";
@@ -157,7 +167,7 @@ void Display(Player player[], int frame)
 {
     for (int playerIndex=0; playerIndex<c_playerCount; playerIndex++)
     {
-        std::cout << frame << ": " << player[playerIndex].name << " tries to " << ActionToString(player[playerIndex].action) << " while in the " << player[playerIndex].lastLocationClass.LocationToString() << ": " << player[playerIndex].narrative << "\n";
+        std::cout << frame << ": " << player[playerIndex].name << " tries to " << ActionToString(player[playerIndex].action) << " while in the " << player[playerIndex].lastLocationClass.ToString() << ": " << player[playerIndex].narrative << "\n";
     }
 }
 
@@ -231,7 +241,7 @@ void Simulate()
         world.Clean();
         for (int playerIndex=0; playerIndex < c_playerCount; playerIndex++)
         {
-            player[playerIndex].action = player[playerIndex].aiController.ChooseAction(playerIndex, player);
+            player[playerIndex].action = player[playerIndex].aiController.ChooseAction(playerIndex, player, world);
         };
         PriorityActions(frame, player, world); //mainly for resolving clashes and attacks, ie conflict.
         for (int playerIndex=0; playerIndex < c_playerCount; playerIndex++)

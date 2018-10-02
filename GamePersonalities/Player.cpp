@@ -139,8 +139,8 @@ void Player::PrintPlayer()
     std::cout << "*** PLAYER " << name << " ***\n";
     std::cout << "action=" << ActionToString(action) << "\n";
     std::cout << "lastAction=" << ActionToString(lastAction) << "\n";
-    std::cout << "location=" << locationClass.LocationToString() << "\n";
-    std::cout << "lastLocation=" << lastLocationClass.LocationToString() << "\n";
+    std::cout << "location=" << locationClass.ToString() << "\n";
+    std::cout << "lastLocation=" << lastLocationClass.ToString() << "\n";
     std::cout << "attacked=" << BoolToString(attacked) << "\n";
     std::cout << "playerTarget=" << playerTarget << "\n";
     std::cout << "narrative=" << narrative << "\n";

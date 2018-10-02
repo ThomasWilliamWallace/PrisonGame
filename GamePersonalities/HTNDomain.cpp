@@ -18,7 +18,7 @@ void Study::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions Study::Operator(int playerIndex, Player player[])
+Actions Study::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::useRoom;
 }
@@ -41,7 +41,7 @@ void Sleep::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions Sleep::Operator(int playerIndex, Player player[])
+Actions Sleep::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::useRoom;
 }
@@ -64,7 +64,7 @@ void UseGym::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions UseGym::Operator(int playerIndex, Player player[])
+Actions UseGym::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::useRoom;
 }
@@ -87,7 +87,7 @@ void RunCircuits::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions RunCircuits::Operator(int playerIndex, Player player[])
+Actions RunCircuits::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::useRoom;
 }
@@ -110,7 +110,7 @@ void GoToGym::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions GoToGym::Operator(int playerIndex, Player player[])
+Actions GoToGym::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::goToGym;
 }
@@ -133,7 +133,7 @@ void GoToLibrary::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions GoToLibrary::Operator(int playerIndex, Player player[])
+Actions GoToLibrary::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::goToLibrary;
 }
@@ -156,7 +156,7 @@ void GoToBedroom::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions GoToBedroom::Operator(int playerIndex, Player player[])
+Actions GoToBedroom::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::goToBedroom;
 }
@@ -179,7 +179,7 @@ void GoToCircuitTrack::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions GoToCircuitTrack::Operator(int playerIndex, Player player[])
+Actions GoToCircuitTrack::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::goToCircuitTrack;
 }
@@ -202,7 +202,7 @@ void GoToMainHall::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions GoToMainHall::Operator(int playerIndex, Player player[])
+Actions GoToMainHall::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::goToMainHall;
 }
@@ -225,7 +225,7 @@ void Drink::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions Drink::Operator(int playerIndex, Player player[])
+Actions Drink::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::noAction;
 }
@@ -242,14 +242,9 @@ std::string Drink::ToString()
 }
 
 //***********************************************************
-Punch::Punch()
-{
-    targetPlayerIndex = -1;
-}
-
 Punch::Punch(int playerIndex)
 {
-    targetPlayerIndex = playerIndex;
+    m_targetPlayerIndex = playerIndex;
 }
 
 void Punch::Effect(HTNWorldState &htnWorldState)
@@ -257,9 +252,9 @@ void Punch::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_v.at(WorldE::punches) += 1;
 }
 
-Actions Punch::Operator(int playerIndex, Player player[])
+Actions Punch::Operator(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].playerTarget = targetPlayerIndex;
+    player[playerIndex].playerTarget = m_targetPlayerIndex;
     return Actions::attack;
 }
 
@@ -280,7 +275,7 @@ void Evade::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_v.at(WorldE::evading) = 1;
 }
 
-Actions Evade::Operator(int playerIndex, Player player[])
+Actions Evade::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::evade;
 }
@@ -293,6 +288,73 @@ bool Evade::Preconditions(HTNWorldState &htnWorldState)
 std::string Evade::ToString()
 {
     std::string name = "Evade";
+    return name;
+}
+
+//***********************************************************
+PickUpItem::PickUpItem(Item* itemFocusPtr)
+{
+    m_itemFocusPtr = itemFocusPtr;
+}
+
+void PickUpItem::Effect(HTNWorldState &htnWorldState)
+{
+    m_itemFocusPtr->m_carryingPlayer = htnWorldState.m_ptrToSelf;
+}
+
+Actions PickUpItem::Operator(int playerIndex, Player player[], World &world)
+{
+    player[playerIndex].itemFocusPtr = m_itemFocusPtr;
+    return Actions::pickUpItem;
+}
+
+bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
+{
+    //TODO hook this into the actions code
+    if (m_itemFocusPtr != nullptr)
+    {
+        if (static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocusPtr->m_locationClass.location)
+        {
+            if (m_itemFocusPtr->m_carryingPlayer == nullptr)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+std::string PickUpItem::ToString()
+{
+    std::string name = "PickUpItem";
+    return name;
+}
+
+//***********************************************************
+DropItem::DropItem(Item* itemFocusPtr)
+{
+    m_itemFocusPtr = itemFocusPtr;
+}
+
+void DropItem::Effect(HTNWorldState &htnWorldState)
+{
+    m_itemFocusPtr->m_carryingPlayer = nullptr;
+}
+
+Actions DropItem::Operator(int playerIndex, Player player[], World &world)
+{
+    player[playerIndex].itemFocusPtr = m_itemFocusPtr;
+    return Actions::dropItem;
+}
+
+bool DropItem::Preconditions(HTNWorldState &htnWorldState)
+{
+    return m_itemFocusPtr != nullptr; //TODO hook this into the actions code
+}
+
+std::string DropItem::ToString()
+{
+    std::string name = "DropItem";
     return name;
 }
 
@@ -494,8 +556,9 @@ IncreaseAgilityCompound::IncreaseAgilityCompound()
 }
 
 //***********************************************************
-IncreaseIntelligenceMethod1::IncreaseIntelligenceMethod1()
+IncreaseIntelligenceMethod1::IncreaseIntelligenceMethod1(Item* itemPtr)
 {
+    AddTask(new DropItem(itemPtr));
     AddTask(new Study());
 }
 
@@ -517,13 +580,15 @@ bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseIntelligenceCompound::IncreaseIntelligenceCompound()
 {
-    m_methods.push_back(new IncreaseIntelligenceMethod1());
+    Item* itemPtr = 0; //TODO pass in worldState and choose an item from there.
+    m_methods.push_back(new IncreaseIntelligenceMethod1(itemPtr));
     m_methods.push_back(new IncreaseIntelligenceMethod2());
 }
 
 //***********************************************************
-AttackMethod::AttackMethod()
+AttackMethod::AttackMethod(Item* itemPtr)
 {
+    AddTask(new PickUpItem(itemPtr));
     AddTask(new Punch(0));
 }
 
@@ -534,7 +599,8 @@ bool AttackMethod::Preconditions(HTNWorldState &htnWorldState)
 
 AttackCompound::AttackCompound()
 {
-    m_methods.push_back(new AttackMethod());
+    Item* itemPtr = 0; //TODO pass in worldState and choose an item from there.
+    m_methods.push_back(new AttackMethod(itemPtr));
 }
 
 //***********************************************************
@@ -551,7 +617,9 @@ bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 CombatCompound::CombatCompound()
 {
     m_methods.push_back(new EvadeMethod());
-    m_methods.push_back(new AttackMethod());
+    
+    Item* itemPtr = 0; //TODO pass in worldState and choose an item from there.
+    m_methods.push_back(new AttackMethod(itemPtr));
 }
 
 //***********************************************************
@@ -628,4 +696,26 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound()
     m_methods.push_back(new CombatMethod());
     m_methods.push_back(new DoMissionMethod());
     m_methods.push_back(new IncreaseIntelligenceMethod());
+}
+
+//***********************************************************
+PickUpItemMethod1::PickUpItemMethod1(Item* itemFocusPtr)
+{
+    AddTask(new PickUpItem(itemFocusPtr));
+}
+
+bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+//***********************************************************
+DropItemMethod1::DropItemMethod1(Item* itemFocusPtr)
+{
+    AddTask(new DropItem(itemFocusPtr));
+}
+
+bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
 }

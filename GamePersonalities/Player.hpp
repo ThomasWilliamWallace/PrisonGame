@@ -13,6 +13,7 @@
 #include "Stats.hpp"
 #include "Missions.hpp"
 #include "BasicAI.hpp"
+#include "Item.hpp"
 
 class Relationship //their opinion of another character. Asymptotically bound between 0 and 100.
 {
@@ -45,7 +46,8 @@ public:
     void PrintRel(std::string name1, std::string name2);
 };
 
-class Player{
+class Player
+{
 public:
     Stats stats;
 
@@ -61,8 +63,11 @@ public:
     std::string name = "No-name"; //name of the character, used in speech
     MissionClass missionClass; //a mission currently assigned to the character
     AIController aiController; //controlling AI for this character
-    int playerTarget = c_empty; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
     MissionClass missionOffer; // a mission being offered to 'playerTarget'
+    Item* itemPtr = nullptr; //pointer to an item carried by the player
+    
+    int playerTarget = c_empty; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
+    Item* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
     
 	bool IsMissionComplete();
     void UpdateMissions(Player player[]);

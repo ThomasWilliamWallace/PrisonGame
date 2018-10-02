@@ -13,7 +13,7 @@
 #include "Constants.hpp"
 #include "HTN.hpp"
 
-class Stats; //todo remove
+class World;
 
 class AIController
 {
@@ -25,11 +25,11 @@ class AIController
     Actions aggroAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions humanAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions greedyAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
-    Actions htnAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
+    Actions htnAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach);
     void CreateMissionOffer(Player player[], int playerIndex, bool playersInReach[], int countPlayersInReach);
     int TargetForMakeFriend(Player player[], int playerIndex, bool playersInReach[], int countPlayersInReach);
 public:
-    Actions ChooseAction(int playerIndex, Player player[]);
+    Actions ChooseAction(int playerIndex, Player player[], World &world);
     AIController(AI _algo);
     AIController();
 };

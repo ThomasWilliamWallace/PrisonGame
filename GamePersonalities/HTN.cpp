@@ -27,7 +27,7 @@ void HTNPrimitive::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions HTNPrimitive::Operator(int playerIndex, Player player[])
+Actions HTNPrimitive::Operator(int playerIndex, Player player[], World &world)
 {
     return Actions::noAction;
 }
@@ -116,20 +116,4 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
     
     HTNPrimitiveList htnPlan3;
     return htnPlan3; //return failure state of empty plan
-}
-
-//*******************************************************************
-HTNPrimitiveList ComposeHTNPlan()
-{
-    HTNWorldState htnWorldState;
-    IncreaseIntelligenceCompound increaseIntelligenceCompound;
-    HTNPrimitiveList htnPlan = HTNdfs(htnWorldState, increaseIntelligenceCompound, 0);
-    for (auto &htnPrimitive : htnPlan)
-    {
-        std::cout << "Plan step:" << htnPrimitive->ToString() << "\n";
-    }
-    std::cout << "\nFinal world state:\n";
-    htnWorldState.Print();
-    std::cout <<"\n";
-    return htnPlan;
 }

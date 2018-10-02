@@ -8,12 +8,7 @@
 
 #include "Locations.hpp"
 
-LocationClass::LocationClass()
-{
-    location = Locations::mainHall;
-}
-
-std::string LocationClass::LocationToString()
+std::string LocationClass::ToString()
 {
     switch(location)
     {

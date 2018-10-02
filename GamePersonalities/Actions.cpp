@@ -43,6 +43,10 @@ std::string ActionToString(Actions action)
             return "MakeFriends";
         case Actions::offerMission:
             return "OfferMission";
+        case Actions::pickUpItem:
+            return "PickUpItem";
+        case Actions::dropItem:
+            return "DropItem";
         case Actions::noAction:
             return "ERROR NO ACTION";
     }
@@ -140,7 +144,7 @@ void SleepAction(int playerIndex, Player player[], World &world)
     }
 }
 
-void UseRoom(int playerIndex, Player player[], World &world)
+void UseRoomAction(int playerIndex, Player player[], World &world)
 {
     switch (player[playerIndex].locationClass.location)
     {
@@ -162,7 +166,7 @@ void UseRoom(int playerIndex, Player player[], World &world)
     }
 }
 
-void OfferMission(int playerIndex, Player player[], World &world)
+void OfferMissionAction(int playerIndex, Player player[], World &world)
 {
     if (playerIndexOutOfBounds(player[playerIndex].playerTarget))
     {
@@ -178,7 +182,7 @@ void OfferMission(int playerIndex, Player player[], World &world)
         player[playerIndex].narrative = "tries to offer a mission to " + player[player[playerIndex].playerTarget].name + ", but he's not here.";
 }
 
-void MakeFriends(int playerIndex, Player player[], World &world)
+void MakeFriendsAction(int playerIndex, Player player[], World &world)
 {
     if (playerIndexOutOfBounds(player[playerIndex].playerTarget))
     {
@@ -201,3 +205,39 @@ void MakeFriends(int playerIndex, Player player[], World &world)
     } else
         player[playerIndex].narrative = "tries to make friends with " + player[player[playerIndex].playerTarget].name + ", but he's not here.";
 }
+
+void PickUpItemAction(int playerIndex, Player player[], World &world)
+{
+    if (player[playerIndex].itemFocusPtr != nullptr)
+    {
+        if (player[playerIndex].locationClass.location == (player[playerIndex].itemFocusPtr)->m_locationClass.location)
+        {
+            if (player[playerIndex].itemFocusPtr->m_carryingPlayer == nullptr)
+            {
+                player[playerIndex].itemPtr = player[playerIndex].itemFocusPtr;
+                player[playerIndex].itemPtr->m_carryingPlayer = &(player[playerIndex]);
+                player[playerIndex].narrative = "picked up a " + player[playerIndex].itemPtr->ToString() + " in the " + player[playerIndex].itemPtr->m_locationClass.ToString() + ".";
+            } else {
+                player[playerIndex].narrative = "ERROR: tried to pick up a " + player[playerIndex].itemFocusPtr->ToString() + " but " + (player[playerIndex].itemFocusPtr->m_carryingPlayer)->name + " was already carrying it.";
+            }
+        } else {
+            player[playerIndex].narrative = "ERROR: tried to pick up a " + player[playerIndex].itemFocusPtr->ToString() + " but it was in the " + (player[playerIndex].itemFocusPtr)->m_locationClass.ToString() + " while he was in the " + player[playerIndex].locationClass.ToString() + ".";
+        }
+    } else {
+        player[playerIndex].narrative = "ERROR: tried to pick up an item, but didn't specify which.";
+    }
+} 
+
+void DropItemAction(int playerIndex, Player player[], World &world)
+{
+    if (player[playerIndex].itemPtr != nullptr)
+    {
+        player[playerIndex].narrative = "Dropped a " + player[playerIndex].itemPtr->ToString() + " in the " + player[playerIndex].itemPtr->m_locationClass.ToString() + ".";
+        player[playerIndex].itemPtr->m_carryingPlayer = nullptr;
+        player[playerIndex].itemPtr = nullptr;
+    } else {
+        player[playerIndex].narrative = "ERROR: tried to drop up an item, but no item is being carried.";
+    }
+}
+
+//TODO add destructors throughout the program to remove memory leaks! Release all pointer and array memory within classes.

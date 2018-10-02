@@ -42,6 +42,8 @@ enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
     evade,
 	makeFriends,
     offerMission,
+    pickUpItem,
+    dropItem,
     noAction // serves as a flag for any unset actions
 };
 
@@ -57,6 +59,8 @@ const std::vector<Actions> v_action //MUST KEEP IN SYNC WITH ACTIONS
     Actions::evade,
     Actions::makeFriends,
     Actions::offerMission,
+    Actions::pickUpItem,
+    Actions::dropItem,
     Actions::noAction,
 };
 

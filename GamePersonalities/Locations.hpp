@@ -16,8 +16,8 @@ class LocationClass
 {
 public:
     Locations location;
-    LocationClass();
-    std::string LocationToString();
+    LocationClass(Locations l=Locations::mainHall) : location(l){}
+    std::string ToString();
 };
 
 #endif /* Locations_hpp */

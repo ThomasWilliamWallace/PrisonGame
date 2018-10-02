@@ -13,13 +13,16 @@
 #include "HTN.hpp"
 #include "HTNWorldState.hpp"
 
+class Item;
+class World;
+
 //***********************************************************
 class Study : public HTNPrimitive
 {
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -29,7 +32,7 @@ class Sleep : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -39,7 +42,7 @@ class UseGym : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -49,7 +52,7 @@ class RunCircuits : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -59,7 +62,7 @@ class GoToGym : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -69,7 +72,7 @@ class GoToLibrary : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -79,7 +82,7 @@ class GoToCircuitTrack : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -89,7 +92,7 @@ class GoToBedroom : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -99,7 +102,7 @@ class GoToMainHall : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
@@ -109,18 +112,18 @@ class Drink : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
 };
 
 //***********************************************************
 class Punch : public HTNPrimitive
 {
-    int targetPlayerIndex;
+    int m_targetPlayerIndex;
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
     Punch();
     Punch(int playerIndex);
@@ -132,8 +135,32 @@ class Evade : public HTNPrimitive
 public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operator(int playerIndex, Player player[]);
+    Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
+};
+
+//***********************************************************
+class PickUpItem : public HTNPrimitive
+{
+    Item* m_itemFocusPtr;
+public:
+    bool Preconditions(HTNWorldState &htnWorldState);
+    void Effect(HTNWorldState &htnWorldState);
+    Actions Operator(int playerIndex, Player player[], World &world);
+    std::string ToString();
+    PickUpItem(Item* itemFocusPtr);
+};
+
+//***********************************************************
+class DropItem : public HTNPrimitive
+{
+    Item* m_itemFocusPtr;
+public:
+    bool Preconditions(HTNWorldState &htnWorldState);
+    void Effect(HTNWorldState &htnWorldState);
+    Actions Operator(int playerIndex, Player player[], World &world);
+    std::string ToString();
+    DropItem(Item* itemFocusPtr);
 };
 
 //***********************************************************
@@ -287,7 +314,7 @@ public:
 class IncreaseIntelligenceMethod1 : public HTNMethod
 {
 public:
-    IncreaseIntelligenceMethod1();
+    IncreaseIntelligenceMethod1(Item* itemPtr);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -308,7 +335,7 @@ public:
 class AttackMethod : public HTNMethod
 {
 public:
-    AttackMethod();
+    AttackMethod(Item* itemPtr);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -386,6 +413,22 @@ class PrisonerBehaviourCompound : public HTNCompound
 {
 public:
     PrisonerBehaviourCompound();
+};
+
+//***********************************************************
+class PickUpItemMethod1 : public HTNMethod
+{
+public:
+    PickUpItemMethod1(Item* itemFocusPtr);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+//***********************************************************
+class DropItemMethod1 : public HTNMethod
+{
+public:
+    DropItemMethod1(Item* itemFocusPtr);
+    bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 #endif /* HTNDomain_hpp */

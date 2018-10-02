@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "Player.hpp"
+#include "Item.hpp"
 
 class World //represents the simulated world
 {
@@ -23,6 +24,7 @@ public:
     void PrintWorld(Player player[]);
     void Clean();
     World();
+    std::vector< Item* > items;
 };
 
 #endif /* World_hpp */

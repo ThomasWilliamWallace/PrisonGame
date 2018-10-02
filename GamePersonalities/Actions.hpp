@@ -23,8 +23,10 @@ void WeightliftAction(int playerIndex, Player player[], World &world);
 void CircuitsAction(int playerIndex, Player player[], World &world);
 void StudyAction(int playerIndex, Player player[], World &world);
 void SleepAction(int playerIndex, Player player[], World &world);
-void UseRoom(int playerIndex, Player player[], World &world);
-void OfferMission(int playerIndex, Player player[], World &world);
-void MakeFriends(int playerIndex, Player player[], World &world);
+void UseRoomAction(int playerIndex, Player player[], World &world);
+void OfferMissionAction(int playerIndex, Player player[], World &world);
+void MakeFriendsAction(int playerIndex, Player player[], World &world);
+void PickUpItemAction(int playerIndex, Player player[], World &world);
+void DropItemAction(int playerIndex, Player player[], World &world);
 
 #endif /* Actions_hpp */

@@ -37,7 +37,7 @@ Actions AIController::ChooseRoom(int playerIndex, Player player[])
     }
 }
 
-Actions AIController::ChooseAction(int playerIndex, Player player[])
+Actions AIController::ChooseAction(int playerIndex, Player player[], World &world)
 {
     bool playersInReach[c_playerCount];
     int countPlayersInReach = 0;
@@ -65,7 +65,7 @@ Actions AIController::ChooseAction(int playerIndex, Player player[])
         case(AI::greedyAI):
             return greedyAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
         case(AI::htnAI):
-            return htnAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
+            return htnAIChooseAction(playerIndex, player, world, playersInReach, countPlayersInReach);
     }
 	return RandomAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
 }
@@ -264,10 +264,10 @@ Actions AIController::greedyAIChooseAction(int playerIndex, Player player[], boo
     return maxActionUtilityIndex;
 }
 
-Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach)
+Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach)
 {
     //update worldstate from real world
-    HTNWorldState htnWorldState(1, player);
+    HTNWorldState htnWorldState(1, player, world);
     
     bool hasValidPlan = false;
     // check if next step of the plan is valid.
@@ -299,7 +299,7 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], bool p
         //continue with current plan
         HTNPrimitive* currentPlanStep = htnPlan.front();
         htnPlan.pop_front();
-        return currentPlanStep->Operator(playerIndex, player);
+        return currentPlanStep->Operator(playerIndex, player, world);
     }
 }
 

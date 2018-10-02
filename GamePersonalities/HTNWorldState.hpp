@@ -31,16 +31,19 @@ enum WorldE
 std::string WorldEToString(WorldE worldE);
 
 class Player;
+class Item;
+class World;
 
 class HTNWorldState
 {
 public:
     std::vector<int> m_v;
-    HTNWorldState();
+    std::vector< Item* > m_items;
+    Player* m_ptrToSelf;
     HTNWorldState(HTNWorldState &ws2);
-    HTNWorldState(int playerIndex, Player player[]);
-    void Print();
+    HTNWorldState(int playerIndex, Player player[], World &world);
     void CopyFrom(HTNWorldState &ws2);
+    void Print();
 };
 
 #endif /* HTNWorldState_hpp */
