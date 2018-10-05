@@ -271,7 +271,7 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     
     bool hasValidPlan = false;
     // check if next step of the plan is valid.
-    if (htnPlan.size() > 0)
+    if (htnPlan.size() > 0)  //TODO if the most recent action failed, then replan else continue with the 'if (htnPlan.size() > 0) ...'
     {
         hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
     }
@@ -281,9 +281,13 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     {
         //make new plan
         std::cout << "Make a new plan\n";
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
         HTNWorldState htnWorldStateDFSCopy(htnWorldState);
+        HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
         htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
+        for (auto &htnPrimitive : htnPlan)
+        {
+            htnPrimitive->PointToRealItems();
+        }
         
         //once again, check if next step of the plan is valid.
         if (htnPlan.size() > 0)
@@ -294,9 +298,11 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     
     if (!hasValidPlan)
     {
+        std::cout << "Give up and return noAction\n";
         return Actions::noAction; //If next step of the plan is still not valid, then return failure state
     } else {
         //continue with current plan
+        std::cout << "Continue\n";
         HTNPrimitive* currentPlanStep = htnPlan.front();
         htnPlan.pop_front();
         return currentPlanStep->Operator(playerIndex, player, world);

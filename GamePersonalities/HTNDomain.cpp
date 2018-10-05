@@ -324,6 +324,11 @@ bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
     return false;
 }
 
+void PickUpItem::PointToRealItems()
+{
+    m_itemFocusPtr = &((static_cast<SimItem*>(m_itemFocusPtr))->m_realItem);
+}
+
 std::string PickUpItem::ToString()
 {
     std::string name = "PickUpItem";
@@ -350,6 +355,11 @@ Actions DropItem::Operator(int playerIndex, Player player[], World &world)
 bool DropItem::Preconditions(HTNWorldState &htnWorldState)
 {
     return m_itemFocusPtr != nullptr; //TODO hook this into the actions code
+}
+
+void DropItem::PointToRealItems()
+{
+    m_itemFocusPtr = &((static_cast<SimItem*>(m_itemFocusPtr))->m_realItem);
 }
 
 std::string DropItem::ToString()
@@ -556,9 +566,8 @@ IncreaseAgilityCompound::IncreaseAgilityCompound()
 }
 
 //***********************************************************
-IncreaseIntelligenceMethod1::IncreaseIntelligenceMethod1(Item* itemPtr)
+IncreaseIntelligenceMethod1::IncreaseIntelligenceMethod1()
 {
-    AddTask(new DropItem(itemPtr));
     AddTask(new Study());
 }
 
@@ -580,27 +589,53 @@ bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseIntelligenceCompound::IncreaseIntelligenceCompound()
 {
-    Item* itemPtr = 0; //TODO pass in worldState and choose an item from there.
-    m_methods.push_back(new IncreaseIntelligenceMethod1(itemPtr));
+    m_methods.push_back(new IncreaseIntelligenceMethod1());
     m_methods.push_back(new IncreaseIntelligenceMethod2());
 }
 
 //***********************************************************
-AttackMethod::AttackMethod(Item* itemPtr)
+AttackMethod1::AttackMethod1(Item* itemPtr)
 {
-    AddTask(new PickUpItem(itemPtr));
+    m_itemPtr = itemPtr;
+    AddTask(new PickUpItem(m_itemPtr));
     AddTask(new Punch(0));
 }
 
-bool AttackMethod::Preconditions(HTNWorldState &htnWorldState)
+bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_v.at(WorldE::inSameRoom) && (m_itemPtr->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)));
+}
+
+AttackMethod2::AttackMethod2()
+{
+    AddTask(new Punch(0));
+}
+
+bool AttackMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
     return htnWorldState.m_v.at(WorldE::inSameRoom);
 }
 
-AttackCompound::AttackCompound()
+AttackCompound::AttackCompound(HTNWorldState &htnWorldState)
 {
-    Item* itemPtr = 0; //TODO pass in worldState and choose an item from there.
-    m_methods.push_back(new AttackMethod(itemPtr));
+    for (auto &item : htnWorldState.m_items)
+    {
+        if (item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
+        {
+            m_methods.push_back(new AttackMethod1(item));
+        }
+    }
+    m_methods.push_back(new AttackMethod2());
+}
+
+AttackCompoundMethod::AttackCompoundMethod(HTNWorldState &htnWorldState)
+{
+    AddTask(new AttackCompound(htnWorldState));
+}
+
+bool AttackCompoundMethod::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
 }
 
 //***********************************************************
@@ -614,12 +649,10 @@ bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
     return (htnWorldState.m_v.at(WorldE::health) < 66) && htnWorldState.m_v.at(WorldE::inSameRoom);
 }
 
-CombatCompound::CombatCompound()
+CombatCompound::CombatCompound(HTNWorldState &htnWorldState)
 {
     m_methods.push_back(new EvadeMethod());
-    
-    Item* itemPtr = 0; //TODO pass in worldState and choose an item from there.
-    m_methods.push_back(new AttackMethod(itemPtr));
+    m_methods.push_back(new AttackCompoundMethod(htnWorldState));
 }
 
 //***********************************************************
@@ -661,9 +694,9 @@ DoMissionCompound::DoMissionCompound()
 }
 
 //***********************************************************
-CombatMethod::CombatMethod()
+CombatMethod::CombatMethod(HTNWorldState &htnWorldState)
 {
-    AddTask(new CombatCompound());
+    AddTask(new CombatCompound(htnWorldState));
 }
 
 bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -691,9 +724,9 @@ bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-PrisonerBehaviourCompound::PrisonerBehaviourCompound()
+PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldState)
 {
-    m_methods.push_back(new CombatMethod());
+    m_methods.push_back(new CombatMethod(htnWorldState));
     m_methods.push_back(new DoMissionMethod());
     m_methods.push_back(new IncreaseIntelligenceMethod());
 }

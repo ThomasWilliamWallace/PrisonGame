@@ -142,25 +142,27 @@ public:
 //***********************************************************
 class PickUpItem : public HTNPrimitive
 {
-    Item* m_itemFocusPtr;
 public:
+    Item* m_itemFocusPtr;
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
     PickUpItem(Item* itemFocusPtr);
+    void PointToRealItems();
 };
 
 //***********************************************************
 class DropItem : public HTNPrimitive
 {
-    Item* m_itemFocusPtr;
 public:
+    Item* m_itemFocusPtr;
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
     DropItem(Item* itemFocusPtr);
+    void PointToRealItems();
 };
 
 //***********************************************************
@@ -314,7 +316,7 @@ public:
 class IncreaseIntelligenceMethod1 : public HTNMethod
 {
 public:
-    IncreaseIntelligenceMethod1(Item* itemPtr);
+    IncreaseIntelligenceMethod1();
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -332,17 +334,32 @@ public:
 };
 
 //***********************************************************
-class AttackMethod : public HTNMethod
+class AttackMethod1 : public HTNMethod
+{
+    Item* m_itemPtr;
+public:
+    AttackMethod1(Item* itemPtr);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class AttackMethod2 : public HTNMethod
 {
 public:
-    AttackMethod(Item* itemPtr);
+    AttackMethod2();
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class AttackCompound : public HTNCompound
 {
 public:
-    AttackCompound();
+    AttackCompound(HTNWorldState &htnWorldState);
+};
+
+class AttackCompoundMethod : public HTNMethod
+{
+public:
+    AttackCompoundMethod(HTNWorldState &htnWorldState);
+    bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -384,14 +401,14 @@ public:
 class CombatCompound : public HTNCompound
 {
 public:
-    CombatCompound();
+    CombatCompound(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
 class CombatMethod : public HTNMethod
 {
 public:
-    CombatMethod();
+    CombatMethod(HTNWorldState &htnWorldState);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -412,7 +429,7 @@ public:
 class PrisonerBehaviourCompound : public HTNCompound
 {
 public:
-    PrisonerBehaviourCompound();
+    PrisonerBehaviourCompound(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************

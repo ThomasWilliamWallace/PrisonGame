@@ -29,17 +29,27 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world): m_
     //TODO reflect players sensors rather than being hardwired to the world
     for (auto &item : world.items)
     {
-        m_items.push_back(new Item(item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(new SimItem(*item, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
     }
 }
 
-HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_items(ws2.m_items), m_ptrToSelf(ws2.m_ptrToSelf) {}
+HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_ptrToSelf(ws2.m_ptrToSelf)
+{
+    for (auto &item : ws2.m_items)
+    {
+        m_items.push_back(new SimItem(*item, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
+    }
+}
 
 void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 {
     m_v = ws2.m_v;
-    m_items = ws2.m_items;
     m_ptrToSelf = ws2.m_ptrToSelf;
+    
+    for (auto &item : ws2.m_items)
+    {
+        m_items.push_back(new SimItem(*item, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
+    }
 }
 
 void HTNWorldState::Print()

@@ -24,4 +24,13 @@ public:
     std::string ToString();
 };
 
+class SimItem : public Item
+{
+public:
+    Item& m_realItem;
+    SimItem(Item &realItem, std::string name, Locations location, Player* carryingPlayer=nullptr):
+        Item(name, location, carryingPlayer), m_realItem(realItem)
+    {};
+};
+
 #endif /* Item_hpp */

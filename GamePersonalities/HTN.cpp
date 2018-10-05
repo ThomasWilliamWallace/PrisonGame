@@ -38,6 +38,8 @@ std::string HTNPrimitive::ToString()
     return name;
 }
 
+void HTNPrimitive::PointToRealItems(){}
+
 //*******************************************************************
 bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
 {
@@ -55,7 +57,7 @@ void HTNMethod::AddTask(HTNCompound* htnCompound)
 }
 
 //*******************************************************************
-constexpr int c_MaxSearchDepth = 5;
+constexpr int c_MaxSearchDepth = 50;
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth)
 {    
@@ -90,10 +92,13 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
                 HTNPrimitiveList subplan = HTNdfs(ws2, *(htnTask->m_htnCompound), searchDepth + 1);
                 if (static_cast<int>(subplan.size()) > 0)
                 {
+                    std::cout << "Returning plan:";
                     for (auto &subtask : subplan)
                     {
+                        std::cout << subtask->ToString() << ", ";
                         htnPlan.push_back(subtask);
                     }
+                    std::cout << "\n";
                 } else {
                     planningFailed = true;
                 }
