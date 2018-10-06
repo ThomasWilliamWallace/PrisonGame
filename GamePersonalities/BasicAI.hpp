@@ -9,7 +9,6 @@
 #ifndef BasicAI_hpp
 #define BasicAI_hpp
 
-#include "Actions.hpp" //todo remove
 #include "Constants.hpp"
 #include "HTN.hpp"
 
