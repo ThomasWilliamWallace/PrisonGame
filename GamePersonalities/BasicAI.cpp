@@ -12,6 +12,7 @@
 #include "Constants.hpp"
 #include "Evaluate.hpp"
 #include "HTNDomain.hpp"
+#include "World.hpp"
 
 Actions AIController::ChooseRoom(int playerIndex, Player player[])
 {
@@ -61,7 +62,7 @@ Actions AIController::ChooseAction(int playerIndex, Player player[], World &worl
         case(AI::aggroAI):
             return aggroAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
         case(AI::humanAI):
-            return humanAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
+            return humanAIChooseAction(playerIndex, player, world, playersInReach, countPlayersInReach);
         case(AI::greedyAI):
             return greedyAIChooseAction(playerIndex, player, playersInReach, countPlayersInReach);
         case(AI::htnAI):
@@ -313,7 +314,7 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     }
 }
 
-Actions AIController::humanAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach)
+Actions AIController::humanAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach)
 {
     string input;
     int targetPlayer;
@@ -336,6 +337,21 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], bool
         case 'g': return Actions::goToGym;
         case 'l': return Actions::goToLibrary;
         case 'h': return Actions::goToMainHall;
+        case 'p': 
+            while (true)
+            {
+                std::cout << "Choose target item (-1 means no item):";
+                int targetItem;
+                std::cin >> targetItem;
+                if (targetItem == -1)
+                {
+                    player[playerIndex].itemFocusPtr = nullptr;
+                } else {
+                    player[playerIndex].itemFocusPtr = world.items.at(targetItem);
+                }
+                return Actions::pickUpItem;
+            }
+        case 'd': return Actions::dropItem;
         case 'm':
             while (true)
             {

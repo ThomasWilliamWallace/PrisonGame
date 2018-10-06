@@ -23,7 +23,7 @@ class AIController
     Actions DoNothingAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions RandomAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions aggroAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
-    Actions humanAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
+    Actions humanAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach);
     Actions greedyAIChooseAction(int playerIndex, Player player[], bool playersInReach[], int countPlayersInReach);
     Actions htnAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach);
     void CreateMissionOffer(Player player[], int playerIndex, bool playersInReach[], int countPlayersInReach);
