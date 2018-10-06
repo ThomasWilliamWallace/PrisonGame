@@ -268,7 +268,7 @@ Actions AIController::greedyAIChooseAction(int playerIndex, Player player[], boo
 Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach)
 {
     //update worldstate from real world
-    HTNWorldState htnWorldState(1, player, world);
+    HTNWorldState htnWorldState(playerIndex, player, world);
     
     bool hasValidPlan = false;
     // check if next step of the plan is valid.

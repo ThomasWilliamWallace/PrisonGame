@@ -227,10 +227,10 @@ void Simulate()
     World world;
     player[0].name = "Thomas";
     player[1].name = "Vita";
-//    player[2].name = "Zog";
+    player[2].name = "Zog";
     player[0].aiController = AIController(AI::humanAI);
     player[1].aiController = AIController(AI::htnAI);
-//    player[2].aiController = AIController(AI::aggroAI);
+    player[2].aiController = AIController(AI::htnAI);
     for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)
     {
         player[playerIndex].missionClass = CreateNewMission(player,playerIndex);

@@ -7,7 +7,6 @@
 //
 
 #include "HTNWorldState.hpp"
-#include "Locations.hpp"
 #include "Player.hpp"
 #include <cmath>
 #include "World.hpp"
@@ -31,9 +30,15 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world): m_
     {
         m_items.push_back(new SimItem(*item, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
     }
+    
+    for (int i = 0; i < c_playerCount; i++)
+    {
+        m_attackers.push_back(player[playerIndex].rel[i].getAggro()>29 ? true : false);
+        m_playerLocations.push_back(player[i].locationClass.location);
+    }
 }
 
-HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_ptrToSelf(ws2.m_ptrToSelf)
+HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_ptrToSelf(ws2.m_ptrToSelf), m_attackers(ws2.m_attackers), m_playerLocations(ws2.m_playerLocations)
 {
     for (auto &item : ws2.m_items)
     {
@@ -45,6 +50,8 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 {
     m_v = ws2.m_v;
     m_ptrToSelf = ws2.m_ptrToSelf;
+    m_attackers = ws2.m_attackers;
+    m_playerLocations = ws2.m_playerLocations;
     
     for (auto &item : ws2.m_items)
     {

@@ -10,6 +10,7 @@
 #define HTNWorldState_hpp
 #include <vector>
 #include <iostream>
+#include "Locations.hpp"
 
 enum WorldE
 {
@@ -40,6 +41,8 @@ public:
     std::vector<int> m_v;
     std::vector< SimItem* > m_items;
     Player* m_ptrToSelf;
+    std::vector<bool> m_attackers;
+    std::vector<Locations> m_playerLocations;
     HTNWorldState(HTNWorldState &ws2);
     HTNWorldState(int playerIndex, Player player[], World &world);
     void CopyFrom(HTNWorldState &ws2);

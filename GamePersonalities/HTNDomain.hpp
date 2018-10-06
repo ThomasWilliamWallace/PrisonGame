@@ -125,7 +125,6 @@ public:
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
     std::string ToString();
-    Punch();
     Punch(int playerIndex);
 };
 
@@ -338,27 +337,27 @@ class AttackMethod1 : public HTNMethod
 {
     Item* m_itemPtr;
 public:
-    AttackMethod1(Item* itemPtr);
+    AttackMethod1(Item* itemPtr, int opponentIndex);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class AttackMethod2 : public HTNMethod
 {
 public:
-    AttackMethod2();
+    AttackMethod2(int opponentIndex);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class AttackCompound : public HTNCompound
 {
 public:
-    AttackCompound(HTNWorldState &htnWorldState);
+    AttackCompound(HTNWorldState &htnWorldState, int opponentIndex);
 };
 
 class AttackCompoundMethod : public HTNMethod
 {
 public:
-    AttackCompoundMethod(HTNWorldState &htnWorldState);
+    AttackCompoundMethod(HTNWorldState &htnWorldState, int opponentIndex);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -401,14 +400,14 @@ public:
 class CombatCompound : public HTNCompound
 {
 public:
-    CombatCompound(HTNWorldState &htnWorldState);
+    CombatCompound(HTNWorldState &htnWorldState, int opponentIndex);
 };
 
 //***********************************************************
 class CombatMethod : public HTNMethod
 {
 public:
-    CombatMethod(HTNWorldState &htnWorldState);
+    CombatMethod(HTNWorldState &htnWorldState, int opponentIndex);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
