@@ -603,7 +603,19 @@ AttackMethod1::AttackMethod1(Item* itemPtr)
 
 bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_v.at(WorldE::inSameRoom) && (m_itemPtr->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)));
+    bool carryingItemAlready = false;
+    for (auto &item : htnWorldState.m_items)
+    {
+        if ((item->m_carryingPlayer) == htnWorldState.m_ptrToSelf)
+        {
+            carryingItemAlready = true;
+            break;
+        }
+    }
+    
+    return htnWorldState.m_v.at(WorldE::inSameRoom)
+        && (m_itemPtr->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
+        && !carryingItemAlready;
 }
 
 AttackMethod2::AttackMethod2()
@@ -646,7 +658,7 @@ EvadeMethod::EvadeMethod()
 
 bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return (htnWorldState.m_v.at(WorldE::health) < 66) && htnWorldState.m_v.at(WorldE::inSameRoom);
+    return (htnWorldState.m_v.at(WorldE::health) < 67) && htnWorldState.m_v.at(WorldE::inSameRoom);
 }
 
 CombatCompound::CombatCompound(HTNWorldState &htnWorldState)
@@ -701,7 +713,7 @@ CombatMethod::CombatMethod(HTNWorldState &htnWorldState)
 
 bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_v.at(WorldE::health) < 68;
+    return htnWorldState.m_v.at(WorldE::health) < 69;
 }
 
 DoMissionMethod::DoMissionMethod()

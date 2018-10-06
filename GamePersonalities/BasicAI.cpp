@@ -271,7 +271,11 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     
     bool hasValidPlan = false;
     // check if next step of the plan is valid.
-    if (htnPlan.size() > 0)  //TODO if the most recent action failed, then replan else continue with the 'if (htnPlan.size() > 0) ...'
+    
+    if (!lastActionSucceeded)
+    {
+        hasValidPlan = false;
+    } else if (htnPlan.size() > 0)
     {
         hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
     }

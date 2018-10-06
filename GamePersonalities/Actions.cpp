@@ -55,6 +55,7 @@ std::string ActionToString(Actions action)
 
 void AttackAction(int attackerIndex, Player player[], World &world)
 {
+    player[attackerIndex].aiController.lastActionSucceeded = false;
     int defenderIndex = player[attackerIndex].playerTarget;
     if (playerIndexOutOfBounds(defenderIndex))
     {
@@ -89,6 +90,7 @@ void AttackAction(int attackerIndex, Player player[], World &world)
             player[defenderIndex].rel[attackerIndex].deltaThreat(1);
             player[defenderIndex].attacked = true;
             player[attackerIndex].narrative = "attacks player " + player[defenderIndex].name + " who now has " + FormatDouble(player[defenderIndex].stats.getHealth()) + " health";
+            player[attackerIndex].aiController.lastActionSucceeded = true;
         }
     } else
     {
@@ -98,10 +100,12 @@ void AttackAction(int attackerIndex, Player player[], World &world)
 
 void WeightliftAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.weightsOccupied == c_empty)
     {
         world.weightsOccupied = playerIndex;
-        player[playerIndex].narrative = "tries to use the gym";
+        player[playerIndex].narrative = "uses the gym";
+        player[playerIndex].aiController.lastActionSucceeded = true;
     } else
     {
         player[playerIndex].narrative = "attempts to weightlift, but the weights are already in use; strength = " + FormatDouble(player[playerIndex].stats.getStrength());
@@ -110,10 +114,12 @@ void WeightliftAction(int playerIndex, Player player[], World &world)
 
 void CircuitsAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.circuitsOccupied == c_empty)
     {
         world.circuitsOccupied = playerIndex;
-        player[playerIndex].narrative = "tries to use the circuit track";
+        player[playerIndex].narrative = "uses the circuit track";
+        player[playerIndex].aiController.lastActionSucceeded = true;
     } else
     {
         player[playerIndex].narrative = "attempts to do circuits, but the track is already in use; agility = " + FormatDouble(player[playerIndex].stats.getAgility());
@@ -122,10 +128,12 @@ void CircuitsAction(int playerIndex, Player player[], World &world)
 
 void StudyAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.studyOccupied == c_empty)
     {
         world.studyOccupied = playerIndex;
-        player[playerIndex].narrative = "tries to use the library";
+        player[playerIndex].narrative = "uses the library";
+        player[playerIndex].aiController.lastActionSucceeded = true;
     } else
     {
         player[playerIndex].narrative = "attempts to study, but the library seat is already taken; intelligence = " + FormatDouble(player[playerIndex].stats.getIntelligence());
@@ -134,10 +142,12 @@ void StudyAction(int playerIndex, Player player[], World &world)
 
 void SleepAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.bedOccupied == c_empty)
     {
         world.bedOccupied = playerIndex;
         player[playerIndex].narrative = "tries to use the bedroom";
+        player[playerIndex].aiController.lastActionSucceeded = true;
     } else
     {
         player[playerIndex].narrative = "tried to sleep, but the bed was occupied; health = " + FormatDouble(player[playerIndex].stats.getHealth());
@@ -162,12 +172,14 @@ void UseRoomAction(int playerIndex, Player player[], World &world)
             break;
         case Locations::mainHall:
             player[playerIndex].narrative = "tries to use the main hall, but there's nothing here to use.";
+            player[playerIndex].aiController.lastActionSucceeded = false;
             break;
     }
 }
 
 void OfferMissionAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (playerIndexOutOfBounds(player[playerIndex].playerTarget))
     {
         player[playerIndex].narrative = "ERROR: tried to offer a mission to an invalid player index.";
@@ -177,13 +189,15 @@ void OfferMissionAction(int playerIndex, Player player[], World &world)
     } else if (OtherInReach(playerIndex, player[playerIndex].playerTarget, player))
     {
         player[player[playerIndex].playerTarget].missionClass = player[playerIndex].missionOffer;
-        player[playerIndex].narrative = "tries to offer a mission to " + player[player[playerIndex].playerTarget].missionClass.MissionName() + " to " + player[player[playerIndex].playerTarget].name;
+        player[playerIndex].narrative = "offers a mission to " + player[player[playerIndex].playerTarget].missionClass.MissionName() + " to " + player[player[playerIndex].playerTarget].name;
+        player[playerIndex].aiController.lastActionSucceeded = true;
     } else
         player[playerIndex].narrative = "tries to offer a mission to " + player[player[playerIndex].playerTarget].name + ", but he's not here.";
 }
 
 void MakeFriendsAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (playerIndexOutOfBounds(player[playerIndex].playerTarget))
     {
         player[playerIndex].narrative = "ERROR: tried to make friends with an an invalid player index.";
@@ -192,15 +206,15 @@ void MakeFriendsAction(int playerIndex, Player player[], World &world)
         player[playerIndex].narrative = "ERROR: tried to make friends with himself.";
     } else if (OtherInReach(playerIndex, player[playerIndex].playerTarget, player))
     {
-        player[playerIndex].narrative = "tries to make friends with " + player[player[playerIndex].playerTarget].name;
         if (player[player[playerIndex].playerTarget].rel[playerIndex].getAggro() + 50 < RandPercent())
         {
             player[player[playerIndex].playerTarget].rel[playerIndex].deltaFriendliness(30);
             player[playerIndex].rel[player[playerIndex].playerTarget].deltaFriendliness(30);
-            player[playerIndex].narrative += ": Friendliness = " + FormatDouble(player[player[playerIndex].playerTarget].rel[playerIndex].getFriendliness());
+            player[playerIndex].narrative = "makes friends with " + player[player[playerIndex].playerTarget].name + ": Friendliness = " + FormatDouble(player[player[playerIndex].playerTarget].rel[playerIndex].getFriendliness());
+            player[playerIndex].aiController.lastActionSucceeded = true;
         } else
         {
-            player[playerIndex].narrative += " but is rejected";
+            player[playerIndex].narrative = "tries to make friends with " + player[player[playerIndex].playerTarget].name + " but is rejected";
         }
     } else
         player[playerIndex].narrative = "tries to make friends with " + player[player[playerIndex].playerTarget].name + ", but he's not here.";
@@ -208,6 +222,7 @@ void MakeFriendsAction(int playerIndex, Player player[], World &world)
 
 void PickUpItemAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (player[playerIndex].itemFocusPtr != nullptr)
     {
         if (player[playerIndex].locationClass.location == (player[playerIndex].itemFocusPtr)->m_locationClass.location)
@@ -217,6 +232,7 @@ void PickUpItemAction(int playerIndex, Player player[], World &world)
                 player[playerIndex].itemPtr = player[playerIndex].itemFocusPtr;
                 player[playerIndex].itemPtr->m_carryingPlayer = &(player[playerIndex]);
                 player[playerIndex].narrative = "picked up a " + player[playerIndex].itemPtr->ToString() + " in the " + player[playerIndex].itemPtr->m_locationClass.ToString() + ".";
+                player[playerIndex].aiController.lastActionSucceeded = true;
             } else {
                 player[playerIndex].narrative = "ERROR: tried to pick up a " + player[playerIndex].itemFocusPtr->ToString() + " but " + (player[playerIndex].itemFocusPtr->m_carryingPlayer)->name + " was already carrying it.";
             }
@@ -230,11 +246,13 @@ void PickUpItemAction(int playerIndex, Player player[], World &world)
 
 void DropItemAction(int playerIndex, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     if (player[playerIndex].itemPtr != nullptr)
     {
         player[playerIndex].narrative = "Dropped a " + player[playerIndex].itemPtr->ToString() + " in the " + player[playerIndex].itemPtr->m_locationClass.ToString() + ".";
         player[playerIndex].itemPtr->m_carryingPlayer = nullptr;
         player[playerIndex].itemPtr = nullptr;
+        player[playerIndex].aiController.lastActionSucceeded = true;
     } else {
         player[playerIndex].narrative = "ERROR: tried to drop up an item, but no item is being carried.";
     }

@@ -37,7 +37,7 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_ptrToSelf(ws2.
 {
     for (auto &item : ws2.m_items)
     {
-        m_items.push_back(new SimItem(*item, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(new SimItem(item->m_realItem, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
     }
 }
 
@@ -48,7 +48,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
     
     for (auto &item : ws2.m_items)
     {
-        m_items.push_back(new SimItem(*item, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(new SimItem(item->m_realItem, item->m_name, item->m_locationClass.location, item->m_carryingPlayer));
     }
 }
 

@@ -59,6 +59,7 @@ void Act(int playerIndex, int frame, Player player[], World &world)
     if (player[playerIndex].attacked && action != Actions::attack && action != Actions::evade)
     {
         player[playerIndex].narrative = "attempted action " + ActionToString(action) + " but was attacked and lost their turn.";
+        player[playerIndex].aiController.lastActionSucceeded = false;
         return;
     }
     
@@ -159,6 +160,7 @@ void Act(int playerIndex, int frame, Player player[], World &world)
             break;
         case Actions::noAction:
             player[playerIndex].narrative = "ERROR NO ACTION.";
+            player[playerIndex].aiController.lastActionSucceeded = false;
             break;
     }
 }

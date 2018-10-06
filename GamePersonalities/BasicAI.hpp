@@ -32,6 +32,7 @@ public:
     Actions ChooseAction(int playerIndex, Player player[], World &world);
     AIController(AI _algo);
     AIController();
+    bool lastActionSucceeded;
 };
 
 #endif /* BasicAI_hpp */
