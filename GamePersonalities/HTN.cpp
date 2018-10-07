@@ -12,9 +12,9 @@
 //*******************************************************************
 HTNTask::HTNTask():m_htnPrimitive(0), m_htnCompound(0), m_isPrimitive(false){}
 
-HTNTask::HTNTask(HTNPrimitive* htnPrimitive):m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true){}
+HTNTask::HTNTask(HTNPrimitivePtr htnPrimitive):m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true){}
 
-HTNTask::HTNTask(HTNCompound* htnCompound):m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false){}
+HTNTask::HTNTask(HTNCompoundPtr htnCompound):m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false){}
 
 //*******************************************************************
 bool HTNPrimitive::Preconditions(HTNWorldState &htnWorldState)
@@ -46,14 +46,14 @@ bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-void HTNMethod::AddTask(HTNPrimitive* htnPrimitive)
+void HTNMethod::AddTask(HTNPrimitivePtr htnPrimitive)
 {
-    m_taskList.push_back(new HTNTask(htnPrimitive));
+    m_taskList.push_back(HTNTaskPtr(new HTNTask(htnPrimitive)));
 }
 
-void HTNMethod::AddTask(HTNCompound* htnCompound)
+void HTNMethod::AddTask(HTNCompoundPtr htnCompound)
 {
-    m_taskList.push_back(new HTNTask(htnCompound));
+    m_taskList.push_back(HTNTaskPtr(new HTNTask(htnCompound)));
 }
 
 //*******************************************************************

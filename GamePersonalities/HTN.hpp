@@ -13,24 +13,35 @@
 #include <iostream>
 #include "HTNWorldState.hpp"
 #include "Actions.hpp"
+#include <memory>
 
+class HTNTask;
 class HTNPrimitive;
 class HTNCompound;
+class HTNMethod;
 
 class World;
+
+typedef std::shared_ptr<HTNPrimitive> HTNPrimitivePtr;
+typedef std::shared_ptr<HTNCompound> HTNCompoundPtr;
+typedef std::shared_ptr<HTNTask> HTNTaskPtr;
+typedef std::shared_ptr<HTNMethod> HTNMethodPtr;
+
+typedef std::deque< HTNPrimitivePtr > HTNPrimitiveList;
+typedef std::vector< HTNCompoundPtr > HTNCompoundList;
+typedef std::vector< HTNTaskPtr > HTNTaskList;
+typedef std::vector< HTNMethodPtr > HTNMethodList;
 
 class HTNTask
 {
 public:
-    HTNPrimitive* m_htnPrimitive;
-    HTNCompound* m_htnCompound;
+    HTNPrimitivePtr m_htnPrimitive;
+    HTNCompoundPtr m_htnCompound;
     bool m_isPrimitive;
     HTNTask();
-    HTNTask(HTNPrimitive* htnPrimitive);
-    HTNTask(HTNCompound* htnCompound);
+    HTNTask(HTNPrimitivePtr htnPrimitive);
+    HTNTask(HTNCompoundPtr htnCompound);
 };
-
-typedef std::vector< HTNTask* > HTNTaskList;
 
 class HTNPrimitive
 {
@@ -42,18 +53,14 @@ public:
     virtual void PointToRealItems();  //updates pointers and references to point to items existing in the players perceived HTNWorldState, rather than the simulated, predicted HTNWorldState.
 };
 
-typedef std::deque< HTNPrimitive* > HTNPrimitiveList;
-
 class HTNMethod
 {
 public:
     virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
     HTNTaskList m_taskList; //To complete this HTNCompound task, all the tasks in a method must be completed.
-    void AddTask(HTNPrimitive* htnPrimitive);
-    void AddTask(HTNCompound* htnCompound);
+    void AddTask(HTNPrimitivePtr htnPrimitive);
+    void AddTask(HTNCompoundPtr htnCompound);
 };
-
-typedef std::vector< HTNMethod* > HTNMethodList;
 
 //list of either primitive or compound tasks
 class HTNCompound
@@ -61,8 +68,6 @@ class HTNCompound
 public:
     HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
 };
-
-typedef std::vector< HTNCompound* > HTNCompoundList;
 
 class HTNPlan
 {

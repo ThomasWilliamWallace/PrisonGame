@@ -46,6 +46,14 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_ptrToSelf(ws2.
     }
 }
 
+HTNWorldState::~HTNWorldState()
+{
+    for (SimItem* itemPtr : m_items)
+    {
+        delete itemPtr;
+    }
+}
+
 void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 {
     m_v = ws2.m_v;

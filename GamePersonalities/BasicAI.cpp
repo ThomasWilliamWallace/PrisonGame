@@ -308,7 +308,7 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     } else {
         //continue with current plan
         std::cout << "Continue\n";
-        HTNPrimitive* currentPlanStep = htnPlan.front();
+        HTNPrimitivePtr currentPlanStep = htnPlan.front();
         htnPlan.pop_front();
         return currentPlanStep->Operator(playerIndex, player, world);
     }

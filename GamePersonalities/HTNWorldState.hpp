@@ -45,6 +45,7 @@ public:
     std::vector<Locations> m_playerLocations;
     HTNWorldState(HTNWorldState &ws2);
     HTNWorldState(int playerIndex, Player player[], World &world);
+    ~HTNWorldState();
     void CopyFrom(HTNWorldState &ws2);
     void Print();
 };

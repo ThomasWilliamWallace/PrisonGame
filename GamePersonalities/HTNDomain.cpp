@@ -372,7 +372,7 @@ std::string DropItem::ToString()
 //***********************************************************
 GoToLibraryMethod1::GoToLibraryMethod1()
 {
-    AddTask(new GoToLibrary());
+    AddTask(HTNPrimitivePtr(new GoToLibrary()));
 }
 
 bool GoToLibraryMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -382,8 +382,8 @@ bool GoToLibraryMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 GoToLibraryMethod2::GoToLibraryMethod2()
 {
-    AddTask(new GoToMainHall());
-    AddTask(new GoToLibrary());
+    AddTask(HTNPrimitivePtr(new GoToMainHall()));
+    AddTask(HTNPrimitivePtr(new GoToLibrary()));
 }
 
 bool GoToLibraryMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -393,14 +393,14 @@ bool GoToLibraryMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToLibraryCompound::GoToLibraryCompound()
 {
-    m_methods.push_back(new GoToLibraryMethod1());
-    m_methods.push_back(new GoToLibraryMethod2());
+    m_methods.push_back(HTNMethodPtr(new GoToLibraryMethod1()));
+    m_methods.push_back(HTNMethodPtr(new GoToLibraryMethod2()));
 }
 
 //***********************************************************
 GoToGymMethod1::GoToGymMethod1()
 {
-    AddTask(new GoToGym());
+    AddTask(HTNPrimitivePtr(new GoToGym()));
 }
 
 bool GoToGymMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -410,8 +410,8 @@ bool GoToGymMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 GoToGymMethod2::GoToGymMethod2()
 {
-    AddTask(new GoToMainHall());
-    AddTask(new GoToGym());
+    AddTask(HTNPrimitivePtr(new GoToMainHall()));
+    AddTask(HTNPrimitivePtr(new GoToGym()));
 }
 
 bool GoToGymMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -421,14 +421,14 @@ bool GoToGymMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToGymCompound::GoToGymCompound()
 {
-    m_methods.push_back(new GoToGymMethod1());
-    m_methods.push_back(new GoToGymMethod2());
+    m_methods.push_back(HTNMethodPtr(new GoToGymMethod1()));
+    m_methods.push_back(HTNMethodPtr(new GoToGymMethod2()));
 }
 
 //***********************************************************
 GoToCircuitTrackMethod1::GoToCircuitTrackMethod1()
 {
-    AddTask(new GoToCircuitTrack());
+    AddTask(HTNPrimitivePtr(new GoToCircuitTrack()));
 }
 
 bool GoToCircuitTrackMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -438,8 +438,8 @@ bool GoToCircuitTrackMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 GoToCircuitTrackMethod2::GoToCircuitTrackMethod2()
 {
-    AddTask(new GoToMainHall());
-    AddTask(new GoToCircuitTrack());
+    AddTask(HTNPrimitivePtr(new GoToMainHall()));
+    AddTask(HTNPrimitivePtr(new GoToCircuitTrack()));
 }
 
 bool GoToCircuitTrackMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -449,14 +449,14 @@ bool GoToCircuitTrackMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToCircuitTrackCompound::GoToCircuitTrackCompound()
 {
-    m_methods.push_back(new GoToCircuitTrackMethod1());
-    m_methods.push_back(new GoToCircuitTrackMethod2());
+    m_methods.push_back(HTNMethodPtr(new GoToCircuitTrackMethod1()));
+    m_methods.push_back(HTNMethodPtr(new GoToCircuitTrackMethod2()));
 }
 
 //***********************************************************
 GoToBedroomMethod1::GoToBedroomMethod1()
 {
-    AddTask(new GoToBedroom());
+    AddTask(HTNPrimitivePtr(new GoToBedroom()));
 }
 
 bool GoToBedroomMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -466,8 +466,8 @@ bool GoToBedroomMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 GoToBedroomMethod2::GoToBedroomMethod2()
 {
-    AddTask(new GoToMainHall());
-    AddTask(new GoToBedroom());
+    AddTask(HTNPrimitivePtr(new GoToMainHall()));
+    AddTask(HTNPrimitivePtr(new GoToBedroom()));
 }
 
 bool GoToBedroomMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -477,14 +477,14 @@ bool GoToBedroomMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToBedroomCompound::GoToBedroomCompound()
 {
-    m_methods.push_back(new GoToBedroomMethod1());
-    m_methods.push_back(new GoToBedroomMethod2());
+    m_methods.push_back(HTNMethodPtr(new GoToBedroomMethod1()));
+    m_methods.push_back(HTNMethodPtr(new GoToBedroomMethod2()));
 }
 
 //***********************************************************
 IncreaseHealthMethod1::IncreaseHealthMethod1()
 {
-    AddTask(new Sleep());
+    AddTask(HTNPrimitivePtr(new Sleep()));
 }
 
 bool IncreaseHealthMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -494,8 +494,8 @@ bool IncreaseHealthMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseHealthMethod2::IncreaseHealthMethod2()
 {
-    AddTask(new GoToBedroomCompound());
-    AddTask(new Sleep());
+    AddTask(HTNCompoundPtr(new GoToBedroomCompound()));
+    AddTask(HTNPrimitivePtr(new Sleep()));
 }
 
 bool IncreaseHealthMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -505,14 +505,14 @@ bool IncreaseHealthMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseHealthCompound::IncreaseHealthCompound()
 {
-    m_methods.push_back(new IncreaseHealthMethod1());
-    m_methods.push_back(new IncreaseHealthMethod2());
+    m_methods.push_back(HTNMethodPtr(new IncreaseHealthMethod1()));
+    m_methods.push_back(HTNMethodPtr(new IncreaseHealthMethod2()));
 }
 
 //***********************************************************
 IncreaseStrengthMethod1::IncreaseStrengthMethod1()
 {
-    AddTask(new UseGym());
+    AddTask(HTNPrimitivePtr(new UseGym()));
 }
 
 bool IncreaseStrengthMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -522,8 +522,8 @@ bool IncreaseStrengthMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseStrengthMethod2::IncreaseStrengthMethod2()
 {
-    AddTask(new GoToGymCompound());
-    AddTask(new UseGym());
+    AddTask(HTNCompoundPtr(new GoToGymCompound()));
+    AddTask(HTNPrimitivePtr(new UseGym()));
 }
 
 bool IncreaseStrengthMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -533,14 +533,14 @@ bool IncreaseStrengthMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseStrengthCompound::IncreaseStrengthCompound()
 {
-    m_methods.push_back(new IncreaseStrengthMethod1());
-    m_methods.push_back(new IncreaseStrengthMethod2());
+    m_methods.push_back(HTNMethodPtr(new IncreaseStrengthMethod1()));
+    m_methods.push_back(HTNMethodPtr(new IncreaseStrengthMethod2()));
 }
 
 //***********************************************************
 IncreaseAgilityMethod1::IncreaseAgilityMethod1()
 {
-    AddTask(new RunCircuits());
+    AddTask(HTNPrimitivePtr(new RunCircuits()));
 }
 
 bool IncreaseAgilityMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -550,8 +550,8 @@ bool IncreaseAgilityMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseAgilityMethod2::IncreaseAgilityMethod2()
 {
-    AddTask(new GoToCircuitTrackCompound());
-    AddTask(new RunCircuits());
+    AddTask(HTNCompoundPtr(new GoToCircuitTrackCompound()));
+    AddTask(HTNPrimitivePtr(new RunCircuits()));
 }
 
 bool IncreaseAgilityMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -561,14 +561,14 @@ bool IncreaseAgilityMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseAgilityCompound::IncreaseAgilityCompound()
 {
-    m_methods.push_back(new IncreaseAgilityMethod1());
-    m_methods.push_back(new IncreaseAgilityMethod2());
+    m_methods.push_back(HTNMethodPtr(new IncreaseAgilityMethod1()));
+    m_methods.push_back(HTNMethodPtr(new IncreaseAgilityMethod2()));
 }
 
 //***********************************************************
 IncreaseIntelligenceMethod1::IncreaseIntelligenceMethod1()
 {
-    AddTask(new Study());
+    AddTask(HTNPrimitivePtr(new Study()));
 }
 
 bool IncreaseIntelligenceMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -578,8 +578,8 @@ bool IncreaseIntelligenceMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseIntelligenceMethod2::IncreaseIntelligenceMethod2()
 {
-    AddTask(new GoToLibraryCompound());
-    AddTask(new Study());
+    AddTask(HTNCompoundPtr(new GoToLibraryCompound()));
+    AddTask(HTNPrimitivePtr(new Study()));
 }
 
 bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -589,16 +589,16 @@ bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseIntelligenceCompound::IncreaseIntelligenceCompound()
 {
-    m_methods.push_back(new IncreaseIntelligenceMethod1());
-    m_methods.push_back(new IncreaseIntelligenceMethod2());
+    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod1()));
+    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod2()));
 }
 
 //***********************************************************
 AttackMethod1::AttackMethod1(Item* itemPtr, int opponentIndex)
 {
     m_itemPtr = itemPtr;
-    AddTask(new PickUpItem(m_itemPtr));
-    AddTask(new Punch(opponentIndex));
+    AddTask(HTNPrimitivePtr(new PickUpItem(m_itemPtr)));
+    AddTask(HTNPrimitivePtr(new Punch(opponentIndex)));
 }
 
 bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -620,7 +620,7 @@ bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 AttackMethod2::AttackMethod2(int opponentIndex)
 {
-    AddTask(new Punch(opponentIndex));
+    AddTask(HTNPrimitivePtr(new Punch(opponentIndex)));
 }
 
 bool AttackMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -634,15 +634,15 @@ AttackCompound::AttackCompound(HTNWorldState &htnWorldState, int opponentIndex)
     {
         if (item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
         {
-            m_methods.push_back(new AttackMethod1(item, opponentIndex));
+            m_methods.push_back(HTNMethodPtr(new AttackMethod1(item, opponentIndex)));
         }
     }
-    m_methods.push_back(new AttackMethod2(opponentIndex));
+    m_methods.push_back(HTNMethodPtr(new AttackMethod2(opponentIndex)));
 }
 
 AttackCompoundMethod::AttackCompoundMethod(HTNWorldState &htnWorldState, int opponentIndex)
 {
-    AddTask(new AttackCompound(htnWorldState, opponentIndex));
+    AddTask(HTNCompoundPtr(new AttackCompound(htnWorldState, opponentIndex)));
 }
 
 bool AttackCompoundMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -653,7 +653,7 @@ bool AttackCompoundMethod::Preconditions(HTNWorldState &htnWorldState)
 //***********************************************************
 EvadeMethod::EvadeMethod()
 {
-    AddTask(new Evade());
+    AddTask(HTNPrimitivePtr(new Evade()));
 }
 
 bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -663,14 +663,14 @@ bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 
 CombatCompound::CombatCompound(HTNWorldState &htnWorldState, int opponentIndex)
 {
-    m_methods.push_back(new EvadeMethod());
-    m_methods.push_back(new AttackCompoundMethod(htnWorldState, opponentIndex));
+    m_methods.push_back(HTNMethodPtr(new EvadeMethod()));
+    m_methods.push_back(HTNMethodPtr(new AttackCompoundMethod(htnWorldState, opponentIndex)));
 }
 
 //***********************************************************
 DoMissionMethod1::DoMissionMethod1()
 {
-    AddTask(new IncreaseStrengthCompound());
+    AddTask(HTNCompoundPtr(new IncreaseStrengthCompound()));
 }
 
 bool DoMissionMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -680,7 +680,7 @@ bool DoMissionMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod2::DoMissionMethod2()
 {
-    AddTask(new IncreaseAgilityCompound());
+    AddTask(HTNCompoundPtr(new IncreaseAgilityCompound()));
 }
 
 bool DoMissionMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -690,7 +690,7 @@ bool DoMissionMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod3::DoMissionMethod3()
 {
-    AddTask(new IncreaseIntelligenceCompound());
+    AddTask(HTNCompoundPtr(new IncreaseIntelligenceCompound()));
 }
 
 bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
@@ -700,15 +700,15 @@ bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionCompound::DoMissionCompound()
 {
-    m_methods.push_back(new DoMissionMethod1());
-    m_methods.push_back(new DoMissionMethod2());
-    m_methods.push_back(new DoMissionMethod3());
+    m_methods.push_back(HTNMethodPtr(new DoMissionMethod1()));
+    m_methods.push_back(HTNMethodPtr(new DoMissionMethod2()));
+    m_methods.push_back(HTNMethodPtr(new DoMissionMethod3()));
 }
 
 //***********************************************************
 CombatMethod::CombatMethod(HTNWorldState &htnWorldState, int opponentIndex)
 {
-    AddTask(new CombatCompound(htnWorldState, opponentIndex));
+    AddTask(HTNCompoundPtr(new CombatCompound(htnWorldState, opponentIndex)));
 }
 
 bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -719,7 +719,7 @@ bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod::DoMissionMethod()
 {
-    AddTask(new DoMissionCompound());
+    AddTask(HTNCompoundPtr(new DoMissionCompound()));
 }
 
 bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -729,7 +729,7 @@ bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseIntelligenceMethod::IncreaseIntelligenceMethod()
 {
-    AddTask(new IncreaseIntelligenceCompound());
+    AddTask(HTNCompoundPtr(new IncreaseIntelligenceCompound()));
 }
 
 bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -743,17 +743,17 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
     {
         if (htnWorldState.m_attackers[i])
         {
-            m_methods.push_back(new CombatMethod(htnWorldState, i));
+            m_methods.push_back(HTNMethodPtr(new CombatMethod(htnWorldState, i)));
         }
     }
-    m_methods.push_back(new DoMissionMethod());
-    m_methods.push_back(new IncreaseIntelligenceMethod());
+    m_methods.push_back(HTNMethodPtr(new DoMissionMethod()));
+    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod()));
 }
 
 //***********************************************************
 PickUpItemMethod1::PickUpItemMethod1(Item* itemFocusPtr)
 {
-    AddTask(new PickUpItem(itemFocusPtr));
+    AddTask(HTNPrimitivePtr(new PickUpItem(itemFocusPtr)));
 }
 
 bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -764,7 +764,7 @@ bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 //***********************************************************
 DropItemMethod1::DropItemMethod1(Item* itemFocusPtr)
 {
-    AddTask(new DropItem(itemFocusPtr));
+    AddTask(HTNPrimitivePtr(new DropItem(itemFocusPtr)));
 }
 
 bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)
