@@ -53,7 +53,7 @@ public:
     virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
     virtual void Effect(HTNWorldState &htnWorldState); //simplified, predicted effect of taking this action. Will be applied to the simulated world during planning.
     virtual Actions Operator(int playerIndex, Player player[], World &world);  //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
-    virtual std::string ToString();
+    std::string ToString();
     virtual void PointToRealItems();  //updates pointers and references to point to items existing in the players perceived HTNWorldState, rather than the simulated, predicted HTNWorldState.
 };
 
@@ -63,7 +63,7 @@ public:
     std::string m_name;
     HTNCompound(std::string name);
     HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
-    virtual std::string ToString();
+    std::string ToString();
 };
 
 //list of either primitive or compound tasks
