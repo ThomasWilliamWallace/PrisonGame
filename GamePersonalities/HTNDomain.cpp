@@ -12,6 +12,8 @@
 
 //Start HTNPrimitives****************************************
 //***********************************************************
+Study::Study() : HTNPrimitive("Study") {}
+
 void Study::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::intelligence) += 1;
@@ -28,13 +30,9 @@ bool Study::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::library;
 }
 
-std::string Study::ToString()
-{
-    std::string name = "Study";
-    return name;
-}
-
 //***********************************************************
+Sleep::Sleep() : HTNPrimitive("Sleep") {}
+
 void Sleep::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::health) += 1;
@@ -51,13 +49,9 @@ bool Sleep::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::bedroom;
 }
 
-std::string Sleep::ToString()
-{
-    std::string name = "Sleep";
-    return name;
-}
-
 //***********************************************************
+UseGym::UseGym() : HTNPrimitive("UseGym") {}
+
 void UseGym::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::strength) += 1;
@@ -74,13 +68,9 @@ bool UseGym::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::gym;
 }
 
-std::string UseGym::ToString()
-{
-    std::string name = "UseGym";
-    return name;
-}
-
 //***********************************************************
+RunCircuits::RunCircuits() : HTNPrimitive("RunCircuits") {}
+
 void RunCircuits::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::agility) += 1;
@@ -97,13 +87,9 @@ bool RunCircuits::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::circuitTrack;
 }
 
-std::string RunCircuits::ToString()
-{
-    std::string name = "RunCircuits";
-    return name;
-}
-
 //***********************************************************
+GoToGym::GoToGym() : HTNPrimitive("GoToGym") {}
+
 void GoToGym::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::gym);
@@ -120,13 +106,9 @@ bool GoToGym::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
 }
 
-std::string GoToGym::ToString()
-{
-    std::string name = "GoToGym";
-    return name;
-}
-
 //***********************************************************
+GoToLibrary::GoToLibrary() : HTNPrimitive("GoToLibrary") {}
+
 void GoToLibrary::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::library);
@@ -143,13 +125,9 @@ bool GoToLibrary::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
 }
 
-std::string GoToLibrary::ToString()
-{
-    std::string name = "GoToLibrary";
-    return name;
-}
-
 //***********************************************************
+GoToBedroom::GoToBedroom() : HTNPrimitive("GoToBedroom") {}
+
 void GoToBedroom::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::bedroom);
@@ -166,13 +144,9 @@ bool GoToBedroom::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
 }
 
-std::string GoToBedroom::ToString()
-{
-    std::string name = "GoToBedroom";
-    return name;
-}
-
 //***********************************************************
+GoToCircuitTrack::GoToCircuitTrack() : HTNPrimitive("GoToCircuitTrack") {}
+
 void GoToCircuitTrack::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::circuitTrack);
@@ -189,13 +163,9 @@ bool GoToCircuitTrack::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
 }
 
-std::string GoToCircuitTrack::ToString()
-{
-    std::string name = "GoToCircuitTrack";
-    return name;
-}
-
 //***********************************************************
+GoToMainHall::GoToMainHall() : HTNPrimitive("GoToMainHall") {}
+
 void GoToMainHall::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::mainHall);
@@ -212,13 +182,9 @@ bool GoToMainHall::Preconditions(HTNWorldState &htnWorldState)
     return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) != Locations::mainHall;
 }
 
-std::string GoToMainHall::ToString()
-{
-    std::string name = "GoToMainHall";
-    return name;
-}
-
 //***********************************************************
+Drink::Drink() : HTNPrimitive("Drink") {}
+
 void Drink::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::intelligence) -= 1;
@@ -235,17 +201,8 @@ bool Drink::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-std::string Drink::ToString()
-{
-    std::string name = "Drink";
-    return name;
-}
-
 //***********************************************************
-Punch::Punch(int playerIndex)
-{
-    m_targetPlayerIndex = playerIndex;
-}
+Punch::Punch(int playerIndex) : HTNPrimitive("Punch"), m_targetPlayerIndex(playerIndex) {}
 
 void Punch::Effect(HTNWorldState &htnWorldState)
 {
@@ -263,13 +220,9 @@ bool Punch::Preconditions(HTNWorldState &htnWorldState)
     return htnWorldState.m_playerLocations[m_targetPlayerIndex] == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
 }
 
-std::string Punch::ToString()
-{
-    std::string name = "Punch";
-    return name;
-}
-
 //***********************************************************
+Evade::Evade() : HTNPrimitive("Evade") {}
+
 void Evade::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_v.at(WorldE::evading) = 1;
@@ -285,17 +238,8 @@ bool Evade::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-std::string Evade::ToString()
-{
-    std::string name = "Evade";
-    return name;
-}
-
 //***********************************************************
-PickUpItem::PickUpItem(Item* itemFocusPtr)
-{
-    m_itemFocusPtr = itemFocusPtr;
-}
+PickUpItem::PickUpItem(Item* itemFocusPtr) : HTNPrimitive("PickUpItem"), m_itemFocusPtr(itemFocusPtr) {}
 
 void PickUpItem::Effect(HTNWorldState &htnWorldState)
 {
@@ -329,17 +273,8 @@ void PickUpItem::PointToRealItems()
     m_itemFocusPtr = &((static_cast<SimItem*>(m_itemFocusPtr))->m_realItem);
 }
 
-std::string PickUpItem::ToString()
-{
-    std::string name = "PickUpItem";
-    return name;
-}
-
 //***********************************************************
-DropItem::DropItem(Item* itemFocusPtr)
-{
-    m_itemFocusPtr = itemFocusPtr;
-}
+DropItem::DropItem(Item* itemFocusPtr) : HTNPrimitive("DropItem"), m_itemFocusPtr(itemFocusPtr) {}
 
 void DropItem::Effect(HTNWorldState &htnWorldState)
 {
@@ -360,12 +295,6 @@ bool DropItem::Preconditions(HTNWorldState &htnWorldState)
 void DropItem::PointToRealItems()
 {
     m_itemFocusPtr = &((static_cast<SimItem*>(m_itemFocusPtr))->m_realItem);
-}
-
-std::string DropItem::ToString()
-{
-    std::string name = "DropItem";
-    return name;
 }
 
 //Start HTNCompounds*****************************************
@@ -391,7 +320,7 @@ bool GoToLibraryMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-GoToLibraryCompound::GoToLibraryCompound()
+GoToLibraryCompound::GoToLibraryCompound() : HTNCompound("GoToLibraryCompound")
 {
     m_methods.push_back(HTNMethodPtr(new GoToLibraryMethod1()));
     m_methods.push_back(HTNMethodPtr(new GoToLibraryMethod2()));
@@ -419,7 +348,7 @@ bool GoToGymMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-GoToGymCompound::GoToGymCompound()
+GoToGymCompound::GoToGymCompound() : HTNCompound("GoToGymCompound")
 {
     m_methods.push_back(HTNMethodPtr(new GoToGymMethod1()));
     m_methods.push_back(HTNMethodPtr(new GoToGymMethod2()));
@@ -447,7 +376,7 @@ bool GoToCircuitTrackMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-GoToCircuitTrackCompound::GoToCircuitTrackCompound()
+GoToCircuitTrackCompound::GoToCircuitTrackCompound() : HTNCompound("GoToCircuitTrackCompound")
 {
     m_methods.push_back(HTNMethodPtr(new GoToCircuitTrackMethod1()));
     m_methods.push_back(HTNMethodPtr(new GoToCircuitTrackMethod2()));
@@ -475,7 +404,7 @@ bool GoToBedroomMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-GoToBedroomCompound::GoToBedroomCompound()
+GoToBedroomCompound::GoToBedroomCompound() : HTNCompound("GoToBedroomCompound")
 {
     m_methods.push_back(HTNMethodPtr(new GoToBedroomMethod1()));
     m_methods.push_back(HTNMethodPtr(new GoToBedroomMethod2()));
@@ -503,7 +432,7 @@ bool IncreaseHealthMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-IncreaseHealthCompound::IncreaseHealthCompound()
+IncreaseHealthCompound::IncreaseHealthCompound() : HTNCompound("IncreaseHealthCompound")
 {
     m_methods.push_back(HTNMethodPtr(new IncreaseHealthMethod1()));
     m_methods.push_back(HTNMethodPtr(new IncreaseHealthMethod2()));
@@ -531,7 +460,7 @@ bool IncreaseStrengthMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-IncreaseStrengthCompound::IncreaseStrengthCompound()
+IncreaseStrengthCompound::IncreaseStrengthCompound() : HTNCompound("IncreaseStrengthCompound")
 {
     m_methods.push_back(HTNMethodPtr(new IncreaseStrengthMethod1()));
     m_methods.push_back(HTNMethodPtr(new IncreaseStrengthMethod2()));
@@ -559,7 +488,7 @@ bool IncreaseAgilityMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-IncreaseAgilityCompound::IncreaseAgilityCompound()
+IncreaseAgilityCompound::IncreaseAgilityCompound() : HTNCompound("IncreaseAgilityCompound")
 {
     m_methods.push_back(HTNMethodPtr(new IncreaseAgilityMethod1()));
     m_methods.push_back(HTNMethodPtr(new IncreaseAgilityMethod2()));
@@ -587,7 +516,7 @@ bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-IncreaseIntelligenceCompound::IncreaseIntelligenceCompound()
+IncreaseIntelligenceCompound::IncreaseIntelligenceCompound() : HTNCompound("IncreaseIntelligenceCompound")
 {
     m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod1()));
     m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod2()));
@@ -628,7 +557,7 @@ bool AttackMethod2::Preconditions(HTNWorldState &htnWorldState)
     return htnWorldState.m_v.at(WorldE::inSameRoom);
 }
 
-AttackCompound::AttackCompound(HTNWorldState &htnWorldState, int opponentIndex)
+AttackCompound::AttackCompound(HTNWorldState &htnWorldState, int opponentIndex) : HTNCompound("AttackCompound")
 {
     for (auto &item : htnWorldState.m_items)
     {
@@ -661,7 +590,7 @@ bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
     return (htnWorldState.m_v.at(WorldE::health) < 67) && htnWorldState.m_v.at(WorldE::inSameRoom);
 }
 
-CombatCompound::CombatCompound(HTNWorldState &htnWorldState, int opponentIndex)
+CombatCompound::CombatCompound(HTNWorldState &htnWorldState, int opponentIndex) : HTNCompound("CombatCompound")
 {
     m_methods.push_back(HTNMethodPtr(new EvadeMethod()));
     m_methods.push_back(HTNMethodPtr(new AttackCompoundMethod(htnWorldState, opponentIndex)));
@@ -698,7 +627,7 @@ bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
     return htnWorldState.m_v.at(WorldE::mission) == static_cast<int>(Missions::increaseIntelligence);
 }
 
-DoMissionCompound::DoMissionCompound()
+DoMissionCompound::DoMissionCompound() : HTNCompound("DoMissionCompound")
 {
     m_methods.push_back(HTNMethodPtr(new DoMissionMethod1()));
     m_methods.push_back(HTNMethodPtr(new DoMissionMethod2()));
@@ -737,7 +666,7 @@ bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldState)
+PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldState) : HTNCompound("PrisonerBehaviourCompound")
 {
     for (int i = 0; i < c_playerCount; i++)
     {

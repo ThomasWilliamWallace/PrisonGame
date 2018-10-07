@@ -10,13 +10,20 @@
 #include "HTNDomain.hpp"
 
 //*******************************************************************
-HTNTask::HTNTask():m_htnPrimitive(0), m_htnCompound(0), m_isPrimitive(false){}
+HTNTask::HTNTask():m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(0), m_isPrimitive(false) {}
 
-HTNTask::HTNTask(HTNPrimitivePtr htnPrimitive):m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true){}
+HTNTask::HTNTask(HTNPrimitivePtr htnPrimitive):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true) {}
 
-HTNTask::HTNTask(HTNCompoundPtr htnCompound):m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false){}
+HTNTask::HTNTask(HTNCompoundPtr htnCompound):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false) {}
+
+std::string HTNTask::ToString()
+{
+    return m_name;
+}
 
 //*******************************************************************
+HTNPrimitive::HTNPrimitive(std::string name): m_name(name) {}
+
 bool HTNPrimitive::Preconditions(HTNWorldState &htnWorldState)
 {
     return true;
@@ -34,11 +41,20 @@ Actions HTNPrimitive::Operator(int playerIndex, Player player[], World &world)
 
 std::string HTNPrimitive::ToString()
 {
-    std::string name = "NAME_NOT_SET";
-    return name;
+//    std::string name = "PRIMITIVE_NAME_NOT_SET";
+    return m_name;
 }
 
 void HTNPrimitive::PointToRealItems(){}
+
+//*******************************************************************
+HTNCompound::HTNCompound(std::string name): m_name(name) {}
+
+std::string HTNCompound::ToString()
+{
+//    std::string name = "COMPOUND_NAME_NOT_SET";
+    return m_name;
+}
 
 //*******************************************************************
 bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
