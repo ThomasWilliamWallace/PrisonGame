@@ -14,13 +14,38 @@
 
 class Player;
 
+enum class ItemType
+{
+    hammer,
+    knife,
+    brick,
+    plank,
+    mirror,
+    pistol,
+    ball,
+    bat,
+    rock,
+    assaultRifle,
+    scissors,
+    dynamite,
+    extinguisher,
+    syringe,
+    cigarette,
+    bottle,
+    cleaver,
+    poolCue,
+    dumbbell,
+    broom,
+    sword
+};
+
 class Item
 {
 public:
-    std::string m_name;
+    ItemType m_itemE;
     LocationClass m_locationClass;
     Player* m_carryingPlayer;
-    Item(std::string name, Locations location, Player* carryingPlayer=nullptr): m_name(name), m_locationClass(location), m_carryingPlayer(carryingPlayer){};
+    Item(ItemType itemE, Locations location, Player* carryingPlayer=nullptr): m_itemE(itemE), m_locationClass(location), m_carryingPlayer(carryingPlayer) {};
     std::string ToString();
 };
 
@@ -28,8 +53,8 @@ class SimItem : public Item
 {
 public:
     Item& m_realItem;
-    SimItem(Item &realItem, std::string name, Locations location, Player* carryingPlayer=nullptr):
-        Item(name, location, carryingPlayer), m_realItem(realItem)
+    SimItem(Item &realItem, ItemType itemE, Locations location, Player* carryingPlayer=nullptr):
+        Item(itemE, location, carryingPlayer), m_realItem(realItem)
     {};
 };
 

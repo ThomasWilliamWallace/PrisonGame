@@ -249,6 +249,7 @@ void DropItemAction(int playerIndex, Player player[], World &world)
     player[playerIndex].aiController.lastActionSucceeded = false;
     if (player[playerIndex].itemPtr != nullptr)
     {
+        player[playerIndex].itemPtr->m_locationClass.location = player[playerIndex].locationClass.location;
         player[playerIndex].narrative = "Dropped a " + player[playerIndex].itemPtr->ToString() + " in the " + player[playerIndex].itemPtr->m_locationClass.ToString() + ".";
         player[playerIndex].itemPtr->m_carryingPlayer = nullptr;
         player[playerIndex].itemPtr = nullptr;

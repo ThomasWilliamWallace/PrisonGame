@@ -278,6 +278,7 @@ DropItem::DropItem(Item* itemFocusPtr) : HTNPrimitive("DropItem"), m_itemFocusPt
 
 void DropItem::Effect(HTNWorldState &htnWorldState)
 {
+    m_itemFocusPtr->m_locationClass.location = static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
     m_itemFocusPtr->m_carryingPlayer = nullptr;
 }
 

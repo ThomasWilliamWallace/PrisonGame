@@ -15,9 +15,9 @@ World::World()
     circuitsOccupied = c_empty;
     studyOccupied = c_empty;
     bedOccupied = c_empty;
-    items.push_back(new Item("Broom", Locations::mainHall));
-    items.push_back(new Item("Brick", Locations::circuitTrack));
-    items.push_back(new Item("Mirror", Locations::bedroom));
+    items.push_back(new Item(ItemType::broom, Locations::mainHall));
+    items.push_back(new Item(ItemType::brick, Locations::circuitTrack));
+    items.push_back(new Item(ItemType::mirror, Locations::bedroom));
 }
 
 void World::Clean()
@@ -62,7 +62,7 @@ void World::PrintWorld(Player player[])
     std::cout << "\n";
     for (auto &item : items)
     {
-        std::cout << item->m_name << " is in the " << item->m_locationClass.ToString() << ".\n";
+        std::cout << item->ToString() << " is in the " << item->m_locationClass.ToString() << ".\n";
     }
     std::cout << "\n";
 }
