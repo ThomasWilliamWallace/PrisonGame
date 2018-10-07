@@ -36,34 +36,27 @@ class HTNTask
 {
 public:
     std::string m_name;
-    HTNPrimitivePtr m_htnPrimitive;
-    HTNCompoundPtr m_htnCompound;
     bool m_isPrimitive;
-    HTNTask();
-    HTNTask(HTNPrimitivePtr htnPrimitive);
-    HTNTask(HTNCompoundPtr htnCompound);
-    virtual std::string ToString();
+    HTNTask(std::string name, bool isPrimitive);
+    virtual ~HTNTask() = default;
+    std::string ToString();
 };
 
-class HTNPrimitive
+class HTNPrimitive : public HTNTask
 {
 public:
-    std::string m_name;
     HTNPrimitive(std::string name);
     virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
     virtual void Effect(HTNWorldState &htnWorldState); //simplified, predicted effect of taking this action. Will be applied to the simulated world during planning.
     virtual Actions Operator(int playerIndex, Player player[], World &world);  //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
-    std::string ToString();
     virtual void PointToRealItems();  //updates pointers and references to point to items existing in the players perceived HTNWorldState, rather than the simulated, predicted HTNWorldState.
 };
 
-class HTNCompound
+class HTNCompound : public HTNTask
 {
 public:
-    std::string m_name;
     HTNCompound(std::string name);
     HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
-    std::string ToString();
 };
 
 //list of either primitive or compound tasks
@@ -72,15 +65,15 @@ class HTNMethod
 public:
     virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
     HTNTaskList m_taskList; //To complete this HTNCompound task, all the tasks in a method must be completed.
-    void AddTask(HTNPrimitivePtr htnPrimitive);
-    void AddTask(HTNCompoundPtr htnCompound);
+    void AddTask(HTNPrimitivePtr htnPrimitivePtr);
+    void AddTask(HTNCompoundPtr htnCompoundPtr);
 };
 
 class HTNPlan
 {
 public:
-    HTNPrimitiveList m_list;
     //list of primitive tasks
+    HTNPrimitiveList m_list;
 };
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth);

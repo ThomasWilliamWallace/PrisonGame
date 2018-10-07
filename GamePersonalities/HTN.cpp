@@ -10,11 +10,13 @@
 #include "HTNDomain.hpp"
 
 //*******************************************************************
-HTNTask::HTNTask():m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(0), m_isPrimitive(false) {}
+//HTNTask::HTNTask():m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(0), m_isPrimitive(false) {}
 
-HTNTask::HTNTask(HTNPrimitivePtr htnPrimitive):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true) {}
+//HTNTask::HTNTask(HTNPrimitivePtr htnPrimitive):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true) {}
 
-HTNTask::HTNTask(HTNCompoundPtr htnCompound):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false) {}
+//HTNTask::HTNTask(HTNCompoundPtr htnCompound):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false) {}
+
+HTNTask::HTNTask(std::string name, bool isPrimitive) : m_name(name), m_isPrimitive(isPrimitive) {}
 
 std::string HTNTask::ToString()
 {
@@ -22,7 +24,7 @@ std::string HTNTask::ToString()
 }
 
 //*******************************************************************
-HTNPrimitive::HTNPrimitive(std::string name): m_name(name) {}
+HTNPrimitive::HTNPrimitive(std::string name): HTNTask(name, true) {}
 
 bool HTNPrimitive::Preconditions(HTNWorldState &htnWorldState)
 {
@@ -39,22 +41,10 @@ Actions HTNPrimitive::Operator(int playerIndex, Player player[], World &world)
     return Actions::noAction;
 }
 
-std::string HTNPrimitive::ToString()
-{
-//    std::string name = "PRIMITIVE_NAME_NOT_SET";
-    return m_name;
-}
-
 void HTNPrimitive::PointToRealItems(){}
 
 //*******************************************************************
-HTNCompound::HTNCompound(std::string name): m_name(name) {}
-
-std::string HTNCompound::ToString()
-{
-//    std::string name = "COMPOUND_NAME_NOT_SET";
-    return m_name;
-}
+HTNCompound::HTNCompound(std::string name): HTNTask(name, false) {}
 
 //*******************************************************************
 bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -62,14 +52,14 @@ bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-void HTNMethod::AddTask(HTNPrimitivePtr htnPrimitive)
+void HTNMethod::AddTask(HTNPrimitivePtr htnPrimitivePtr)
 {
-    m_taskList.push_back(HTNTaskPtr(new HTNTask(htnPrimitive)));
+    m_taskList.push_back(htnPrimitivePtr);
 }
 
-void HTNMethod::AddTask(HTNCompoundPtr htnCompound)
+void HTNMethod::AddTask(HTNCompoundPtr htnCompoundPtr)
 {
-    m_taskList.push_back(HTNTaskPtr(new HTNTask(htnCompound)));
+    m_taskList.push_back(htnCompoundPtr);
 }
 
 //*******************************************************************
@@ -97,15 +87,17 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
         {
             if (htnTask->m_isPrimitive)
             {
-                if (htnTask->m_htnPrimitive->Preconditions(ws2))
+                HTNPrimitivePtr pPtr( std::dynamic_pointer_cast<HTNPrimitive>(htnTask) );
+                if (pPtr->Preconditions(ws2))
                 {
-                    htnTask->m_htnPrimitive->Effect(ws2);
-                    htnPlan.push_back(htnTask->m_htnPrimitive);
+                    pPtr->Effect(ws2);
+                    htnPlan.push_back(pPtr);
                 } else {
                     planningFailed = true;
                 }
             } else {
-                HTNPrimitiveList subplan = HTNdfs(ws2, *(htnTask->m_htnCompound), searchDepth + 1);
+                HTNCompoundPtr cPtr( std::dynamic_pointer_cast<HTNCompound>(htnTask) );
+                HTNPrimitiveList subplan = HTNdfs(ws2, *cPtr, searchDepth + 1);
                 if (static_cast<int>(subplan.size()) > 0)
                 {
                     std::cout << "Returning plan:";

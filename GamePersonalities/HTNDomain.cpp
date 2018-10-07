@@ -643,7 +643,6 @@ CombatMethod::CombatMethod(HTNWorldState &htnWorldState, int opponentIndex)
 bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
 {
     return true;
-    //return htnWorldState.m_v.at(WorldE::health) < 69;
 }
 
 DoMissionMethod::DoMissionMethod()
