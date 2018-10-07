@@ -257,5 +257,3 @@ void DropItemAction(int playerIndex, Player player[], World &world)
         player[playerIndex].narrative = "ERROR: tried to drop up an item, but no item is being carried.";
     }
 }
-
-//TODO add destructors throughout the program to remove memory leaks! Release all pointer and array memory within classes.

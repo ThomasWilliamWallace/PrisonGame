@@ -27,7 +27,7 @@ class Relationship //their opinion of another character. Asymptotically bound be
     double trust = 50; //whether you consider this character to be trusted or a traitor
     
 public:
-    double getAggro(); //TODO the aggros seem to be totally off. Either the display or the calc is wrong.
+    double getAggro();
     double getFriendliness();
     double getFear();
     double getThreat();
