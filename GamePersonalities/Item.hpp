@@ -39,13 +39,16 @@ enum class ItemType
     sword
 };
 
+std::string ItemTypeToString(ItemType itemType);
+ItemType GetRandomItemType();
+
 class Item
 {
 public:
-    ItemType m_itemE;
+    ItemType m_itemType;
     LocationClass m_locationClass;
     Player* m_carryingPlayer;
-    Item(ItemType itemE, Locations location, Player* carryingPlayer=nullptr): m_itemE(itemE), m_locationClass(location), m_carryingPlayer(carryingPlayer) {};
+    Item(ItemType itemE, Locations location, Player* carryingPlayer=nullptr): m_itemType(itemE), m_locationClass(location), m_carryingPlayer(carryingPlayer) {};
     std::string ToString();
 };
 
@@ -53,8 +56,8 @@ class SimItem : public Item
 {
 public:
     Item& m_realItem;
-    SimItem(Item &realItem, ItemType itemE, Locations location, Player* carryingPlayer=nullptr):
-        Item(itemE, location, carryingPlayer), m_realItem(realItem)
+    SimItem(Item &realItem, ItemType itemType, Locations location, Player* carryingPlayer=nullptr):
+        Item(itemType, location, carryingPlayer), m_realItem(realItem)
     {};
 };
 

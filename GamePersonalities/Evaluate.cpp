@@ -109,7 +109,8 @@ void ConsiderMakeFriend(Eval& eval, Player player[], int playerIndex)
 
 void ConsiderMission(Eval& eval, Player player[], int playerIndex)
 {
-    switch (player[playerIndex].missionClass.mission)
+    /*
+    switch (player[playerIndex].missionClass.m_mission)
     {
         case Missions::increaseIntelligence:
             if (player[playerIndex].locationClass.location == Locations::library)
@@ -156,6 +157,7 @@ void ConsiderMission(Eval& eval, Player player[], int playerIndex)
         case Missions::noMission:
             break;
     }
+     */
 }
 
 Eval UtilityOfAction(Player player[], int playerIndex)

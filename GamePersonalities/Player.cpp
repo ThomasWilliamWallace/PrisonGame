@@ -8,6 +8,8 @@
 
 #include "Player.hpp"
 #include "Missions.hpp"
+#include "World.hpp"
+#include "Locations.hpp"
 
 double Relationship::getAggro()
 {
@@ -92,34 +94,25 @@ void Relationship::PrintRel(std::string name1, std::string name2)
     std::cout << "\n";
 }
 
-bool Player::IsMissionComplete()
+bool Player::IsMissionComplete(World &world)
 {
-    switch (missionClass.mission)
+    switch (missionClass.m_mission)
     {
         case Missions::increaseAgility:
-            if (missionClass.objective <= stats.getAgility())
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
+            return (missionClass.m_objective <= stats.getAgility());
         case Missions::increaseStrength:
-            if (missionClass.objective <= stats.getStrength())
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
+            return (missionClass.m_objective <= stats.getStrength());
         case Missions::increaseIntelligence:
-            if (missionClass.objective <= stats.getIntelligence())
+            return (missionClass.m_objective <= stats.getIntelligence());
+        case Missions::bringItemToRoom:
+            for (auto &item : world.items)
             {
-                return true;
-            } else
-            {
-                return false;
+                if ((item->m_itemType == missionClass.m_itemType) && (item->m_locationClass.location == missionClass.m_locationClass.location))
+                {
+                    return true;
+                }
             }
+            return false;
         case Missions::noMission:
             return false;
     }
@@ -144,9 +137,11 @@ void Player::PrintPlayer()
     std::cout << "attacked=" << BoolToString(attacked) << "\n";
     std::cout << "playerTarget=" << playerTarget << "\n";
     std::cout << "narrative=" << narrative << "\n";
-    std::cout << "mission.name=" << missionClass.MissionName() << "\n";
-    std::cout << "mission.objective=" << FormatDouble(missionClass.objective) << "\n";
-    std::cout << "mission.targetPlayerIndex=" << missionClass.targetPlayerIndex << "\n";
+    std::cout << "mission.MissionName()=" << missionClass.MissionName() << "\n";
+    std::cout << "mission.m_objective=" << FormatDouble(missionClass.m_objective) << "\n";
+    std::cout << "mission.m_targetPlayerIndex=" << missionClass.m_targetPlayerIndex << "\n";
+    std::cout << "mission.m_itemType=" << ItemTypeToString(missionClass.m_itemType) << "\n";
+    std::cout << "mission.m_locationClass=" << missionClass.m_locationClass.ToString() << "\n";
     std::cout << "cash=" << cash << "\n";
     std::cout << "sentence=" << sentence << "\n";
     std::cout << "m_playerIndex=" << m_playerIndex << "\n";
@@ -164,25 +159,27 @@ MissionClass CreateNewMission(Player player[], int playerIndex)
     double tempObjective;
     switch (tempMission)
     {
-        case (Missions::noMission):
+        case Missions::noMission:
             break;
-        case (Missions::increaseAgility):
+        case Missions::increaseAgility:
             tempObjective = player[playerIndex].stats.getAgility();
             break;
-        case (Missions::increaseStrength):
+        case Missions::increaseStrength:
             tempObjective = player[playerIndex].stats.getStrength();
             break;
-        case (Missions::increaseIntelligence):
+        case Missions::increaseIntelligence:
             tempObjective = player[playerIndex].stats.getIntelligence();
             break;
+        case Missions::bringItemToRoom:
+            return MissionClass(tempMission, GetRandomItemType(), GetRandomLocation());
     }
     tempObjective += 3; //todo ensure that the mission is achievable, ie 100 or below
     return MissionClass(tempMission, tempObjective, playerIndex); //TODO targetPlayerIndex not set
 }
 
-void Player::UpdateMissions(Player player[])
+void Player::UpdateMissions(Player player[], World &world)
 {
-    if (IsMissionComplete())
+    if (IsMissionComplete(world))
     {
         std::cout << name << " has completed his mission to " << missionClass.MissionName() << " and now has sanity=" << FormatDouble(stats.getSanity()) << "!\n";
         stats.deltaSanity(5);

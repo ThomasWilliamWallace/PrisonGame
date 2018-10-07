@@ -11,17 +11,21 @@
 
 #include <iostream>
 #include "Constants.hpp"
+#include "Item.hpp"
 
 class Player;
 
 class MissionClass
 {
 public:
-	Missions mission;
-	double objective; //objective for stat increase missions
-	int targetPlayerIndex;
+	Missions m_mission;
+	double m_objective; //objective for stat increase missions
+	int m_targetPlayerIndex;
+    ItemType m_itemType;
+    LocationClass m_locationClass;
     std::string MissionName();
     MissionClass(Missions mission, double objective, int targetPlayerIndex);
+    MissionClass(Missions mission, ItemType itemE, Locations location);
     MissionClass();
     std::string MissionNarrative(Player player[]);
 };

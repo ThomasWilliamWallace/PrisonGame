@@ -383,7 +383,7 @@ public:
 class DoMissionCompound : public HTNCompound
 {
 public:
-    DoMissionCompound();
+    DoMissionCompound();  //TODO add the bringItemToLocation mission
 };
 
 //***********************************************************

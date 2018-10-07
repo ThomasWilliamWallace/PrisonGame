@@ -254,7 +254,7 @@ void Simulate()
         AggroCooldown(player);
         for (int playerIndex=0; playerIndex < c_playerCount; playerIndex++)
         {
-            player[playerIndex].UpdateMissions(player);
+            player[playerIndex].UpdateMissions(player, world);
         }
         Display(player, frame);
     }

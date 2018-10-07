@@ -22,13 +22,13 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world): m_
     m_v.at(WorldE::punches) = 0;
     m_v.at(WorldE::evading) = player[playerIndex].lastAction == Actions::evade;
     m_v.at(WorldE::location) = static_cast<int>(player[playerIndex].locationClass.location);
-    m_v.at(WorldE::mission) = static_cast<int>(player[playerIndex].missionClass.mission);
+    m_v.at(WorldE::mission) = static_cast<int>(player[playerIndex].missionClass.m_mission);
     m_v.at(WorldE::inSameRoom) = player[playerIndex].locationClass.location == player[0].locationClass.location;
     
     //TODO reflect players sensors rather than being hardwired to the world
     for (auto &item : world.items)
     {
-        m_items.push_back(new SimItem(*item, item->m_itemE, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(new SimItem(*item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
     }
     
     for (int i = 0; i < c_playerCount; i++)
@@ -42,7 +42,7 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_ptrToSelf(ws2.
 {
     for (auto &item : ws2.m_items)
     {
-        m_items.push_back(new SimItem(item->m_realItem, item->m_itemE, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(new SimItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
     }
 }
 
@@ -63,7 +63,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
     
     for (auto &item : ws2.m_items)
     {
-        m_items.push_back(new SimItem(item->m_realItem, item->m_itemE, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(new SimItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
     }
 }
 

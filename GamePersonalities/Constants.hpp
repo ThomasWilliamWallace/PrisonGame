@@ -127,7 +127,8 @@ enum class Missions
     noMission,
     increaseStrength,
     increaseAgility,
-    increaseIntelligence
+    increaseIntelligence,
+    bringItemToRoom
 };
 
 std::string FormatDouble(double input);

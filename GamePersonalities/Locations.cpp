@@ -25,3 +25,18 @@ std::string LocationClass::ToString()
     }
     return "UnrecognisedLocation";
 }
+
+Locations GetRandomLocation()
+{
+    int random = rand() % 100;
+    if (random<20)
+        return Locations::bedroom;
+    else if (random<40)
+        return Locations::circuitTrack;
+    else if (random<60)
+        return Locations::gym;
+    else if (random<80)
+        return Locations::library;
+    else
+        return Locations::mainHall;
+}

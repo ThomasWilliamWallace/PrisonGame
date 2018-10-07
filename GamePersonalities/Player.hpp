@@ -69,8 +69,8 @@ public:
     int playerTarget = c_empty; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
     Item* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
     
-	bool IsMissionComplete();
-    void UpdateMissions(Player player[]);
+	bool IsMissionComplete(World &world);
+    void UpdateMissions(Player player[], World &world);
     void PrintPlayer();
     
     Relationship rel[c_playerCount];

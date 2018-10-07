@@ -12,7 +12,7 @@
 
 std::string MissionClass::MissionName()
 {
-    switch(mission)
+    switch(m_mission)
     {
         case (Missions::increaseAgility):
             return "increase agility";
@@ -20,6 +20,8 @@ std::string MissionClass::MissionName()
             return "increase strength";
         case (Missions::increaseIntelligence):
             return "increase intelligence";
+        case (Missions::bringItemToRoom):
+            return "bring item to room";
         case (Missions::noMission):
             return "no mission";
     }
@@ -28,47 +30,37 @@ std::string MissionClass::MissionName()
 
 std::string MissionClass::MissionNarrative(Player player[])
 {
-    std::string narrative =  "Mission: " + player[targetPlayerIndex].name + " must " + MissionName() + " to " + FormatDouble(objective) + " (current=";
-    switch (mission)
+    switch (m_mission)
     {
         case Missions::noMission:
-            narrative += "N/A";
-            break;
+            return "No Mission\n";
         case Missions::increaseAgility:
-            narrative += FormatDouble(player[targetPlayerIndex].stats.getAgility());
-            break;
+            return "Mission: " + player[m_targetPlayerIndex].name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(player[m_targetPlayerIndex].stats.getAgility()) + ")\n";
         case Missions::increaseStrength:
-            narrative += FormatDouble(player[targetPlayerIndex].stats.getStrength());
-            break;
+            return "Mission: " + player[m_targetPlayerIndex].name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(player[m_targetPlayerIndex].stats.getStrength()) + ")\n";
         case Missions::increaseIntelligence:
-            narrative += FormatDouble(player[targetPlayerIndex].stats.getIntelligence());
-            break;
+            return "Mission: " + player[m_targetPlayerIndex].name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(player[m_targetPlayerIndex].stats.getIntelligence()) + ")\n";
+        case Missions::bringItemToRoom:
+            return "Mission: " + player[m_targetPlayerIndex].name + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".\n";
     }
-    narrative += ")\n";
-    return narrative;
+    return "ERROR: MISSION TYPE NOT RECOGNISED";
 }
 
 Missions GetRandomMission()
 {
     int random = rand() % 100;
-    if (random<20)
+    if (random<25)
         return Missions::increaseStrength;
-    if (random<60)
+    else if (random<50)
         return Missions::increaseAgility;
-    else
+    else if (random<75)
         return Missions::increaseIntelligence;
+    else
+        return Missions::bringItemToRoom;
 }
 
-MissionClass::MissionClass(Missions _mission, double _objective, int _targetPlayerIndex)
-{
-    mission = _mission;
-    objective = _objective;
-    targetPlayerIndex = _targetPlayerIndex;
-}
+MissionClass::MissionClass(Missions mission, double objective, int targetPlayerIndex) : m_mission(mission), m_objective(objective), m_targetPlayerIndex(targetPlayerIndex) {}
 
-MissionClass::MissionClass()
-{
-    mission = Missions::noMission;
-    objective = 101;
-    targetPlayerIndex = -1;
-}
+MissionClass::MissionClass(Missions mission, ItemType itemType, Locations location) : m_mission(mission), m_itemType(itemType), m_locationClass(location) {}
+
+MissionClass::MissionClass() : m_mission(Missions::noMission), m_objective(101), m_targetPlayerIndex(-1) {}

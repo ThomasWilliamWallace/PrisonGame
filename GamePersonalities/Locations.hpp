@@ -20,4 +20,6 @@ public:
     std::string ToString();
 };
 
+Locations GetRandomLocation();
+
 #endif /* Locations_hpp */
