@@ -570,7 +570,8 @@ bool GetItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
     for (auto &item : htnWorldState.m_items)
     {
-        if (item->m_itemType == m_itemType && item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+        if (item->m_itemType == m_itemType
+          && item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
           && (item->m_carryingPlayer == nullptr))
         {
             return true;
@@ -585,7 +586,7 @@ GetItemCompound::GetItemCompound(ItemType itemType) : HTNCompound("GetItemCompou
 }
 
 //***********************************************************
-BringItemToLocationMethod1::BringItemToLocationMethod1(ItemType itemType)
+BringItemToLocationMethod1::BringItemToLocationMethod1(ItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
     AddTask(HTNPrimitivePtr(new DropItem()));
 }
@@ -593,13 +594,30 @@ BringItemToLocationMethod1::BringItemToLocationMethod1(ItemType itemType)
 bool BringItemToLocationMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
     return (htnWorldState.m_itemCarriedPtr != nullptr) &&
-        (htnWorldState.m_itemCarriedPtr->m_itemType == htnWorldState.m_missionClass.m_itemType) &&
-        (static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == htnWorldState.m_missionClass.m_locationClass.location);
+        (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType) &&
+        (static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_locationClass.location);
 }
 
-BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType)
+BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
-    AddTask(HTNCompoundPtr(new GoToGymCompound())); //TODO choose location based on mission target location
+    switch(m_locationClass.location)
+    {
+        case Locations::bedroom:
+            AddTask(HTNCompoundPtr(new GoToBedroomCompound()));
+            break;
+        case Locations::circuitTrack:
+            AddTask(HTNCompoundPtr(new GoToCircuitTrackCompound()));
+            break;
+        case Locations::gym:
+            AddTask(HTNCompoundPtr(new GoToGymCompound()));
+            break;
+        case Locations::library:
+            AddTask(HTNCompoundPtr(new GoToLibraryCompound()));
+            break;
+        case Locations::mainHall:
+            AddTask(HTNPrimitivePtr(new GoToMainHall()));
+            break;
+    }
     
     AddTask(HTNPrimitivePtr(new DropItem()));
 }
@@ -607,14 +625,31 @@ BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType)
 bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
     return (htnWorldState.m_itemCarriedPtr != nullptr) &&
-        (htnWorldState.m_itemCarriedPtr->m_itemType == htnWorldState.m_missionClass.m_itemType);
+        (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
-BringItemToLocationMethod3::BringItemToLocationMethod3(ItemType itemType)
+BringItemToLocationMethod3::BringItemToLocationMethod3(ItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
     AddTask(HTNCompoundPtr(new GetItemCompound(itemType)));
     
-    AddTask(HTNCompoundPtr(new GoToGymCompound())); //TODO choose location based on mission target location
+    switch(m_locationClass.location)
+    {
+        case Locations::bedroom:
+            AddTask(HTNCompoundPtr(new GoToBedroomCompound()));
+            break;
+        case Locations::circuitTrack:
+            AddTask(HTNCompoundPtr(new GoToCircuitTrackCompound()));
+            break;
+        case Locations::gym:
+            AddTask(HTNCompoundPtr(new GoToGymCompound()));
+            break;
+        case Locations::library:
+            AddTask(HTNCompoundPtr(new GoToLibraryCompound()));
+            break;
+        case Locations::mainHall:
+            AddTask(HTNPrimitivePtr(new GoToMainHall()));
+            break;
+    }
     
     AddTask(HTNPrimitivePtr(new DropItem()));
 }
@@ -624,11 +659,11 @@ bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
     return true; 
 }
 
-BringItemToLocationCompound::BringItemToLocationCompound(ItemType itemType) : HTNCompound("BringItemToLocationCompound")
+BringItemToLocationCompound::BringItemToLocationCompound(ItemType itemType, LocationClass &locationClass) : HTNCompound("BringItemToLocationCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod1(itemType))); //TODO reuse some of the actions at higher level
-    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod2(itemType)));  // TODO ie, right now, method 1 2 and 3 all overlap.
-    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod3(itemType)));
+    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod1(itemType, locationClass))); //TODO reuse some of the actions at higher level
+    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod2(itemType, locationClass)));  // TODO ie, right now, method 1 2 and 3 all overlap.
+    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod3(itemType, locationClass)));
 }
 
 //***********************************************************
@@ -738,7 +773,7 @@ bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod4::DoMissionMethod4(HTNWorldState &htnWorldState)
 {
-    AddTask(HTNCompoundPtr(new BringItemToLocationCompound(htnWorldState.m_missionClass.m_itemType)));  //TODO make construction conditional on 'Preconditions'? Because right now, tasks are constructed regardless of whether their preconditions apply.
+    AddTask(HTNCompoundPtr(new BringItemToLocationCompound(htnWorldState.m_missionClass.m_itemType, htnWorldState.m_missionClass.m_locationClass)));  //TODO make construction conditional on 'Preconditions'? Because right now, tasks are constructed regardless of whether their preconditions apply.
 }
 
 bool DoMissionMethod4::Preconditions(HTNWorldState &htnWorldState)

@@ -356,29 +356,35 @@ public:
 //***********************************************************
 class BringItemToLocationMethod1 : public HTNMethod
 {
+    ItemType m_itemType;
+    LocationClass& m_locationClass;
 public:
-    BringItemToLocationMethod1(ItemType itemType);
+    BringItemToLocationMethod1(ItemType itemType, LocationClass &locationClass);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationMethod2 : public HTNMethod
 {
+    ItemType m_itemType;
+    LocationClass& m_locationClass;
 public:
-    BringItemToLocationMethod2(ItemType itemType);
+    BringItemToLocationMethod2(ItemType itemType, LocationClass &locationClass);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationMethod3 : public HTNMethod
 {
+    ItemType m_itemType;
+    LocationClass& m_locationClass;
 public:
-    BringItemToLocationMethod3(ItemType itemType);
+    BringItemToLocationMethod3(ItemType itemType, LocationClass &locationClass);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationCompound : public HTNCompound
 {
 public:
-    BringItemToLocationCompound(ItemType itemType);
+    BringItemToLocationCompound(ItemType itemType, LocationClass &locationClass);
 };
 
 //***********************************************************
