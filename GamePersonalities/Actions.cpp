@@ -223,6 +223,12 @@ void MakeFriendsAction(int playerIndex, Player player[], World &world)
 void PickUpItemAction(int playerIndex, Player player[], World &world)
 {
     player[playerIndex].aiController.lastActionSucceeded = false;
+    if (player[playerIndex].itemPtr != nullptr)
+    {
+        player[playerIndex].narrative = "ERROR: tried to pick up an item, but was already carrying something.";
+        return;
+    }
+    
     if (player[playerIndex].itemFocusPtr != nullptr)
     {
         if (player[playerIndex].locationClass.location == (player[playerIndex].itemFocusPtr)->m_locationClass.location)

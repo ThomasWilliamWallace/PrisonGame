@@ -10,12 +10,6 @@
 #include "HTNDomain.hpp"
 
 //*******************************************************************
-//HTNTask::HTNTask():m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(0), m_isPrimitive(false) {}
-
-//HTNTask::HTNTask(HTNPrimitivePtr htnPrimitive):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(htnPrimitive), m_htnCompound(0), m_isPrimitive(true) {}
-
-//HTNTask::HTNTask(HTNCompoundPtr htnCompound):m_name("TASK_NAME_NOT_SET"), m_htnPrimitive(0), m_htnCompound(htnCompound), m_isPrimitive(false) {}
-
 HTNTask::HTNTask(std::string name, bool isPrimitive) : m_name(name), m_isPrimitive(isPrimitive) {}
 
 std::string HTNTask::ToString()
@@ -41,7 +35,7 @@ Actions HTNPrimitive::Operator(int playerIndex, Player player[], World &world)
     return Actions::noAction;
 }
 
-void HTNPrimitive::PointToRealItems(){}
+void HTNPrimitive::PointToRealItems(HTNWorldState &htnWorldState){}
 
 //*******************************************************************
 HTNCompound::HTNCompound(std::string name): HTNTask(name, false) {}

@@ -48,19 +48,27 @@ std::string MissionClass::MissionNarrative(Player player[])
 
 Missions GetRandomMission()
 {
-    int random = rand() % 100;
-    if (random<25)
-        return Missions::increaseStrength;
-    else if (random<50)
-        return Missions::increaseAgility;
-    else if (random<75)
-        return Missions::increaseIntelligence;
-    else
+//    int random = rand() % 100;
+//    if (random<25)
+//        return Missions::increaseStrength;
+//    else if (random<50)
+//        return Missions::increaseAgility;
+//    else if (random<75)
+//        return Missions::increaseIntelligence;
+//    else
         return Missions::bringItemToRoom;
 }
 
 MissionClass::MissionClass(Missions mission, double objective, int targetPlayerIndex) : m_mission(mission), m_objective(objective), m_targetPlayerIndex(targetPlayerIndex) {}
 
-MissionClass::MissionClass(Missions mission, ItemType itemType, Locations location) : m_mission(mission), m_itemType(itemType), m_locationClass(location) {}
+MissionClass::MissionClass(Missions mission, int targetPlayerIndex, ItemType itemType, Locations location) : m_mission(mission), m_targetPlayerIndex(targetPlayerIndex), m_itemType(itemType), m_locationClass(location) {}
 
 MissionClass::MissionClass() : m_mission(Missions::noMission), m_objective(101), m_targetPlayerIndex(-1) {}
+
+MissionClass::MissionClass(const MissionClass& missionClass) :
+    m_mission(missionClass.m_mission),
+    m_objective(missionClass.m_objective),
+    m_targetPlayerIndex(missionClass.m_targetPlayerIndex),
+    m_itemType(missionClass.m_itemType),
+    m_locationClass(missionClass.m_locationClass)
+{}

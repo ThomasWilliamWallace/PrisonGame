@@ -12,7 +12,10 @@
 #include "World.hpp"
 
 //***********************************************************
-HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world): m_v(WorldE::last, 0), m_ptrToSelf(&(player[playerIndex]))
+HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world):
+    m_v(WorldE::last, 0),
+    m_ptrToSelf(&(player[playerIndex])),
+    m_missionClass(player[playerIndex].missionClass)
 {
     m_v.at(WorldE::health) = round(player[playerIndex].stats.getHealth());
     m_v.at(WorldE::sanity) = round(player[playerIndex].stats.getSanity());
@@ -22,13 +25,16 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world): m_
     m_v.at(WorldE::punches) = 0;
     m_v.at(WorldE::evading) = player[playerIndex].lastAction == Actions::evade;
     m_v.at(WorldE::location) = static_cast<int>(player[playerIndex].locationClass.location);
-    m_v.at(WorldE::mission) = static_cast<int>(player[playerIndex].missionClass.m_mission);
     m_v.at(WorldE::inSameRoom) = player[playerIndex].locationClass.location == player[0].locationClass.location;
     
     //TODO reflect players sensors rather than being hardwired to the world
     for (auto &item : world.items)
     {
         m_items.push_back(new SimItem(*item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
+        if (&*(m_items.back()->m_carryingPlayer) == &player[playerIndex])
+        {
+            m_itemCarriedPtr = m_items.back();
+        }
     }
     
     for (int i = 0; i < c_playerCount; i++)
@@ -38,11 +44,20 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world): m_
     }
 }
 
-HTNWorldState::HTNWorldState(HTNWorldState &ws2): m_v(ws2.m_v), m_ptrToSelf(ws2.m_ptrToSelf), m_attackers(ws2.m_attackers), m_playerLocations(ws2.m_playerLocations)
+HTNWorldState::HTNWorldState(HTNWorldState &ws2):
+    m_v(ws2.m_v),
+    m_ptrToSelf(ws2.m_ptrToSelf),
+    m_attackers(ws2.m_attackers),
+    m_playerLocations(ws2.m_playerLocations),
+    m_missionClass(ws2.m_missionClass)
 {
     for (auto &item : ws2.m_items)
     {
         m_items.push_back(new SimItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
+        if (ws2.m_itemCarriedPtr == item)
+        {
+            m_itemCarriedPtr = m_items.back();
+        }
     }
 }
 
@@ -64,7 +79,12 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
     for (auto &item : ws2.m_items)
     {
         m_items.push_back(new SimItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
+        if (ws2.m_itemCarriedPtr == item)
+        {
+            m_itemCarriedPtr = m_items.back();
+        }
     }
+    m_missionClass = ws2.m_missionClass;
 }
 
 void HTNWorldState::Print()
@@ -74,9 +94,14 @@ void HTNWorldState::Print()
         std::cout << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
     }
     std::cout << "m_ptrToSelf:" << m_ptrToSelf << "\n";
+    std::cout << "m_itemCarriedPtr:" << m_itemCarriedPtr << "\n";
     for (auto &item : m_items)
     {
         std::cout << "Item: " << item->ToString() << " in the " << item->m_locationClass.ToString() << "\n";
+    }
+    for (int i = 0; i < c_playerCount; i++)
+    {
+        std::cout << "Status of player " << i << " = " << (m_attackers.at(i) ? "fighting" : "peaceful") << " in the " << LocationToString(m_playerLocations.at(i)) << ".\n";
     }
 }
 
@@ -92,7 +117,6 @@ std::string WorldEToString(WorldE worldE)
         case WorldE::punches: return "punches";
         case WorldE::evading: return "evading";
         case WorldE::location: return "location";
-        case WorldE::mission: return "mission";
         case WorldE::inSameRoom: return "inSameRoom";
         case WorldE::last: return "LAST";
         default: return "ERROR_NO_WORLDE_STRING_FOUND";

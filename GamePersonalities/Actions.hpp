@@ -18,6 +18,7 @@ class Player;
 
 bool OtherInReach(int playerIndex, int otherPlayer, Player player[]);
 std::string ActionToString(Actions action);
+
 void AttackAction(int attackerIndex, Player player[], World &world);
 void WeightliftAction(int playerIndex, Player player[], World &world);
 void CircuitsAction(int playerIndex, Player player[], World &world);

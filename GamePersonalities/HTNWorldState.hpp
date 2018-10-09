@@ -11,6 +11,7 @@
 #include <vector>
 #include <iostream>
 #include "Locations.hpp"
+#include "Missions.hpp"
 
 enum WorldE
 {
@@ -24,8 +25,7 @@ enum WorldE
     evading,
     
     location,
-    mission,
-    inSameRoom,  //TODO adapt this to multiple players
+    inSameRoom,  //TODO adapt this to multiple players. not currently used.
     last
 };
 
@@ -41,8 +41,10 @@ public:
     std::vector<int> m_v;
     std::vector< SimItem* > m_items;
     Player* m_ptrToSelf;
+    Item* m_itemCarriedPtr;
     std::vector<bool> m_attackers;
     std::vector<Locations> m_playerLocations;
+    MissionClass m_missionClass;
     HTNWorldState(HTNWorldState &ws2);
     HTNWorldState(int playerIndex, Player player[], World &world);
     ~HTNWorldState();

@@ -234,6 +234,7 @@ void Simulate()
     for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)
     {
         player[playerIndex].missionClass = CreateNewMission(player,playerIndex);
+        std::cout << player[playerIndex].missionClass.MissionNarrative(player);
     }
     
     // loop one time step at a time

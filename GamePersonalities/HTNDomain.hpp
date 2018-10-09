@@ -146,19 +146,28 @@ public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
-    void PointToRealItems();
+    void PointToRealItems(HTNWorldState &htnWorldState);
+};
+
+//***********************************************************
+class PickUpItem2 : public HTNPrimitive
+{
+public:
+    PickUpItem2(ItemType itemType);
+    ItemType m_itemType;
+    bool Preconditions(HTNWorldState &htnWorldState);
+    void Effect(HTNWorldState &htnWorldState);
+    Actions Operator(int playerIndex, Player player[], World &world);
 };
 
 //***********************************************************
 class DropItem : public HTNPrimitive
 {
 public:
-    DropItem(Item* itemFocusPtr);
-    Item* m_itemFocusPtr;
+    DropItem();
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
-    void PointToRealItems();
 };
 
 //***********************************************************
@@ -330,6 +339,49 @@ public:
 };
 
 //***********************************************************
+class GetItemMethod1 : public HTNMethod
+{
+    ItemType m_itemType;
+public:
+    GetItemMethod1(ItemType itemType);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class GetItemCompound : public HTNCompound
+{
+public:
+    GetItemCompound(ItemType itemType);
+};
+
+//***********************************************************
+class BringItemToLocationMethod1 : public HTNMethod
+{
+public:
+    BringItemToLocationMethod1(ItemType itemType);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class BringItemToLocationMethod2 : public HTNMethod
+{
+public:
+    BringItemToLocationMethod2(ItemType itemType);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class BringItemToLocationMethod3 : public HTNMethod
+{
+public:
+    BringItemToLocationMethod3(ItemType itemType);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class BringItemToLocationCompound : public HTNCompound
+{
+public:
+    BringItemToLocationCompound(ItemType itemType);
+};
+
+//***********************************************************
 class AttackMethod1 : public HTNMethod
 {
     Item* m_itemPtr;
@@ -380,10 +432,17 @@ public:
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
+class DoMissionMethod4 : public HTNMethod
+{
+public:
+    DoMissionMethod4(HTNWorldState &htnWorldState);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
 class DoMissionCompound : public HTNCompound
 {
 public:
-    DoMissionCompound();  //TODO add the bringItemToLocation mission
+    DoMissionCompound(HTNWorldState &htnWorldState);  //TODO add the bringItemToLocation mission
 };
 
 //***********************************************************
@@ -411,7 +470,7 @@ public:
 class DoMissionMethod : public HTNMethod
 {
 public:
-    DoMissionMethod();
+    DoMissionMethod(HTNWorldState &htnWorldState);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -440,7 +499,7 @@ public:
 class DropItemMethod1 : public HTNMethod
 {
 public:
-    DropItemMethod1(Item* itemFocusPtr);
+    DropItemMethod1();
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 

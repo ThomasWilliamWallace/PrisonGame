@@ -25,8 +25,9 @@ public:
     LocationClass m_locationClass;
     std::string MissionName();
     MissionClass(Missions mission, double objective, int targetPlayerIndex);
-    MissionClass(Missions mission, ItemType itemE, Locations location);
+    MissionClass(Missions mission, int targetPlayerIndex, ItemType itemE, Locations location);
     MissionClass();
+    MissionClass(const MissionClass& missionClass);
     std::string MissionNarrative(Player player[]);
 };
 

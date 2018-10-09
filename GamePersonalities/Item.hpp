@@ -50,6 +50,7 @@ public:
     Player* m_carryingPlayer;
     Item(ItemType itemE, Locations location, Player* carryingPlayer=nullptr): m_itemType(itemE), m_locationClass(location), m_carryingPlayer(carryingPlayer) {};
     std::string ToString();
+    virtual ~Item() = default;
 };
 
 class SimItem : public Item

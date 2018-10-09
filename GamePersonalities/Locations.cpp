@@ -8,7 +8,7 @@
 
 #include "Locations.hpp"
 
-std::string LocationClass::ToString()
+std::string LocationToString(Locations location)
 {
     switch(location)
     {
@@ -24,6 +24,11 @@ std::string LocationClass::ToString()
             return "Main hall";
     }
     return "UnrecognisedLocation";
+}
+
+std::string LocationClass::ToString()
+{
+    return LocationToString(location);
 }
 
 Locations GetRandomLocation()

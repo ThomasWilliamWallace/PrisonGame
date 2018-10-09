@@ -16,6 +16,7 @@ World::World()
     studyOccupied = c_empty;
     bedOccupied = c_empty;
     items.push_back(new Item(ItemType::extinguisher, Locations::mainHall));
+    items.push_back(new Item(ItemType::bottle, Locations::mainHall));
     items.push_back(new Item(ItemType::brick, Locations::circuitTrack));
     items.push_back(new Item(ItemType::mirror, Locations::bedroom));
 }

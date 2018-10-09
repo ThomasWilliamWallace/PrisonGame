@@ -49,7 +49,7 @@ public:
     virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
     virtual void Effect(HTNWorldState &htnWorldState); //simplified, predicted effect of taking this action. Will be applied to the simulated world during planning.
     virtual Actions Operator(int playerIndex, Player player[], World &world);  //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
-    virtual void PointToRealItems();  //updates pointers and references to point to items existing in the players perceived HTNWorldState, rather than the simulated, predicted HTNWorldState.
+    virtual void PointToRealItems(HTNWorldState &htnWorldState);  //updates pointers and references to point to items existing in the players perceived HTNWorldState, rather than the simulated, predicted HTNWorldState.
 };
 
 class HTNCompound : public HTNTask

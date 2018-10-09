@@ -171,7 +171,7 @@ MissionClass CreateNewMission(Player player[], int playerIndex)
             tempObjective = player[playerIndex].stats.getIntelligence();
             break;
         case Missions::bringItemToRoom:
-            return MissionClass(tempMission, GetRandomItemType(), GetRandomLocation());
+            return MissionClass(tempMission, playerIndex, GetRandomItemType(), GetRandomLocation());
     }
     tempObjective += 3; //todo ensure that the mission is achievable, ie 100 or below
     return MissionClass(tempMission, tempObjective, playerIndex); //TODO targetPlayerIndex not set

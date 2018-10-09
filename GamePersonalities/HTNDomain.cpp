@@ -9,9 +9,9 @@
 #include "HTNDomain.hpp"
 #include "Locations.hpp"
 #include "Player.hpp"
+#include "World.hpp"
 
 //Start HTNPrimitives****************************************
-//***********************************************************
 Study::Study() : HTNPrimitive("Study") {}
 
 void Study::Effect(HTNWorldState &htnWorldState)
@@ -244,6 +244,7 @@ PickUpItem::PickUpItem(Item* itemFocusPtr) : HTNPrimitive("PickUpItem"), m_itemF
 void PickUpItem::Effect(HTNWorldState &htnWorldState)
 {
     m_itemFocusPtr->m_carryingPlayer = htnWorldState.m_ptrToSelf;
+    htnWorldState.m_itemCarriedPtr = m_itemFocusPtr;
 }
 
 Actions PickUpItem::Operator(int playerIndex, Player player[], World &world)
@@ -255,51 +256,87 @@ Actions PickUpItem::Operator(int playerIndex, Player player[], World &world)
 bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 {
     //TODO hook this into the actions code
-    if (m_itemFocusPtr != nullptr)
+    if (m_itemFocusPtr != nullptr
+      && static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocusPtr->m_locationClass.location
+      && m_itemFocusPtr->m_carryingPlayer == nullptr)
     {
-        if (static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocusPtr->m_locationClass.location)
+        return true;
+    }
+    return false;
+}
+
+void PickUpItem::PointToRealItems(HTNWorldState &htnWorldState)
+{
+    m_itemFocusPtr = &(dynamic_cast<SimItem*>(m_itemFocusPtr))->m_realItem;
+}
+
+//***********************************************************
+PickUpItem2::PickUpItem2(ItemType itemType) : HTNPrimitive("PickUpItem2"), m_itemType(itemType) {}
+
+void PickUpItem2::Effect(HTNWorldState &htnWorldState)
+{
+    for (auto &item : htnWorldState.m_items)
+    {
+        if (item->m_itemType == m_itemType
+            && item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+            && item->m_carryingPlayer == nullptr)
         {
-            if (m_itemFocusPtr->m_carryingPlayer == nullptr)
-            {
-                return true;
-            }
+            item->m_carryingPlayer = htnWorldState.m_ptrToSelf;
+            htnWorldState.m_itemCarriedPtr = item;
+            return;
+        }
+    }
+}
+
+Actions PickUpItem2::Operator(int playerIndex, Player player[], World &world)
+{
+    for (auto &item : world.items)
+    {
+        if (item->m_itemType == m_itemType && item->m_locationClass.location == player[playerIndex].locationClass.location)
+        {
+            player[playerIndex].itemFocusPtr = item;
+            return Actions::pickUpItem;
+        }
+    }
+    player[playerIndex].itemFocusPtr = nullptr;
+    return Actions::pickUpItem;
+}
+
+bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
+{
+    for (auto &item : htnWorldState.m_items)
+    {
+        if (item->m_itemType == m_itemType
+            && item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+            && item->m_carryingPlayer == nullptr)
+        {
+            return true;
         }
     }
     return false;
 }
 
-void PickUpItem::PointToRealItems()
-{
-    m_itemFocusPtr = &((static_cast<SimItem*>(m_itemFocusPtr))->m_realItem);
-}
-
 //***********************************************************
-DropItem::DropItem(Item* itemFocusPtr) : HTNPrimitive("DropItem"), m_itemFocusPtr(itemFocusPtr) {}
+DropItem::DropItem() : HTNPrimitive("DropItem") {}
 
 void DropItem::Effect(HTNWorldState &htnWorldState)
 {
-    m_itemFocusPtr->m_locationClass.location = static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
-    m_itemFocusPtr->m_carryingPlayer = nullptr;
+    htnWorldState.m_itemCarriedPtr->m_locationClass.location = static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
+    htnWorldState.m_itemCarriedPtr->m_carryingPlayer = nullptr;
+    htnWorldState.m_itemCarriedPtr = nullptr;
 }
 
 Actions DropItem::Operator(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].itemFocusPtr = m_itemFocusPtr;
     return Actions::dropItem;
 }
 
 bool DropItem::Preconditions(HTNWorldState &htnWorldState)
 {
-    return m_itemFocusPtr != nullptr; //TODO hook this into the actions code
-}
-
-void DropItem::PointToRealItems()
-{
-    m_itemFocusPtr = &((static_cast<SimItem*>(m_itemFocusPtr))->m_realItem);
+    return htnWorldState.m_itemCarriedPtr != nullptr; //TODO hook this into the actions code
 }
 
 //Start HTNCompounds*****************************************
-//***********************************************************
 GoToLibraryMethod1::GoToLibraryMethod1()
 {
     AddTask(HTNPrimitivePtr(new GoToLibrary()));
@@ -524,6 +561,77 @@ IncreaseIntelligenceCompound::IncreaseIntelligenceCompound() : HTNCompound("Incr
 }
 
 //***********************************************************
+GetItemMethod1::GetItemMethod1(ItemType itemType) : m_itemType(itemType)
+{
+    AddTask(HTNPrimitivePtr(new PickUpItem2(itemType)));
+}
+
+bool GetItemMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    for (auto &item : htnWorldState.m_items)
+    {
+        if (item->m_itemType == m_itemType && item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+          && (item->m_carryingPlayer == nullptr))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+GetItemCompound::GetItemCompound(ItemType itemType) : HTNCompound("GetItemCompound("+ItemTypeToString(itemType)+")")
+{
+    m_methods.push_back(HTNMethodPtr(new GetItemMethod1(itemType)));
+}
+
+//***********************************************************
+BringItemToLocationMethod1::BringItemToLocationMethod1(ItemType itemType)
+{
+    AddTask(HTNPrimitivePtr(new DropItem()));
+}
+
+bool BringItemToLocationMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return (htnWorldState.m_itemCarriedPtr != nullptr) &&
+        (htnWorldState.m_itemCarriedPtr->m_itemType == htnWorldState.m_missionClass.m_itemType) &&
+        (static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == htnWorldState.m_missionClass.m_locationClass.location);
+}
+
+BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType)
+{
+    AddTask(HTNCompoundPtr(new GoToGymCompound())); //TODO choose location based on mission target location
+    
+    AddTask(HTNPrimitivePtr(new DropItem()));
+}
+
+bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return (htnWorldState.m_itemCarriedPtr != nullptr) &&
+        (htnWorldState.m_itemCarriedPtr->m_itemType == htnWorldState.m_missionClass.m_itemType);
+}
+
+BringItemToLocationMethod3::BringItemToLocationMethod3(ItemType itemType)
+{
+    AddTask(HTNCompoundPtr(new GetItemCompound(itemType)));
+    
+    AddTask(HTNCompoundPtr(new GoToGymCompound())); //TODO choose location based on mission target location
+    
+    AddTask(HTNPrimitivePtr(new DropItem()));
+}
+
+bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true; 
+}
+
+BringItemToLocationCompound::BringItemToLocationCompound(ItemType itemType) : HTNCompound("BringItemToLocationCompound")
+{
+    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod1(itemType))); //TODO reuse some of the actions at higher level
+    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod2(itemType)));  // TODO ie, right now, method 1 2 and 3 all overlap.
+    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod3(itemType)));
+}
+
+//***********************************************************
 AttackMethod1::AttackMethod1(Item* itemPtr, int opponentIndex)
 {
     m_itemPtr = itemPtr;
@@ -605,7 +713,7 @@ DoMissionMethod1::DoMissionMethod1()
 
 bool DoMissionMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_v.at(WorldE::mission) == static_cast<int>(Missions::increaseStrength);
+    return htnWorldState.m_missionClass.m_mission == Missions::increaseStrength;
 }
 
 DoMissionMethod2::DoMissionMethod2()
@@ -615,7 +723,7 @@ DoMissionMethod2::DoMissionMethod2()
 
 bool DoMissionMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_v.at(WorldE::mission) == static_cast<int>(Missions::increaseAgility);
+    return htnWorldState.m_missionClass.m_mission == Missions::increaseAgility;
 }
 
 DoMissionMethod3::DoMissionMethod3()
@@ -625,14 +733,25 @@ DoMissionMethod3::DoMissionMethod3()
 
 bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_v.at(WorldE::mission) == static_cast<int>(Missions::increaseIntelligence);
+    return htnWorldState.m_missionClass.m_mission == Missions::increaseIntelligence;
 }
 
-DoMissionCompound::DoMissionCompound() : HTNCompound("DoMissionCompound")
+DoMissionMethod4::DoMissionMethod4(HTNWorldState &htnWorldState)
+{
+    AddTask(HTNCompoundPtr(new BringItemToLocationCompound(htnWorldState.m_missionClass.m_itemType)));  //TODO make construction conditional on 'Preconditions'? Because right now, tasks are constructed regardless of whether their preconditions apply.
+}
+
+bool DoMissionMethod4::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_missionClass.m_mission == Missions::bringItemToRoom;
+}
+
+DoMissionCompound::DoMissionCompound(HTNWorldState &htnWorldState) : HTNCompound("DoMissionCompound")
 {
     m_methods.push_back(HTNMethodPtr(new DoMissionMethod1()));
     m_methods.push_back(HTNMethodPtr(new DoMissionMethod2()));
     m_methods.push_back(HTNMethodPtr(new DoMissionMethod3()));
+    m_methods.push_back(HTNMethodPtr(new DoMissionMethod4(htnWorldState)));
 }
 
 //***********************************************************
@@ -646,14 +765,14 @@ bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-DoMissionMethod::DoMissionMethod()
+DoMissionMethod::DoMissionMethod(HTNWorldState &htnWorldState)
 {
-    AddTask(HTNCompoundPtr(new DoMissionCompound()));
+    AddTask(HTNCompoundPtr(new DoMissionCompound(htnWorldState)));
 }
 
 bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_v.at(WorldE::mission) != static_cast<int>(Missions::noMission);
+    return htnWorldState.m_missionClass.m_mission != Missions::noMission;
 }
 
 IncreaseIntelligenceMethod::IncreaseIntelligenceMethod()
@@ -675,7 +794,7 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
             m_methods.push_back(HTNMethodPtr(new CombatMethod(htnWorldState, i)));
         }
     }
-    m_methods.push_back(HTNMethodPtr(new DoMissionMethod()));
+    m_methods.push_back(HTNMethodPtr(new DoMissionMethod(htnWorldState)));
     m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod()));
 }
 
@@ -691,9 +810,9 @@ bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-DropItemMethod1::DropItemMethod1(Item* itemFocusPtr)
+DropItemMethod1::DropItemMethod1()
 {
-    AddTask(HTNPrimitivePtr(new DropItem(itemFocusPtr)));
+    AddTask(HTNPrimitivePtr(new DropItem()));
 }
 
 bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)

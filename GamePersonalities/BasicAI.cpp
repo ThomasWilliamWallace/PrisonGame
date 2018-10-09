@@ -291,7 +291,7 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
         htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
         for (auto &htnPrimitive : htnPlan)
         {
-            htnPrimitive->PointToRealItems();
+            htnPrimitive->PointToRealItems(htnWorldStateDFSCopy);
         }
         
         //once again, check if next step of the plan is valid.
@@ -319,10 +319,62 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
     string input;
     int targetPlayer;
     std::cout << "Choose action:";
+    int itemsInRoom;
+    int playersInRoom;
     while (true)
     {
         std::cin >> input;
         switch(input[0]){
+        case 'v':
+            std::cout << "Room contains:\n";
+            playersInRoom = 0;
+            for (int i = 0; i < c_playerCount; i++)
+            {
+                if (player[i].locationClass.location == player[playerIndex].locationClass.location)
+                {
+                    std::cout << "Player \"" << player[i].name << "\", (index=" << i << ")\n";
+                    playersInRoom += 1;
+                }
+            }
+            if (playersInRoom == 0)
+            {
+                std::cout << "No players in room.\n";
+            }
+            itemsInRoom = 0;
+            for (auto &item : world.items)
+            {
+                if (item->m_locationClass.location == player[playerIndex].locationClass.location)
+                {
+                    std::cout << "Item \"" << item->ToString() << "\", (index=" << itemsInRoom << ")\n";
+                    itemsInRoom += 1;
+                }
+            }
+            if (itemsInRoom == 0)
+            {
+                std::cout << "No items in room.\n";
+            }
+            std::cout << "\n";
+            break;
+        case 'q':
+            exit(0);
+        case 'h':
+            std::cout << "Commands:\n";
+            std::cout << "v: view room\n";
+            std::cout << "a: " << ActionToString(Actions::attack) << "\n";
+            std::cout << "e: " << ActionToString(Actions::evade) << "\n";
+            std::cout << "b: " << ActionToString(Actions::goToBedroom) << "\n";
+            std::cout << "c: " << ActionToString(Actions::goToCircuitTrack) << "\n";
+            std::cout << "g: " << ActionToString(Actions::goToGym) << "\n";
+            std::cout << "l: " << ActionToString(Actions::goToLibrary) << "\n";
+            std::cout << "m: " << ActionToString(Actions::goToMainHall) << "\n";
+            std::cout << "p: " << ActionToString(Actions::pickUpItem) << "\n";
+            std::cout << "d: " << ActionToString(Actions::dropItem) << "\n";
+            std::cout << "f: " << ActionToString(Actions::makeFriends) << "\n";
+            std::cout << "o: " << ActionToString(Actions::offerMission) << "\n";
+            std::cout << "u: " << ActionToString(Actions::useRoom) << "\n";
+            std::cout << "h: display help\n";
+            std::cout << "q: quit\n";
+            break;
         case 'a':
             while (true)
             {
@@ -336,7 +388,7 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
         case 'c': return Actions::goToCircuitTrack;
         case 'g': return Actions::goToGym;
         case 'l': return Actions::goToLibrary;
-        case 'h': return Actions::goToMainHall;
+        case 'm': return Actions::goToMainHall;
         case 'p': 
             while (true)
             {
@@ -346,13 +398,19 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
                 if (targetItem == -1)
                 {
                     player[playerIndex].itemFocusPtr = nullptr;
+                    return Actions::pickUpItem;
+                } else if (targetItem < 0 || targetItem >= static_cast<int>(world.items.size())) 
+                {
+                    std::cout << "ERROR: invalid target item index. Please enter a new action:\n";
+                    break;
                 } else {
                     player[playerIndex].itemFocusPtr = world.items.at(targetItem);
+                    return Actions::pickUpItem;
                 }
-                return Actions::pickUpItem;
             }
+            break;
         case 'd': return Actions::dropItem;
-        case 'm':
+        case 'f':
             while (true)
             {
                 std::cout << "Choose target player:";
