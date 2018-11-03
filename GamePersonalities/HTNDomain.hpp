@@ -12,6 +12,7 @@
 #include <iostream>
 #include "HTN.hpp"
 #include "HTNWorldState.hpp"
+#include "Player.hpp"
 
 class Item;
 class World;
@@ -165,6 +166,19 @@ class DropItem : public HTNPrimitive
 {
 public:
     DropItem();
+    bool Preconditions(HTNWorldState &htnWorldState);
+    void Effect(HTNWorldState &htnWorldState);
+    Actions Operator(int playerIndex, Player player[], World &world);
+};
+
+//***********************************************************
+class RequestItemPrim : public HTNPrimitive
+{
+    int m_playerIndex;
+    Player* m_player;
+    ItemType m_itemType;
+public:
+    RequestItemPrim(int playerIndex, Player* player, ItemType itemType);
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
@@ -347,10 +361,19 @@ public:
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
+class GetItemMethod2 : public HTNMethod
+{
+    int m_playerIndex;
+    ItemType m_itemType;
+public:
+    GetItemMethod2(int playerIndex, Player player[], ItemType itemType);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
 class GetItemCompound : public HTNCompound
 {
 public:
-    GetItemCompound(ItemType itemType);
+    GetItemCompound(ItemType itemType, Player player[]);
 };
 
 //***********************************************************
@@ -377,14 +400,14 @@ class BringItemToLocationMethod3 : public HTNMethod
     ItemType m_itemType;
     LocationClass& m_locationClass;
 public:
-    BringItemToLocationMethod3(ItemType itemType, LocationClass &locationClass);
+    BringItemToLocationMethod3(ItemType itemType, LocationClass &locationClass, Player player[]);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationCompound : public HTNCompound
 {
 public:
-    BringItemToLocationCompound(ItemType itemType, LocationClass &locationClass);
+    BringItemToLocationCompound(ItemType itemType, LocationClass &locationClass, Player player[]);
 };
 
 //***********************************************************
@@ -441,14 +464,14 @@ public:
 class DoMissionMethod4 : public HTNMethod
 {
 public:
-    DoMissionMethod4(HTNWorldState &htnWorldState);
+    DoMissionMethod4(HTNWorldState &htnWorldState, Player player[]);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class DoMissionCompound : public HTNCompound
 {
 public:
-    DoMissionCompound(HTNWorldState &htnWorldState);  //TODO add the bringItemToLocation mission
+    DoMissionCompound(HTNWorldState &htnWorldState, Player player[]);  //TODO add the bringItemToLocation mission
 };
 
 //***********************************************************
@@ -476,7 +499,7 @@ public:
 class DoMissionMethod : public HTNMethod
 {
 public:
-    DoMissionMethod(HTNWorldState &htnWorldState);
+    DoMissionMethod(HTNWorldState &htnWorldState, Player player[]);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -490,7 +513,7 @@ public:
 class PrisonerBehaviourCompound : public HTNCompound
 {
 public:
-    PrisonerBehaviourCompound(HTNWorldState &htnWorldState);
+    PrisonerBehaviourCompound(HTNWorldState &htnWorldState, Player player[]);
 };
 
 //***********************************************************

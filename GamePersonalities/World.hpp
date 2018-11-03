@@ -22,6 +22,7 @@ public:
     int bedOccupied;
     void WorldEffects(Player player[], int frame);
     void PrintWorld(Player player[]);
+    void FullDisplay(Player player[]);
     void Clean();
     World();
     std::vector< Item* > items;

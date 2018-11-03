@@ -32,6 +32,7 @@ public:
     AIController(AI _algo);
     AIController();
     bool lastActionSucceeded;
+    bool RespondToOffer(int playerIndex);
 };
 
 #endif /* BasicAI_hpp */

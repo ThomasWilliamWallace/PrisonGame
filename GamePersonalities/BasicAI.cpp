@@ -285,14 +285,17 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     if (!hasValidPlan)
     {
         //make new plan
-        std::cout << "Make a new plan\n";
+        std::cout << player[playerIndex].name << ": Make a new plan:\n";
         HTNWorldState htnWorldStateDFSCopy(htnWorldState);
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
+        HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy, player);
+        
         htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
         for (auto &htnPrimitive : htnPlan)
         {
             htnPrimitive->PointToRealItems(htnWorldStateDFSCopy);
+            std::cout << htnPrimitive->ToString() << ", ";
         }
+        std::cout << "\n";
         
         //once again, check if next step of the plan is valid.
         if (htnPlan.size() > 0)
@@ -303,11 +306,10 @@ Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World 
     
     if (!hasValidPlan)
     {
-        std::cout << "Give up and return noAction\n";
+        std::cout << player[playerIndex].name << ": Give up and return noAction\n";
         return Actions::noAction; //If next step of the plan is still not valid, then return failure state
     } else {
         //continue with current plan
-        std::cout << "Continue\n";
         HTNPrimitivePtr currentPlanStep = htnPlan.front();
         htnPlan.pop_front();
         return currentPlanStep->Operator(playerIndex, player, world);
@@ -318,11 +320,11 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
 {
     string input;
     int targetPlayer;
-    std::cout << "Choose action:";
     int itemsInRoom;
     int playersInRoom;
     while (true)
     {
+        std::cout << "Choose action:";
         std::cin >> input;
         switch(input[0]){
         case 'v':
@@ -356,6 +358,7 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
             std::cout << "\n";
             break;
         case 'q':
+            world.FullDisplay(player);
             exit(0);
         case 'h':
             std::cout << "Commands:\n";
@@ -372,6 +375,7 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
             std::cout << "f: " << ActionToString(Actions::makeFriends) << "\n";
             std::cout << "o: " << ActionToString(Actions::offerMission) << "\n";
             std::cout << "u: " << ActionToString(Actions::useRoom) << "\n";
+            std::cout << "r: " << ActionToString(Actions::requestItem) << "\n";
             std::cout << "h: display help\n";
             std::cout << "q: quit\n";
             break;
@@ -399,13 +403,24 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
                 {
                     player[playerIndex].itemFocusPtr = nullptr;
                     return Actions::pickUpItem;
-                } else if (targetItem < 0 || targetItem >= static_cast<int>(world.items.size())) 
-                {
+                } else {
+                    int itemCountInRoom = 0;
+                    int itemIndex = 0;
+                    for (auto &item : world.items)
+                    {
+                        if (item->m_locationClass.location == player[playerIndex].locationClass.location)
+                        {
+                            if (itemCountInRoom == targetItem)
+                            {
+                                player[playerIndex].itemFocusPtr = world.items.at(itemIndex);
+                                return Actions::pickUpItem;
+                            }
+                            itemCountInRoom += 1;
+                        }
+                        itemIndex += 1;
+                    }
                     std::cout << "ERROR: invalid target item index. Please enter a new action:\n";
                     break;
-                } else {
-                    player[playerIndex].itemFocusPtr = world.items.at(targetItem);
-                    return Actions::pickUpItem;
                 }
             }
             break;
@@ -427,6 +442,14 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
                 player[playerIndex].missionOffer = CreateNewMission(player, targetPlayer);
                 return Actions::offerMission;
             }
+        case 'r':
+            while (true)
+            {
+                std::cout << "Which player do you request from? ";
+                std::cin >> targetPlayer;
+                player[playerIndex].playerTarget = targetPlayer;
+                return Actions::requestItem;
+            }
         case 'u': return Actions::useRoom;
         }
     }
@@ -441,4 +464,9 @@ AIController::AIController(AI _algo)
 AIController::AIController()
 {
     algo = AI::randomAI;
+}
+
+bool AIController::RespondToOffer(int playerIndex)
+{
+    return true; //STUB
 }

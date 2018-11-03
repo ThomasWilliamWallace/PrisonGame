@@ -16,27 +16,27 @@ class Player;
 
 enum class ItemType
 {
-    hammer,
-    knife,
-    brick,
-    plank,
-    mirror,
-    pistol,
-    ball,
-    bat,
-    rock,
-    assaultRifle,
-    scissors,
-    dynamite,
-    extinguisher,
-    syringe,
-    cigarette,
-    bottle,
-    cleaver,
-    poolCue,
-    dumbbell,
-    broom,
-    sword
+	assaultRifle,
+	ball,
+	bat,
+	bottle,
+	brick,
+	broom,
+	cigarette,
+	cleaver,
+	dumbbell,
+	dynamite,
+	extinguisher,
+	hammer,
+	knife,
+	mirror,
+	pistol,
+	plank,
+	poolCue,
+	rock,
+	scissors,
+	sword,
+	syringe
 };
 
 std::string ItemTypeToString(ItemType itemType);

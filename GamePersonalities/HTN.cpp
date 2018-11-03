@@ -61,6 +61,17 @@ constexpr int c_MaxSearchDepth = 50;
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth)
 {    
+    std::cout << "Try to plan " + htnCompound.ToString() + ", containing methods:\n";
+    for (auto &htnMethod : htnCompound.m_methods)
+    {
+        std::cout << "Method: ";
+        for (auto &task : htnMethod->m_taskList)
+        {
+            std::cout << task->ToString() << ",";
+        }
+        std::cout << "\n";
+    }
+
     if (searchDepth > c_MaxSearchDepth)
     {
         HTNPrimitiveList htnPlan2;
@@ -94,13 +105,10 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
                 HTNPrimitiveList subplan = HTNdfs(ws2, *cPtr, searchDepth + 1);
                 if (static_cast<int>(subplan.size()) > 0)
                 {
-                    std::cout << "Returning plan:";
                     for (auto &subtask : subplan)
                     {
-                        std::cout << subtask->ToString() << ", ";
                         htnPlan.push_back(subtask);
                     }
-                    std::cout << "\n";
                 } else {
                     planningFailed = true;
                 }
@@ -117,6 +125,12 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
             //an htnMethod of htnCompound has been successfully planned
             //copy the planned htnWorldState back into the parameter htnWorldState
             htnWorldState.CopyFrom(ws2);
+            std::cout << "Successfully planned an htnMethod for compound " + htnCompound.ToString() + ":";
+            for (auto &htn : htnPlan)
+            {
+                std::cout << htn->ToString() << ", ";
+            }
+            std::cout << "\n";
             return htnPlan;
         }
     }

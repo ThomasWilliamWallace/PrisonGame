@@ -47,6 +47,8 @@ std::string ActionToString(Actions action)
             return "PickUpItem";
         case Actions::dropItem:
             return "DropItem";
+        case Actions::requestItem:
+            return "RequestItem";
         case Actions::noAction:
             return "ERROR NO ACTION";
     }
@@ -55,7 +57,6 @@ std::string ActionToString(Actions action)
 
 void AttackAction(int attackerIndex, Player player[], World &world)
 {
-    player[attackerIndex].aiController.lastActionSucceeded = false;
     int defenderIndex = player[attackerIndex].playerTarget;
     if (playerIndexOutOfBounds(defenderIndex))
     {
@@ -100,7 +101,6 @@ void AttackAction(int attackerIndex, Player player[], World &world)
 
 void WeightliftAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.weightsOccupied == c_empty)
     {
         world.weightsOccupied = playerIndex;
@@ -114,7 +114,6 @@ void WeightliftAction(int playerIndex, Player player[], World &world)
 
 void CircuitsAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.circuitsOccupied == c_empty)
     {
         world.circuitsOccupied = playerIndex;
@@ -128,7 +127,6 @@ void CircuitsAction(int playerIndex, Player player[], World &world)
 
 void StudyAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.studyOccupied == c_empty)
     {
         world.studyOccupied = playerIndex;
@@ -142,7 +140,6 @@ void StudyAction(int playerIndex, Player player[], World &world)
 
 void SleepAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (world.bedOccupied == c_empty)
     {
         world.bedOccupied = playerIndex;
@@ -172,14 +169,12 @@ void UseRoomAction(int playerIndex, Player player[], World &world)
             break;
         case Locations::mainHall:
             player[playerIndex].narrative = "tries to use the main hall, but there's nothing here to use.";
-            player[playerIndex].aiController.lastActionSucceeded = false;
             break;
     }
 }
 
 void OfferMissionAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (playerIndexOutOfBounds(player[playerIndex].playerTarget))
     {
         player[playerIndex].narrative = "ERROR: tried to offer a mission to an invalid player index.";
@@ -197,7 +192,6 @@ void OfferMissionAction(int playerIndex, Player player[], World &world)
 
 void MakeFriendsAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (playerIndexOutOfBounds(player[playerIndex].playerTarget))
     {
         player[playerIndex].narrative = "ERROR: tried to make friends with an an invalid player index.";
@@ -222,7 +216,6 @@ void MakeFriendsAction(int playerIndex, Player player[], World &world)
 
 void PickUpItemAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (player[playerIndex].itemPtr != nullptr)
     {
         player[playerIndex].narrative = "ERROR: tried to pick up an item, but was already carrying something.";
@@ -248,11 +241,10 @@ void PickUpItemAction(int playerIndex, Player player[], World &world)
     } else {
         player[playerIndex].narrative = "ERROR: tried to pick up an item, but didn't specify which.";
     }
-} 
+}
 
 void DropItemAction(int playerIndex, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     if (player[playerIndex].itemPtr != nullptr)
     {
         player[playerIndex].itemPtr->m_locationClass.location = player[playerIndex].locationClass.location;
@@ -262,5 +254,40 @@ void DropItemAction(int playerIndex, Player player[], World &world)
         player[playerIndex].aiController.lastActionSucceeded = true;
     } else {
         player[playerIndex].narrative = "ERROR: tried to drop up an item, but no item is being carried.";
+    }
+}
+
+void RequestItemAction(int playerIndex, Player player[], World &world)
+{
+    if (player[playerIndex].playerTarget == playerIndex)
+    {
+        player[playerIndex].narrative = "ERROR: " + player[playerIndex].name + " tried to request an item from himself.";
+        return;
+    }
+    if (player[playerIndex].itemPtr != nullptr)
+    {
+        player[playerIndex].narrative = "ERROR: tried to request an item but is already carrying a " + player[playerIndex].itemPtr->ToString() + ".";
+        return;
+    }
+    if (playerIndexOutOfBounds(player[playerIndex].playerTarget))
+    {
+        player[playerIndex].narrative = "ERROR: tried to request an item but didn't specify who to ask.";
+        return;
+    }
+    if (player[player[playerIndex].playerTarget].itemPtr == nullptr)
+    {
+        player[playerIndex].narrative = "ERROR: tried to request an item from " + player[player[playerIndex].playerTarget].name + ", but " + player[player[playerIndex].playerTarget].name + " is not carrying anything.";
+        return;
+    }
+    player[playerIndex].narrative = "Says: 'Hey " + player[player[playerIndex].playerTarget].name + ", can I have that " + player[player[playerIndex].playerTarget].itemPtr->ToString() + " you're carrying?'\n";
+    if (player[player[playerIndex].playerTarget].aiController.RespondToOffer(playerIndex))
+    {
+        player[player[playerIndex].playerTarget].itemPtr->m_carryingPlayer = &player[playerIndex];
+        player[playerIndex].itemPtr = player[player[playerIndex].playerTarget].itemPtr;
+        player[player[playerIndex].playerTarget].itemPtr = nullptr;
+        player[playerIndex].narrative += "Request success! " + player[player[playerIndex].playerTarget].name + " has given " + player[playerIndex].name + " the " + player[playerIndex].itemPtr->ToString() + ".";
+        player[playerIndex].aiController.lastActionSucceeded = true;
+    } else {
+        player[playerIndex].narrative += "Request was declined.";
     }
 }

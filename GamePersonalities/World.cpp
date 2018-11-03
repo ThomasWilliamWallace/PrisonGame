@@ -11,22 +11,23 @@
 
 World::World()
 {
-    weightsOccupied = c_empty;
+    weightsOccupied  = c_empty;
     circuitsOccupied = c_empty;
-    studyOccupied = c_empty;
-    bedOccupied = c_empty;
+    studyOccupied    = c_empty;
+    bedOccupied      = c_empty;
     items.push_back(new Item(ItemType::extinguisher, Locations::mainHall));
-    items.push_back(new Item(ItemType::bottle, Locations::mainHall));
-    items.push_back(new Item(ItemType::brick, Locations::circuitTrack));
-    items.push_back(new Item(ItemType::mirror, Locations::bedroom));
+    items.push_back(new Item(ItemType::bottle      , Locations::mainHall));
+    items.push_back(new Item(ItemType::brick       , Locations::circuitTrack));
+    items.push_back(new Item(ItemType::ball        , Locations::mainHall));
+    items.push_back(new Item(ItemType::mirror      , Locations::bedroom));
 }
 
 void World::Clean()
 {
-    bedOccupied = c_empty;
+    bedOccupied      = c_empty;
     circuitsOccupied = c_empty;
-    studyOccupied = c_empty;
-    weightsOccupied = c_empty;
+    studyOccupied    = c_empty;
+    weightsOccupied  = c_empty;
 }
 
 void World::WorldEffects(Player player[], int frame)
@@ -66,4 +67,25 @@ void World::PrintWorld(Player player[])
         std::cout << item->ToString() << " is in the " << item->m_locationClass.ToString() << ".\n";
     }
     std::cout << "\n";
+}
+
+void World::FullDisplay(Player player[])
+{
+    std::cout << "\n";
+    PrintWorld(player);
+    
+    for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)
+    {
+        player[playerIndex].PrintPlayer(player);
+    }
+    
+    //display rels
+    for (int i=0; i < c_playerCount; i++)
+    {
+        for (int j=0; j < c_playerCount; j++)
+        {
+            if (i!=j)
+                player[i].rel[j].PrintRel(player[i].name, player[j].name);
+        }
+    }
 }

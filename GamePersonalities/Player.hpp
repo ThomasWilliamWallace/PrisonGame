@@ -71,7 +71,7 @@ public:
     
 	bool IsMissionComplete(World &world);
     void UpdateMissions(Player player[], World &world);
-    void PrintPlayer();
+    void PrintPlayer(Player player[]);
     
     Relationship rel[c_playerCount];
 };

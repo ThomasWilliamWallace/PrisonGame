@@ -29,5 +29,6 @@ void OfferMissionAction(int playerIndex, Player player[], World &world);
 void MakeFriendsAction(int playerIndex, Player player[], World &world);
 void PickUpItemAction(int playerIndex, Player player[], World &world);
 void DropItemAction(int playerIndex, Player player[], World &world);
+void RequestItemAction(int playerIndex, Player player[], World &world);
 
 #endif /* Actions_hpp */

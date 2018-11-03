@@ -127,7 +127,7 @@ std::string CharacterName(Player player[], int playerIndex)
         return player[playerIndex].name;
 }
 
-void Player::PrintPlayer()
+void Player::PrintPlayer(Player player[])
 {
     std::cout << "*** PLAYER " << name << " ***\n";
     std::cout << "action=" << ActionToString(action) << "\n";
@@ -137,11 +137,18 @@ void Player::PrintPlayer()
     std::cout << "attacked=" << BoolToString(attacked) << "\n";
     std::cout << "playerTarget=" << playerTarget << "\n";
     std::cout << "narrative=" << narrative << "\n";
-    std::cout << "mission.MissionName()=" << missionClass.MissionName() << "\n";
-    std::cout << "mission.m_objective=" << FormatDouble(missionClass.m_objective) << "\n";
-    std::cout << "mission.m_targetPlayerIndex=" << missionClass.m_targetPlayerIndex << "\n";
-    std::cout << "mission.m_itemType=" << ItemTypeToString(missionClass.m_itemType) << "\n";
-    std::cout << "mission.m_locationClass=" << missionClass.m_locationClass.ToString() << "\n";
+    std::cout << "item=";
+    if (itemPtr != nullptr)
+        std::cout << itemPtr->ToString() << "\n";
+    else
+        std::cout << "null\n";
+    std::cout << "itemFocus=";
+    if (itemFocusPtr != nullptr)
+        std::cout << itemFocusPtr->ToString() << "\n";
+    else
+        std::cout << "null\n";
+    std::cout << "missionClass=" << missionClass.MissionNarrative(player);
+    std::cout << "missionOffer=" << missionOffer.MissionNarrative(player);
     std::cout << "cash=" << cash << "\n";
     std::cout << "sentence=" << sentence << "\n";
     std::cout << "m_playerIndex=" << m_playerIndex << "\n";

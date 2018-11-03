@@ -47,6 +47,8 @@ void PriorityActions(int frame, Player player[], World &world)
             case Actions::evade:
                 player[playerIndex].narrative = "evade";
                 break;
+            case Actions::requestItem:
+                break;
             case Actions::noAction:
                 break;
         }
@@ -55,11 +57,11 @@ void PriorityActions(int frame, Player player[], World &world)
 
 void Act(int playerIndex, int frame, Player player[], World &world)
 {
+    player[playerIndex].aiController.lastActionSucceeded = false;
     Actions action = player[playerIndex].action;
     if (player[playerIndex].attacked && action != Actions::attack && action != Actions::evade)
     {
         player[playerIndex].narrative = "attempted action " + ActionToString(action) + " but was attacked and lost their turn.";
-        player[playerIndex].aiController.lastActionSucceeded = false;
         return;
     }
     
@@ -79,6 +81,7 @@ void Act(int playerIndex, int frame, Player player[], World &world)
                 {
                     player[playerIndex].narrative = "goes to the bedroom.";
                     player[playerIndex].locationClass.location = Locations::bedroom;
+                    player[playerIndex].aiController.lastActionSucceeded = true;
                 } else
                 {
                     player[playerIndex].narrative = "tries to go to the bedroom, but is too far away.";
@@ -95,6 +98,7 @@ void Act(int playerIndex, int frame, Player player[], World &world)
                 {
                     player[playerIndex].narrative = "goes to the circuit track.";
                     player[playerIndex].locationClass.location = Locations::circuitTrack;
+                    player[playerIndex].aiController.lastActionSucceeded = true;
                 } else
                 {
                     player[playerIndex].narrative = "tries to go to the circuit track, but is too far away.";
@@ -111,6 +115,7 @@ void Act(int playerIndex, int frame, Player player[], World &world)
                 {
                     player[playerIndex].narrative = "goes to the gym.";
                     player[playerIndex].locationClass.location = Locations::gym;
+                    player[playerIndex].aiController.lastActionSucceeded = true;
                 } else
                 {
                     player[playerIndex].narrative = "tries to go to the gym, but is too far away.";
@@ -127,6 +132,7 @@ void Act(int playerIndex, int frame, Player player[], World &world)
                 {
                     player[playerIndex].narrative = "goes to the library.";
                     player[playerIndex].locationClass.location = Locations::library;
+                    player[playerIndex].aiController.lastActionSucceeded = true;
                 } else
                 {
                     player[playerIndex].narrative = "tries to go to the library, but is too far away.";
@@ -141,6 +147,7 @@ void Act(int playerIndex, int frame, Player player[], World &world)
             {
                 player[playerIndex].narrative = "goes to the main hall.";
                 player[playerIndex].locationClass.location = Locations::mainHall;
+                player[playerIndex].aiController.lastActionSucceeded = true;
             }
             break;
         case Actions::useRoom:
@@ -157,6 +164,9 @@ void Act(int playerIndex, int frame, Player player[], World &world)
             break;
         case Actions::dropItem:
             DropItemAction(playerIndex, player, world);
+            break;
+        case Actions::requestItem:
+            RequestItemAction(playerIndex, player, world);
             break;
         case Actions::noAction:
             player[playerIndex].narrative = "ERROR NO ACTION.";
@@ -195,27 +205,6 @@ void CleanUpFrame(Player player[])
     }
 }
 
-void FullDisplay(Player player[], World &world)
-{
-    std::cout << "\n";
-    world.PrintWorld(player);
-    
-    for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)
-    {
-        player[playerIndex].PrintPlayer();
-    }
-    
-    //display rels
-    for (int i=0; i < c_playerCount; i++)
-    {
-        for (int j=0; j < c_playerCount; j++)
-        {
-            if (i!=j)
-                player[i].rel[j].PrintRel(player[i].name, player[j].name);
-        }
-    }
-}
-
 void Simulate()
 {
     // Setup
@@ -226,11 +215,17 @@ void Simulate()
     }
     World world;
     player[0].name = "Thomas";
-    player[1].name = "Vita";
-    player[2].name = "Zog";
     player[0].aiController = AIController(AI::humanAI);
-    player[1].aiController = AIController(AI::htnAI);
-    player[2].aiController = AIController(AI::htnAI);
+    if (c_playerCount > 1)
+    {
+        player[1].name = "Vita";
+        player[1].aiController = AIController(AI::htnAI);
+    }
+    if (c_playerCount > 2)
+    {
+        player[2].name = "Zog";
+        player[2].aiController = AIController(AI::htnAI);
+    }
     for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)
     {
         player[playerIndex].missionClass = CreateNewMission(player,playerIndex);
@@ -260,7 +255,7 @@ void Simulate()
         Display(player, frame);
     }
     world.Clean();
-    FullDisplay(player, world);
+    world.FullDisplay(player);
 }
 
 int main(int argc, char **argv)

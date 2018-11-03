@@ -16,7 +16,7 @@
 using namespace std;
 
 constexpr int c_empty = -1;
-constexpr int c_playerCount = 3;
+constexpr int c_playerCount = 2;
 constexpr double c_aggro_scale = 30;
 constexpr double c_aggroCooldown = 0.15;
 
@@ -44,6 +44,7 @@ enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
     offerMission,
     pickUpItem,
     dropItem,
+    requestItem,
     noAction // serves as a flag for any unset actions
 };
 
@@ -61,6 +62,7 @@ const std::vector<Actions> v_action //MUST KEEP IN SYNC WITH ACTIONS
     Actions::offerMission,
     Actions::pickUpItem,
     Actions::dropItem,
+    Actions::requestItem,
     Actions::noAction,
 };
 
