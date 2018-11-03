@@ -43,15 +43,6 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world):
         m_attackers.push_back(player[playerIndex].rel[i].getAggro()>29 ? true : false);
         m_playerLocations.push_back(player[i].locationClass.location);
     }
-    std::cout << "HTNWorldState constructor\n";
-        for (auto &item : world.items)
-        {
-            std::cout << "Items: " << item << "\n";
-        }
-        for (auto &simItem : m_items)
-        {
-            std::cout << "SimItems: " << simItem << ", with link to real item " << &(simItem->m_realItem) << "\n";
-        }
 }
 
 HTNWorldState::HTNWorldState(HTNWorldState &ws2):
@@ -71,12 +62,6 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2):
             m_itemCarriedPtr = m_items.back();
         }
     }
-    std::cout << "HTNWorldState copy constructor\n";
-        for (auto &simItem : m_items)
-        {
-            std::cout << "Cycling through m_items!";
-            std::cout << "SimItems: " << simItem << ", with link to real item " << &(simItem->m_realItem) << "\n";
-        }   
 }
 
 HTNWorldState::~HTNWorldState()
@@ -105,11 +90,6 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
         }
     }
     m_missionClass = ws2.m_missionClass;
-    std::cout << "HTNWorldState copyFrom\n";
-        for (auto &simItem : m_items)
-        {
-            std::cout << "SimItems: " << simItem << ", with link to real item " << &(simItem->m_realItem) << "\n";
-        }
 }
 
 void HTNWorldState::Print()
