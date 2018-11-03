@@ -274,6 +274,11 @@ void RequestItemAction(int playerIndex, Player player[], World &world)
         player[playerIndex].narrative = "ERROR: tried to request an item but didn't specify who to ask.";
         return;
     }
+    if (player[player[playerIndex].playerTarget].locationClass.location != player[playerIndex].locationClass.location)
+    {
+        player[playerIndex].narrative = "ERROR: tried to request an item from " + player[player[playerIndex].playerTarget].name + ", but he isn't even in the same room.";
+        return;
+    }
     if (player[player[playerIndex].playerTarget].itemPtr == nullptr)
     {
         player[playerIndex].narrative = "ERROR: tried to request an item from " + player[player[playerIndex].playerTarget].name + ", but " + player[player[playerIndex].playerTarget].name + " is not carrying anything.";
