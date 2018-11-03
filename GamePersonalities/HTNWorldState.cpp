@@ -100,9 +100,9 @@ void HTNWorldState::Print()
     }
     std::cout << "m_ptrToSelf:" << m_ptrToSelf << "\n";
     std::cout << "m_itemCarriedPtr:" << m_itemCarriedPtr << "\n";
-    for (auto &item : m_items)
+    for (auto &simItem : m_items)
     {
-        std::cout << "Item: " << item->ToString() << " in the " << item->m_locationClass.ToString() << "\n";
+        std::cout << "SimItem: " << simItem->ToString() << " carried by " << simItem->m_carryingPlayer->name << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << &(simItem->m_realItem) << "\n";
     }
     for (int i = 0; i < c_playerCount; i++)
     {
