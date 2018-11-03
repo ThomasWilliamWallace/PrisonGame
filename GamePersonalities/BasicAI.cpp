@@ -468,5 +468,26 @@ AIController::AIController()
 
 bool AIController::RespondToOffer(int playerIndex)
 {
-    return true; //STUB
+    if (algo == AI::humanAI)
+    {
+        while (true)
+        {
+            std::string input;
+            std::cout << "Y/N? ";
+            std::cin >> input;
+            switch(input[0])
+            {
+                case 'Y':
+                case 'y':
+                    return true;
+                case 'N':
+                case 'n':
+                    return false;
+                default:
+                    break;
+            }
+        }
+    } else {
+        return true;
+    }
 }

@@ -19,6 +19,7 @@ constexpr int c_empty = -1;
 constexpr int c_playerCount = 3;
 constexpr double c_aggro_scale = 30;
 constexpr double c_aggroCooldown = 0.15;
+constexpr bool c_debug = false;
 
 enum class AI
 {

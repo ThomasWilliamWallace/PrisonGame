@@ -360,7 +360,6 @@ Actions RequestItemPrim::Operator(int playerIndex, Player player[], World &world
 
 bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    std::cout << "RequestItemPrim::Preconditions: htnWorldState.m_itemCarriedPtr = " << htnWorldState.m_itemCarriedPtr << "\n";
     if (htnWorldState.m_itemCarriedPtr != nullptr)
     {
         return false;

@@ -60,16 +60,19 @@ void HTNMethod::AddTask(HTNCompoundPtr htnCompoundPtr)
 constexpr int c_MaxSearchDepth = 50;
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth)
-{    
-    std::cout << "Try to plan " + htnCompound.ToString() + ", containing methods:\n";
-    for (auto &htnMethod : htnCompound.m_methods)
+{
+    if (c_debug)
     {
-        std::cout << "Method: ";
-        for (auto &task : htnMethod->m_taskList)
+        std::cout << "Try to plan " + htnCompound.ToString() + ", containing methods:\n";
+        for (auto &htnMethod : htnCompound.m_methods)
         {
-            std::cout << task->ToString() << ",";
+            std::cout << "Method: ";
+            for (auto &task : htnMethod->m_taskList)
+            {
+                std::cout << task->ToString() << ",";
+            }
+            std::cout << "\n";
         }
-        std::cout << "\n";
     }
 
     if (searchDepth > c_MaxSearchDepth)
@@ -125,12 +128,15 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
             //an htnMethod of htnCompound has been successfully planned
             //copy the planned htnWorldState back into the parameter htnWorldState
             htnWorldState.CopyFrom(ws2);
-            std::cout << "Successfully planned an htnMethod for compound " + htnCompound.ToString() + ":";
-            for (auto &htn : htnPlan)
+            if (c_debug)
             {
-                std::cout << htn->ToString() << ", ";
+                std::cout << "Successfully planned an htnMethod for compound " + htnCompound.ToString() + ":";
+                for (auto &htn : htnPlan)
+                {
+                    std::cout << htn->ToString() << ", ";
+                }
+                std::cout << "\n";
             }
-            std::cout << "\n";
             return htnPlan;
         }
     }
