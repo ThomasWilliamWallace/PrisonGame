@@ -217,7 +217,7 @@ Actions Punch::Operator(int playerIndex, Player player[], World &world)
 
 bool Punch::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_playerLocations[m_targetPlayerIndex] == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
+    return htnWorldState.m_inTheRoom[m_targetPlayerIndex];
 }
 
 //***********************************************************
@@ -366,7 +366,7 @@ bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
     }
     for (auto &item : htnWorldState.m_items)
     {
-        if (item->m_carryingPlayer == &(m_player[m_playerIndex]) && item->m_itemType == m_itemType)
+        if (item->m_carryingPlayer == &(m_player[m_playerIndex]) && item->m_itemType == m_itemType && static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::gym)
         {
             return true;
         }

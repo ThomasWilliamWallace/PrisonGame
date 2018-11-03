@@ -43,7 +43,7 @@ public:
     Player* m_ptrToSelf;
     Item* m_itemCarriedPtr;
     std::vector<bool> m_attackers;
-    std::vector<Locations> m_playerLocations;
+    bool m_inTheRoom[c_playerCount];
     MissionClass m_missionClass;
     HTNWorldState(HTNWorldState &ws2);
     HTNWorldState(int playerIndex, Player player[], World &world);

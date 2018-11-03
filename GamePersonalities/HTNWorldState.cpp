@@ -41,7 +41,7 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world):
     for (int i = 0; i < c_playerCount; i++)
     {
         m_attackers.push_back(player[playerIndex].rel[i].getAggro()>29 ? true : false);
-        m_playerLocations.push_back(player[i].locationClass.location);
+        m_inTheRoom[i] = player[i].locationClass.location == player[playerIndex].locationClass.location && i != playerIndex;
     }
 }
 
@@ -50,9 +50,9 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2):
     m_ptrToSelf(ws2.m_ptrToSelf),
     m_itemCarriedPtr(nullptr),
     m_attackers(ws2.m_attackers),
-    m_playerLocations(ws2.m_playerLocations),
     m_missionClass(ws2.m_missionClass)
 {
+    std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
     for (auto &item : ws2.m_items)
     {
         m_items.push_back(new SimItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
@@ -78,7 +78,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
     m_ptrToSelf = ws2.m_ptrToSelf;
     m_itemCarriedPtr = nullptr;
     m_attackers = ws2.m_attackers;
-    m_playerLocations = ws2.m_playerLocations;
+    std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
     
     m_items.clear();
     for (auto &item : ws2.m_items)
@@ -106,7 +106,7 @@ void HTNWorldState::Print()
     }
     for (int i = 0; i < c_playerCount; i++)
     {
-        std::cout << "Status of player " << i << " = " << (m_attackers.at(i) ? "fighting" : "peaceful") << " in the " << LocationToString(m_playerLocations.at(i)) << ".\n";
+        std::cout << "Status of player " << i << " = " << (m_attackers.at(i) ? "fighting" : "peaceful") << " in the " << LocationToString(static_cast<Locations>(m_v.at(WorldE::location))) << ".\n";
     }
 }
 
