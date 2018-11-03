@@ -366,7 +366,7 @@ bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
     }
     for (auto &item : htnWorldState.m_items)
     {
-        if (item->m_carryingPlayer == &(m_player[m_playerIndex]) && item->m_itemType == m_itemType && static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::gym)
+        if (item->m_carryingPlayer == &(m_player[m_playerIndex]) && item->m_itemType == m_itemType && htnWorldState.m_inTheRoom[m_playerIndex])
         {
             return true;
         }
