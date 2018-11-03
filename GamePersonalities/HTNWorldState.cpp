@@ -15,6 +15,7 @@
 HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world):
     m_v(WorldE::last, 0),
     m_ptrToSelf(&(player[playerIndex])),
+    m_itemCarriedPtr(nullptr),
     m_missionClass(player[playerIndex].missionClass)
 {
     m_v.at(WorldE::health) = round(player[playerIndex].stats.getHealth());
@@ -56,6 +57,7 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world):
 HTNWorldState::HTNWorldState(HTNWorldState &ws2):
     m_v(ws2.m_v),
     m_ptrToSelf(ws2.m_ptrToSelf),
+    m_itemCarriedPtr(nullptr),
     m_attackers(ws2.m_attackers),
     m_playerLocations(ws2.m_playerLocations),
     m_missionClass(ws2.m_missionClass)
@@ -70,10 +72,11 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2):
         }
     }
     std::cout << "HTNWorldState copy constructor\n";
-//        for (auto &simItem : m_items)
-//        {;
-            //std::cout << "SimItems: " << simItem << ", with link to real item " << &(simItem->m_realItem) << "\n";
-//        }   
+        for (auto &simItem : m_items)
+        {
+            std::cout << "Cycling through m_items!";
+            std::cout << "SimItems: " << simItem << ", with link to real item " << &(simItem->m_realItem) << "\n";
+        }   
 }
 
 HTNWorldState::~HTNWorldState()
@@ -88,6 +91,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 {
     m_v = ws2.m_v;
     m_ptrToSelf = ws2.m_ptrToSelf;
+    m_itemCarriedPtr = nullptr;
     m_attackers = ws2.m_attackers;
     m_playerLocations = ws2.m_playerLocations;
     
