@@ -488,6 +488,7 @@ bool AIController::RespondToOffer(int playerIndex)
             }
         }
     } else {
+        lastActionSucceeded = false;
         return true;
     }
 }
