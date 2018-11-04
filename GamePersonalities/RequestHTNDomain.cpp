@@ -21,7 +21,7 @@ void AcceptItemRequestPrim::Effect(HTNWorldState &htnWorldState)
     {
         if (simItem == htnWorldState.m_itemCarriedPtr)
         {
-            simItem->m_carryingPlayer = nullptr; //TODO REQUESTING_PLAYER;
+            simItem->m_carryingPlayer = htnWorldState.m_requester;
         }
     }
     htnWorldState.m_itemCarriedPtr = nullptr;

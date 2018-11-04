@@ -269,7 +269,7 @@ Actions AIController::greedyAIChooseAction(int playerIndex, Player player[], boo
 Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach)
 {
     //update worldstate from real world
-    HTNWorldState htnWorldState(playerIndex, player, world, 0);
+    HTNWorldState htnWorldState(playerIndex, player, world, nullptr);
     
     bool hasValidPlan = false;
     // check if next step of the plan is valid.
@@ -493,7 +493,7 @@ bool AIController::RespondToOffer(int playerIndex, Player player[], World &world
         std::cout << player[playerIndex].name << ": Asked for item, make a new plan:\n";
         
         //update worldstate from real world
-        HTNWorldState htnWorldState(playerIndex, player, world, 0);
+        HTNWorldState htnWorldState(playerIndex, player, world, &(player[requesterIndex]));
         HTNCompound* missionPtr = new StartCompound(htnWorldState, player);
         
         htnPlan = HTNdfs(htnWorldState, *missionPtr, 0);
