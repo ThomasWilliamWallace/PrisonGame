@@ -289,7 +289,7 @@ void RequestItemAction(int playerIndex, Player player[], World &world)
         return;
     }
     player[playerIndex].narrative = "Says: 'Hey " + player[player[playerIndex].playerTarget].name + ", can I have that " + player[player[playerIndex].playerTarget].itemPtr->ToString() + " you're carrying?'\n";
-    if (player[player[playerIndex].playerTarget].aiController.RespondToOffer(playerIndex))
+    if (player[player[playerIndex].playerTarget].aiController.RespondToOffer(player[playerIndex].playerTarget, player, world, playerIndex))
     {
         player[player[playerIndex].playerTarget].itemPtr->m_carryingPlayer = &player[playerIndex];
         player[playerIndex].itemPtr = player[player[playerIndex].playerTarget].itemPtr;

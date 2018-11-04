@@ -42,11 +42,12 @@ public:
     std::vector< SimItem* > m_items;
     Player* m_ptrToSelf;
     Item* m_itemCarriedPtr;
+    int m_requesterIndex; // Index of the player who is requesting the currently carried item. If -1, no player is requesting the currently carried item.
     std::vector<bool> m_attackers;
     bool m_inTheRoom[c_playerCount];
     MissionClass m_missionClass;
     HTNWorldState(HTNWorldState &ws2);
-    HTNWorldState(int playerIndex, Player player[], World &world);
+    HTNWorldState(int playerIndex, Player player[], World &world, int requesterIndex);
     ~HTNWorldState();
     void CopyFrom(HTNWorldState &ws2);
     void Print();

@@ -12,6 +12,7 @@
 #include "Constants.hpp"
 #include "Evaluate.hpp"
 #include "HTNDomain.hpp"
+#include "RequestHTNDomain.hpp"
 #include "World.hpp"
 
 Actions AIController::ChooseRoom(int playerIndex, Player player[])
@@ -268,7 +269,7 @@ Actions AIController::greedyAIChooseAction(int playerIndex, Player player[], boo
 Actions AIController::htnAIChooseAction(int playerIndex, Player player[], World &world, bool playersInReach[], int countPlayersInReach)
 {
     //update worldstate from real world
-    HTNWorldState htnWorldState(playerIndex, player, world);
+    HTNWorldState htnWorldState(playerIndex, player, world, 0);
     
     bool hasValidPlan = false;
     // check if next step of the plan is valid.
@@ -466,7 +467,7 @@ AIController::AIController()
     algo = AI::randomAI;
 }
 
-bool AIController::RespondToOffer(int playerIndex)
+bool AIController::RespondToOffer(int playerIndex, Player player[], World &world, int requesterIndex)
 {
     if (algo == AI::humanAI)
     {
@@ -488,7 +489,48 @@ bool AIController::RespondToOffer(int playerIndex)
             }
         }
     } else {
-        lastActionSucceeded = false;
-        return true;
+        //lastActionSucceeded = false;
+        std::cout << player[playerIndex].name << ": Asked for item, make a new plan:\n";
+        
+        //update worldstate from real world
+        HTNWorldState htnWorldState(playerIndex, player, world, 0);
+        HTNCompound* missionPtr = new StartCompound(htnWorldState, player);
+        
+        htnPlan = HTNdfs(htnWorldState, *missionPtr, 0);
+        for (auto &htnPrimitive : htnPlan)
+        {
+            htnPrimitive->PointToRealItems(htnWorldState);
+            std::cout << htnPrimitive->ToString() << ", ";
+        }
+        std::cout << "\n";
+        
+        //check if next step of the plan is valid.
+        bool hasValidPlan = false;
+        if (htnPlan.size() > 0)
+        {
+            hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
+        }
+
+        if (!hasValidPlan)
+        {
+            std::cout << player[playerIndex].name << "ERROR: Give up and return noAction (from RespondToOffer)\n";
+            exit(0); //If next step of the plan is still not valid, then return failure state
+        } else {
+            //continue with current plan
+            HTNPrimitivePtr currentPlanStep = htnPlan.front();
+            htnPlan.pop_front();
+            Actions responseAction = currentPlanStep->Operator(playerIndex, player, world);
+            switch(responseAction)
+            {
+                case Actions::acceptRequest:
+                    return true;
+                case Actions::declineRequest:
+                    return false;
+                default:
+                    std::cout << "ERROR: INVALID ACTION '" << ActionToString(responseAction) << "' GIVEN IN RESPONSE TO AN ITEM REQUEST";
+                    exit(0);
+            }
+        }
+        return false;
     }
 }

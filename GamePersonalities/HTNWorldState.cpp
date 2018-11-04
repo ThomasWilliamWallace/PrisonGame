@@ -12,10 +12,11 @@
 #include "World.hpp"
 
 //***********************************************************
-HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world):
+HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world, int requesterIndex):
     m_v(WorldE::last, 0),
     m_ptrToSelf(&(player[playerIndex])),
     m_itemCarriedPtr(nullptr),
+    m_requesterIndex(requesterIndex),
     m_missionClass(player[playerIndex].missionClass)
 {
     m_v.at(WorldE::health) = round(player[playerIndex].stats.getHealth());
@@ -49,6 +50,7 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2):
     m_v(ws2.m_v),
     m_ptrToSelf(ws2.m_ptrToSelf),
     m_itemCarriedPtr(nullptr),
+    m_requesterIndex(ws2.m_requesterIndex),
     m_attackers(ws2.m_attackers),
     m_missionClass(ws2.m_missionClass)
 {
@@ -77,6 +79,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
     m_v = ws2.m_v;
     m_ptrToSelf = ws2.m_ptrToSelf;
     m_itemCarriedPtr = nullptr;
+    m_requesterIndex = ws2.m_requesterIndex;
     m_attackers = ws2.m_attackers;
     std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
     
@@ -100,6 +103,7 @@ void HTNWorldState::Print()
     }
     std::cout << "m_ptrToSelf:" << m_ptrToSelf << "\n";
     std::cout << "m_itemCarriedPtr:" << m_itemCarriedPtr << "\n";
+    std::cout << "m_requesterIndex:" << m_requesterIndex << "\n";
     for (auto &simItem : m_items)
     {
         std::cout << "SimItem: " << simItem->ToString() << " carried by " << simItem->m_carryingPlayer->name << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << &(simItem->m_realItem) << "\n";

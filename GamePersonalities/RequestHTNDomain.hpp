@@ -6,8 +6,8 @@
 //  Copyright © 2018 Thomas. All rights reserved.
 //
 
-#ifndef HTNDomain_hpp
-#define HTNDomain_hpp
+#ifndef RequestHTNDomain_hpp
+#define RequestHTNDomain_hpp
 #include <vector>
 #include <iostream>
 #include "HTN.hpp"
@@ -34,27 +34,6 @@ public:
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
-};
-
-//***********************************************************
-class GoToLibraryMethod1 : public HTNMethod
-{
-public:
-    GoToLibraryMethod1();
-    bool Preconditions(HTNWorldState &htnWorldState);
-};
-
-class GoToLibraryMethod2 : public HTNMethod
-{
-public:
-    GoToLibraryMethod2();
-    bool Preconditions(HTNWorldState &htnWorldState);
-};
-
-class GoToLibraryCompound : public HTNCompound
-{
-public:
-    GoToLibraryCompound();
 };
 
 //***********************************************************
@@ -86,17 +65,17 @@ public:
 };
 
 //***********************************************************
-//class StartMethod : public HTNMethod
-//{
-//public:
-//    StartMethod();
-//    bool Preconditions(HTNWorldState &htnWorldState);
-//};
-//
-//class StartCompound : public HTNCompound
-//{
-//public:
-//    StartCompound(HTNWorldState &htnWorldState, Player player[]);
-//};
+class StartMethod : public HTNMethod
+{
+public:
+    StartMethod(HTNWorldState &htnWorldState, Player player[]);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class StartCompound : public HTNCompound
+{
+public:
+    StartCompound(HTNWorldState &htnWorldState, Player player[]);
+};
 
 #endif /* RequestHTNDomain_hpp */

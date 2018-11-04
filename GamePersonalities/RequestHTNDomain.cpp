@@ -10,6 +10,7 @@
 #include "Locations.hpp"
 #include "Player.hpp"
 #include "World.hpp"
+#include "HTNDomain.hpp"
 
 //Start HTNPrimitives****************************************
 AcceptItemRequestPrim::AcceptItemRequestPrim() : HTNPrimitive("AcceptItemRequest") {}
@@ -83,18 +84,18 @@ RespondToItemRequestCompound::RespondToItemRequestCompound() : HTNCompound("Resp
 }
 
 //***********************************************************
-//StartMethod::StartMethod()
-//{
-//    AddTask(new RespondToItemRequestCompound());
-//    AddTask(new PrisonerBehaviourCompound());
-//}
-//
-//bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
-//{
-//    return true;
-//}
-//
-//StartCompound::StartCompound(HTNWorldState &htnWorldState, Player player[]) : HTNCompound("StartCompound")
-//{
-//    AddMethod(new StartMethod());
-//}
+StartMethod::StartMethod(HTNWorldState &htnWorldState, Player player[])
+{
+    AddTask(new RespondToItemRequestCompound());
+    AddTask(new PrisonerBehaviourCompound(htnWorldState, player));
+}
+
+bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+StartCompound::StartCompound(HTNWorldState &htnWorldState, Player player[]) : HTNCompound("StartCompound")
+{
+    AddMethod(new StartMethod(htnWorldState, player));
+}
