@@ -17,6 +17,7 @@ void PriorityActions(int frame, Player player[], World &world)
     Actions action;
     for (int playerIndex = 0; playerIndex<c_playerCount; playerIndex++)
     {
+        player[playerIndex].aiController.lastActionSucceeded = false;
         action = player[playerIndex].action;
         
         switch(action)
@@ -57,7 +58,6 @@ void PriorityActions(int frame, Player player[], World &world)
 
 void Act(int playerIndex, int frame, Player player[], World &world)
 {
-    player[playerIndex].aiController.lastActionSucceeded = false;
     Actions action = player[playerIndex].action;
     if (player[playerIndex].attacked && action != Actions::attack && action != Actions::evade)
     {
