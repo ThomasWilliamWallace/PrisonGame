@@ -398,8 +398,8 @@ bool GoToLibraryMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToLibraryCompound::GoToLibraryCompound() : HTNCompound("GoToLibraryCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new GoToLibraryMethod1()));
-    m_methods.push_back(HTNMethodPtr(new GoToLibraryMethod2()));
+    AddMethod(new GoToLibraryMethod1());
+    AddMethod(new GoToLibraryMethod2());
 }
 
 //***********************************************************
@@ -426,8 +426,8 @@ bool GoToGymMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToGymCompound::GoToGymCompound() : HTNCompound("GoToGymCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new GoToGymMethod1()));
-    m_methods.push_back(HTNMethodPtr(new GoToGymMethod2()));
+    AddMethod(new GoToGymMethod1());
+    AddMethod(new GoToGymMethod2());
 }
 
 //***********************************************************
@@ -454,8 +454,8 @@ bool GoToCircuitTrackMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToCircuitTrackCompound::GoToCircuitTrackCompound() : HTNCompound("GoToCircuitTrackCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new GoToCircuitTrackMethod1()));
-    m_methods.push_back(HTNMethodPtr(new GoToCircuitTrackMethod2()));
+    AddMethod(new GoToCircuitTrackMethod1());
+    AddMethod(new GoToCircuitTrackMethod2());
 }
 
 //***********************************************************
@@ -482,8 +482,8 @@ bool GoToBedroomMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GoToBedroomCompound::GoToBedroomCompound() : HTNCompound("GoToBedroomCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new GoToBedroomMethod1()));
-    m_methods.push_back(HTNMethodPtr(new GoToBedroomMethod2()));
+    AddMethod(new GoToBedroomMethod1());
+    AddMethod(new GoToBedroomMethod2());
 }
 
 //***********************************************************
@@ -510,8 +510,8 @@ bool IncreaseHealthMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseHealthCompound::IncreaseHealthCompound() : HTNCompound("IncreaseHealthCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new IncreaseHealthMethod1()));
-    m_methods.push_back(HTNMethodPtr(new IncreaseHealthMethod2()));
+    AddMethod(new IncreaseHealthMethod1());
+    AddMethod(new IncreaseHealthMethod2());
 }
 
 //***********************************************************
@@ -538,8 +538,8 @@ bool IncreaseStrengthMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseStrengthCompound::IncreaseStrengthCompound() : HTNCompound("IncreaseStrengthCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new IncreaseStrengthMethod1()));
-    m_methods.push_back(HTNMethodPtr(new IncreaseStrengthMethod2()));
+    AddMethod(new IncreaseStrengthMethod1());
+    AddMethod(new IncreaseStrengthMethod2());
 }
 
 //***********************************************************
@@ -566,8 +566,8 @@ bool IncreaseAgilityMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseAgilityCompound::IncreaseAgilityCompound() : HTNCompound("IncreaseAgilityCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new IncreaseAgilityMethod1()));
-    m_methods.push_back(HTNMethodPtr(new IncreaseAgilityMethod2()));
+    AddMethod(new IncreaseAgilityMethod1());
+    AddMethod(new IncreaseAgilityMethod2());
 }
 
 //***********************************************************
@@ -594,8 +594,8 @@ bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseIntelligenceCompound::IncreaseIntelligenceCompound() : HTNCompound("IncreaseIntelligenceCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod1()));
-    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod2()));
+    AddMethod(new IncreaseIntelligenceMethod1());
+    AddMethod(new IncreaseIntelligenceMethod2());
 }
 
 //***********************************************************
@@ -630,10 +630,10 @@ bool GetItemMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 GetItemCompound::GetItemCompound(ItemType itemType, Player player[]) : HTNCompound("GetItemCompound("+ItemTypeToString(itemType)+")")
 {
-    m_methods.push_back(HTNMethodPtr(new GetItemMethod1(itemType)));
+    AddMethod(new GetItemMethod1(itemType));
     for (int i=0; i<c_playerCount; i++)
     {
-        m_methods.push_back(HTNMethodPtr(new GetItemMethod2(i, player, itemType)));
+        AddMethod(new GetItemMethod2(i, player, itemType));
     }
 }
 
@@ -713,9 +713,9 @@ bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
 
 BringItemToLocationCompound::BringItemToLocationCompound(ItemType itemType, LocationClass &locationClass, Player player[]) : HTNCompound("BringItemToLocationCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod1(itemType, locationClass))); //TODO reuse some of the actions at higher level
-    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod2(itemType, locationClass)));  // TODO ie, right now, method 1 2 and 3 all overlap.
-    m_methods.push_back(HTNMethodPtr(new BringItemToLocationMethod3(itemType, locationClass, player)));
+    AddMethod(new BringItemToLocationMethod1(itemType, locationClass)); //TODO reuse some of the actions at higher level
+    AddMethod(new BringItemToLocationMethod2(itemType, locationClass)); // TODO ie, right now, method 1 2 and 3 all overlap.
+    AddMethod(new BringItemToLocationMethod3(itemType, locationClass, player));
 }
 
 //***********************************************************
@@ -759,10 +759,10 @@ AttackCompound::AttackCompound(HTNWorldState &htnWorldState, int opponentIndex) 
     {
         if (item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
         {
-            m_methods.push_back(HTNMethodPtr(new AttackMethod1(item, opponentIndex)));
+            AddMethod(new AttackMethod1(item, opponentIndex));
         }
     }
-    m_methods.push_back(HTNMethodPtr(new AttackMethod2(opponentIndex)));
+    AddMethod(new AttackMethod2(opponentIndex));
 }
 
 AttackCompoundMethod::AttackCompoundMethod(HTNWorldState &htnWorldState, int opponentIndex)
@@ -788,8 +788,8 @@ bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 
 CombatCompound::CombatCompound(HTNWorldState &htnWorldState, int opponentIndex) : HTNCompound("CombatCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new EvadeMethod()));
-    m_methods.push_back(HTNMethodPtr(new AttackCompoundMethod(htnWorldState, opponentIndex)));
+    AddMethod(new EvadeMethod());
+    AddMethod(new AttackCompoundMethod(htnWorldState, opponentIndex));
 }
 
 //***********************************************************
@@ -835,10 +835,10 @@ bool DoMissionMethod4::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionCompound::DoMissionCompound(HTNWorldState &htnWorldState, Player player[]) : HTNCompound("DoMissionCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new DoMissionMethod1()));
-    m_methods.push_back(HTNMethodPtr(new DoMissionMethod2()));
-    m_methods.push_back(HTNMethodPtr(new DoMissionMethod3()));
-    m_methods.push_back(HTNMethodPtr(new DoMissionMethod4(htnWorldState, player)));
+    AddMethod(new DoMissionMethod1());
+    AddMethod(new DoMissionMethod2());
+    AddMethod(new DoMissionMethod3());
+    AddMethod(new DoMissionMethod4(htnWorldState, player));
 }
 
 //***********************************************************
@@ -901,9 +901,9 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
     {
         if (htnWorldState.m_attackers[i])
         {
-            m_methods.push_back(HTNMethodPtr(new CombatMethod(htnWorldState, i)));
+            AddMethod(new CombatMethod(htnWorldState, i));
         }
     }
-    m_methods.push_back(HTNMethodPtr(new DoMissionMethod(htnWorldState, player)));
-    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod()));
+    AddMethod(new DoMissionMethod(htnWorldState, player));
+    AddMethod(new IncreaseIntelligenceMethod());
 }

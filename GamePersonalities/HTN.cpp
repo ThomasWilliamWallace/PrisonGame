@@ -40,6 +40,11 @@ void HTNPrimitive::PointToRealItems(HTNWorldState &htnWorldState){}
 //*******************************************************************
 HTNCompound::HTNCompound(std::string name): HTNTask(name, false) {}
 
+void HTNCompound::AddMethod(HTNMethod* htnMethod)
+{
+    m_methods.push_back(HTNMethodPtr(htnMethod));
+}
+
 //*******************************************************************
 bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
 {

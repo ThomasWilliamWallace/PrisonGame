@@ -78,8 +78,8 @@ bool DeclineItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
 
 RespondToItemRequestCompound::RespondToItemRequestCompound() : HTNCompound("RespondToItemRequestCompound")
 {
-    m_methods.push_back(HTNMethodPtr(new AcceptItemRequestMethod()));
-    m_methods.push_back(HTNMethodPtr(new DeclineItemRequestMethod()));
+    AddMethod(new AcceptItemRequestMethod());
+    AddMethod(new DeclineItemRequestMethod());
 }
 
 //***********************************************************
@@ -96,5 +96,5 @@ RespondToItemRequestCompound::RespondToItemRequestCompound() : HTNCompound("Resp
 //
 //StartCompound::StartCompound(HTNWorldState &htnWorldState, Player player[]) : HTNCompound("StartCompound")
 //{
-//    m_methods.push_back(HTNMethodPtr(new StartMethod()));
+//    AddMethod(new StartMethod());
 //}
