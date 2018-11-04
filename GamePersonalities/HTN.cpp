@@ -46,14 +46,14 @@ bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-void HTNMethod::AddTask(HTNPrimitivePtr htnPrimitivePtr)
+void HTNMethod::AddTask(HTNPrimitive* htnPrimitive)
 {
-    m_taskList.push_back(htnPrimitivePtr);
+    m_taskList.push_back(HTNPrimitivePtr(htnPrimitive));
 }
 
-void HTNMethod::AddTask(HTNCompoundPtr htnCompoundPtr)
+void HTNMethod::AddTask(HTNCompound* htnCompound)
 {
-    m_taskList.push_back(htnCompoundPtr);
+    m_taskList.push_back(HTNCompoundPtr(htnCompound));
 }
 
 //*******************************************************************

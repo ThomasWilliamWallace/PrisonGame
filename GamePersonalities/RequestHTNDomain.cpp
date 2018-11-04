@@ -58,7 +58,7 @@ bool DeclineItemRequestPrim::Preconditions(HTNWorldState &htnWorldState)
 //Start HTNCompounds*****************************************
 AcceptItemRequestMethod::AcceptItemRequestMethod()
 {
-    AddTask(HTNPrimitivePtr(new AcceptItemRequestPrim()));
+    AddTask(new AcceptItemRequestPrim());
 }
 
 bool AcceptItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -68,7 +68,7 @@ bool AcceptItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
 
 DeclineItemRequestMethod::DeclineItemRequestMethod()
 {
-    AddTask(HTNPrimitivePtr(new DeclineItemRequestPrim()));
+    AddTask(new DeclineItemRequestPrim());
 }
 
 bool DeclineItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -85,8 +85,8 @@ RespondToItemRequestCompound::RespondToItemRequestCompound() : HTNCompound("Resp
 //***********************************************************
 //StartMethod::StartMethod()
 //{
-//    AddTask(HTNCompoundPtr(new RespondToItemRequestCompound()));
-//    AddTask(HTNCompoundPtr(new PrisonerBehaviourCompound()));
+//    AddTask(new RespondToItemRequestCompound());
+//    AddTask(new PrisonerBehaviourCompound());
 //}
 //
 //bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
