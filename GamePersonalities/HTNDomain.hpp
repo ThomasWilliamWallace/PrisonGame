@@ -510,12 +510,6 @@ public:
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
-class PrisonerBehaviourCompound : public HTNCompound
-{
-public:
-    PrisonerBehaviourCompound(HTNWorldState &htnWorldState, Player player[]);
-};
-
 //***********************************************************
 class PickUpItemMethod1 : public HTNMethod
 {
@@ -530,6 +524,13 @@ class DropItemMethod1 : public HTNMethod
 public:
     DropItemMethod1();
     bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+//***********************************************************
+class PrisonerBehaviourCompound : public HTNCompound
+{
+public:
+    PrisonerBehaviourCompound(HTNWorldState &htnWorldState, Player player[]);
 };
 
 #endif /* HTNDomain_hpp */

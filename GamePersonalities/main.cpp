@@ -50,6 +50,10 @@ void PriorityActions(int frame, Player player[], World &world)
                 break;
             case Actions::requestItem:
                 break;
+            case Actions::acceptRequest:
+                break;
+            case Actions::declineRequest:
+                break;
             case Actions::noAction:
                 break;
         }
@@ -167,6 +171,14 @@ void Act(int playerIndex, int frame, Player player[], World &world)
             break;
         case Actions::requestItem:
             RequestItemAction(playerIndex, player, world);
+            break;
+        case Actions::acceptRequest:
+            player[playerIndex].narrative = "ERROR: 'ACCEPT REQUEST' IS NOT AN MAIN TURN ACTION";
+            player[playerIndex].aiController.lastActionSucceeded = false;
+            break;
+        case Actions::declineRequest:
+            player[playerIndex].narrative = "ERROR: 'DECLINE REQUEST' IS NOT AN MAIN TURN ACTION";
+            player[playerIndex].aiController.lastActionSucceeded = false;
             break;
         case Actions::noAction:
             player[playerIndex].narrative = "ERROR NO ACTION.";

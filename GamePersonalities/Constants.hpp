@@ -46,6 +46,8 @@ enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
     pickUpItem,
     dropItem,
     requestItem,
+    acceptRequest,
+    declineRequest,
     noAction // serves as a flag for any unset actions
 };
 

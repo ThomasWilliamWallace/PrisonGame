@@ -49,6 +49,10 @@ std::string ActionToString(Actions action)
             return "DropItem";
         case Actions::requestItem:
             return "RequestItem";
+        case Actions::acceptRequest:
+            return "acceptRequest";
+        case Actions::declineRequest:
+            return "declineRequest";
         case Actions::noAction:
             return "ERROR NO ACTION";
     }

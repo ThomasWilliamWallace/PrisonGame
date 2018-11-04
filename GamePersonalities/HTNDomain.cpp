@@ -872,19 +872,6 @@ bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldState, Player player[]) : HTNCompound("PrisonerBehaviourCompound")
-{
-    for (int i = 0; i < c_playerCount; i++)
-    {
-        if (htnWorldState.m_attackers[i])
-        {
-            m_methods.push_back(HTNMethodPtr(new CombatMethod(htnWorldState, i)));
-        }
-    }
-    m_methods.push_back(HTNMethodPtr(new DoMissionMethod(htnWorldState, player)));
-    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod()));
-}
-
 //***********************************************************
 PickUpItemMethod1::PickUpItemMethod1(Item* itemFocusPtr)
 {
@@ -905,4 +892,18 @@ DropItemMethod1::DropItemMethod1()
 bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
     return true;
+}
+
+//***********************************************************
+PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldState, Player player[]) : HTNCompound("PrisonerBehaviourCompound")
+{
+    for (int i = 0; i < c_playerCount; i++)
+    {
+        if (htnWorldState.m_attackers[i])
+        {
+            m_methods.push_back(HTNMethodPtr(new CombatMethod(htnWorldState, i)));
+        }
+    }
+    m_methods.push_back(HTNMethodPtr(new DoMissionMethod(htnWorldState, player)));
+    m_methods.push_back(HTNMethodPtr(new IncreaseIntelligenceMethod()));
 }

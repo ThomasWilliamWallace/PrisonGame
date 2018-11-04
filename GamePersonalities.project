@@ -8,6 +8,8 @@
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
+    <File Name="GamePersonalities/RequestHTNDomain.hpp"/>
+    <File Name="GamePersonalities/RequestHTNDomain.cpp"/>
     <File Name="GamePersonalities/World.hpp"/>
     <File Name="GamePersonalities/World.cpp"/>
     <File Name="GamePersonalities/Stats.hpp"/>
