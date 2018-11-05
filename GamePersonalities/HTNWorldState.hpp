@@ -45,6 +45,7 @@ public:
     Player* m_requester; // Pointer to the player who is requesting the currently carried item.
     std::vector<bool> m_attackers;
     bool m_inTheRoom[c_playerCount];
+    bool m_carryingRequiredItem;
     MissionClass m_missionClass;
     HTNWorldState(HTNWorldState &ws2);
     HTNWorldState(int playerIndex, Player player[], World &world, Player* requester);

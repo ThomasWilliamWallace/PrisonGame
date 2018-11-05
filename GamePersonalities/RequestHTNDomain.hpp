@@ -37,6 +37,13 @@ public:
 };
 
 //***********************************************************
+class NeedItemDeclineRequestMethod : public HTNMethod
+{
+public:
+    NeedItemDeclineRequestMethod();
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
 class AcceptItemRequestMethod : public HTNMethod
 {
 public:

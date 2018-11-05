@@ -28,7 +28,7 @@ std::string MissionClass::MissionName()
     return "UnrecognisedMission";
 }
 
-std::string MissionClass::MissionNarrative(Player player[])
+std::string MissionClass::MissionNarrative(Player player[]) //TODO remove dependency on player[], use pointers instead
 {
     switch (m_mission)
     {

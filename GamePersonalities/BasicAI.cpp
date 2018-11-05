@@ -517,8 +517,8 @@ bool AIController::RespondToOffer(int playerIndex, Player player[], World &world
             exit(0); //If next step of the plan is still not valid, then return failure state
         } else {
             //continue with current plan
-            HTNPrimitivePtr currentPlanStep = htnPlan.front();
-            htnPlan.pop_front();
+            HTNPrimitivePtr currentPlanStep = htnPlan.back();
+            htnPlan.pop_back();
             Actions responseAction = currentPlanStep->Operator(playerIndex, player, world);
             switch(responseAction)
             {
