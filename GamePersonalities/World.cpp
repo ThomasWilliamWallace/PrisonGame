@@ -17,7 +17,7 @@ World::World()
     bedOccupied      = c_empty;
     items.push_back(new Item(ItemType::extinguisher, Locations::mainHall));
     items.push_back(new Item(ItemType::bottle      , Locations::mainHall));
-    items.push_back(new Item(ItemType::brick       , Locations::circuitTrack));
+    items.push_back(new Item(ItemType::hammer      , Locations::circuitTrack));
     items.push_back(new Item(ItemType::ball        , Locations::mainHall));
     items.push_back(new Item(ItemType::mirror      , Locations::bedroom));
     items.push_back(new Item(ItemType::rock        , Locations::library));
