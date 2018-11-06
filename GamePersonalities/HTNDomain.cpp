@@ -502,6 +502,19 @@ DoMissionCompound::DoMissionCompound(HTNWorldState &htnWorldState, Player player
 }
 
 //***********************************************************
+PickUpUnneccessaryItemCompound::PickUpUnneccessaryItemCompound(HTNWorldState &htnWorldState) : HTNCompound("PickUpUnneccessaryItemCompound")
+{
+    for (auto &item : htnWorldState.m_items)
+    {
+        SimItem* simItem = dynamic_cast<SimItem*>(item);
+        if (   simItem->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+            && simItem->m_carryingPlayer == nullptr
+        )
+            AddMethod(new PickUpItemMethod1(&(simItem->m_realItem)));
+    }
+}
+
+//***********************************************************
 CombatMethod::CombatMethod(HTNWorldState &htnWorldState, int opponentIndex)
 {
     AddTask(new CombatCompound(htnWorldState, opponentIndex));
@@ -520,6 +533,16 @@ DoMissionMethod::DoMissionMethod(HTNWorldState &htnWorldState, Player player[])
 bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
     return htnWorldState.m_missionClass.m_mission != Missions::noMission;
+}
+
+PickUpUnneccessaryItemMethod::PickUpUnneccessaryItemMethod(HTNWorldState &htnWorldState)
+{
+    AddTask(new PickUpUnneccessaryItemCompound(htnWorldState));
+}
+
+bool PickUpUnneccessaryItemMethod::Preconditions(HTNWorldState &htnWorldState)
+{
+    return htnWorldState.m_itemCarriedPtr == nullptr;
 }
 
 IncreaseIntelligenceMethod::IncreaseIntelligenceMethod()
@@ -543,5 +566,6 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
         }
     }
     AddMethod(new DoMissionMethod(htnWorldState, player));
+//    AddMethod(new PickUpUnneccessaryItemMethod(htnWorldState));
     AddMethod(new IncreaseIntelligenceMethod());
 }

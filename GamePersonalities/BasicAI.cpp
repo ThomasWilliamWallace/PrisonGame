@@ -346,7 +346,7 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
             itemsInRoom = 0;
             for (auto &item : world.items)
             {
-                if (item->m_locationClass.location == player[playerIndex].locationClass.location)
+                if (item->m_locationClass.location == player[playerIndex].locationClass.location && item->m_carryingPlayer == nullptr)
                 {
                     std::cout << "Item \"" << item->ToString() << "\", (index=" << itemsInRoom << ")\n";
                     itemsInRoom += 1;
@@ -409,7 +409,7 @@ Actions AIController::humanAIChooseAction(int playerIndex, Player player[], Worl
                     int itemIndex = 0;
                     for (auto &item : world.items)
                     {
-                        if (item->m_locationClass.location == player[playerIndex].locationClass.location)
+                        if (item->m_locationClass.location == player[playerIndex].locationClass.location && item->m_carryingPlayer == nullptr)
                         {
                             if (itemCountInRoom == targetItem)
                             {

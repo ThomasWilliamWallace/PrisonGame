@@ -308,6 +308,13 @@ public:
 };
 
 //***********************************************************
+class PickUpUnneccessaryItemCompound : public HTNCompound
+{
+public:
+    PickUpUnneccessaryItemCompound(HTNWorldState &htnWorldState);
+};
+
+//***********************************************************
 class EvadeMethod : public HTNMethod
 {
 public:
@@ -333,6 +340,13 @@ class DoMissionMethod : public HTNMethod
 {
 public:
     DoMissionMethod(HTNWorldState &htnWorldState, Player player[]);
+    bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+class PickUpUnneccessaryItemMethod : public HTNMethod
+{
+public:
+    PickUpUnneccessaryItemMethod(HTNWorldState &htnWorldState);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 

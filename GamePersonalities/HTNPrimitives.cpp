@@ -247,8 +247,16 @@ PickUpItem::PickUpItem(Item* itemFocusPtr) : HTNPrimitive("PickUpItem"), m_itemF
 
 void PickUpItem::Effect(HTNWorldState &htnWorldState)
 {
-    m_itemFocusPtr->m_carryingPlayer = htnWorldState.m_ptrToSelf;
-    htnWorldState.m_itemCarriedPtr = m_itemFocusPtr;
+    SimItem* itemFocusSimItem = dynamic_cast<SimItem*>(m_itemFocusPtr);
+    for (auto &item : htnWorldState.m_items)
+    {
+        SimItem* simItem = dynamic_cast<SimItem*>(item);
+        if (&(simItem->m_realItem) == &(itemFocusSimItem->m_realItem))
+        {
+            m_itemFocusPtr->m_carryingPlayer = htnWorldState.m_ptrToSelf;
+        }
+    }
+    htnWorldState.m_itemCarriedPtr = &(itemFocusSimItem->m_realItem);
 }
 
 Actions PickUpItem::Operator(int playerIndex, Player player[], World &world)
@@ -269,10 +277,10 @@ bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
     return false;
 }
 
-void PickUpItem::PointToRealItems(HTNWorldState &htnWorldState)
-{
-    m_itemFocusPtr = &(dynamic_cast<SimItem*>(m_itemFocusPtr))->m_realItem;
-}
+//void PickUpItem::PointToRealItems(HTNWorldState &htnWorldState)
+//{
+//    m_itemFocusPtr = &(dynamic_cast<SimItem*>(m_itemFocusPtr))->m_realItem;
+//}
 
 //***********************************************************
 PickUpItem2::PickUpItem2(ItemType itemType) : HTNPrimitive("PickUpItem2"), m_itemType(itemType) {}
