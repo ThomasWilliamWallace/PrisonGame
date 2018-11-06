@@ -57,14 +57,36 @@ bool DeclineItemRequestPrim::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //Start HTNCompounds*****************************************
-NeedItemDeclineRequestMethod::NeedItemDeclineRequestMethod()
+ NeedItemDeclineRequestMethod::NeedItemDeclineRequestMethod(Item* requestedItem) : m_requestedItem(requestedItem)
 {
     AddTask(new DeclineItemRequestPrim());
 }
 
 bool NeedItemDeclineRequestMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_carryingRequiredItem;
+//    std::cout << "ENTERING NEEDITEMDECLINEREQUESTMETHOD: m_requestedItem = " << m_requestedItem << "\n";
+//    if (m_requestedItem == nullptr)
+//    {
+//        std::cout << "ERROR: NeedItemDeclineRequestMethod called when m_requestedItem == nullptr.\n";
+//        return false;
+//    }
+    SimItem* simItem = dynamic_cast<SimItem*>(m_requestedItem);
+//    if (simItem == nullptr)
+//    {
+//        std::cout << "ERROR cast to m_requestedItem to SimItem failed.\n";
+//        exit(0);
+//    }
+    for (auto &item : htnWorldState.m_itemsToKeep)
+    {
+//    std::cout << "item=" << item << "\n";
+        if (item == &(simItem->m_realItem))
+        {
+//    std::cout << "RETURN TRUE\n";
+            return true;
+        }
+    }
+//    std::cout << "RETURN FALSE\n";
+    return false;
 }
 
 AcceptItemRequestMethod::AcceptItemRequestMethod()
@@ -87,9 +109,9 @@ bool DeclineItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-RespondToItemRequestCompound::RespondToItemRequestCompound() : HTNCompound("RespondToItemRequestCompound")
+RespondToItemRequestCompound::RespondToItemRequestCompound(Item* requestedItem) : HTNCompound("RespondToItemRequestCompound")
 {
-    AddMethod(new NeedItemDeclineRequestMethod());
+    AddMethod(new NeedItemDeclineRequestMethod(requestedItem));
     AddMethod(new AcceptItemRequestMethod());
     AddMethod(new DeclineItemRequestMethod());
 }
@@ -97,8 +119,9 @@ RespondToItemRequestCompound::RespondToItemRequestCompound() : HTNCompound("Resp
 //***********************************************************
 StartMethod::StartMethod(HTNWorldState &htnWorldState, Player player[])
 {
+    Item* requestedItem = htnWorldState.m_itemCarriedPtr;
     AddTask(new PrisonerBehaviourCompound(htnWorldState, player));
-    AddTask(new RespondToItemRequestCompound());
+    AddTask(new RespondToItemRequestCompound(requestedItem));
 }
 
 bool StartMethod::Preconditions(HTNWorldState &htnWorldState)

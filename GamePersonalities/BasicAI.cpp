@@ -505,17 +505,17 @@ bool AIController::RespondToOffer(int playerIndex, Player player[], World &world
         std::cout << "\n";
         
         //check if next step of the plan is valid.
-        bool hasValidPlan = false;
-        if (htnPlan.size() > 0)
-        {
-            hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
-        }
+//        bool hasValidPlan = false;
+//        if (htnPlan.size() > 0)
+//        {
+//            hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
+//        }
 
-        if (!hasValidPlan)
-        {
-            std::cout << player[playerIndex].name << "ERROR: Give up and return noAction (from RespondToOffer)\n";
-            exit(0); //If next step of the plan is still not valid, then return failure state
-        } else {
+//        if (!hasValidPlan)
+//        {
+//            std::cout << player[playerIndex].name << "ERROR: Give up and return noAction (from RespondToOffer)\n";
+//            exit(0); //If next step of the plan is still not valid, then return failure state
+//        } else {
             //continue with current plan
             HTNPrimitivePtr currentPlanStep = htnPlan.back();
             htnPlan.pop_back();
@@ -529,7 +529,7 @@ bool AIController::RespondToOffer(int playerIndex, Player player[], World &world
                 default:
                     std::cout << "ERROR: INVALID ACTION '" << ActionToString(responseAction) << "' GIVEN IN RESPONSE TO AN ITEM REQUEST";
                     exit(0);
-            }
+//            }
         }
         return false;
     }

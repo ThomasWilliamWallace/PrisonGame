@@ -40,7 +40,8 @@ public:
 class NeedItemDeclineRequestMethod : public HTNMethod
 {
 public:
-    NeedItemDeclineRequestMethod();
+    NeedItemDeclineRequestMethod(Item* requestedItem);
+    Item* m_requestedItem;
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -61,13 +62,13 @@ public:
 class RespondToItemRequestCompound : public HTNCompound
 {
 public:
-    RespondToItemRequestCompound();
+    RespondToItemRequestCompound(Item* requestedItem);
 };
 
 class RespondToItemRequestMethod : public HTNMethod
 {
 public:
-    RespondToItemRequestMethod();
+    RespondToItemRequestMethod(Item* requestedItem);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 

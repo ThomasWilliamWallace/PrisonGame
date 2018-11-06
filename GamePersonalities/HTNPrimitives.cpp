@@ -206,6 +206,10 @@ Punch::Punch(int playerIndex) : HTNPrimitive("Punch"), m_targetPlayerIndex(playe
 
 void Punch::Effect(HTNWorldState &htnWorldState)
 {
+    if (htnWorldState.m_itemCarriedPtr != nullptr)
+    {
+        htnWorldState.m_itemsToKeep.push_back(htnWorldState.m_itemCarriedPtr);
+    }
     htnWorldState.m_v.at(WorldE::punches) += 1;
 }
 
@@ -317,12 +321,23 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-DropItem::DropItem() : HTNPrimitive("DropItem") {}
+DropItem::DropItem(bool keepItem) : HTNPrimitive("DropItem"), m_keepItem(keepItem) {}
 
 void DropItem::Effect(HTNWorldState &htnWorldState)
 {
     htnWorldState.m_itemCarriedPtr->m_locationClass.location = static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
     htnWorldState.m_itemCarriedPtr->m_carryingPlayer = nullptr;
+    if (m_keepItem)
+    {
+        SimItem* simItem = dynamic_cast<SimItem*>(htnWorldState.m_itemCarriedPtr);
+//        if (simItem == nullptr)
+//        {
+//            std::cout << "ERROR cast to SimItem failed.\n";
+//            exit(0);
+//        }
+//        std::cout << "saving from dropItem=" << &(simItem->m_realItem) << "\n"; //TODO this is probably a simItem, and we are treating it as an Item.
+        htnWorldState.m_itemsToKeep.push_back(&(simItem->m_realItem));
+    }
     htnWorldState.m_itemCarriedPtr = nullptr;
 }
 

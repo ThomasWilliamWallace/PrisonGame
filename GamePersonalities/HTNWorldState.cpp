@@ -17,8 +17,7 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world, Pla
     m_ptrToSelf(&(player[playerIndex])),
     m_itemCarriedPtr(nullptr),
     m_requester(requester),
-    m_missionClass(player[playerIndex].missionClass),
-    m_carryingRequiredItem(false)
+    m_missionClass(player[playerIndex].missionClass)
 {
     m_v.at(WorldE::health) = round(player[playerIndex].stats.getHealth());
     m_v.at(WorldE::sanity) = round(player[playerIndex].stats.getSanity());
@@ -49,12 +48,12 @@ HTNWorldState::HTNWorldState(int playerIndex, Player player[], World &world, Pla
 
 HTNWorldState::HTNWorldState(HTNWorldState &ws2):
     m_v(ws2.m_v),
+    m_itemsToKeep(ws2.m_itemsToKeep),
     m_ptrToSelf(ws2.m_ptrToSelf),
     m_itemCarriedPtr(nullptr),
     m_requester(ws2.m_requester),
     m_attackers(ws2.m_attackers),
-    m_missionClass(ws2.m_missionClass),
-    m_carryingRequiredItem(ws2.m_carryingRequiredItem)
+    m_missionClass(ws2.m_missionClass)
 {
     std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
     for (auto &item : ws2.m_items)
@@ -79,11 +78,11 @@ HTNWorldState::~HTNWorldState()
 void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 {
     m_v = ws2.m_v;
+    m_itemsToKeep = ws2.m_itemsToKeep;
     m_ptrToSelf = ws2.m_ptrToSelf;
     m_itemCarriedPtr = nullptr;
     m_requester = ws2.m_requester;
     m_attackers = ws2.m_attackers;
-    m_carryingRequiredItem = ws2.m_carryingRequiredItem;
     std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
     
     m_items.clear();
@@ -115,7 +114,6 @@ void HTNWorldState::Print()
     {
         std::cout << "Status of player " << i << " = " << (m_attackers.at(i) ? "fighting" : "peaceful") << " in the " << LocationToString(static_cast<Locations>(m_v.at(WorldE::location))) << ".\n";
     }
-    std::cout << "m_carryingRequiredItem:" << m_carryingRequiredItem << "\n";
     std::cout << "m_missionClass:" << m_missionClass.MissionName() << "\n";
 }
 

@@ -24,9 +24,9 @@ bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-DropItemMethod1::DropItemMethod1()
+DropItemMethod1::DropItemMethod1(bool keepItem)
 {
-    AddTask(new DropItem());
+    AddTask(new DropItem(keepItem));
 }
 
 bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -300,7 +300,7 @@ GetItemCompound::GetItemCompound(ItemType itemType, Player player[]) : HTNCompou
 //***********************************************************
 BringItemToLocationMethod1::BringItemToLocationMethod1(ItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
-    AddTask(new DropItem());
+    AddTask(new DropItem(true));
 }
 
 bool BringItemToLocationMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -331,7 +331,7 @@ BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType, Locati
             break;
     }
     
-    AddTask(new DropItem());
+    AddTask(new DropItem(true));
 }
 
 bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -363,7 +363,7 @@ BringItemToLocationMethod3::BringItemToLocationMethod3(ItemType itemType, Locati
             break;
     }
     
-    AddTask(new DropItem());
+    AddTask(new DropItem(true));
 }
 
 bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)

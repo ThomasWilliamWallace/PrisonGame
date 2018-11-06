@@ -165,10 +165,11 @@ public:
 class DropItem : public HTNPrimitive
 {
 public:
-    DropItem();
+    DropItem(bool keepItem);
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
+    bool m_keepItem;
 };
 
 //***********************************************************

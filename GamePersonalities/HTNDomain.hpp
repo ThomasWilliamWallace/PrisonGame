@@ -355,7 +355,7 @@ public:
 class DropItemMethod1 : public HTNMethod
 {
 public:
-    DropItemMethod1();
+    DropItemMethod1(bool keepItem);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
