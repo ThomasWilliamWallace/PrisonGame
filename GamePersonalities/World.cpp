@@ -20,6 +20,7 @@ World::World()
     items.push_back(new Item(ItemType::brick       , Locations::circuitTrack));
     items.push_back(new Item(ItemType::ball        , Locations::mainHall));
     items.push_back(new Item(ItemType::mirror      , Locations::bedroom));
+    items.push_back(new Item(ItemType::rock        , Locations::library));
 }
 
 void World::Clean()

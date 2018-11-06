@@ -48,14 +48,14 @@ std::string MissionClass::MissionNarrative(Player player[]) //TODO remove depend
 
 Missions GetRandomMission()
 {
-//    int random = rand() % 100;
-//    if (random<25)
-//        return Missions::increaseStrength;
-//    else if (random<50)
-//        return Missions::increaseAgility;
-//    else if (random<75)
-//        return Missions::increaseIntelligence;
-//    else
+    int random = rand() % 100;
+    if (random<25)
+        return Missions::increaseStrength;
+    else if (random<50)
+        return Missions::increaseAgility;
+    else if (random<75)
+        return Missions::increaseIntelligence;
+    else
         return Missions::bringItemToRoom;
 }
 

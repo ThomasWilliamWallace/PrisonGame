@@ -226,11 +226,11 @@ void Simulate()
         player[playerIndex].m_playerIndex = playerIndex;
     }
     World world;
-    player[0].name = "Thomas";
+    player[0].name = "Vita";
     player[0].aiController = AIController(AI::humanAI);
     if (c_playerCount > 1)
     {
-        player[1].name = "Vita";
+        player[1].name = "Thomas";
         player[1].aiController = AIController(AI::htnAI);
     }
     if (c_playerCount > 2)
