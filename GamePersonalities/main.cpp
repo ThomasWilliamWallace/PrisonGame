@@ -245,7 +245,7 @@ void Simulate()
     }
     
     // loop one time step at a time
-    for (int frame=0; frame<15; frame++)
+    for (int frame=0; true; frame++)
     {
         CleanUpFrame(player);
         world.Clean();
