@@ -64,28 +64,14 @@ bool DeclineItemRequestPrim::Preconditions(HTNWorldState &htnWorldState)
 
 bool NeedItemDeclineRequestMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-//    std::cout << "ENTERING NEEDITEMDECLINEREQUESTMETHOD: m_requestedItem = " << m_requestedItem << "\n";
-//    if (m_requestedItem == nullptr)
-//    {
-//        std::cout << "ERROR: NeedItemDeclineRequestMethod called when m_requestedItem == nullptr.\n";
-//        return false;
-//    }
     SimItem* simItem = dynamic_cast<SimItem*>(m_requestedItem);
-//    if (simItem == nullptr)
-//    {
-//        std::cout << "ERROR cast to m_requestedItem to SimItem failed.\n";
-//        exit(0);
-//    }
     for (auto &item : htnWorldState.m_itemsToKeep)
     {
-//    std::cout << "item=" << item << "\n";
         if (item == &(simItem->m_realItem))
         {
-//    std::cout << "RETURN TRUE\n";
             return true;
         }
     }
-//    std::cout << "RETURN FALSE\n";
     return false;
 }
 
