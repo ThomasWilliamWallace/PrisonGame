@@ -142,12 +142,12 @@ public:
 class PickUpItem : public HTNPrimitive
 {
 public:
-    PickUpItem(Item* itemFocusPtr);
+    PickUpItem(SimItem* itemFocusPtr);
     Item* m_itemFocusPtr;
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
     Actions Operator(int playerIndex, Player player[], World &world);
-//    void PointToRealItems(HTNWorldState &htnWorldState);
+    void PointToRealItems(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************

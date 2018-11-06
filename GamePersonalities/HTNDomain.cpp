@@ -13,7 +13,7 @@
 #include "HTNPrimitives.hpp"
 
 //***********************************************************
-PickUpItemMethod1::PickUpItemMethod1(Item* itemFocusPtr)
+PickUpItemMethod1::PickUpItemMethod1(SimItem* itemFocusPtr)
 {
     AddTask(new PickUpItem(itemFocusPtr));
 }
@@ -379,7 +379,7 @@ BringItemToLocationCompound::BringItemToLocationCompound(ItemType itemType, Loca
 }
 
 //***********************************************************
-AttackMethod1::AttackMethod1(Item* itemPtr, int opponentIndex)
+AttackMethod1::AttackMethod1(SimItem* itemPtr, int opponentIndex)
 {
     m_itemPtr = itemPtr;
     AddTask(new PickUpItem(m_itemPtr));
@@ -510,7 +510,7 @@ PickUpUnneccessaryItemCompound::PickUpUnneccessaryItemCompound(HTNWorldState &ht
         if (   simItem->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
             && simItem->m_carryingPlayer == nullptr
         )
-            AddMethod(new PickUpItemMethod1(&(simItem->m_realItem)));
+            AddMethod(new PickUpItemMethod1(simItem));
     }
 }
 
@@ -566,6 +566,6 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
         }
     }
     AddMethod(new DoMissionMethod(htnWorldState, player));
-//    AddMethod(new PickUpUnneccessaryItemMethod(htnWorldState));
+    AddMethod(new PickUpUnneccessaryItemMethod(htnWorldState));
     AddMethod(new IncreaseIntelligenceMethod());
 }

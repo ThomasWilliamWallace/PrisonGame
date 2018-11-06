@@ -246,9 +246,9 @@ public:
 //***********************************************************
 class AttackMethod1 : public HTNMethod
 {
-    Item* m_itemPtr;
+    SimItem* m_itemPtr;
 public:
-    AttackMethod1(Item* itemPtr, int opponentIndex);
+    AttackMethod1(SimItem* itemPtr, int opponentIndex);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -361,7 +361,7 @@ public:
 class PickUpItemMethod1 : public HTNMethod
 {
 public:
-    PickUpItemMethod1(Item* itemFocusPtr);
+    PickUpItemMethod1(SimItem* itemFocusPtr);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
