@@ -3,8 +3,7 @@
 #include "AICharacterC.h"
 #include "HTNPrimitives.hpp"
 #include "Engine/GameEngine.h"
-
-constexpr int c_playerCount = 2; //Other declaration in HTNWorldState.cpp
+#include "Constants.hpp"
 
 //***********************************************************
 GoToLibraryMethod1::GoToLibraryMethod1()

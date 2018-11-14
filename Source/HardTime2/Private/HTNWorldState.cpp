@@ -5,8 +5,6 @@
 #include "HTNDomain.hpp"
 #include "Engine/GameEngine.h"
 
-constexpr int c_playerCount = 2; //Other declaration in HTNDomain.cpp
-
 //***********************************************************
 HTNWorldState::HTNWorldState(AAICharacterC* aiCharacterC) :
 	m_v(WorldE::last, 0),
