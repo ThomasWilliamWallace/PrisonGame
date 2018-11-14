@@ -1,11 +1,3 @@
-//
-//  HTN.cpp
-//  GamePersonalities
-//
-//  Created by VITALIJA STEPUSAITYTE on 25/08/2018.
-//  Copyright © 2018 Thomas. All rights reserved.
-//
-
 #include "HTNPlanner.hpp"
 #include "HTNDomain.hpp"
 #include "AICharacterC.h"

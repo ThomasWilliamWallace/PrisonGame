@@ -1,9 +1,10 @@
 #pragma once
+
 #include <vector>
 #include <deque>
 #include <iostream>
-#include "HTNWorldState.hpp"
 #include <memory>
+#include "HTNWorldState.hpp"
 #include "Actions.hpp"
 
 class HTNTask;
