@@ -507,6 +507,28 @@ bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
 	return true;
 }
 
+//***********************************************************
+PickUpItemMethod1::PickUpItemMethod1(SimItem* itemFocusPtr)
+{
+    AddTask(new PickUpItem(itemFocusPtr));
+}
+
+bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+//***********************************************************
+DropItemMethod1::DropItemMethod1(bool keepItem)
+{
+    AddTask(new DropItem(keepItem));
+}
+
+bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
 PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldState) : HTNCompound("PrisonerBehaviourCompound")
 {
 	/*
@@ -519,26 +541,4 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
 	}*/
     	AddMethod(new DoMissionMethod(htnWorldState));
     	AddMethod(new IncreaseIntelligenceMethod());
-}
-
-//***********************************************************
-PickUpItemMethod1::PickUpItemMethod1(SimActorItem* itemFocusPtr)
-{
-	AddTask(HTNPrimitivePtr(new PickUpItem(itemFocusPtr)));
-}
-
-bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
-{
-	return true;
-}
-
-//***********************************************************
-DropItemMethod1::DropItemMethod1()
-{
-	AddTask(HTNPrimitivePtr(new DropItem()));
-}
-
-bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)
-{
-	return true;
 }

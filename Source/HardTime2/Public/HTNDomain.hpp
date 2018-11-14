@@ -324,12 +324,6 @@ public:
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
-class PrisonerBehaviourCompound : public HTNCompound
-{
-public:
-	PrisonerBehaviourCompound(HTNWorldState &htnWorldState);
-};
-
 //***********************************************************
 class PickUpItemMethod1 : public HTNMethod
 {
@@ -344,4 +338,11 @@ class DropItemMethod1 : public HTNMethod
 public:
 	DropItemMethod1();
 	bool Preconditions(HTNWorldState &htnWorldState);
+};
+
+//***********************************************************
+class PrisonerBehaviourCompound : public HTNCompound
+{
+public:
+	PrisonerBehaviourCompound(HTNWorldState &htnWorldState);
 };
