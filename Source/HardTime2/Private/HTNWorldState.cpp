@@ -11,6 +11,7 @@ constexpr int c_playerCount = 2; //Other declaration in HTNDomain.cpp
 HTNWorldState::HTNWorldState(AAICharacterC* aiCharacterC) :
 	m_v(WorldE::last, 0),
 	m_ptrToSelf(aiCharacterC),
+    	m_itemCarriedPtr(nullptr),
 	m_missionClass(aiCharacterC->missionClass)
 {
 	m_v.at(WorldE::health) = round(aiCharacterC->health);
@@ -23,7 +24,6 @@ HTNWorldState::HTNWorldState(AAICharacterC* aiCharacterC) :
 	m_v.at(WorldE::location) = static_cast<int>(aiCharacterC->locationClass.location);
 
 	//TODO reflect players sensors rather than being hardwired to the world
-	m_itemCarriedPtr = nullptr;
 	for (auto &item : aiCharacterC->m_items)
 	{
 		m_items.push_back(new SimActorItem(item->m_itemType, Locations::mainHall, item->m_unrealItem, item->m_carryingPlayer));
@@ -52,6 +52,7 @@ HTNWorldState::HTNWorldState(AAICharacterC* aiCharacterC) :
 HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 	m_v(ws2.m_v),
 	m_ptrToSelf(ws2.m_ptrToSelf),
+    	m_itemCarriedPtr(nullptr),
 	m_attackers(ws2.m_attackers),
 	m_playerLocations(ws2.m_playerLocations),
 	m_missionClass(ws2.m_missionClass)
@@ -83,10 +84,10 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 {
 	m_v = ws2.m_v;
 	m_ptrToSelf = ws2.m_ptrToSelf;
+    	m_itemCarriedPtr = nullptr;
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
 
-	m_itemCarriedPtr = nullptr;
 	for (auto &item : ws2.m_items)
 	{
 		m_items.push_back(new SimActorItem(item->m_itemType, item->m_locationClass.location, item->m_unrealItem, item->m_carryingPlayer));
