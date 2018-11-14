@@ -507,7 +507,7 @@ bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-PickUpItemMethod1::PickUpItemMethod1(SimItem* itemFocusPtr)
+PickUpItemMethod1::PickUpItemMethod1(SimActorItem* itemFocusPtr)
 {
     AddTask(new PickUpItem(itemFocusPtr));
 }
@@ -518,9 +518,9 @@ bool PickUpItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-DropItemMethod1::DropItemMethod1(bool keepItem)
+DropItemMethod1::DropItemMethod1()
 {
-    AddTask(new DropItem(keepItem));
+    AddTask(new DropItem());
 }
 
 bool DropItemMethod1::Preconditions(HTNWorldState &htnWorldState)
