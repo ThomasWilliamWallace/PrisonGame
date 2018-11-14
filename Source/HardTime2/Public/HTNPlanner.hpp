@@ -50,6 +50,7 @@ class HTNCompound : public HTNTask
 public:
 	HTNCompound(std::string name);
 	HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
+	void AddMethod(HTNMethod* htnMethod);
 	virtual ~HTNCompound() = default;
 };
 

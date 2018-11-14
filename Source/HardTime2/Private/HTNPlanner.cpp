@@ -37,6 +37,11 @@ bool HTNPrimitive::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacte
 //*******************************************************************
 HTNCompound::HTNCompound(std::string name) : HTNTask(name, false) {}
 
+void HTNCompound::AddMethod(HTNMethodPtr htnMethod)
+{
+    m_methods.push_back(HTNMethodPtr(htnMethod));
+}
+
 //*******************************************************************
 bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
 {
