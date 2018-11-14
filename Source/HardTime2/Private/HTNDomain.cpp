@@ -1,7 +1,7 @@
 #include "HTNDomain.hpp"
-#include "HTNPrimitives.hpp"
 #include "Locations.hpp"
 #include "AICharacterC.h"
+#include "HTNPrimitives.hpp"
 #include "Engine/GameEngine.h"
 
 constexpr int c_playerCount = 2; //Other declaration in HTNWorldState.cpp
