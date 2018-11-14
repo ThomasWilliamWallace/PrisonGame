@@ -37,7 +37,7 @@ bool HTNPrimitive::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacte
 //*******************************************************************
 HTNCompound::HTNCompound(std::string name) : HTNTask(name, false) {}
 
-void HTNCompound::AddMethod(HTNMethodPtr htnMethod)
+void HTNCompound::AddMethod(HTNMethod* htnMethod)
 {
     m_methods.push_back(HTNMethodPtr(htnMethod));
 }
@@ -48,14 +48,14 @@ bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
 	return true;
 }
 
-void HTNMethod::AddTask(HTNPrimitivePtr htnPrimitivePtr)
+void HTNMethod::AddTask(HTNPrimitive* htnPrimitive)
 {
-	m_taskList.push_back(htnPrimitivePtr);
+	m_taskList.push_back(HTNPrimitivePtr(htnPrimitive));
 }
 
-void HTNMethod::AddTask(HTNCompoundPtr htnCompoundPtr)
+void HTNMethod::AddTask(HTNCompound* htnCompound)
 {
-	m_taskList.push_back(htnCompoundPtr);
+	m_taskList.push_back(HTNCompoundPtr(htnCompound));
 }
 
 //*******************************************************************
@@ -83,7 +83,7 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 		{
 			if (htnTask->m_isPrimitive)
 			{
-				HTNPrimitivePtr pPtr = static_cast<HTNPrimitive*>(htnTask);
+				HTNPrimitivePtr pPtr = static_cast<HTNPrimitivePtr>(htnTask); //This needs re-written to use unreal shared pointers
 				if (pPtr->Preconditions(ws2))
 				{
 					pPtr->Effect(ws2);
@@ -94,7 +94,7 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 				}
 			}
 			else {
-				HTNCompoundPtr cPtr = static_cast<HTNCompound*>(htnTask);
+				HTNCompoundPtr cPtr = static_cast<HTNCompoundPtr>(htnTask); //This needs re-written to use unreal shared pointers
 				HTNPrimitiveList subplan = HTNdfs(ws2, *cPtr, searchDepth + 1);
 				if (static_cast<int>(subplan.size()) > 0)
 				{

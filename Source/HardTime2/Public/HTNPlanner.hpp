@@ -60,8 +60,8 @@ class HTNMethod
 public:
 	virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
 	HTNTaskList m_taskList; //To complete this HTNCompound task, all the tasks in a method must be completed.
-	void AddTask(HTNPrimitivePtr htnPrimitivePtr);
-	void AddTask(HTNCompoundPtr htnCompoundPtr);
+	void AddTask(HTNPrimitive* htnPrimitive);
+	void AddTask(HTNCompound* htnCompound);
 	virtual ~HTNMethod() = default;
 };
 
