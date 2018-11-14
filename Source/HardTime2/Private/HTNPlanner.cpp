@@ -136,7 +136,7 @@ Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-	if (!(aiCharacterC->lastPrimitiveAction->LastActionSucceeded(htnWorldState, aiCharacterC)))
+	if ((aiCharacterC->lastPrimitiveAction != nullptr) && !(aiCharacterC->lastPrimitiveAction->LastActionSucceeded(htnWorldState, aiCharacterC)))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Last Action did not succeed"));
 		hasValidPlan = false;
@@ -146,7 +146,7 @@ Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 		UE_LOG(LogTemp, Warning, TEXT("Check Precondition of plan primitive step"));
 		hasValidPlan = (aiCharacterC->htnPlan).at(0)->Preconditions(htnWorldState);
 	}
-
+	
 	//If plan is not valid, abandon it and try to make a new plan
 	if (!hasValidPlan)
 	{
