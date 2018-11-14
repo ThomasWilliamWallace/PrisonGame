@@ -335,7 +335,7 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 
 bool PickUpItem2::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
 {
-	return htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType;
+	return (htnWorldState.m_itemCarriedPtr != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
 //***********************************************************
