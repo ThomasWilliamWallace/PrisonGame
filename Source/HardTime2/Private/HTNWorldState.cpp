@@ -86,6 +86,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
 
+    	m_items.clear();
 	for (auto &item : ws2.m_items)
 	{
 		m_items.push_back(new SimActorItem(item->m_itemType, item->m_locationClass.location, item->m_unrealItem, item->m_carryingPlayer));

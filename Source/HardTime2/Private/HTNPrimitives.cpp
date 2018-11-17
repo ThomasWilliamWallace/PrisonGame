@@ -18,7 +18,6 @@ Actions Study::Operate(AAICharacterC* aiCharacterC)
 	return Actions::useRoom;
 }
 
-
 bool Study::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::library;
