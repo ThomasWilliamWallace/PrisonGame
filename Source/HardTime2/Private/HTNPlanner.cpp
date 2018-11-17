@@ -131,7 +131,7 @@ Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 {
 	UE_LOG(LogTemp, Warning, TEXT("Entering htnAIChooseAction"));
 	//update worldstate from real world
-	HTNWorldState htnWorldState(aiCharacterC);
+	HTNWorldState htnWorldState(&(aiCharacterC->m_player), aiCharacterC->m_world);
 
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.

@@ -5,7 +5,7 @@
 #include "HTNWorldState.hpp"
 #include "Actions.hpp"
 
-class ActorItem;
+class AActorItem;
 
 //***********************************************************
 class Study : public HTNPrimitive

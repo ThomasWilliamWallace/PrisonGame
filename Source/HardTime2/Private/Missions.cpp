@@ -1,5 +1,6 @@
 #include "Missions.hpp"
-#include "AICharacterC.h"
+#include "Player.hpp"
+#include "World.hpp"
 
 std::string MissionClass::MissionName()
 {
@@ -32,13 +33,13 @@ Missions GetRandomMission()
 		return Missions::bringItemToRoom;
 }
 
-MissionClass::MissionClass(Missions mission, double objective, AAICharacterC* owner):
+MissionClass::MissionClass(Missions mission, Player* owner, double objective):
 	m_mission(mission),
-	m_objective(objective),
-	m_owner(owner)
+	m_owner(owner),
+	m_objective(objective)
 {}
 
-MissionClass::MissionClass(Missions mission, AAICharacterC* owner, ItemType itemType, Locations location):
+MissionClass::MissionClass(Missions mission, Player* owner, ItemType itemType, Locations location):
 	m_mission(mission),
 	m_owner(owner),
 	m_itemType(itemType),
@@ -47,19 +48,20 @@ MissionClass::MissionClass(Missions mission, AAICharacterC* owner, ItemType item
 
 MissionClass::MissionClass():
 	m_mission(Missions::noMission),
-	m_objective(101),
-	m_targetPlayerIndex(-1)
+	m_owner(nullptr)
 {}
 
 MissionClass::MissionClass(const MissionClass& missionClass) :
 	m_mission(missionClass.m_mission),
+	m_owner(missionClass.m_owner),
 	m_objective(missionClass.m_objective),
-	m_targetPlayerIndex(missionClass.m_targetPlayerIndex),
 	m_itemType(missionClass.m_itemType),
 	m_locationClass(missionClass.m_locationClass)
 {}
 
-MissionClass::MissionClass(AAICharacterC* aiCharacterC) : m_mission(GetRandomMission()), m_owner(aiCharacterC)
+MissionClass::MissionClass(Player* owner):
+	m_mission(GetRandomMission()),
+	m_owner(owner)
 {
 	m_mission = Missions::bringItemToRoom;
 	m_itemType = ItemType::sword;
@@ -70,13 +72,13 @@ MissionClass::MissionClass(AAICharacterC* aiCharacterC) : m_mission(GetRandomMis
 	case Missions::noMission:
 		break;
 	case Missions::increaseAgility:
-		m_objective = aiCharacterC->agility;
+		m_objective = m_owner->pStats.getAgility();
 		break;
 	case Missions::increaseStrength:
-		m_objective = aiCharacterC->strength;
+		m_objective = m_owner->pStats.getStrength();
 		break;
 	case Missions::increaseIntelligence:
-		m_objective = aiCharacterC->intelligence;
+		m_objective = m_owner->pStats.getIntelligence();
 		break;
 	case Missions::bringItemToRoom:
 		m_itemType = GetRandomItemType();
@@ -86,18 +88,18 @@ MissionClass::MissionClass(AAICharacterC* aiCharacterC) : m_mission(GetRandomMis
 	m_objective += 3; //todo ensure that the mission is achievable, ie 100 or below
 }
 
-bool MissionClass::IsMissionComplete()
+bool MissionClass::IsMissionComplete(World &world)
 {
 	switch (m_mission)
 	{
 	case Missions::increaseAgility:
-		return (m_objective <= m_owner->agility);
+		return (m_objective <= m_owner->pStats.getAgility());
 	case Missions::increaseStrength:
-		return (m_objective <= m_owner->strength);
+		return (m_objective <= m_owner->pStats.getStrength());
 	case Missions::increaseIntelligence:
-		return (m_objective <= m_owner->intelligence);
+		return (m_objective <= m_owner->pStats.getIntelligence());
 	case Missions::bringItemToRoom:
-		for (auto &item : m_owner->m_items)
+		for (auto &item : world.items)
 		{
 			if ((item->m_itemType == m_itemType) && (item->m_locationClass.location == m_locationClass.location))
 			{

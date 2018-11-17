@@ -14,14 +14,14 @@ AAICharacterC::AAICharacterC(): lastPrimitiveAction(nullptr)
 void AAICharacterC::BeginPlay()
 {
 	Super::BeginPlay();
-	missionClass = MissionClass(this);
+	missionClass = MissionClass(&m_player);
 }
 
 // Called every frame
 void AAICharacterC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (missionClass.IsMissionComplete())
+	if (missionClass.IsMissionComplete(m_world))
 	{
 		missionClass.m_mission = Missions::noMission;
 		UE_LOG(LogTemp, Warning, TEXT("Mission complete"));
@@ -83,38 +83,38 @@ void AAICharacterC::UpdateLocation(int locationAsInt)
 	locationClass.location = static_cast<Locations>(locationAsInt);
 }
 
-void AAICharacterC::UpdateItemLocation(AActor* actor, int locationAsInt)
+void AAICharacterC::UpdateItemLocation(AActorItem* item, int locationAsInt)
 {
-	for (auto &item : m_items)
+	for (auto &i : m_items)
 	{
-		if (item->m_unrealItem == actor)
+		if (i->m_realItem == item)
 		{
-			item->m_locationClass.location = static_cast<Locations>(locationAsInt);
+			i->m_locationClass.location = static_cast<Locations>(locationAsInt);
 			break;
 		}
 	}
-	for (auto &item : m_items)
+	for (auto &i : m_items)
 	{
 		//if (GEngine)
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("itemtype %d in location %d"), static_cast<int>(item->m_itemType), static_cast<int>(item->m_locationClass.location)));
 	}
 }
 
-void AAICharacterC::AddItem(AActor* actor)
+void AAICharacterC::AddItem(AActorItem* item)
 {
-	m_items.push_back(new SimActorItem(ItemType::sword, Locations::mainHall, actor, (m_carriedItem==actor) ? this : nullptr ));
+	m_items.push_back(new SimActorItem(item, ItemType::sword, Locations::mainHall, (m_carriedItem==item) ? &(this->m_player) : nullptr ));
 	if (GEngine)
 	{
-		for (auto &item : m_items)
+		for (auto &i : m_items)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("itemtype %d in location %d"), static_cast<int>(item->m_itemType), static_cast<int>(item->m_locationClass.location)));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("itemtype %d in location %d"), static_cast<int>(i->m_itemType), static_cast<int>(item->m_locationClass.location)));
 		}
 	}
 }
 
-void AAICharacterC::UpdateCarriedItemC(AActor* item, ACharacter* character)
+void AAICharacterC::UpdateCarriedItemC(AActorItem* item, AAICharacterC* aiCharacterC)
 {
-	if (character == this)
+	if (&(aiCharacterC->m_player) == &(m_player))
 	{
 		m_carriedItem = item;
 	}
@@ -123,7 +123,7 @@ void AAICharacterC::UpdateCarriedItemC(AActor* item, ACharacter* character)
 	{
 		for (auto &m_item : m_items)
 		{
-			if (m_item->m_carryingPlayer == character)
+			if (m_item->m_carryingPlayer == &(aiCharacterC->m_player))
 			{
 				m_item->m_carryingPlayer = nullptr;
 				break;
@@ -134,10 +134,10 @@ void AAICharacterC::UpdateCarriedItemC(AActor* item, ACharacter* character)
 	{
 		for (auto &m_item : m_items)
 		{
-			if (m_item->m_unrealItem == item)
+			if (m_item->m_realItem == item)
 			{
-				m_item->m_carryingPlayer = character;
-				break;
+				m_item->m_carryingPlayer = &(aiCharacterC->m_player);
+				break; 
 			}
 		}
 	}

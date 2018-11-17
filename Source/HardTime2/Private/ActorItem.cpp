@@ -1,4 +1,4 @@
-#include "ActorItem.hpp"
+#include "ActorItem.h"
 
 std::string ItemTypeToString(ItemType itemType)
 {
@@ -95,9 +95,4 @@ ItemType GetRandomItemType()
 		return ItemType::sword;
 	else
 		return ItemType::syringe;
-}
-
-std::string SimActorItem::ToString()
-{
-	return ItemTypeToString(m_itemType);
 }

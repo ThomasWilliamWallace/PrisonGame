@@ -309,7 +309,7 @@ Actions PickUpItem2::Operate(AAICharacterC* aiCharacterC)
 	{
 		if (item->m_itemType == m_itemType && item->m_locationClass.location == aiCharacterC->locationClass.location)
 		{
-			aiCharacterC->m_itemFocusPtr = item->m_unrealItem;
+			aiCharacterC->m_itemFocusPtr = item->m_realItem;
 			return Actions::pickUpItem;
 		}
 	}

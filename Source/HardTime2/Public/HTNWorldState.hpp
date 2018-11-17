@@ -22,22 +22,21 @@ enum WorldE
 std::string WorldEToString(WorldE worldE);
 
 class Player;
-class ActorItem;
+class SimActorItem;
 class World;
-class AAICharacterC;
 
 class HTNWorldState
 {
 public:
 	std::vector<int> m_v;
 	std::vector< SimActorItem* > m_items;
-	AAICharacterC* m_ptrToSelf;
+	Player* m_ptrToSelf;
 	SimActorItem* m_itemCarriedPtr;
 	std::vector<bool> m_attackers;
 	std::vector<Locations> m_playerLocations;
 	MissionClass m_missionClass;
 	HTNWorldState(HTNWorldState &ws2);
-	HTNWorldState(AAICharacterC* aiCharacterC);
+	HTNWorldState(Player* playerPtr, World &world);
 	~HTNWorldState();
 	void CopyFrom(HTNWorldState &ws2);
 };
