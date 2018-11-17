@@ -32,11 +32,24 @@ Missions GetRandomMission()
 		return Missions::bringItemToRoom;
 }
 
-MissionClass::MissionClass(Missions mission, double objective, AAICharacterC* owner) : m_mission(mission), m_objective(objective), m_owner(owner) {}
+MissionClass::MissionClass(Missions mission, double objective, AAICharacterC* owner):
+	m_mission(mission),
+	m_objective(objective),
+	m_owner(owner)
+{}
 
-MissionClass::MissionClass(Missions mission, AAICharacterC* owner, ItemType itemType, Locations location) : m_mission(mission), m_owner(owner), m_itemType(itemType), m_locationClass(location) {}
+MissionClass::MissionClass(Missions mission, AAICharacterC* owner, ItemType itemType, Locations location):
+	m_mission(mission),
+	m_owner(owner),
+	m_itemType(itemType),
+	m_locationClass(location)
+{}
 
-MissionClass::MissionClass() : m_mission(Missions::noMission), m_objective(101), m_targetPlayerIndex(-1) {}
+MissionClass::MissionClass():
+	m_mission(Missions::noMission),
+	m_objective(101),
+	m_targetPlayerIndex(-1)
+{}
 
 MissionClass::MissionClass(const MissionClass& missionClass) :
 	m_mission(missionClass.m_mission),
