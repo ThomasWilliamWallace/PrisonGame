@@ -4,7 +4,8 @@
 #include "Player.hpp"
 #include "World.hpp"
 #include "HTNDomain.hpp"
-#include "Engine/GameEngine.h"
+#include "pLog.hpp"
+#include <sstream>
 
 //***********************************************************
 HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
@@ -27,17 +28,29 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 	{
 		m_items.push_back(new SimActorItem(item, item->m_itemType, Locations::mainHall, item->m_carryingPlayer));
 
-		if (GEngine) {
-			UE_LOG(LogTemp, Warning, TEXT("item->m_carryingPlayer = %p"), item->m_carryingPlayer);
-			UE_LOG(LogTemp, Warning, TEXT("m_items.back()->m_carryingPlayer = %p"), m_items.back()->m_carryingPlayer);
-			UE_LOG(LogTemp, Warning, TEXT("m_ptrToSelf = %p"), m_ptrToSelf);
-		}
+		std::stringstream ss;
+		ss << "item->m_carryingPlayer = " << item->m_carryingPlayer;
+		pLog(ss.str());
+		ss.str(std::string());
+		ss.clear();
+		ss << "m_items.back()->m_carryingPlayer = " << m_items.back()->m_carryingPlayer;
+		pLog(ss.str());
+		ss.str(std::string());
+		ss.clear();
+		ss << "m_ptrToSelf = " << m_ptrToSelf;
+		pLog(ss.str());
+		ss.str(std::string());
+		ss.clear();
+		ss << "constructor #1a m_itemCarriedPtr = " << m_itemCarriedPtr;
+		pLog(ss.str());
+		ss.str(std::string());
+		ss.clear();
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("constructor #1a m_itemCarriedPtr = %p"), m_itemCarriedPtr));
 		if ((m_items.back()->m_carryingPlayer) == m_ptrToSelf)
 		{
 			m_itemCarriedPtr = m_items.back();
-			UE_LOG(LogTemp, Warning, TEXT("constructor #1b m_itemCarriedPtr = %p"), m_itemCarriedPtr);
+			ss << "constructor #1b m_itemCarriedPtr = " << m_itemCarriedPtr;
+			pLog(ss.str());
 		}
 	}
 
@@ -51,7 +64,7 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 	m_v(ws2.m_v),
 	m_ptrToSelf(ws2.m_ptrToSelf),
-    	m_itemCarriedPtr(nullptr),
+    m_itemCarriedPtr(nullptr),
 	m_attackers(ws2.m_attackers),
 	m_playerLocations(ws2.m_playerLocations),
 	m_missionClass(ws2.m_missionClass)
