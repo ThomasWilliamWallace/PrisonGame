@@ -11,6 +11,8 @@ void pLog(std::string logText)
 
 void pLog(std::string logText, std::string logText2)
 {
+	FString fString = FString(logText.c_str());
+	FString fString2 = FString(logText2.c_str());
 	if (c_debugMode)
-		UE_LOG(LogTemp, Warning, TEXT("pLog2: %s%s"), *(logText.c_str()), *(logText2.c_str()));
+		UE_LOG(LogTemp, Warning, TEXT("pLog2: %s%s"), *fString, *fString2);
 }
