@@ -6,7 +6,7 @@ void pLog(std::string logText)
 {
 	FString fString = FString(logText.c_str());
 	if (c_debugMode)
-		UE_LOG(LogTemp, Warning, TEXT("pLOG: %s"), *fString);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *fString);
 }
 
 void pLog(std::string logText, std::string logText2)
@@ -14,5 +14,5 @@ void pLog(std::string logText, std::string logText2)
 	FString fString = FString(logText.c_str());
 	FString fString2 = FString(logText2.c_str());
 	if (c_debugMode)
-		UE_LOG(LogTemp, Warning, TEXT("pLog2: %s%s"), *fString, *fString2);
+		UE_LOG(LogTemp, Warning, TEXT("%s%s"), *fString, *fString2);
 }
