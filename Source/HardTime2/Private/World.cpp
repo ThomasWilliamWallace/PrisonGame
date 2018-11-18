@@ -7,12 +7,12 @@ World::World()
     circuitsOccupied = nullptr;
     studyOccupied    = nullptr;
     bedOccupied      = nullptr;
-//    items.push_back(new AActorItem(ItemType::extinguisher, Locations::mainHall));
-//    items.push_back(new AActorItem(ItemType::bottle      , Locations::mainHall));
-//    items.push_back(new AActorItem(ItemType::hammer      , Locations::circuitTrack));
-//    items.push_back(new AActorItem(ItemType::ball        , Locations::mainHall));
-//    items.push_back(new AActorItem(ItemType::mirror      , Locations::bedroom));
-//    items.push_back(new AActorItem(ItemType::rock        , Locations::library));
+//    items.push_back(new AActorItem(EItemType::extinguisher, Locations::mainHall));
+//    items.push_back(new AActorItem(EItemType::bottle      , Locations::mainHall));
+//    items.push_back(new AActorItem(EItemType::hammer      , Locations::circuitTrack));
+//    items.push_back(new AActorItem(EItemType::ball        , Locations::mainHall));
+//    items.push_back(new AActorItem(EItemType::mirror      , Locations::bedroom));
+//    items.push_back(new AActorItem(EItemType::rock        , Locations::library));
 }
 
 void World::Clean()

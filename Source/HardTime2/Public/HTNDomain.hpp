@@ -178,50 +178,50 @@ public:
 //***********************************************************
 class GetItemMethod1 : public HTNMethod
 {
-	ItemType m_itemType;
+	EItemType m_itemType;
 public:
-	GetItemMethod1(ItemType itemType);
+	GetItemMethod1(EItemType itemType);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class GetItemCompound : public HTNCompound
 {
 public:
-	GetItemCompound(ItemType itemType);
+	GetItemCompound(EItemType itemType);
 };
 
 //***********************************************************
 class BringItemToLocationMethod1 : public HTNMethod
 {
-	ItemType m_itemType;
+	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-	BringItemToLocationMethod1(ItemType itemType, LocationClass &locationClass);
+	BringItemToLocationMethod1(EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationMethod2 : public HTNMethod
 {
-	ItemType m_itemType;
+	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-	BringItemToLocationMethod2(ItemType itemType, LocationClass &locationClass);
+	BringItemToLocationMethod2(EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationMethod3 : public HTNMethod
 {
-	ItemType m_itemType;
+	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-	BringItemToLocationMethod3(ItemType itemType, LocationClass &locationClass);
+	BringItemToLocationMethod3(EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationCompound : public HTNCompound
 {
 public:
-	BringItemToLocationCompound(ItemType itemType, LocationClass &locationClass);
+	BringItemToLocationCompound(EItemType itemType, LocationClass &locationClass);
 };
 
 //***********************************************************

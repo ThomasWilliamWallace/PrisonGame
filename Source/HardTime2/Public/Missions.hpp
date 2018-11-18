@@ -21,11 +21,11 @@ public:
 	Missions m_mission;
 	Player* m_owner;
 	double m_objective; //objective for stat increase missions
-	ItemType m_itemType;
+	EItemType m_itemType;
 	LocationClass m_locationClass;
 	std::string MissionName();
 	MissionClass(Missions mission, Player* owner, double objective);
-	MissionClass(Missions mission, Player* owner, ItemType itemE, Locations location);
+	MissionClass(Missions mission, Player* owner, EItemType itemE, Locations location);
 	MissionClass();
 	MissionClass(const MissionClass& missionClass);
 	MissionClass(Player* owner);

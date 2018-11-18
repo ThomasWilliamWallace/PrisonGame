@@ -33,6 +33,7 @@ public:
 	// Sets default values for this character's properties
 	AAICharacterC();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
 	bool lastActionSucceeded = true;
 	HTNPrimitivePtr lastPrimitiveAction;
 	HTNPrimitiveList htnPlan;

@@ -6,7 +6,8 @@
 
 class Player;
 
-enum class ItemType
+UENUM()
+enum class EItemType
 {
 	assaultRifle,
 	ball,
@@ -31,15 +32,17 @@ enum class ItemType
 	syringe
 };
 
-std::string ItemTypeToString(ItemType itemType);
-ItemType GetRandomItemType();
+std::string ItemTypeToString(EItemType itemType);
+EItemType GetRandomItemType();
 
 UCLASS()
 class AActorItem : public AActor
 {
 	GENERATED_BODY()
 public:
-	ItemType m_itemType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
+		EItemType m_itemType;
+
 	LocationClass m_locationClass;
 	Player* m_carryingPlayer;
     std::string ToString();
@@ -48,11 +51,11 @@ public:
 class SimActorItem
 {
 public:
-	ItemType m_itemType;
+	EItemType m_itemType;
 	LocationClass m_locationClass;
 	Player* m_carryingPlayer;
 	AActorItem* m_realItem;
-	SimActorItem(AActorItem* realItem, ItemType itemType, Locations location, Player* carryingPlayer = nullptr):
+	SimActorItem(AActorItem* realItem, EItemType itemType, Locations location, Player* carryingPlayer = nullptr):
 		m_itemType(itemType),
 		m_locationClass(location),
 		m_carryingPlayer(carryingPlayer),

@@ -30,19 +30,19 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 
 		std::stringstream ss;
 		ss << "item->m_carryingPlayer = " << item->m_carryingPlayer;
-		pLog(ss.str());
+		//pLog(ss.str());
 		ss.str(std::string());
 		ss.clear();
 		ss << "m_items.back()->m_carryingPlayer = " << m_items.back()->m_carryingPlayer;
-		pLog(ss.str());
+		//pLog(ss.str());
 		ss.str(std::string());
 		ss.clear();
 		ss << "m_ptrToSelf = " << m_ptrToSelf;
-		pLog(ss.str());
+		//pLog(ss.str());
 		ss.str(std::string());
 		ss.clear();
 		ss << "constructor #1a m_itemCarriedPtr = " << m_itemCarriedPtr;
-		pLog(ss.str());
+		//pLog(ss.str());
 		ss.str(std::string());
 		ss.clear();
 
@@ -50,7 +50,7 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 		{
 			m_itemCarriedPtr = m_items.back();
 			ss << "constructor #1b m_itemCarriedPtr = " << m_itemCarriedPtr;
-			pLog(ss.str());
+			//pLog(ss.str());
 		}
 	}
 
@@ -122,11 +122,15 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 
 void HTNWorldState::Print()
 {
+	pLog("HTNWorldState::Print");
+	std::stringstream ss;
     for (int i = 0; i < static_cast<int>(m_v.size()); i++)
     {
-        std::cout << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
+		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i);
+		pLog(ss.str());
+		ss.str(std::string());
+		ss.clear();
     }
-	std::stringstream ss;
 	ss << "m_ptrToSelf:" << m_ptrToSelf;
 	pLog(ss.str());
 	ss.str(std::string());
@@ -137,10 +141,19 @@ void HTNWorldState::Print()
 	ss.clear();
     for (auto &simItem : m_items)
     {
-		//ss << "SimItem: " << simItem->ToString() << " carried by " << simItem->m_carryingPlayer->name << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << &(simItem->m_realItem);
-		//pLog(ss.str());
-		//ss.str(std::string());
-		//ss.clear();
+		ss << "SimItem: " << simItem->ToString() << " carried by ";
+		if (simItem->m_carryingPlayer != nullptr)
+		{
+			ss << simItem->m_carryingPlayer->name;
+		}
+		else
+		{
+			ss << "nullptr";
+		}
+		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << simItem->m_realItem;
+		pLog(ss.str());
+		ss.str(std::string());
+		ss.clear();
     }
 	ss << "m_missionClass:" << m_missionClass.MissionName();
 	pLog(ss.str());

@@ -1,100 +1,100 @@
 #include "ActorItem.h"
 
-std::string ItemTypeToString(ItemType itemType)
+std::string ItemTypeToString(EItemType itemType)
 {
 	switch (itemType)
 	{
-	case ItemType::assaultRifle:
+	case EItemType::assaultRifle:
 		return "Assault Rifle";
-	case ItemType::ball:
+	case EItemType::ball:
 		return "Ball";
-	case ItemType::bat:
+	case EItemType::bat:
 		return "Bat";
-	case ItemType::bottle:
+	case EItemType::bottle:
 		return "Bottle";
-	case ItemType::brick:
+	case EItemType::brick:
 		return "Brick";
-	case ItemType::broom:
+	case EItemType::broom:
 		return "Broom";
-	case ItemType::cigarette:
+	case EItemType::cigarette:
 		return "Cigarette";
-	case ItemType::cleaver:
+	case EItemType::cleaver:
 		return "Cleaver";
-	case ItemType::dumbbell:
+	case EItemType::dumbbell:
 		return "Dumbbell";
-	case ItemType::dynamite:
+	case EItemType::dynamite:
 		return "Dynamite";
-	case ItemType::extinguisher:
+	case EItemType::extinguisher:
 		return "Extinguisher";
-	case ItemType::hammer:
+	case EItemType::hammer:
 		return "Hammer";
-	case ItemType::knife:
+	case EItemType::knife:
 		return "Knife";
-	case ItemType::mirror:
+	case EItemType::mirror:
 		return "Mirror";
-	case ItemType::pistol:
+	case EItemType::pistol:
 		return "Pistol";
-	case ItemType::plank:
+	case EItemType::plank:
 		return "Plank";
-	case ItemType::poolCue:
+	case EItemType::poolCue:
 		return "Pool Cue";
-	case ItemType::rock:
+	case EItemType::rock:
 		return "Rock";
-	case ItemType::scissors:
+	case EItemType::scissors:
 		return "Scissors";
-	case ItemType::sword:
+	case EItemType::sword:
 		return "Sword";
-	case ItemType::syringe:
+	case EItemType::syringe:
 		return "Syringe";
 	}
 	return "ERROR: NO ITEM NAME";
 }
 
-ItemType GetRandomItemType()
+EItemType GetRandomItemType()
 {
 	int random = rand() % 100;
 	if (random < 4)
-		return ItemType::assaultRifle;
+		return EItemType::assaultRifle;
 	else if (random < 9)
-		return ItemType::ball;
+		return EItemType::ball;
 	else if (random < 14)
-		return ItemType::bat;
+		return EItemType::bat;
 	else if (random < 19)
-		return ItemType::bottle;
+		return EItemType::bottle;
 	else if (random < 24)
-		return ItemType::brick;
+		return EItemType::brick;
 	else if (random < 29)
-		return ItemType::broom;
+		return EItemType::broom;
 	else if (random < 34)
-		return ItemType::cigarette;
+		return EItemType::cigarette;
 	else if (random < 39)
-		return ItemType::cleaver;
+		return EItemType::cleaver;
 	else if (random < 44)
-		return ItemType::dumbbell;
+		return EItemType::dumbbell;
 	else if (random < 49)
-		return ItemType::dynamite;
+		return EItemType::dynamite;
 	else if (random < 53)
-		return ItemType::extinguisher;
+		return EItemType::extinguisher;
 	else if (random < 58)
-		return ItemType::hammer;
+		return EItemType::hammer;
 	else if (random < 63)
-		return ItemType::knife;
+		return EItemType::knife;
 	else if (random < 67)
-		return ItemType::mirror;
+		return EItemType::mirror;
 	else if (random < 71)
-		return ItemType::pistol;
+		return EItemType::pistol;
 	else if (random < 76)
-		return ItemType::plank;
+		return EItemType::plank;
 	else if (random < 81)
-		return ItemType::poolCue;
+		return EItemType::poolCue;
 	else if (random < 86)
-		return ItemType::rock;
+		return EItemType::rock;
 	else if (random < 91)
-		return ItemType::scissors;
+		return EItemType::scissors;
 	else if (random < 95)
-		return ItemType::sword;
+		return EItemType::sword;
 	else
-		return ItemType::syringe;
+		return EItemType::syringe;
 }
 
 std::string AActorItem::ToString()

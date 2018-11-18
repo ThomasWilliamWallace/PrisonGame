@@ -148,8 +148,8 @@ public:
 class PickUpItem2 : public HTNPrimitive
 {
 public:
-	PickUpItem2(ItemType itemType);
-	ItemType m_itemType;
+	PickUpItem2(EItemType itemType);
+	EItemType m_itemType;
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
 	Actions Operate(AAICharacterC* aiCharacterC);

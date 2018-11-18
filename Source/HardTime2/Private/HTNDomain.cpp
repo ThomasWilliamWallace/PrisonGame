@@ -231,7 +231,7 @@ IncreaseIntelligenceCompound::IncreaseIntelligenceCompound() : HTNCompound("Incr
 }
 
 //***********************************************************
-GetItemMethod1::GetItemMethod1(ItemType itemType) : m_itemType(itemType)
+GetItemMethod1::GetItemMethod1(EItemType itemType) : m_itemType(itemType)
 {
     AddTask(new PickUpItem2(itemType));
 }
@@ -250,13 +250,13 @@ bool GetItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 	return false;
 }
 
-GetItemCompound::GetItemCompound(ItemType itemType) : HTNCompound("GetItemCompound(" + ItemTypeToString(itemType) + ")")
+GetItemCompound::GetItemCompound(EItemType itemType) : HTNCompound("GetItemCompound(" + ItemTypeToString(itemType) + ")")
 {
 	AddMethod(new GetItemMethod1(itemType));
 }
 
 //***********************************************************
-BringItemToLocationMethod1::BringItemToLocationMethod1(ItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
+BringItemToLocationMethod1::BringItemToLocationMethod1(EItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
     AddTask(new DropItem());
 }
@@ -268,7 +268,7 @@ bool BringItemToLocationMethod1::Preconditions(HTNWorldState &htnWorldState)
 		(static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_locationClass.location);
 }
 
-BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
+BringItemToLocationMethod2::BringItemToLocationMethod2(EItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
 	switch (m_locationClass.location)
 	{
@@ -295,8 +295,9 @@ BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType, Locati
 bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
 	std::stringstream ss;
-	ss << "BringItemToLocationMethod2::Preconditions m_itemCarriedPtr = " << htnWorldState.m_itemCarriedPtr;
+	ss << "BringItemToLocationMethod2::Preconditions";
 	pLog(ss.str());
+	htnWorldState.Print();
 	//if (GEngine)
 	//	if (htnWorldState.m_itemCarriedPtr !=  nullptr)
 	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("htnWorldState.m_itemCarriedPtr !=  nullptr"));
@@ -305,11 +306,13 @@ bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 	//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("htnWorldState m_itemType = %d"), static_cast<int>(htnWorldState.m_itemCarriedPtr->m_itemType)));
 	//if (GEngine)
 	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("in m_itemType = %d"), static_cast<int>(m_itemType)));
+	pLog((htnWorldState.m_itemCarriedPtr != nullptr) &&
+		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType) ? "returning True" : "Returning False");
 	return (htnWorldState.m_itemCarriedPtr != nullptr) &&
 		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
-BringItemToLocationMethod3::BringItemToLocationMethod3(ItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
+BringItemToLocationMethod3::BringItemToLocationMethod3(EItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
     	AddTask(new GetItemCompound(itemType));
 
@@ -348,10 +351,12 @@ bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
 	//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("htnWorldState m_itemType = %d"), static_cast<int>(htnWorldState.m_itemCarriedPtr->m_itemType)));
 	//if (GEngine)
 	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("in m_itemType = %d"), static_cast<int>(m_itemType)));
+
+	pLog("returning True as always");
 	return true;
 }
 
-BringItemToLocationCompound::BringItemToLocationCompound(ItemType itemType, LocationClass &locationClass) : HTNCompound("BringItemToLocationCompound")
+BringItemToLocationCompound::BringItemToLocationCompound(EItemType itemType, LocationClass &locationClass) : HTNCompound("BringItemToLocationCompound")
 {
     AddMethod(new BringItemToLocationMethod1(itemType, locationClass)); //TODO reuse some of the actions at higher level
     AddMethod(new BringItemToLocationMethod2(itemType, locationClass)); // TODO ie, right now, method 1 2 and 3 all overlap.

@@ -171,10 +171,10 @@ Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 	else {
 		pLog("Valid plan found!");
 		//continue with current plan
-		//for (auto &prim : aiCharacterC->htnPlan)
-		//{
-		//	pLog("Plan step: ", prim->ToString());
-		//}
+		for (auto &prim : aiCharacterC->htnPlan)
+		{
+			pLog("Plan step: ", prim->ToString());
+		}
 		HTNPrimitivePtr currentPlanStep = (aiCharacterC->htnPlan).front();
 		aiCharacterC->lastPrimitiveAction = currentPlanStep;
 		(aiCharacterC->htnPlan).pop_front();

@@ -284,7 +284,7 @@ bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-PickUpItem2::PickUpItem2(ItemType itemType) : HTNPrimitive("PickUpItem2"), m_itemType(itemType) {}
+PickUpItem2::PickUpItem2(EItemType itemType) : HTNPrimitive("PickUpItem2"), m_itemType(itemType) {}
 
 void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 {
