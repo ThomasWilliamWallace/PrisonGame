@@ -305,15 +305,15 @@ void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 
 Actions PickUpItem2::Operate(AAICharacterC* aiCharacterC)
 {
-	for (auto &item : aiCharacterC->m_items)
+	for (auto &item : aiCharacterC->m_world.items)
 	{
-		if (item->m_itemType == m_itemType && item->m_locationClass.location == aiCharacterC->locationClass.location)
+		if (item->m_itemType == m_itemType && item->m_locationClass.location == aiCharacterC->m_player.locationClass.location)
 		{
-			aiCharacterC->m_itemFocusPtr = item->m_realItem;
+			aiCharacterC->m_player.itemFocusPtr = item;
 			return Actions::pickUpItem;
 		}
 	}
-	aiCharacterC->m_itemFocusPtr = nullptr;
+	aiCharacterC->m_player.itemFocusPtr = nullptr;
 	return Actions::noAction;
 }
 

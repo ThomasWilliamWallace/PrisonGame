@@ -2,7 +2,8 @@
 #include "Locations.hpp"
 #include "AICharacterC.h"
 #include "HTNPrimitives.hpp"
-#include "Engine/GameEngine.h"
+#include "pLog.hpp"
+#include <sstream>
 #include "Constants.hpp"
 
 //***********************************************************
@@ -293,7 +294,9 @@ BringItemToLocationMethod2::BringItemToLocationMethod2(ItemType itemType, Locati
 
 bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BringItemToLocationMethod2::Preconditions m_itemCarriedPtr = %p"), htnWorldState.m_itemCarriedPtr);
+	std::stringstream ss;
+	ss << "BringItemToLocationMethod2::Preconditions m_itemCarriedPtr = " << htnWorldState.m_itemCarriedPtr;
+	pLog(ss.str());
 	//if (GEngine)
 	//	if (htnWorldState.m_itemCarriedPtr !=  nullptr)
 	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("htnWorldState.m_itemCarriedPtr !=  nullptr"));
@@ -334,7 +337,9 @@ BringItemToLocationMethod3::BringItemToLocationMethod3(ItemType itemType, Locati
 
 bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BringItemToLocationMethod3::Preconditions m_itemCarriedPtr = %p"), htnWorldState.m_itemCarriedPtr);
+	std::stringstream ss;
+	ss << "BringItemToLocationMethod3::Preconditions m_itemCarriedPtr = " << htnWorldState.m_itemCarriedPtr;
+	pLog(ss.str());
 	//if (GEngine)
 	//	if (htnWorldState.m_itemCarriedPtr != nullptr)
 	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("htnWorldState.m_itemCarriedPtr !=  nullptr"));

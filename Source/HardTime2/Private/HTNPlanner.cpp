@@ -1,7 +1,7 @@
 #include "HTNPlanner.hpp"
 #include "HTNDomain.hpp"
 #include "AICharacterC.h"
-#include "Engine/GameEngine.h"
+#include "pLog.hpp"
 
 //*******************************************************************
 HTNTask::HTNTask(std::string name, bool isPrimitive) : m_name(name), m_isPrimitive(isPrimitive) {}
@@ -129,7 +129,7 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 
 Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 {
-	UE_LOG(LogTemp, Warning, TEXT("Entering htnAIChooseAction"));
+	pLog("Entering htnAIChooseAction");
 	//update worldstate from real world
 	HTNWorldState htnWorldState(&(aiCharacterC->m_player), aiCharacterC->m_world);
 
@@ -138,19 +138,19 @@ Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 
 	if ((aiCharacterC->lastPrimitiveAction != nullptr) && !(aiCharacterC->lastPrimitiveAction->LastActionSucceeded(htnWorldState, aiCharacterC)))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Last Action did not succeed"));
+		pLog("Last Action did not succeed");
 		hasValidPlan = false;
 	}
 	else if (aiCharacterC->htnPlan.size() > 0)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Check Precondition of plan primitive step"));
+		pLog("Check Precondition of plan primitive step");
 		hasValidPlan = (aiCharacterC->htnPlan).at(0)->Preconditions(htnWorldState);
 	}
 	
 	//If plan is not valid, abandon it and try to make a new plan
 	if (!hasValidPlan)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("No valid plan exists! Try to replan."));
+		pLog("No valid plan exists! Try to replan.");
 		//make new plan
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
@@ -165,25 +165,22 @@ Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 
 	if (!hasValidPlan)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("No valid plan exists! Leaving htnAIChooseAction #1"));
+		pLog("No valid plan exists! Leaving htnAIChooseAction #1");
 		return Actions::noAction; //If next step of the plan is still not valid, then return failure state
 	}
 	else {
-		UE_LOG(LogTemp, Warning, TEXT("Valid plan found!"));
+		pLog("Valid plan found!");
 		//continue with current plan
 		for (auto &prim : aiCharacterC->htnPlan)
 		{
-			FString b = (prim->ToString().c_str());
-			UE_LOG(LogTemp, Warning, TEXT("Plan step: %s"), *b);
-			//if (GEngine)
-			//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, b);
+			pLog("Plan step: ", prim->ToString());
 		}
 		HTNPrimitivePtr currentPlanStep = (aiCharacterC->htnPlan).front();
 		aiCharacterC->lastPrimitiveAction = currentPlanStep;
 		(aiCharacterC->htnPlan).pop_front();
-		UE_LOG(LogTemp, Warning, TEXT("Leaving htnAIChooseAction #2"));
+		pLog("Leaving htnAIChooseAction #2");
 		return currentPlanStep->Operate(aiCharacterC);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Leaving htnAIChooseAction #3"));
+	pLog("Leaving htnAIChooseAction #3");
 	return Actions::noAction;
 }
