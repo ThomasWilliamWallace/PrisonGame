@@ -1,7 +1,7 @@
 #include "AICharacterC.h"
 #include "HTNWorldState.hpp"
-#include <iostream>
 #include "pLog.hpp"
+#include "Engine/GameEngine.h"
 
 
 // Sets default values

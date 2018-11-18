@@ -59,6 +59,8 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 	//	m_attackers.push_back(aiCharacterC->rel[i].getAggro() > 29 ? true : false);
 	//	m_playerLocations.push_back(player[i].locationClass.location);
 	//}
+	pLog("HTNWorldState::default constructor:");
+	Print();
 }
 
 HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
@@ -82,6 +84,8 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("constructor #2b m_itemCarriedPtr = %p"), m_itemCarriedPtr));
 		}
 	}
+	pLog("HTNWorldState::Copy constructor:");
+	Print();
 }
 
 HTNWorldState::~HTNWorldState()
@@ -112,6 +116,34 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 		}
 	}
 	m_missionClass = ws2.m_missionClass;
+	pLog("HTNWorldState::CopyFrom:");
+	Print();
+}
+
+void HTNWorldState::Print()
+{
+    for (int i = 0; i < static_cast<int>(m_v.size()); i++)
+    {
+        std::cout << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
+    }
+	std::stringstream ss;
+	ss << "m_ptrToSelf:" << m_ptrToSelf;
+	pLog(ss.str());
+	ss.str(std::string());
+	ss.clear();
+	ss << "m_itemCarriedPtr:" << m_itemCarriedPtr;
+	pLog(ss.str());
+	ss.str(std::string());
+	ss.clear();
+    for (auto &simItem : m_items)
+    {
+		//ss << "SimItem: " << simItem->ToString() << " carried by " << simItem->m_carryingPlayer->name << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << &(simItem->m_realItem);
+		//pLog(ss.str());
+		//ss.str(std::string());
+		//ss.clear();
+    }
+	ss << "m_missionClass:" << m_missionClass.MissionName();
+	pLog(ss.str());
 }
 
 std::string WorldEToString(WorldE worldE)

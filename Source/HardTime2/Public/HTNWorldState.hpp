@@ -39,4 +39,5 @@ public:
 	HTNWorldState(Player* playerPtr, World &world);
 	~HTNWorldState();
 	void CopyFrom(HTNWorldState &ws2);
+    void Print();
 };

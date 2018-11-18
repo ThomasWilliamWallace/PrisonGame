@@ -96,3 +96,13 @@ ItemType GetRandomItemType()
 	else
 		return ItemType::syringe;
 }
+
+std::string AActorItem::ToString()
+{
+    return ItemTypeToString(m_itemType);
+}
+
+std::string SimActorItem::ToString()
+{
+	return ItemTypeToString(m_itemType);
+}

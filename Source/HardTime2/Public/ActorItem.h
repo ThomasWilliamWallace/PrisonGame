@@ -42,6 +42,7 @@ public:
 	ItemType m_itemType;
 	LocationClass m_locationClass;
 	Player* m_carryingPlayer;
+    std::string ToString();
 };
 
 class SimActorItem
@@ -57,4 +58,5 @@ public:
 		m_carryingPlayer(carryingPlayer),
 		m_realItem(realItem)
     {};
+    std::string ToString();
 };

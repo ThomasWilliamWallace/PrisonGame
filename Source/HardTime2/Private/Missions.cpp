@@ -20,6 +20,24 @@ std::string MissionClass::MissionName()
 	return "UnrecognisedMission";
 }
 
+std::string MissionClass::MissionNarrative()
+{
+    switch (m_mission)
+    {
+        case Missions::noMission:
+            return "No Mission\n";
+        case Missions::increaseAgility:
+            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getAgility()) + ")\n";
+        case Missions::increaseStrength:
+            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getStrength()) + ")\n";
+        case Missions::increaseIntelligence:
+            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getIntelligence()) + ")\n";
+        case Missions::bringItemToRoom:
+            return "Mission: " + m_owner->name + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".\n";
+    }
+    return "ERROR: MISSION TYPE NOT RECOGNISED";
+}
+
 Missions GetRandomMission()
 {
 	int random = rand() % 100;

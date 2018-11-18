@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "ActorItem.h"
 
 enum class Missions
@@ -29,6 +30,7 @@ public:
 	MissionClass(const MissionClass& missionClass);
 	MissionClass(Player* owner);
 	bool IsMissionComplete(World &world);
+    std::string MissionNarrative();
 };
 
 Missions GetRandomMission();
