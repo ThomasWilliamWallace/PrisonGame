@@ -1,8 +1,8 @@
 #include "HTNPrimitives.hpp"
 #include "Locations.hpp"
 #include "AICharacterC.h"
-#include "Engine/GameEngine.h"
 #include "Constants.hpp"
+#include "pLog.hpp"
 
 //***********************************************************
 Study::Study() : HTNPrimitive("Study") {}
@@ -274,7 +274,8 @@ Actions PickUpItem::Operate(AAICharacterC* aiCharacterC)
 bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 {
 	//TODO hook this into the actions code
-	if (m_itemFocus != nullptr
+    if (htnWorldState.m_itemCarriedPtr == nullptr
+      		&& m_itemFocus != nullptr
 		&& static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocus->m_locationClass.location
 		&& m_itemFocus->m_carryingPlayer == nullptr)
 	{
@@ -307,7 +308,8 @@ Actions PickUpItem2::Operate(AAICharacterC* aiCharacterC)
 {
 	for (auto &item : aiCharacterC->m_world.items)
 	{
-		if (item->m_itemType == m_itemType && item->m_locationClass.location == aiCharacterC->m_player.locationClass.location)
+		if (item->m_itemType == m_itemType &&
+			item->m_locationClass.location == aiCharacterC->m_player.locationClass.location)
 		{
 			aiCharacterC->m_player.itemFocusPtr = item;
 			return Actions::pickUpItem;
@@ -319,15 +321,19 @@ Actions PickUpItem2::Operate(AAICharacterC* aiCharacterC)
 
 bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 {
+	pLog("Entering PickUpItem2::Preconditions");
 	for (auto &item : htnWorldState.m_items)
 	{
-		if (item->m_itemType == m_itemType
+        if (htnWorldState.m_itemCarriedPtr == nullptr
+            		&& item->m_itemType == m_itemType
 			&& item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
 			&& item->m_carryingPlayer == nullptr)
 		{
+			pLog("Return true from PickUpItem2::Preconditions");
 			return true;
 		}
 	}
+	pLog("Return false from PickUpItem2::Preconditions");
 	return false;
 }
 

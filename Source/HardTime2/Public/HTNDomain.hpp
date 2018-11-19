@@ -187,7 +187,7 @@ public:
 class GetItemCompound : public HTNCompound
 {
 public:
-	GetItemCompound(EItemType itemType);
+    GetItemCompound(HTNWorldState &htnWorldState, EItemType itemType);
 };
 
 //***********************************************************
@@ -214,14 +214,14 @@ class BringItemToLocationMethod3 : public HTNMethod
 	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-	BringItemToLocationMethod3(EItemType itemType, LocationClass &locationClass);
+    BringItemToLocationMethod3(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class BringItemToLocationCompound : public HTNCompound
 {
 public:
-	BringItemToLocationCompound(EItemType itemType, LocationClass &locationClass);
+    BringItemToLocationCompound(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass);
 };
 
 //***********************************************************
@@ -285,7 +285,7 @@ public:
 class DoMissionCompound : public HTNCompound
 {
 public:
-	DoMissionCompound(HTNWorldState &htnWorldState);  //TODO add the bringItemToLocation mission
+	DoMissionCompound(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************

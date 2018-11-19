@@ -238,19 +238,25 @@ GetItemMethod1::GetItemMethod1(EItemType itemType) : m_itemType(itemType)
 
 bool GetItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
+	pLog("Entering GetItemMethod1::Preconditions" );
 	for (auto &item : htnWorldState.m_items)
 	{
+		std::stringstream ss;
+		ss << "Item: " << item->ToString() << " in the " << item->m_locationClass.ToString() << " carried by " << item->m_carryingPlayer << " pointing at unreal actor " << item->m_realItem << ". (Player location = " << htnWorldState.m_v.at(WorldE::location) << ")\n";
+		pLog(ss);
 		if (item->m_itemType == m_itemType
 			&& item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
 			&& (item->m_carryingPlayer == nullptr))
 		{
+			pLog("Return true from GetItemMethod1::Preconditions");
 			return true;
 		}
 	}
+	pLog("Return false from GetItemMethod1::Preconditions");
 	return false;
 }
 
-GetItemCompound::GetItemCompound(EItemType itemType) : HTNCompound("GetItemCompound(" + ItemTypeToString(itemType) + ")")
+GetItemCompound::GetItemCompound(HTNWorldState &htnWorldState, EItemType itemType) : HTNCompound("GetItemCompound(" + ItemTypeToString(itemType) + ")")
 {
 	AddMethod(new GetItemMethod1(itemType));
 }
@@ -312,9 +318,9 @@ bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
-BringItemToLocationMethod3::BringItemToLocationMethod3(EItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
+BringItemToLocationMethod3::BringItemToLocationMethod3(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
-    	AddTask(new GetItemCompound(itemType));
+    AddTask(new GetItemCompound(htnWorldState, itemType));
 
 	switch (m_locationClass.location)
 	{
@@ -356,11 +362,11 @@ bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
 	return true;
 }
 
-BringItemToLocationCompound::BringItemToLocationCompound(EItemType itemType, LocationClass &locationClass) : HTNCompound("BringItemToLocationCompound")
+BringItemToLocationCompound::BringItemToLocationCompound(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass) : HTNCompound("BringItemToLocationCompound")
 {
     AddMethod(new BringItemToLocationMethod1(itemType, locationClass)); //TODO reuse some of the actions at higher level
     AddMethod(new BringItemToLocationMethod2(itemType, locationClass)); // TODO ie, right now, method 1 2 and 3 all overlap.
-    AddMethod(new BringItemToLocationMethod3(itemType, locationClass));
+    AddMethod(new BringItemToLocationMethod3(htnWorldState, itemType, locationClass));
 }
 
 //***********************************************************
@@ -383,8 +389,9 @@ bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
 		}
 	}
 
-	return (m_item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
-		&& !carryingItemAlready;
+    	return //htnWorldState.m_v.at(WorldE::inSameRoom) &&
+        	(m_item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))) &&
+			!carryingItemAlready;
 }
 
 AttackMethod2::AttackMethod2(Player* opponent)
@@ -469,7 +476,7 @@ bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod4::DoMissionMethod4(HTNWorldState &htnWorldState)
 {
-    	AddTask(new BringItemToLocationCompound(htnWorldState.m_missionClass.m_itemType, htnWorldState.m_missionClass.m_locationClass));  //TODO make construction conditional on 'Preconditions'? Because right now, tasks are constructed regardless of whether their preconditions apply.
+    	AddTask(new BringItemToLocationCompound(htnWorldState, htnWorldState.m_missionClass.m_itemType, htnWorldState.m_missionClass.m_locationClass));  //TODO make construction conditional on 'Preconditions'? Because right now, tasks are constructed regardless of whether their preconditions apply.
 }
 
 bool DoMissionMethod4::Preconditions(HTNWorldState &htnWorldState)

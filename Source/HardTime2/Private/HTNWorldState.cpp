@@ -11,7 +11,7 @@
 HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 	m_v(WorldE::last, 0),
 	m_ptrToSelf(playerPtr),
-    	m_itemCarriedPtr(nullptr),
+    m_itemCarriedPtr(nullptr),
 	m_missionClass(playerPtr->missionClass)
 {
 	m_v.at(WorldE::health) = round(m_ptrToSelf->pStats.getHealth());
@@ -26,7 +26,7 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 	//TODO reflect players sensors rather than being hardwired to the world
 	for (auto &item : world.items)
 	{
-		m_items.push_back(new SimActorItem(item, item->m_itemType, Locations::mainHall, item->m_carryingPlayer));
+		m_items.push_back(new SimActorItem(item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
 
 		std::stringstream ss;
 		ss << "item->m_carryingPlayer = " << item->m_carryingPlayer << "\n";
