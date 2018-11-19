@@ -4,7 +4,6 @@
 #include "Constants.hpp"
 #include <sstream>
 #include "pLog.hpp"
-using namespace std;
 
 //TODO write an exponentially decreasing add/subtract function, to adjust stats whilst keeping them within 0-100.
 double transformStat(double inputStat)

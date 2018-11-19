@@ -1,5 +1,7 @@
 #include "HTNPlanner.hpp"
 #include "HTNDomain.hpp"
+#include "pLog.hpp"
+#include <sstream>
 
 //*******************************************************************
 HTNTask::HTNTask(std::string name, bool isPrimitive) : m_name(name), m_isPrimitive(isPrimitive) {}
@@ -61,6 +63,19 @@ constexpr int c_MaxSearchDepth = 50;
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth)
 {
+    std::stringstream ss;
+    ss << "Try to plan " + htnCompound.ToString() + ", containing methods:\n";
+    for (auto &htnMethod : htnCompound.m_methods)
+    {
+        ss << "Method: ";
+        for (auto &task : htnMethod->m_taskList)
+        {
+            ss << task->ToString() << ",";
+        }
+        ss << "\n";
+    }
+    pLog(ss);
+
 	if (searchDepth > c_MaxSearchDepth)
 	{
 		HTNPrimitiveList htnPlan2;
@@ -86,12 +101,10 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 				{
 					pPtr->Effect(ws2);
 					htnPlan.push_back(pPtr);
-				}
-				else {
+                		} else {
 					planningFailed = true;
 				}
-			}
-			else {
+			} else {
 				HTNCompoundPtr cPtr = static_cast<HTNCompoundPtr>(htnTask); //This needs re-written to use unreal shared pointers
 				HTNPrimitiveList subplan = HTNdfs(ws2, *cPtr, searchDepth + 1);
 				if (static_cast<int>(subplan.size()) > 0)
@@ -100,8 +113,7 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 					{
 						htnPlan.push_back(subtask);
 					}
-				}
-				else {
+				} else {
 					planningFailed = true;
 				}
 			}
@@ -117,6 +129,14 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 			//an htnMethod of htnCompound has been successfully planned
 			//copy the planned htnWorldState back into the parameter htnWorldState
 			htnWorldState.CopyFrom(ws2);
+            		std::stringstream ss2;
+            		ss2 << "Successfully planned an htnMethod for compound " + htnCompound.ToString() + ":";
+            		for (auto &htn : htnPlan)
+            		{
+                		ss2 << htn->ToString() << ", ";
+            		}
+            		ss2 << "\n";
+            		pLog(ss2);
 			return htnPlan;
 		}
 	}

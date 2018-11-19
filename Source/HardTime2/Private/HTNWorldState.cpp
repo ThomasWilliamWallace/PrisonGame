@@ -11,7 +11,7 @@
 HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 	m_v(WorldE::last, 0),
 	m_ptrToSelf(playerPtr),
-    m_itemCarriedPtr(nullptr),
+    	m_itemCarriedPtr(nullptr),
 	m_missionClass(playerPtr->missionClass)
 {
 	m_v.at(WorldE::health) = round(m_ptrToSelf->pStats.getHealth());
@@ -48,7 +48,7 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 	m_v(ws2.m_v),
 	m_ptrToSelf(ws2.m_ptrToSelf),
-    m_itemCarriedPtr(nullptr),
+    	m_itemCarriedPtr(nullptr),
 	m_attackers(ws2.m_attackers),
 	m_playerLocations(ws2.m_playerLocations),
 	m_missionClass(ws2.m_missionClass)
