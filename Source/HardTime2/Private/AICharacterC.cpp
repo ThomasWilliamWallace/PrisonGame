@@ -25,7 +25,7 @@ void AAICharacterC::Tick(float DeltaTime)
 	if (m_player.missionClass.IsMissionComplete(m_world))
 	{
 		m_player.missionClass.m_mission = Missions::noMission;
-		pLog("Mission complete");
+		pLog("Mission complete", true);
 	}
 
 	if (readyForNewAction)
@@ -33,51 +33,51 @@ void AAICharacterC::Tick(float DeltaTime)
 		m_player.PrintPlayer();
 		readyForNewAction = false;
 		m_player.action = m_player.aiController.HTNAIChooseAction(this);
-		pLog("HTN Planner chose an action:");
+		pLog("HTN Planner chose an action:", true);
 		switch (m_player.action)
 		{
 		case Actions::attack:
 			//AttackPlayer();
-			pLog("attack");
+			pLog("attack", true);
 			break;
 		case Actions::dropItem:
-			pLog("dropItem");
+			pLog("dropItem", true);
 			DropItem();
 			break;
 		case Actions::evade:
-			pLog("evade");
+			pLog("evade", true);
 			Evade();
 			break;
 		case Actions::goToBedroom:
-			pLog("goToBedroom");
+			pLog("goToBedroom", true);
 			GoToLocation(3);
 			break;
 		case Actions::goToCircuitTrack:
-			pLog("goToCircuitTrack");
+			pLog("goToCircuitTrack", true);
 			GoToLocation(4);
 			break;
 		case Actions::goToGym:
-			pLog("goToGym");
+			pLog("goToGym", true);
 			GoToLocation(1);
 			break;
 		case Actions::goToLibrary:
-			pLog("goToLibrary");
+			pLog("goToLibrary", true);
 			GoToLocation(2);
 			break;
 		case Actions::goToMainHall:
-			pLog("goToMainHall");
+			pLog("goToMainHall", true);
 			GoToLocation(0);
 			break;
 		case Actions::pickUpItem:
-			pLog("pickUpItem");
+			pLog("pickUpItem", true);
 			PickUpItem(m_player.itemFocusPtr);
 			break;
 		case Actions::useRoom:
-			pLog("useRoom");
+			pLog("useRoom", true);
 			UseRoom();
 			break;
 		default:
-			pLog("NoAction");
+			pLog("NoAction", true);
 			readyForNewAction = true;
 			break;
 		}
@@ -92,13 +92,13 @@ void AAICharacterC::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void AAICharacterC::UpdateLocation(int locationAsInt)
 {
-	pLog("AAICharacterC::UpdateLocation");
+	pLog("AAICharacterC::UpdateLocation", true);
 	m_player.locationClass.location = static_cast<Locations>(locationAsInt);
 }
 
 void AAICharacterC::UpdateItemLocation(AActorItem* item, int locationAsInt)
 {
-	pLog("AAICharacterC::UpdateItemLocation");
+	pLog("AAICharacterC::UpdateItemLocation", true);
 	for (auto &i : m_world.items)
 	{
 		if (i == item)
@@ -111,13 +111,13 @@ void AAICharacterC::UpdateItemLocation(AActorItem* item, int locationAsInt)
 
 void AAICharacterC::AddItem(AActorItem* item)
 {
-	pLog("AAICharacterC::AddItem");
+	pLog("AAICharacterC::AddItem", true);
 	m_world.items.push_back(item);
 }
 
 void AAICharacterC::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 {
-	pLog("AAICharacterC::UpdateCarriedItemC");
+	pLog("AAICharacterC::UpdateCarriedItemC", true);
 	AAICharacterC* aiCharacterC = Cast<AAICharacterC>(character);
 	if (aiCharacterC == nullptr)
 	{

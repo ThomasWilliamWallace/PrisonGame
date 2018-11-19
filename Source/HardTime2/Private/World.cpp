@@ -55,7 +55,7 @@ void World::PrintWorld(Player player[])
         ss << item->ToString() << " is in the " << item->m_locationClass.ToString() << ".\n";
     }
     ss << "\n";
-	pLog(ss.str());
+	pLog(ss);
 	*/
 }
 

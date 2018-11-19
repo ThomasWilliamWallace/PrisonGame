@@ -144,7 +144,7 @@ Actions AIController::RandomAIChooseAction(Player* playerPtr, Player player[], b
 
 Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 {
-	pLog("Entering htnAIChooseAction");
+	pLog("Entering htnAIChooseAction", true);
 	//update worldstate from real world
 	HTNWorldState htnWorldState(&(aiCharacterC->m_player), aiCharacterC->m_world);
 
@@ -153,19 +153,19 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 
 	if ((aiCharacterC->lastPrimitiveAction != nullptr) && !(aiCharacterC->lastPrimitiveAction->LastActionSucceeded(htnWorldState, aiCharacterC)))
 	{
-		pLog("Last Action did not succeed");
+		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
 	}
 	else if (aiCharacterC->m_player.aiController.htnPlan.size() > 0)
 	{
-		pLog("Check Precondition of plan primitive step");
+		pLog("Check Precondition of plan primitive step", true);
 		hasValidPlan = (aiCharacterC->m_player.aiController.htnPlan).at(0)->Preconditions(htnWorldState);
 	}
 
 	//If plan is not valid, abandon it and try to make a new plan
 	if (!hasValidPlan)
 	{
-		pLog("No valid plan exists! Try to replan.");
+		pLog("No valid plan exists! Try to replan.", true);
 		//make new plan
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
@@ -180,11 +180,11 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 
 	if (!hasValidPlan)
 	{
-		pLog("No valid plan exists! Leaving htnAIChooseAction #1");
+		pLog("No valid plan exists! Leaving htnAIChooseAction #1", true);
 		return Actions::noAction; //If next step of the plan is still not valid, then return failure state
 	}
 	else {
-		pLog("Valid plan found!");
+		pLog("Valid plan found!"), true;
 		//continue with current plan
 		std::stringstream ss;
 		ss << "Plan steps: ";
@@ -192,14 +192,14 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 		{
 			ss << prim->ToString() << ", ";
 		}
-		pLog(ss.str());
+		pLog(ss, true);
 		HTNPrimitivePtr currentPlanStep = (aiCharacterC->m_player.aiController.htnPlan).front();
 		aiCharacterC->lastPrimitiveAction = currentPlanStep;
 		(aiCharacterC->m_player.aiController.htnPlan).pop_front();
-		pLog("Leaving htnAIChooseAction #2");
+		pLog("Leaving htnAIChooseAction #2", true);
 		return currentPlanStep->Operate(aiCharacterC);
 	}
-	pLog("Leaving htnAIChooseAction #3");
+	pLog("Leaving htnAIChooseAction #3", true);
 	return Actions::noAction;
 }
 

@@ -296,7 +296,7 @@ bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
 	std::stringstream ss;
 	ss << "BringItemToLocationMethod2::Preconditions";
-	pLog(ss.str());
+	pLog(ss);
 	htnWorldState.Print();
 	//if (GEngine)
 	//	if (htnWorldState.m_itemCarriedPtr !=  nullptr)
@@ -342,7 +342,7 @@ bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
 {
 	std::stringstream ss;
 	ss << "BringItemToLocationMethod3::Preconditions m_itemCarriedPtr = " << htnWorldState.m_itemCarriedPtr;
-	pLog(ss.str());
+	pLog(ss);
 	//if (GEngine)
 	//	if (htnWorldState.m_itemCarriedPtr != nullptr)
 	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("htnWorldState.m_itemCarriedPtr !=  nullptr"));

@@ -39,7 +39,7 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 			m_itemCarriedPtr = m_items.back();
 			ss << "constructor #1b m_itemCarriedPtr = " << m_itemCarriedPtr << "\n";
 		}
-		//pLog(ss.str());
+		pLog(ss);
 	}
 	pLog("HTNWorldState::default constructor:");
 	Print();
@@ -120,7 +120,7 @@ void HTNWorldState::Print()
 		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << simItem->m_realItem << "\n";
     }
 	ss << "m_missionClass:" << m_missionClass.MissionName() << "\n";
-	pLog(ss.str());
+	pLog(ss);
 }
 
 std::string WorldEToString(WorldE worldE)

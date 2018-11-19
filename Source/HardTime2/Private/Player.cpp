@@ -110,7 +110,7 @@ void Player::PrintPlayer()
     ss << "sentence=" << sentence << "\n";
     ss << "m_playerIndex=" << m_playerIndex << "\n";
     ss << "\n";
-	pLog(ss.str());
+	pLog(ss);
 //    pStats.PrintStats();
 }
 
