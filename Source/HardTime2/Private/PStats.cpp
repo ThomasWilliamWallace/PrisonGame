@@ -2,6 +2,8 @@
 #include "Missions.hpp"
 #include <algorithm>
 #include "Constants.hpp"
+#include <sstream>
+#include "pLog.hpp"
 using namespace std;
 
 //TODO write an exponentially decreasing add/subtract function, to adjust stats whilst keeping them within 0-100.
@@ -88,6 +90,38 @@ void PStats::deltaReputation(double delta)
 void PStats::deltaRespect(double delta)
 {
     respect = transformStat(respect + delta);
+}
+
+void PStats::PrintStats()
+{
+	/*
+	std::sstringstreams ss;
+    ss << "*** STATS ***\n";
+    ss << "health=" << FormatDouble(getHealth()) << "\n";
+    ss << "sanity=" << FormatDouble(getSanity()) << "\n";
+    ss << "strength=" << FormatDouble(getStrength()) << "\n";
+    ss << "agility=" << FormatDouble(getAgility()) << "\n";
+    ss << "intelligence=" << FormatDouble(getIntelligence()) << "\n";
+    ss << "charisma=" << FormatDouble(getCharisma()) << "\n";
+    ss << "reputation=" << FormatDouble(getReputation()) << "\n";
+    ss << "respect=" << FormatDouble(getRespect()) << "\n";
+    ss << "\n";
+    ss << "loyalty=" << loyalty << "\n";
+    ss << "traitorous=" << traitorous << "\n";
+    ss << "aggression=" << aggression << "\n";
+    ss << "sociability=" << sociability << "\n";
+    ss << "curiosity=" << curiosity << "\n";
+    ss << "risktaking=" << risktaking << "\n";
+    ss << "leader=" << leader << "\n";
+    ss << "follower=" << follower << "\n";
+    ss << "herdfollower=" << herdfollower << "\n";
+    ss << "strongwilled=" << strongwilled << "\n";
+    ss << "proud=" << proud << "\n";
+    ss << "forgiving=" << forgiving << "\n";
+    ss << "discreet=" << discreet << "\n";
+    ss << "\n";
+	pLog(ss.str());
+	*/
 }
 
 PStats::PStats()

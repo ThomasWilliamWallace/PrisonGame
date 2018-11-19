@@ -1,6 +1,7 @@
 #include "HTNPlanner.hpp"
 #include "HTNDomain.hpp"
 #include "AICharacterC.h"
+#include <sstream>
 #include "pLog.hpp"
 
 //*******************************************************************
@@ -171,10 +172,13 @@ Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
 	else {
 		pLog("Valid plan found!");
 		//continue with current plan
+		std::stringstream ss;
+		ss << "Plan steps: ";
 		for (auto &prim : aiCharacterC->htnPlan)
 		{
-			pLog("Plan step: ", prim->ToString());
+			ss << prim->ToString() << ", ";
 		}
+		pLog(ss.str());
 		HTNPrimitivePtr currentPlanStep = (aiCharacterC->htnPlan).front();
 		aiCharacterC->lastPrimitiveAction = currentPlanStep;
 		(aiCharacterC->htnPlan).pop_front();

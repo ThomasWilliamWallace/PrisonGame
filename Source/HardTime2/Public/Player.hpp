@@ -62,6 +62,7 @@ public:
 	AActorItem* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
     
     void UpdateMissions(Player player[], World &world);
+    void PrintPlayer();
     
     Relationship rel[c_playerCount];
 };

@@ -30,6 +30,7 @@ void AAICharacterC::Tick(float DeltaTime)
 
 	if (readyForNewAction)
 	{
+		m_player.PrintPlayer();
 		readyForNewAction = false;
 		m_player.action = htnAIChooseAction(this);
 		pLog("HTN Planner chose an action:");
@@ -106,21 +107,12 @@ void AAICharacterC::UpdateItemLocation(AActorItem* item, int locationAsInt)
 			break;
 		}
 	}
-	for (auto &i : m_world.items)
-	{
-		//std::string itemPrint = "itemtype " + static_cast<int>(item->m_itemType) + " in location " + static_cast<int>(item->m_locationClass.location;
-		//pLog(itemPrint);
-	}
 }
 
 void AAICharacterC::AddItem(AActorItem* item)
 {
 	pLog("AAICharacterC::AddItem");
 	m_world.items.push_back(item);
-	//for (auto &i : m_world.items)
-	//{
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("itemtype %d in location %d"), static_cast<int>(i->m_itemType), static_cast<int>(item->m_locationClass.location)));
-	//}
 }
 
 void AAICharacterC::UpdateCarriedItemC(AActorItem* item, ACharacter* character)

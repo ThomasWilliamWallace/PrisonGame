@@ -29,36 +29,18 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 		m_items.push_back(new SimActorItem(item, item->m_itemType, Locations::mainHall, item->m_carryingPlayer));
 
 		std::stringstream ss;
-		ss << "item->m_carryingPlayer = " << item->m_carryingPlayer;
-		//pLog(ss.str());
-		ss.str(std::string());
-		ss.clear();
-		ss << "m_items.back()->m_carryingPlayer = " << m_items.back()->m_carryingPlayer;
-		//pLog(ss.str());
-		ss.str(std::string());
-		ss.clear();
-		ss << "m_ptrToSelf = " << m_ptrToSelf;
-		//pLog(ss.str());
-		ss.str(std::string());
-		ss.clear();
-		ss << "constructor #1a m_itemCarriedPtr = " << m_itemCarriedPtr;
-		//pLog(ss.str());
-		ss.str(std::string());
-		ss.clear();
+		ss << "item->m_carryingPlayer = " << item->m_carryingPlayer << "\n";
+		ss << "m_items.back()->m_carryingPlayer = " << m_items.back()->m_carryingPlayer << "\n";
+		ss << "m_ptrToSelf = " << m_ptrToSelf << "\n";
+		ss << "constructor #1a m_itemCarriedPtr = " << m_itemCarriedPtr << "\n";
 
 		if ((m_items.back()->m_carryingPlayer) == m_ptrToSelf)
 		{
 			m_itemCarriedPtr = m_items.back();
-			ss << "constructor #1b m_itemCarriedPtr = " << m_itemCarriedPtr;
-			//pLog(ss.str());
+			ss << "constructor #1b m_itemCarriedPtr = " << m_itemCarriedPtr << "\n";
 		}
+		//pLog(ss.str());
 	}
-
-	//for (int i = 0; i < c_playerCount; i++)
-	//{
-	//	m_attackers.push_back(aiCharacterC->rel[i].getAggro() > 29 ? true : false);
-	//	m_playerLocations.push_back(player[i].locationClass.location);
-	//}
 	pLog("HTNWorldState::default constructor:");
 	Print();
 }
@@ -71,17 +53,13 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 	m_playerLocations(ws2.m_playerLocations),
 	m_missionClass(ws2.m_missionClass)
 {
-		//if (GEngine)
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Entering constructor #2")));
 	m_itemCarriedPtr = nullptr;
 	for (auto &item : ws2.m_items)
 	{
 		m_items.push_back(new SimActorItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("constructor #2a m_itemCarriedPtr = %p"), m_itemCarriedPtr));
 		if (ws2.m_itemCarriedPtr == item)
 		{
 			m_itemCarriedPtr = m_items.back();
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("constructor #2b m_itemCarriedPtr = %p"), m_itemCarriedPtr));
 		}
 	}
 	pLog("HTNWorldState::Copy constructor:");
@@ -104,15 +82,13 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
 
-    	m_items.clear();
+    m_items.clear();
 	for (auto &item : ws2.m_items)
 	{
 		m_items.push_back(new SimActorItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("copyfrom a m_itemCarriedPtr = %p"), m_itemCarriedPtr));
 		if (ws2.m_itemCarriedPtr == item)
 		{
 			m_itemCarriedPtr = m_items.back();
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("copyfrom b m_itemCarriedPtr = %p"), m_itemCarriedPtr));
 		}
 	}
 	m_missionClass = ws2.m_missionClass;
@@ -122,23 +98,14 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 
 void HTNWorldState::Print()
 {
-	pLog("HTNWorldState::Print");
 	std::stringstream ss;
+	ss << "HTNWorldState::Print\n";
     for (int i = 0; i < static_cast<int>(m_v.size()); i++)
     {
-		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i);
-		pLog(ss.str());
-		ss.str(std::string());
-		ss.clear();
+		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
     }
-	ss << "m_ptrToSelf:" << m_ptrToSelf;
-	pLog(ss.str());
-	ss.str(std::string());
-	ss.clear();
-	ss << "m_itemCarriedPtr:" << m_itemCarriedPtr;
-	pLog(ss.str());
-	ss.str(std::string());
-	ss.clear();
+	ss << "m_ptrToSelf:" << m_ptrToSelf << "\n";
+	ss << "m_itemCarriedPtr:" << m_itemCarriedPtr << "\n";
     for (auto &simItem : m_items)
     {
 		ss << "SimItem: " << simItem->ToString() << " carried by ";
@@ -150,12 +117,9 @@ void HTNWorldState::Print()
 		{
 			ss << "nullptr";
 		}
-		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << simItem->m_realItem;
-		pLog(ss.str());
-		ss.str(std::string());
-		ss.clear();
+		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << simItem->m_realItem << "\n";
     }
-	ss << "m_missionClass:" << m_missionClass.MissionName();
+	ss << "m_missionClass:" << m_missionClass.MissionName() << "\n";
 	pLog(ss.str());
 }
 

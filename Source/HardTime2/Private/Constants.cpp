@@ -9,3 +9,7 @@ std::string FormatDouble(double input)
     return ss.str();
 }
 
+int RandPercent()
+{
+    return rand() % 100;
+}

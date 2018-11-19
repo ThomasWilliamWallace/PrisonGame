@@ -54,6 +54,7 @@ public:
     void deltaReputation(double delta);
     void deltaRespect(double delta);
 
+    void PrintStats();
 	PStats();
 };
 

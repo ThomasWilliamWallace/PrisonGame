@@ -2,6 +2,8 @@
 #include "Missions.hpp"
 #include "World.hpp"
 #include "Locations.hpp"
+#include <sstream>
+#include "pLog.hpp"
 
 double Relationship::getAggro()
 {
@@ -79,6 +81,37 @@ std::string CharacterName(Player* playerPtr)
         return "c_empty";
     else
         return playerPtr->name;
+}
+
+void Player::PrintPlayer()
+{
+	std::stringstream ss;
+    ss << "*** PLAYER " << name << " ***\n";
+	ss << "action=" << ActionToString(action) << "\n";
+	ss << "lastAction=" << ActionToString(lastAction) << "\n";
+    ss << "location=" << locationClass.ToString() << "\n";
+    ss << "lastLocation=" << lastLocationClass.ToString() << "\n";
+//    ss << "attacked=" << BoolToString(attacked) << "\n";
+    ss << "playerTargetPtr=" << playerTargetPtr << "\n";
+    ss << "narrative=" << narrative << "\n";
+    ss << "item=";
+    if (itemPtr != nullptr)
+        ss << itemPtr->ToString() << "\n";
+    else
+        ss << "null\n";
+    ss << "itemFocus=";
+    if (itemFocusPtr != nullptr)
+        ss << itemFocusPtr->ToString() << "\n";
+    else
+        ss << "null\n";
+    ss << "missionClass=" << missionClass.MissionNarrative();
+    ss << "missionOffer=" << missionOffer.MissionNarrative();
+    ss << "cash=" << cash << "\n";
+    ss << "sentence=" << sentence << "\n";
+    ss << "m_playerIndex=" << m_playerIndex << "\n";
+    ss << "\n";
+	pLog(ss.str());
+//    pStats.PrintStats();
 }
 
 MissionClass CreateNewMission(Player* playerPtr)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <iostream>
 #include "Locations.hpp"
 #include "Missions.hpp"
 
