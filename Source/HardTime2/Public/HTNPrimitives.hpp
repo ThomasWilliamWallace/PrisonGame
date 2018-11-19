@@ -115,9 +115,9 @@ public:
 //***********************************************************
 class Punch : public HTNPrimitive
 {
-	int m_targetPlayerIndex;
+	Player* m_targetPlayer;
 public:
-	Punch(int playerIndex);
+	Punch(Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
 	Actions Operate(AAICharacterC* aiCharacterC);

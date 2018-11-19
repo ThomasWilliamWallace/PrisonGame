@@ -229,27 +229,27 @@ class AttackMethod1 : public HTNMethod
 {
 	SimActorItem* m_itemPtr;
 public:
-	AttackMethod1(SimActorItem* itemPtr, int opponentIndex);
+	AttackMethod1(SimActorItem* itemPtr, Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class AttackMethod2 : public HTNMethod
 {
 public:
-	AttackMethod2(int opponentIndex);
+	AttackMethod2(Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class AttackCompound : public HTNCompound
 {
 public:
-	AttackCompound(HTNWorldState &htnWorldState, int opponentIndex);
+	AttackCompound(HTNWorldState &htnWorldState, Player* opponent);
 };
 
 class AttackCompoundMethod : public HTNMethod
 {
 public:
-	AttackCompoundMethod(HTNWorldState &htnWorldState, int opponentIndex);
+	AttackCompoundMethod(HTNWorldState &htnWorldState, Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -299,14 +299,14 @@ public:
 class CombatCompound : public HTNCompound
 {
 public:
-	CombatCompound(HTNWorldState &htnWorldState, int opponentIndex);
+	CombatCompound(HTNWorldState &htnWorldState, Player* opponent);
 };
 
 //***********************************************************
 class CombatMethod : public HTNMethod
 {
 public:
-	CombatMethod(HTNWorldState &htnWorldState, int opponentIndex);
+	CombatMethod(HTNWorldState &htnWorldState, Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 

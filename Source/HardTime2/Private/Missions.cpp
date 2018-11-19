@@ -27,13 +27,13 @@ std::string MissionClass::MissionNarrative()
         case Missions::noMission:
             return "No Mission\n";
         case Missions::increaseAgility:
-            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getAgility()) + ")\n";
+            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getAgility()) + ")";
         case Missions::increaseStrength:
-            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getStrength()) + ")\n";
+            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getStrength()) + ")";
         case Missions::increaseIntelligence:
-            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getIntelligence()) + ")\n";
+            return "Mission: " + m_owner->name + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getIntelligence()) + ")";
         case Missions::bringItemToRoom:
-            return "Mission: " + m_owner->name + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".\n";
+            return "Mission: " + m_owner->name + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".";
     }
     return "ERROR: MISSION TYPE NOT RECOGNISED";
 }
@@ -119,7 +119,9 @@ bool MissionClass::IsMissionComplete(World &world)
 	case Missions::bringItemToRoom:
 		for (auto &item : world.items)
 		{
-			if ((item->m_itemType == m_itemType) && (item->m_locationClass.location == m_locationClass.location))
+			if ((item->m_itemType == m_itemType) &&
+			    (item->m_locationClass.location == m_locationClass.location) &&
+                	    (item->m_carryingPlayer == nullptr))
 			{
 				return true;
 			}

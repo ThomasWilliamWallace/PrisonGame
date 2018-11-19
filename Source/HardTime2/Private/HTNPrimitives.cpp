@@ -220,7 +220,7 @@ bool Drink::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-Punch::Punch(int playerIndex) : HTNPrimitive("Punch"), m_targetPlayerIndex(playerIndex) {}
+Punch::Punch(Player* opponent) : HTNPrimitive("Punch"), m_targetPlayer(opponent) {}
 
 void Punch::Effect(HTNWorldState &htnWorldState)
 {
@@ -229,13 +229,13 @@ void Punch::Effect(HTNWorldState &htnWorldState)
 
 Actions Punch::Operate(AAICharacterC* aiCharacterC)
 {
-	//player[playerIndex].playerTarget = m_targetPlayerIndex;
+	aiCharacterC->m_player.playerTargetPtr = m_targetPlayer;
 	return Actions::attack;
 }
 
 bool Punch::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_playerLocations[m_targetPlayerIndex] == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
+	return htnWorldState.m_playerLocations[m_targetPlayer->m_playerIndex] == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
 }
 
 //***********************************************************
