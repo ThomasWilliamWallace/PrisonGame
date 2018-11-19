@@ -138,7 +138,7 @@ class PickUpItem : public HTNPrimitive
 {
 public:
 	PickUpItem(SimActorItem* itemFocusPtr);
-	SimActorItem* m_itemFocusPtr;
+	SimActorItem* m_itemFocus;
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
 	Actions Operate(AAICharacterC* aiCharacterC);

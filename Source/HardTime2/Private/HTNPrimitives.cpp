@@ -257,26 +257,26 @@ bool Evade::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-PickUpItem::PickUpItem(SimActorItem* itemFocusPtr) : HTNPrimitive("PickUpItem"), m_itemFocusPtr(itemFocusPtr) {}
+PickUpItem::PickUpItem(SimActorItem* itemFocus) : HTNPrimitive("PickUpItem"), m_itemFocus(itemFocus) {}
 
 void PickUpItem::Effect(HTNWorldState &htnWorldState)
 {
-	m_itemFocusPtr->m_carryingPlayer = htnWorldState.m_ptrToSelf;
-	htnWorldState.m_itemCarriedPtr = m_itemFocusPtr;
+	m_itemFocus->m_carryingPlayer = htnWorldState.m_ptrToSelf;
+	htnWorldState.m_itemCarriedPtr = m_itemFocus;
 }
 
 Actions PickUpItem::Operate(AAICharacterC* aiCharacterC)
 {
-	//player[playerIndex].itemFocusPtr = m_itemFocusPtr;
+    aiCharacterC->m_player.itemFocusPtr = m_itemFocus->m_realItem;
 	return Actions::pickUpItem;
 }
 
 bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 {
 	//TODO hook this into the actions code
-	if (m_itemFocusPtr != nullptr
-		&& static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocusPtr->m_locationClass.location
-		&& m_itemFocusPtr->m_carryingPlayer == nullptr)
+	if (m_itemFocus != nullptr
+		&& static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocus->m_locationClass.location
+		&& m_itemFocus->m_carryingPlayer == nullptr)
 	{
 		return true;
 	}

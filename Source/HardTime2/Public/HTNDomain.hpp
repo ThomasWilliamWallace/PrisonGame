@@ -227,9 +227,9 @@ public:
 //***********************************************************
 class AttackMethod1 : public HTNMethod
 {
-	SimActorItem* m_itemPtr;
+	SimActorItem* m_item;
 public:
-	AttackMethod1(SimActorItem* itemPtr, Player* opponent);
+	AttackMethod1(SimActorItem* item, Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 
@@ -328,7 +328,7 @@ public:
 class PickUpItemMethod1 : public HTNMethod
 {
 public:
-	PickUpItemMethod1(SimActorItem* itemFocusPtr);
+	PickUpItemMethod1(SimActorItem* itemFocus);
 	bool Preconditions(HTNWorldState &htnWorldState);
 };
 

@@ -364,10 +364,10 @@ BringItemToLocationCompound::BringItemToLocationCompound(EItemType itemType, Loc
 }
 
 //***********************************************************
-AttackMethod1::AttackMethod1(SimActorItem* itemPtr, Player* opponent)
+AttackMethod1::AttackMethod1(SimActorItem* item, Player* opponent)
 {
-	m_itemPtr = itemPtr;
-    	AddTask(new PickUpItem(m_itemPtr));
+	m_item = item;
+    	AddTask(new PickUpItem(m_item));
     	AddTask(new Punch(opponent));
 }
 
@@ -383,7 +383,7 @@ bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
 		}
 	}
 
-	return (m_itemPtr->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
+	return (m_item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
 		&& !carryingItemAlready;
 }
 
