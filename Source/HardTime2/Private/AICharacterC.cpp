@@ -32,7 +32,7 @@ void AAICharacterC::Tick(float DeltaTime)
 	{
 		m_player.PrintPlayer();
 		readyForNewAction = false;
-		m_player.action = htnAIChooseAction(this);
+		m_player.action = m_player.aiController.HTNAIChooseAction(this);
 		pLog("HTN Planner chose an action:");
 		switch (m_player.action)
 		{

@@ -73,5 +73,3 @@ public:
 };
 
 HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth);
-
-Actions htnAIChooseAction(AAICharacterC* aiCharacterC);

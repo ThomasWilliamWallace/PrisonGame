@@ -36,7 +36,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
 	bool lastActionSucceeded = true;
 	HTNPrimitivePtr lastPrimitiveAction;
-	HTNPrimitiveList htnPlan;
 	Player m_player;
 	World m_world;
 
@@ -70,5 +69,5 @@ public:
 		void UseRoom();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
-		void Evade();	
+		void Evade();
 };

@@ -1,4 +1,13 @@
 #include "Actions.hpp"
+#include "Player.hpp"
+
+bool OtherInReach(Player* playerPtr, Player* otherPlayerPtr, Player player[])
+{
+    if ((otherPlayerPtr->locationClass.location == playerPtr->locationClass.location) && (otherPlayerPtr != playerPtr))
+        return true;
+    else
+        return false;
+}
 
 std::string ActionToString(Actions action)
 {

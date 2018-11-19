@@ -1,8 +1,5 @@
 #include "HTNPlanner.hpp"
 #include "HTNDomain.hpp"
-#include "AICharacterC.h"
-#include <sstream>
-#include "pLog.hpp"
 
 //*******************************************************************
 HTNTask::HTNTask(std::string name, bool isPrimitive) : m_name(name), m_isPrimitive(isPrimitive) {}
@@ -126,65 +123,4 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 
 	HTNPrimitiveList htnPlan3;
 	return htnPlan3; //return failure state of empty plan
-}
-
-Actions htnAIChooseAction(AAICharacterC* aiCharacterC) //TODO capitalise
-{
-	pLog("Entering htnAIChooseAction");
-	//update worldstate from real world
-	HTNWorldState htnWorldState(&(aiCharacterC->m_player), aiCharacterC->m_world);
-
-	bool hasValidPlan = false;
-	// check if next step of the plan is valid.
-
-	if ((aiCharacterC->lastPrimitiveAction != nullptr) && !(aiCharacterC->lastPrimitiveAction->LastActionSucceeded(htnWorldState, aiCharacterC)))
-	{
-		pLog("Last Action did not succeed");
-		hasValidPlan = false;
-	}
-	else if (aiCharacterC->htnPlan.size() > 0)
-	{
-		pLog("Check Precondition of plan primitive step");
-		hasValidPlan = (aiCharacterC->htnPlan).at(0)->Preconditions(htnWorldState);
-	}
-	
-	//If plan is not valid, abandon it and try to make a new plan
-	if (!hasValidPlan)
-	{
-		pLog("No valid plan exists! Try to replan.");
-		//make new plan
-		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
-		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
-		aiCharacterC->htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
-
-		//once again, check if next step of the plan is valid.
-		if ((aiCharacterC->htnPlan).size() > 0)
-		{
-			hasValidPlan = (aiCharacterC->htnPlan).at(0)->Preconditions(htnWorldState);
-		}
-	}
-
-	if (!hasValidPlan)
-	{
-		pLog("No valid plan exists! Leaving htnAIChooseAction #1");
-		return Actions::noAction; //If next step of the plan is still not valid, then return failure state
-	}
-	else {
-		pLog("Valid plan found!");
-		//continue with current plan
-		std::stringstream ss;
-		ss << "Plan steps: ";
-		for (auto &prim : aiCharacterC->htnPlan)
-		{
-			ss << prim->ToString() << ", ";
-		}
-		pLog(ss.str());
-		HTNPrimitivePtr currentPlanStep = (aiCharacterC->htnPlan).front();
-		aiCharacterC->lastPrimitiveAction = currentPlanStep;
-		(aiCharacterC->htnPlan).pop_front();
-		pLog("Leaving htnAIChooseAction #2");
-		return currentPlanStep->Operate(aiCharacterC);
-	}
-	pLog("Leaving htnAIChooseAction #3");
-	return Actions::noAction;
 }

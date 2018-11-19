@@ -3,6 +3,7 @@
 #include <iostream>
 #include "PStats.hpp"
 #include "Missions.hpp"
+#include "BasicAI.hpp"
 #include "ActorItem.h"
 #include "Actions.hpp"
 #include "Constants.hpp"
@@ -55,6 +56,7 @@ public:
     std::string narrative; //printed at the end of each round, giving the update for this character
     std::string name = "No-name"; //name of the character, used in speech
     MissionClass missionClass; //a mission currently assigned to the character
+    AIController aiController; //controlling AI for this character
     MissionClass missionOffer; // a mission being offered to 'playerTarget'
     AActorItem* itemPtr = nullptr; //pointer to an item carried by the player
     
