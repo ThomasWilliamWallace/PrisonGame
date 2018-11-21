@@ -1,5 +1,5 @@
 #include "RequestHTNDomain.hpp"
-#include "Locations.hpp"
+#include "Locations.h"
 #include "Player.hpp"
 #include "World.hpp"
 #include "HTNDomain.hpp"

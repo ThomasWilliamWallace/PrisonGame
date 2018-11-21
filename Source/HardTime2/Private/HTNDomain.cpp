@@ -1,5 +1,5 @@
 #include "HTNDomain.hpp"
-#include "Locations.hpp"
+#include "Locations.h"
 #include "AICharacterC.h"
 #include "HTNPrimitives.hpp"
 #include "pLog.hpp"
@@ -245,7 +245,7 @@ bool GetItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 		ss << "Item: " << item->ToString() << " in the " << item->m_locationClass.ToString() << " carried by " << item->m_carryingPlayer << " pointing at unreal actor " << item->m_realItem << ". (Player location = " << htnWorldState.m_v.at(WorldE::location) << ")\n";
 		pLog(ss);
 		if (item->m_itemType == m_itemType
-			&& item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& (item->m_carryingPlayer == nullptr))
 		{
 			pLog("Return true from GetItemMethod1::Preconditions");
@@ -271,27 +271,27 @@ bool BringItemToLocationMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
 	return (htnWorldState.m_itemCarriedPtr != nullptr) &&
 		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType) &&
-		(static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_locationClass.location);
+		(static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == m_locationClass.location);
 }
 
 BringItemToLocationMethod2::BringItemToLocationMethod2(EItemType itemType, LocationClass &locationClass) : m_itemType(itemType), m_locationClass(locationClass)
 {
 	switch (m_locationClass.location)
 	{
-	case Locations::bedroom:
-            	AddTask(new GoToBedroomCompound());
+	case ELocations::bedroom:
+		AddTask(new GoToBedroomCompound());
 		break;
-	case Locations::circuitTrack:
-            	AddTask(new GoToCircuitTrackCompound());
+	case ELocations::circuitTrack:
+		AddTask(new GoToCircuitTrackCompound());
 		break;
-	case Locations::gym:
-            	AddTask(new GoToGymCompound());
+	case ELocations::gym:
+		AddTask(new GoToGymCompound());
 		break;
-	case Locations::library:
-            	AddTask(new GoToLibraryCompound());
+	case ELocations::library:
+		AddTask(new GoToLibraryCompound());
 		break;
-	case Locations::mainHall:
-            	AddTask(new GoToMainHall());
+	case ELocations::mainHall:
+		AddTask(new GoToMainHall());
 		break;
 	}
 
@@ -304,14 +304,6 @@ bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 	ss << "BringItemToLocationMethod2::Preconditions";
 	pLog(ss);
 	htnWorldState.Print();
-	//if (GEngine)
-	//	if (htnWorldState.m_itemCarriedPtr !=  nullptr)
-	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("htnWorldState.m_itemCarriedPtr !=  nullptr"));
-	//if (GEngine)
-	//	if (htnWorldState.m_itemCarriedPtr != nullptr)
-	//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("htnWorldState m_itemType = %d"), static_cast<int>(htnWorldState.m_itemCarriedPtr->m_itemType)));
-	//if (GEngine)
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("in m_itemType = %d"), static_cast<int>(m_itemType)));
 	pLog((htnWorldState.m_itemCarriedPtr != nullptr) &&
 		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType) ? "returning True" : "Returning False");
 	return (htnWorldState.m_itemCarriedPtr != nullptr) &&
@@ -324,24 +316,24 @@ BringItemToLocationMethod3::BringItemToLocationMethod3(HTNWorldState &htnWorldSt
 
 	switch (m_locationClass.location)
 	{
-	case Locations::bedroom:
-            	AddTask(new GoToBedroomCompound());
+	case ELocations::bedroom:
+		AddTask(new GoToBedroomCompound());
 		break;
-	case Locations::circuitTrack:
-            	AddTask(new GoToCircuitTrackCompound());
+	case ELocations::circuitTrack:
+		AddTask(new GoToCircuitTrackCompound());
 		break;
-	case Locations::gym:
-            	AddTask(new GoToGymCompound());
+	case ELocations::gym:
+		AddTask(new GoToGymCompound());
 		break;
-	case Locations::library:
-            	AddTask(new GoToLibraryCompound());
+	case ELocations::library:
+		AddTask(new GoToLibraryCompound());
 		break;
-	case Locations::mainHall:
-            	AddTask(new GoToMainHall());
+	case ELocations::mainHall:
+		AddTask(new GoToMainHall());
 		break;
 	}
 
-    	AddTask(new DropItem());
+    AddTask(new DropItem());
 }
 
 bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
@@ -373,8 +365,8 @@ BringItemToLocationCompound::BringItemToLocationCompound(HTNWorldState &htnWorld
 AttackMethod1::AttackMethod1(SimActorItem* item, Player* opponent)
 {
 	m_item = item;
-    	AddTask(new PickUpItem(m_item));
-    	AddTask(new Punch(opponent));
+	AddTask(new PickUpItem(m_item));
+	AddTask(new Punch(opponent));
 }
 
 bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -389,14 +381,14 @@ bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
 		}
 	}
 
-    	return //htnWorldState.m_v.at(WorldE::inSameRoom) &&
-        	(m_item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))) &&
+	return //htnWorldState.m_v.at(WorldE::inSameRoom) &&
+        	(m_item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))) &&
 			!carryingItemAlready;
 }
 
 AttackMethod2::AttackMethod2(Player* opponent)
 {
-    	AddTask(new Punch(opponent));
+	AddTask(new Punch(opponent));
 }
 
 bool AttackMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -408,17 +400,17 @@ AttackCompound::AttackCompound(HTNWorldState &htnWorldState, Player* opponent) :
 {
 	for (auto &item : htnWorldState.m_items)
 	{
-		if (item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)))
+		if (item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)))
 		{
-            		AddMethod(new AttackMethod1(item, opponent));
+			AddMethod(new AttackMethod1(item, opponent));
 		}
 	}
-    	AddMethod(new AttackMethod2(opponent));
+	AddMethod(new AttackMethod2(opponent));
 }
 
 AttackCompoundMethod::AttackCompoundMethod(HTNWorldState &htnWorldState, Player* opponent)
 {
-    	AddTask(new AttackCompound(htnWorldState, opponent));
+	AddTask(new AttackCompound(htnWorldState, opponent));
 }
 
 bool AttackCompoundMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -429,7 +421,7 @@ bool AttackCompoundMethod::Preconditions(HTNWorldState &htnWorldState)
 //***********************************************************
 EvadeMethod::EvadeMethod()
 {
-    	AddTask(new Evade());
+	AddTask(new Evade());
 }
 
 bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -446,7 +438,7 @@ CombatCompound::CombatCompound(HTNWorldState &htnWorldState, Player* opponent) :
 //***********************************************************
 DoMissionMethod1::DoMissionMethod1()
 {
-    	AddTask(new IncreaseStrengthCompound());
+	AddTask(new IncreaseStrengthCompound());
 }
 
 bool DoMissionMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -456,7 +448,7 @@ bool DoMissionMethod1::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod2::DoMissionMethod2()
 {
-    	AddTask(new IncreaseAgilityCompound());
+	AddTask(new IncreaseAgilityCompound());
 }
 
 bool DoMissionMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -466,7 +458,7 @@ bool DoMissionMethod2::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod3::DoMissionMethod3()
 {
-    	AddTask(new IncreaseIntelligenceCompound());
+	AddTask(new IncreaseIntelligenceCompound());
 }
 
 bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
@@ -476,7 +468,7 @@ bool DoMissionMethod3::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod4::DoMissionMethod4(HTNWorldState &htnWorldState)
 {
-    	AddTask(new BringItemToLocationCompound(htnWorldState, htnWorldState.m_missionClass.m_itemType, htnWorldState.m_missionClass.m_locationClass));  //TODO make construction conditional on 'Preconditions'? Because right now, tasks are constructed regardless of whether their preconditions apply.
+	AddTask(new BringItemToLocationCompound(htnWorldState, htnWorldState.m_missionClass.m_itemType, htnWorldState.m_missionClass.m_locationClass));  //TODO make construction conditional on 'Preconditions'? Because right now, tasks are constructed regardless of whether their preconditions apply.
 }
 
 bool DoMissionMethod4::Preconditions(HTNWorldState &htnWorldState)
@@ -495,7 +487,7 @@ DoMissionCompound::DoMissionCompound(HTNWorldState &htnWorldState) : HTNCompound
 //***********************************************************
 CombatMethod::CombatMethod(HTNWorldState &htnWorldState, Player* opponent)
 {
-    	AddTask(new CombatCompound(htnWorldState, opponent));
+	AddTask(new CombatCompound(htnWorldState, opponent));
 }
 
 bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -505,7 +497,7 @@ bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
 
 DoMissionMethod::DoMissionMethod(HTNWorldState &htnWorldState)
 {
-    	AddTask(new DoMissionCompound(htnWorldState));
+	AddTask(new DoMissionCompound(htnWorldState));
 }
 
 bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -515,7 +507,7 @@ bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 
 IncreaseIntelligenceMethod::IncreaseIntelligenceMethod()
 {
-    	AddTask(new IncreaseIntelligenceCompound());
+	AddTask(new IncreaseIntelligenceCompound());
 }
 
 bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -555,6 +547,6 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
             		AddMethod(new CombatMethod(htnWorldState, i));
 		}
 	}*/
-    	AddMethod(new DoMissionMethod(htnWorldState));
-    	AddMethod(new IncreaseIntelligenceMethod());
+	AddMethod(new DoMissionMethod(htnWorldState));
+	AddMethod(new IncreaseIntelligenceMethod());
 }

@@ -25,7 +25,7 @@ public:
 	LocationClass m_locationClass;
 	std::string MissionName();
 	MissionClass(Missions mission, Player* owner, double objective);
-	MissionClass(Missions mission, Player* owner, EItemType itemE, Locations location);
+	MissionClass(Missions mission, Player* owner, EItemType itemE, ELocations location);
 	MissionClass();
 	MissionClass(const MissionClass& missionClass);
 	MissionClass(Player* owner);

@@ -4,7 +4,7 @@
 #include "GameFramework/Character.h"
 #include "HTNPlanner.hpp"
 #include "Missions.hpp"
-#include "Locations.hpp"
+#include "Locations.h"
 #include "Actions.hpp"
 #include "ActorItem.h"
 #include "World.hpp"
@@ -22,10 +22,10 @@ public:
 		bool readyForNewAction = true;
 
 	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
-		void UpdateLocation(int locationAsInt);
+		void UpdateLocation(ELocations location);
 
 	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
-		void UpdateItemLocation(AActorItem* item, int locationAsInt);
+		void UpdateItemLocation(AActorItem* item, ELocations location);
 
 	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
 		void AddItem(AActorItem* item);
@@ -54,7 +54,7 @@ public:
 		void UpdateCarriedItemC(AActorItem* item, ACharacter* character);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
-		void GoToLocation(int location);
+		void GoToLocation(ELocations location);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
 		void AttackPlayer(ACharacter* character);

@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <iostream>
-#include "Locations.hpp"
+#include "Locations.h"
 #include "Missions.hpp"
 
 enum WorldE
@@ -34,7 +34,7 @@ public:
 	Player* m_ptrToSelf;
 	SimActorItem* m_itemCarriedPtr;
 	std::vector<bool> m_attackers;
-	std::vector<Locations> m_playerLocations;
+	std::vector<ELocations> m_playerLocations;
 	MissionClass m_missionClass;
 	HTNWorldState(HTNWorldState &ws2);
 	HTNWorldState(Player* playerPtr, World &world);

@@ -50,23 +50,23 @@ void AAICharacterC::Tick(float DeltaTime)
 			break;
 		case Actions::goToBedroom:
 			pLog("goToBedroom", true);
-			GoToLocation(3);
+			GoToLocation(ELocations::bedroom);
 			break;
 		case Actions::goToCircuitTrack:
 			pLog("goToCircuitTrack", true);
-			GoToLocation(4);
+			GoToLocation(ELocations::circuitTrack);
 			break;
 		case Actions::goToGym:
 			pLog("goToGym", true);
-			GoToLocation(1);
+			GoToLocation(ELocations::gym);
 			break;
 		case Actions::goToLibrary:
 			pLog("goToLibrary", true);
-			GoToLocation(2);
+			GoToLocation(ELocations::library);
 			break;
 		case Actions::goToMainHall:
 			pLog("goToMainHall", true);
-			GoToLocation(0);
+			GoToLocation(ELocations::mainHall);
 			break;
 		case Actions::pickUpItem:
 			pLog("pickUpItem", true);
@@ -90,41 +90,56 @@ void AAICharacterC::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AAICharacterC::UpdateLocation(int locationAsInt)
+void AAICharacterC::UpdateLocation(ELocations location)
 {
 	pLog("AAICharacterC::UpdateLocation", true);
-	m_player.locationClass.location = static_cast<Locations>(locationAsInt);
+	m_player.locationClass.location = location;
+	std::stringstream ss;
+	ss << "Location=" << static_cast<int>(location);
+	pLog(ss, true);
 }
 
-void AAICharacterC::UpdateItemLocation(AActorItem* item, int locationAsInt)
+void AAICharacterC::UpdateItemLocation(AActorItem* item, ELocations location)
 {
 	pLog("AAICharacterC::UpdateItemLocation", true);
-	for (auto &i : m_world.items)
-	{
-		if (i == item)
-		{
-			i->m_locationClass.location = static_cast<Locations>(locationAsInt);
-			break;
-		}
-	}
+	item->m_locationClass.location = location;
+	std::stringstream ss;
+	ss << "Location=" << static_cast<int>(location);
+	pLog(ss, true);
 }
 
 void AAICharacterC::AddItem(AActorItem* item)
 {
 	pLog("AAICharacterC::AddItem", true);
 	m_world.items.push_back(item);
+	std::stringstream ss;
+	ss << "item=" << item;
+	pLog(ss, true);
 }
 
 void AAICharacterC::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 {
 	pLog("AAICharacterC::UpdateCarriedItemC", true);
+	std::stringstream ss;
+	ss << "item=" << item << ", character=" << character;
+	pLog(ss, true);
+
+	if (character == nullptr)
+	{
+		if (item != nullptr)
+		{
+			item->m_carryingPlayer = nullptr;
+		}
+		return;
+	}
+
 	AAICharacterC* aiCharacterC = Cast<AAICharacterC>(character);
 	if (aiCharacterC == nullptr)
 	{
 		return;
 	}
 
-	if (&(aiCharacterC->m_player) == &(m_player))
+	if (character == this)
 	{
 		m_player.itemPtr = item;
 	}
@@ -142,13 +157,6 @@ void AAICharacterC::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 	}
 	else
 	{
-		for (auto &m_item : m_world.items)
-		{
-			if (m_item == item)
-			{
-				m_item->m_carryingPlayer = &(aiCharacterC->m_player);
-				break; 
-			}
-		}
+		item->m_carryingPlayer = &(aiCharacterC->m_player);
 	}
 }

@@ -1,18 +1,18 @@
-#include "Locations.hpp"
+#include "Locations.h"
 
-std::string LocationToString(Locations location)
+std::string LocationToString(ELocations location)
 {
 	switch (location)
 	{
-	case (Locations::gym):
+	case (ELocations::gym):
 		return "Gym";
-	case (Locations::circuitTrack):
+	case (ELocations::circuitTrack):
 		return "Circuit track";
-	case (Locations::library):
+	case (ELocations::library):
 		return "Library";
-	case (Locations::bedroom):
+	case (ELocations::bedroom):
 		return "Bedroom";
-	case (Locations::mainHall):
+	case (ELocations::mainHall):
 		return "Main hall";
 	}
 	return "UnrecognisedLocation";
@@ -23,17 +23,17 @@ std::string LocationClass::ToString()
 	return LocationToString(location);
 }
 
-Locations GetRandomLocation()
+ELocations GetRandomLocation()
 {
 	int random = rand() % 100;
 	if (random < 20)
-		return Locations::bedroom;
+		return ELocations::bedroom;
 	else if (random < 40)
-		return Locations::circuitTrack;
+		return ELocations::circuitTrack;
 	else if (random < 60)
-		return Locations::gym;
+		return ELocations::gym;
 	else if (random < 80)
-		return Locations::library;
+		return ELocations::library;
 	else
-		return Locations::mainHall;
+		return ELocations::mainHall;
 }

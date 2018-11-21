@@ -1,5 +1,5 @@
 #include "HTNPrimitives.hpp"
-#include "Locations.hpp"
+#include "Locations.h"
 #include "AICharacterC.h"
 #include "Constants.hpp"
 #include "pLog.hpp"
@@ -20,7 +20,7 @@ Actions Study::Operate(AAICharacterC* aiCharacterC)
 
 bool Study::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::library;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
 }
 
 //***********************************************************
@@ -39,7 +39,7 @@ Actions Sleep::Operate(AAICharacterC* aiCharacterC)
 
 bool Sleep::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::bedroom;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
 }
 
 //***********************************************************
@@ -58,7 +58,7 @@ Actions UseGym::Operate(AAICharacterC* aiCharacterC)
 
 bool UseGym::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::gym;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
 }
 
 //***********************************************************
@@ -77,7 +77,7 @@ Actions RunCircuits::Operate(AAICharacterC* aiCharacterC)
 
 bool RunCircuits::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::circuitTrack;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
 }
 
 //***********************************************************
@@ -85,7 +85,7 @@ GoToGym::GoToGym() : HTNPrimitive("GoToGym") {}
 
 void GoToGym::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::gym);
+	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::gym);
 	return;
 }
 
@@ -96,12 +96,12 @@ Actions GoToGym::Operate(AAICharacterC* aiCharacterC)
 
 bool GoToGym::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
 bool GoToGym::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::gym;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
 }
 
 //***********************************************************
@@ -109,7 +109,7 @@ GoToLibrary::GoToLibrary() : HTNPrimitive("GoToLibrary") {}
 
 void GoToLibrary::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::library);
+	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::library);
 	return;
 }
 
@@ -120,12 +120,12 @@ Actions GoToLibrary::Operate(AAICharacterC* aiCharacterC)
 
 bool GoToLibrary::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
 bool GoToLibrary::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::library;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
 }
 
 //***********************************************************
@@ -133,7 +133,7 @@ GoToBedroom::GoToBedroom() : HTNPrimitive("GoToBedroom") {}
 
 void GoToBedroom::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::bedroom);
+	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::bedroom);
 	return;
 }
 
@@ -144,12 +144,12 @@ Actions GoToBedroom::Operate(AAICharacterC* aiCharacterC)
 
 bool GoToBedroom::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
 bool GoToBedroom::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::bedroom;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
 }
 
 //***********************************************************
@@ -157,7 +157,7 @@ GoToCircuitTrack::GoToCircuitTrack() : HTNPrimitive("GoToCircuitTrack") {}
 
 void GoToCircuitTrack::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::circuitTrack);
+	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::circuitTrack);
 	return;
 }
 
@@ -168,12 +168,12 @@ Actions GoToCircuitTrack::Operate(AAICharacterC* aiCharacterC)
 
 bool GoToCircuitTrack::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
 bool GoToCircuitTrack::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::circuitTrack;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
 }
 
 //***********************************************************
@@ -181,7 +181,7 @@ GoToMainHall::GoToMainHall() : HTNPrimitive("GoToMainHall") {}
 
 void GoToMainHall::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(Locations::mainHall);
+	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::mainHall);
 	return;
 }
 
@@ -192,12 +192,12 @@ Actions GoToMainHall::Operate(AAICharacterC* aiCharacterC)
 
 bool GoToMainHall::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) != Locations::mainHall;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) != ELocations::mainHall;
 }
 
 bool GoToMainHall::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
 {
-	return static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == Locations::mainHall;
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
 //***********************************************************
@@ -235,7 +235,7 @@ Actions Punch::Operate(AAICharacterC* aiCharacterC)
 
 bool Punch::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_playerLocations[m_targetPlayer->m_playerIndex] == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
+	return htnWorldState.m_playerLocations[m_targetPlayer->m_playerIndex] == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location));
 }
 
 //***********************************************************
@@ -276,7 +276,7 @@ bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 	//TODO hook this into the actions code
     if (htnWorldState.m_itemCarriedPtr == nullptr
       		&& m_itemFocus != nullptr
-		&& static_cast<Locations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocus->m_locationClass.location
+		&& static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocus->m_locationClass.location
 		&& m_itemFocus->m_carryingPlayer == nullptr)
 	{
 		return true;
@@ -292,7 +292,7 @@ void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 	for (auto &item : htnWorldState.m_items)
 	{
 		if (item->m_itemType == m_itemType
-			&& item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& item->m_carryingPlayer == nullptr)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("PickUpItem2::Effect item = %p"), item));
@@ -326,7 +326,7 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 	{
         if (htnWorldState.m_itemCarriedPtr == nullptr
             		&& item->m_itemType == m_itemType
-			&& item->m_locationClass.location == static_cast<Locations>(htnWorldState.m_v.at(WorldE::location))
+			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& item->m_carryingPlayer == nullptr)
 		{
 			pLog("Return true from PickUpItem2::Preconditions");
@@ -347,7 +347,7 @@ DropItem::DropItem() : HTNPrimitive("DropItem") {}
 
 void DropItem::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_itemCarriedPtr->m_locationClass.location = static_cast<Locations>(htnWorldState.m_v.at(WorldE::location));
+	htnWorldState.m_itemCarriedPtr->m_locationClass.location = static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location));
 	htnWorldState.m_itemCarriedPtr->m_carryingPlayer = nullptr;
 	htnWorldState.m_itemCarriedPtr = nullptr;
 }

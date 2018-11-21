@@ -57,7 +57,7 @@ MissionClass::MissionClass(Missions mission, Player* owner, double objective):
 	m_objective(objective)
 {}
 
-MissionClass::MissionClass(Missions mission, Player* owner, EItemType itemType, Locations location):
+MissionClass::MissionClass(Missions mission, Player* owner, EItemType itemType, ELocations location):
 	m_mission(mission),
 	m_owner(owner),
 	m_itemType(itemType),
@@ -83,7 +83,7 @@ MissionClass::MissionClass(Player* owner):
 {
 	m_mission = Missions::bringItemToRoom;
 	m_itemType = EItemType::sword;
-	m_locationClass = LocationClass(Locations::bedroom);
+	m_locationClass = LocationClass(ELocations::bedroom);
 	return;
 	switch (m_mission)
 	{

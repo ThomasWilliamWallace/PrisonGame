@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include "Missions.hpp"
 #include "World.hpp"
-#include "Locations.hpp"
+#include "Locations.h"
 #include <sstream>
 #include "pLog.hpp"
 
@@ -104,8 +104,8 @@ void Player::PrintPlayer()
         ss << itemFocusPtr->ToString() << "\n";
     else
         ss << "null\n";
-    ss << "missionClass=" << missionClass.MissionNarrative();
-    ss << "missionOffer=" << missionOffer.MissionNarrative();
+    ss << "missionClass=" << missionClass.MissionNarrative() << "\n";
+    ss << "missionOffer=" << missionOffer.MissionNarrative() << "\n";
     ss << "cash=" << cash << "\n";
     ss << "sentence=" << sentence << "\n";
     ss << "m_playerIndex=" << m_playerIndex << "\n";

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Locations.hpp"
+#include "Locations.h"
 #include "GameFramework/Actor.h"
 #include "ActorItem.generated.h"
 
 class Player;
 
-UENUM()
-enum class EItemType
+UENUM(BlueprintType, Blueprintable)
+enum class EItemType : uint8
 {
 	assaultRifle,
 	ball,
@@ -55,7 +55,7 @@ public:
 	LocationClass m_locationClass;
 	Player* m_carryingPlayer;
 	AActorItem* m_realItem;
-	SimActorItem(AActorItem* realItem, EItemType itemType, Locations location, Player* carryingPlayer = nullptr):
+	SimActorItem(AActorItem* realItem, EItemType itemType, ELocations location, Player* carryingPlayer = nullptr):
 		m_itemType(itemType),
 		m_locationClass(location),
 		m_carryingPlayer(carryingPlayer),

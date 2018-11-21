@@ -11,7 +11,7 @@
 
 Actions AIController::ChooseRoom(Player* playerPtr, Player player[])
 {
-    if (playerPtr->locationClass.location == Locations::mainHall)
+    if (playerPtr->locationClass.location == ELocations::mainHall)
     {
         int random = RandPercent();
         if (random < 25)

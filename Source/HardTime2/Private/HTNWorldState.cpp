@@ -29,6 +29,7 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 		m_items.push_back(new SimActorItem(item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
 
 		std::stringstream ss;
+		ss << "item->m_locationClass.location = " << static_cast<int>(item->m_locationClass.location) << "\n";
 		ss << "item->m_carryingPlayer = " << item->m_carryingPlayer << "\n";
 		ss << "m_items.back()->m_carryingPlayer = " << m_items.back()->m_carryingPlayer << "\n";
 		ss << "m_ptrToSelf = " << m_ptrToSelf << "\n";
@@ -48,7 +49,7 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 	m_v(ws2.m_v),
 	m_ptrToSelf(ws2.m_ptrToSelf),
-    	m_itemCarriedPtr(nullptr),
+    m_itemCarriedPtr(nullptr),
 	m_attackers(ws2.m_attackers),
 	m_playerLocations(ws2.m_playerLocations),
 	m_missionClass(ws2.m_missionClass)
@@ -78,7 +79,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 {
 	m_v = ws2.m_v;
 	m_ptrToSelf = ws2.m_ptrToSelf;
-    	m_itemCarriedPtr = nullptr;
+	m_itemCarriedPtr = nullptr;
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
 
