@@ -16,6 +16,7 @@ void AAICharacterC::BeginPlay()
 {
 	Super::BeginPlay();
 	m_player.missionClass = MissionClass(&m_player);
+	m_player.m_playerIndex = 0;
 }
 
 // Called every frame

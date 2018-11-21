@@ -238,21 +238,15 @@ GetItemMethod1::GetItemMethod1(EItemType itemType) : m_itemType(itemType)
 
 bool GetItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
-	pLog("Entering GetItemMethod1::Preconditions" );
 	for (auto &item : htnWorldState.m_items)
 	{
-		std::stringstream ss;
-		ss << "Item: " << item->ToString() << " in the " << item->m_locationClass.ToString() << " carried by " << item->m_carryingPlayer << " pointing at unreal actor " << item->m_realItem << ". (Player location = " << htnWorldState.m_v.at(WorldE::location) << ")\n";
-		pLog(ss);
 		if (item->m_itemType == m_itemType
 			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& (item->m_carryingPlayer == nullptr))
 		{
-			pLog("Return true from GetItemMethod1::Preconditions");
 			return true;
 		}
 	}
-	pLog("Return false from GetItemMethod1::Preconditions");
 	return false;
 }
 
@@ -300,12 +294,6 @@ BringItemToLocationMethod2::BringItemToLocationMethod2(EItemType itemType, Locat
 
 bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
-	std::stringstream ss;
-	ss << "BringItemToLocationMethod2::Preconditions";
-	pLog(ss);
-	htnWorldState.Print();
-	pLog((htnWorldState.m_itemCarriedPtr != nullptr) &&
-		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType) ? "returning True" : "Returning False");
 	return (htnWorldState.m_itemCarriedPtr != nullptr) &&
 		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
@@ -338,19 +326,6 @@ BringItemToLocationMethod3::BringItemToLocationMethod3(HTNWorldState &htnWorldSt
 
 bool BringItemToLocationMethod3::Preconditions(HTNWorldState &htnWorldState)
 {
-	std::stringstream ss;
-	ss << "BringItemToLocationMethod3::Preconditions m_itemCarriedPtr = " << htnWorldState.m_itemCarriedPtr;
-	pLog(ss);
-	//if (GEngine)
-	//	if (htnWorldState.m_itemCarriedPtr != nullptr)
-	//		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("htnWorldState.m_itemCarriedPtr !=  nullptr"));
-	//if (GEngine)
-	//	if (htnWorldState.m_itemCarriedPtr != nullptr)
-	//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("htnWorldState m_itemType = %d"), static_cast<int>(htnWorldState.m_itemCarriedPtr->m_itemType)));
-	//if (GEngine)
-	//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("in m_itemType = %d"), static_cast<int>(m_itemType)));
-
-	pLog("returning True as always");
 	return true;
 }
 
@@ -362,11 +337,11 @@ BringItemToLocationCompound::BringItemToLocationCompound(HTNWorldState &htnWorld
 }
 
 //***********************************************************
-AttackMethod1::AttackMethod1(SimActorItem* item, Player* opponent)
+AttackMethod1::AttackMethod1(SimActorItem* item, Player* opponent) : m_item(item), m_opponent(opponent)
 {
 	m_item = item;
 	AddTask(new PickUpItem(m_item));
-	AddTask(new Punch(opponent));
+	AddTask(new Punch(m_opponent));
 }
 
 bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
@@ -381,19 +356,19 @@ bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
 		}
 	}
 
-	return //htnWorldState.m_v.at(WorldE::inSameRoom) &&
-        	(m_item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))) &&
-			!carryingItemAlready;
+    return htnWorldState.IsInTheRoom(m_opponent)
+        && (m_item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)))
+        && !carryingItemAlready;
 }
 
-AttackMethod2::AttackMethod2(Player* opponent)
+AttackMethod2::AttackMethod2(Player* opponent) : m_opponent(opponent)
 {
-	AddTask(new Punch(opponent));
+    AddTask(new Punch(m_opponent));
 }
 
 bool AttackMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return htnWorldState.IsInTheRoom(m_opponent);
 }
 
 AttackCompound::AttackCompound(HTNWorldState &htnWorldState, Player* opponent) : HTNCompound("AttackCompound")

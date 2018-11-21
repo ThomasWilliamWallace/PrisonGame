@@ -228,6 +228,7 @@ public:
 class AttackMethod1 : public HTNMethod
 {
 	SimActorItem* m_item;
+	Player* m_opponent;
 public:
 	AttackMethod1(SimActorItem* item, Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
@@ -235,6 +236,7 @@ public:
 
 class AttackMethod2 : public HTNMethod
 {
+	Player* m_opponent;
 public:
 	AttackMethod2(Player* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);

@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Locations.h"
 #include "Missions.hpp"
+#include "Constants.hpp"
 
 enum WorldE
 {
@@ -28,6 +29,7 @@ class World;
 
 class HTNWorldState
 {
+    bool m_inTheRoom[c_playerCount];
 public:
 	std::vector<int> m_v;
 	std::vector< SimActorItem* > m_items;
@@ -35,6 +37,7 @@ public:
 	SimActorItem* m_itemCarriedPtr;
 	std::vector<bool> m_attackers;
 	std::vector<ELocations> m_playerLocations;
+    bool IsInTheRoom(Player* playerPtr);
 	MissionClass m_missionClass;
 	HTNWorldState(HTNWorldState &ws2);
 	HTNWorldState(Player* playerPtr, World &world);

@@ -42,6 +42,12 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 		}
 		pLog(ss);
 	}
+    
+    	for (int i = 0; i < c_playerCount; i++)
+    	{
+        	m_inTheRoom[i] = false;  //TODO!
+    	}
+
 	pLog("HTNWorldState::default constructor:");
 	Print();
 }
@@ -54,7 +60,7 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 	m_playerLocations(ws2.m_playerLocations),
 	m_missionClass(ws2.m_missionClass)
 {
-	m_itemCarriedPtr = nullptr;
+    std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
 	for (auto &item : ws2.m_items)
 	{
 		m_items.push_back(new SimActorItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
@@ -82,6 +88,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 	m_itemCarriedPtr = nullptr;
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
+	std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));    
 
     m_items.clear();
 	for (auto &item : ws2.m_items)
@@ -139,4 +146,9 @@ std::string WorldEToString(WorldE worldE)
 	case WorldE::last: return "LAST";
 	default: return "ERROR_NO_WORLDE_STRING_FOUND";
 	}
+}
+
+bool HTNWorldState::IsInTheRoom(Player* playerPtr)
+{
+    return m_inTheRoom[playerPtr->m_playerIndex];
 }

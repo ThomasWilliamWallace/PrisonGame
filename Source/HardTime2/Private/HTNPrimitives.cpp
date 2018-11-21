@@ -295,8 +295,6 @@ void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& item->m_carryingPlayer == nullptr)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("PickUpItem2::Effect item = %p"), item));
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("PickUpItem2::Effect htnWorldState.m_ptrToSelf = %p"), htnWorldState.m_ptrToSelf));
 			item->m_carryingPlayer = htnWorldState.m_ptrToSelf;
 			htnWorldState.m_itemCarriedPtr = item;
 			return;
@@ -321,7 +319,6 @@ Actions PickUpItem2::Operate(AAICharacterC* aiCharacterC)
 
 bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 {
-	pLog("Entering PickUpItem2::Preconditions");
 	for (auto &item : htnWorldState.m_items)
 	{
         if (htnWorldState.m_itemCarriedPtr == nullptr
@@ -329,11 +326,9 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& item->m_carryingPlayer == nullptr)
 		{
-			pLog("Return true from PickUpItem2::Preconditions");
 			return true;
 		}
 	}
-	pLog("Return false from PickUpItem2::Preconditions");
 	return false;
 }
 

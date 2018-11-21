@@ -165,8 +165,8 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 	//If plan is not valid, abandon it and try to make a new plan
 	if (!hasValidPlan)
 	{
-		pLog("No valid plan exists! Try to replan.", true);
 		//make new plan
+		pLog("No valid plan exists! Try to replan.", true);
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
 		aiCharacterC->m_player.aiController.htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
@@ -195,7 +195,7 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 		pLog(ss, true);
 		HTNPrimitivePtr currentPlanStep = (aiCharacterC->m_player.aiController.htnPlan).front();
 		aiCharacterC->lastPrimitiveAction = currentPlanStep;
-		(aiCharacterC->m_player.aiController.htnPlan).pop_front();
+		aiCharacterC->m_player.aiController.htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2", true);
 		return currentPlanStep->Operate(aiCharacterC);
 	}
