@@ -28,19 +28,10 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	{
 		m_items.push_back(new SimActorItem(item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
 
-		std::stringstream ss;
-		ss << "item->m_locationClass.location = " << static_cast<int>(item->m_locationClass.location) << "\n";
-		ss << "item->m_carryingPlayer = " << item->m_carryingPlayer << "\n";
-		ss << "m_items.back()->m_carryingPlayer = " << m_items.back()->m_carryingPlayer << "\n";
-		ss << "m_ptrToSelf = " << m_ptrToSelf << "\n";
-		ss << "constructor #1a m_itemCarriedPtr = " << m_itemCarriedPtr << "\n";
-
 		if ((m_items.back()->m_carryingPlayer) == m_ptrToSelf)
 		{
 			m_itemCarriedPtr = m_items.back();
-			ss << "constructor #1b m_itemCarriedPtr = " << m_itemCarriedPtr << "\n";
 		}
-		pLog(ss);
 	}
     
 	int i = 0;
@@ -128,7 +119,7 @@ void HTNWorldState::Print()
 		ss << "SimItem: " << simItem->ToString() << " carried by ";
 		if (simItem->m_carryingPlayer != nullptr)
 		{
-			ss << simItem->m_carryingPlayer->name;
+			ss << simItem->m_carryingPlayer->m_playerName;
 		}
 		else
 		{
@@ -138,7 +129,7 @@ void HTNWorldState::Print()
     }
     for (auto &p : m_playersInTheRoom)
     {
-        ss << "PlayerData " << p->name << " is also the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
+        ss << "PlayerData " << p->m_playerName << " is also the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
     }
 	ss << "m_missionClass:" << m_missionClass.MissionName() << "\n";
 	pLog(ss);

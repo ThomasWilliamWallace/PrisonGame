@@ -90,12 +90,12 @@ void USimWorld::AddItem(AActorItem* item)
 	pLog(ss, true);
 }
 
-void USimWorld::AddPlayer(AAICharacterC* aiCharacterC)
+void USimWorld::AddPlayer(UPlayerData* playerData)
 {
 	pLog("USimWorld::AddPlayer", true);
-	m_players.push_back(aiCharacterC->m_player);
+	m_players.push_back(playerData);
 	std::stringstream ss;
-	ss << "player=" << &(aiCharacterC->m_player);
+	ss << "player=" << playerData;
 	pLog(ss, true);
 }
 

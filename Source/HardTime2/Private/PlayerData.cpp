@@ -4,6 +4,7 @@
 #include "Locations.h"
 #include <sstream>
 #include "pLog.hpp"
+#include "HardTime2GameMode.h"
 
 double Relationship::getAggro()
 {
@@ -80,13 +81,13 @@ std::string CharacterName(UPlayerData* playerPtr)
     if (playerPtr == nullptr)
         return "c_empty";
     else
-        return playerPtr->name;
+        return playerPtr->m_playerName;
 }
 
 void UPlayerData::PrintPlayer()
 {
 	std::stringstream ss;
-    ss << "*** PLAYER " << name << " ***\n";
+    ss << "*** PLAYER " << m_playerName << " ***\n";
 	ss << "action=" << ActionToString(action) << "\n";
 	ss << "lastAction=" << ActionToString(lastAction) << "\n";
     ss << "location=" << locationClass.ToString() << "\n";
@@ -151,4 +152,9 @@ void UPlayerData::UpdateMissions(UPlayerData player[], USimWorld &world)
         pStats.deltaSanity(5);
         missionClass = MissionClass(); //create a no_mission mission
     }
+}
+
+UPlayerData::UPlayerData():
+	m_playerName("No-name")
+{
 }

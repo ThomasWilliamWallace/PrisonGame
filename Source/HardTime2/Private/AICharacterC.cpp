@@ -2,6 +2,7 @@
 #include "HTNWorldState.hpp"
 #include "pLog.hpp"
 #include "Engine/GameEngine.h"
+#include "HardTime2GameMode.h"
 
 
 // Sets default values
@@ -16,8 +17,12 @@ AAICharacterC::AAICharacterC(): lastPrimitiveAction(nullptr)
 void AAICharacterC::BeginPlay()
 {
 	Super::BeginPlay();
+	m_player->m_playerName = "No-name";
 	m_player->missionClass = MissionClass(m_player);
 	m_player->m_playerIndex = 0;
+	auto gameMode = GetWorld()->GetAuthGameMode();
+	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
+	hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
 }
 
 // Called every frame
@@ -27,7 +32,9 @@ void AAICharacterC::Tick(float DeltaTime)
 	if (m_player->missionClass.IsMissionComplete(*m_world))
 	{
 		m_player->missionClass.m_mission = Missions::noMission;
-		pLog("Mission complete", true);
+		pLog("********************** Mission complete, creating new mission:", true);
+		m_player->missionClass = MissionClass(m_player);
+		pLog(m_player->missionClass.MissionNarrative(), true);
 	}
 
 	if (readyForNewAction)
@@ -99,7 +106,7 @@ void AAICharacterC::SetWorld(USimWorld* simWorld)
 	std::stringstream ss;
 	ss << "World in:" << simWorld << "\n";
 	ss << "World set" << m_world;
-	pLog(ss, true);
+	pLog(ss);
 }
 
 USimWorld* AAICharacterC::GetSimWorld()
@@ -117,5 +124,41 @@ void AAICharacterC::UpdateLocation(ELocations location)
 	m_player->locationClass.location = location;
 	std::stringstream ss;
 	ss << "Location=" << static_cast<int>(location);
-	pLog(ss, true);
+	pLog(ss);
+}
+
+void AAICharacterC::DeltaHealth(float delta)
+{
+	pLog("AAICharacterC::DeltaHealth", true);
+	std::stringstream ss;
+	m_player->pStats.deltaHealth(delta);
+	ss << "m_player->pStats.getHealth():" << m_player->pStats.getHealth() << "\n";
+	pLog(ss);
+}
+
+void AAICharacterC::DeltaStrength(float delta)
+{
+	pLog("AAICharacterC::DeltaStrength", true);
+	std::stringstream ss;
+	m_player->pStats.deltaStrength(delta);
+	ss << "m_player->pStats.getStrength():" << m_player->pStats.getStrength() << "\n";
+	pLog(ss);
+}
+
+void AAICharacterC::DeltaAgility(float delta)
+{
+	pLog("AAICharacterC::DeltaAgility", true);
+	std::stringstream ss;
+	m_player->pStats.deltaAgility(delta);
+	ss << "m_player->pStats.getAgility():" << m_player->pStats.getAgility() << "\n";
+	pLog(ss);
+}
+
+void AAICharacterC::DeltaIntelligence(float delta)
+{
+	pLog("AAICharacterC::DeltaIntelligence", true);
+	std::stringstream ss;
+	m_player->pStats.deltaIntelligence(delta);
+	ss << "m_player->pStats.getIntelligence():" << m_player->pStats.getIntelligence() << "\n";
+	pLog(ss);
 }

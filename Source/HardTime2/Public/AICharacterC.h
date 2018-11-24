@@ -28,7 +28,19 @@ public:
 		USimWorld* GetSimWorld();
 
 	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
-		void UpdateLocation(AAICharacterC* aiCharacterC, ELocations location);
+		void UpdateLocation(ELocations location);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaHealth(float delta);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaStrength(float delta);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaAgility(float delta);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaIntelligence(float delta);
 
 	// Sets default values for this character's properties
 	AAICharacterC();
@@ -36,6 +48,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
 	bool lastActionSucceeded = true;
 	HTNPrimitivePtr lastPrimitiveAction;
+
 	UPlayerData* m_player;
 	USimWorld* m_world;
 

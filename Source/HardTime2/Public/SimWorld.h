@@ -17,7 +17,7 @@ public:
 		void AddItem(AActorItem* item);
 
 	UFUNCTION(BlueprintCallable, Category = USimWorld)
-		void AddPlayer(AAICharacterC* aiCharacterC);
+		void AddPlayer(UPlayerData* playerData);
 
 	UFUNCTION(BlueprintCallable, Category = USimWorld)
 		void UpdateItemLocation(AActorItem* item, ELocations location);

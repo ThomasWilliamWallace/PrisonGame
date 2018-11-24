@@ -11,23 +11,28 @@ enum class EItemType : uint8
 {
 	assaultRifle,
 	ball,
+	barbell,
 	bat,
+	baton,
 	bottle,
 	brick,
 	broom,
 	cigarette,
 	cleaver,
+	comb,
 	dumbbell,
 	dynamite,
 	extinguisher,
 	hammer,
 	knife,
 	mirror,
+	pipe,
 	pistol,
 	plank,
 	poolCue,
 	rock,
 	scissors,
+	screw,
 	sword,
 	syringe
 };
@@ -39,6 +44,11 @@ UCLASS()
 class AActorItem : public AActor
 {
 	GENERATED_BODY()
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
 		EItemType m_itemType;
