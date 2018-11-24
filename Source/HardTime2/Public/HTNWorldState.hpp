@@ -23,9 +23,9 @@ enum WorldE
 
 std::string WorldEToString(WorldE worldE);
 
-class Player;
+class UPlayerData;
 class SimActorItem;
-class World;
+class USimWorld;
 
 class HTNWorldState
 {
@@ -33,14 +33,15 @@ class HTNWorldState
 public:
 	std::vector<int> m_v;
 	std::vector< SimActorItem* > m_items;
-	Player* m_ptrToSelf;
+	UPlayerData* m_ptrToSelf;
 	SimActorItem* m_itemCarriedPtr;
 	std::vector<bool> m_attackers;
 	std::vector<ELocations> m_playerLocations;
-    bool IsInTheRoom(Player* playerPtr);
+    std::vector< UPlayerData* > m_playersInTheRoom;
+    bool IsInTheRoom(UPlayerData* playerPtr);
 	MissionClass m_missionClass;
 	HTNWorldState(HTNWorldState &ws2);
-	HTNWorldState(Player* playerPtr, World &world);
+	HTNWorldState(UPlayerData* playerPtr, USimWorld &world);
 	~HTNWorldState();
 	void CopyFrom(HTNWorldState &ws2);
     void Print();

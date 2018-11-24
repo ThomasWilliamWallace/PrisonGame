@@ -4,7 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "ActorItem.generated.h"
 
-class Player;
+class UPlayerData;
 
 UENUM(BlueprintType, Blueprintable)
 enum class EItemType : uint8
@@ -44,7 +44,7 @@ public:
 		EItemType m_itemType;
 
 	LocationClass m_locationClass;
-	Player* m_carryingPlayer;
+	UPlayerData* m_carryingPlayer;
     std::string ToString();
 };
 
@@ -53,9 +53,9 @@ class SimActorItem
 public:
 	EItemType m_itemType;
 	LocationClass m_locationClass;
-	Player* m_carryingPlayer;
+	UPlayerData* m_carryingPlayer;
 	AActorItem* m_realItem;
-	SimActorItem(AActorItem* realItem, EItemType itemType, ELocations location, Player* carryingPlayer = nullptr):
+	SimActorItem(AActorItem* realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer = nullptr):
 		m_itemType(itemType),
 		m_locationClass(location),
 		m_carryingPlayer(carryingPlayer),

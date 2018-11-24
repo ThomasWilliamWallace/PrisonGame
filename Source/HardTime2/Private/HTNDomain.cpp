@@ -250,9 +250,23 @@ bool GetItemMethod1::Preconditions(HTNWorldState &htnWorldState)
 	return false;
 }
 
+GetItemMethod2::GetItemMethod2(UPlayerData* player, EItemType itemType) : m_player(player), m_itemType(itemType)
+{
+    AddTask(new RequestItemPrim(player, itemType));
+}
+
+bool GetItemMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
 GetItemCompound::GetItemCompound(HTNWorldState &htnWorldState, EItemType itemType) : HTNCompound("GetItemCompound(" + ItemTypeToString(itemType) + ")")
 {
 	AddMethod(new GetItemMethod1(itemType));
+    for (auto &p : htnWorldState.m_playersInTheRoom)
+    {
+        AddMethod(new GetItemMethod2(p, itemType));
+    }
 }
 
 //***********************************************************
@@ -337,7 +351,7 @@ BringItemToLocationCompound::BringItemToLocationCompound(HTNWorldState &htnWorld
 }
 
 //***********************************************************
-AttackMethod1::AttackMethod1(SimActorItem* item, Player* opponent) : m_item(item), m_opponent(opponent)
+AttackMethod1::AttackMethod1(SimActorItem* item, UPlayerData* opponent) : m_item(item), m_opponent(opponent)
 {
 	m_item = item;
 	AddTask(new PickUpItem(m_item));
@@ -361,7 +375,7 @@ bool AttackMethod1::Preconditions(HTNWorldState &htnWorldState)
         && !carryingItemAlready;
 }
 
-AttackMethod2::AttackMethod2(Player* opponent) : m_opponent(opponent)
+AttackMethod2::AttackMethod2(UPlayerData* opponent) : m_opponent(opponent)
 {
     AddTask(new Punch(m_opponent));
 }
@@ -371,7 +385,7 @@ bool AttackMethod2::Preconditions(HTNWorldState &htnWorldState)
     return htnWorldState.IsInTheRoom(m_opponent);
 }
 
-AttackCompound::AttackCompound(HTNWorldState &htnWorldState, Player* opponent) : HTNCompound("AttackCompound")
+AttackCompound::AttackCompound(HTNWorldState &htnWorldState, UPlayerData* opponent) : HTNCompound("AttackCompound")
 {
 	for (auto &item : htnWorldState.m_items)
 	{
@@ -383,7 +397,7 @@ AttackCompound::AttackCompound(HTNWorldState &htnWorldState, Player* opponent) :
 	AddMethod(new AttackMethod2(opponent));
 }
 
-AttackCompoundMethod::AttackCompoundMethod(HTNWorldState &htnWorldState, Player* opponent)
+AttackCompoundMethod::AttackCompoundMethod(HTNWorldState &htnWorldState, UPlayerData* opponent)
 {
 	AddTask(new AttackCompound(htnWorldState, opponent));
 }
@@ -404,7 +418,7 @@ bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 	return (htnWorldState.m_v.at(WorldE::health) < 67);
 }
 
-CombatCompound::CombatCompound(HTNWorldState &htnWorldState, Player* opponent) : HTNCompound("CombatCompound")
+CombatCompound::CombatCompound(HTNWorldState &htnWorldState, UPlayerData* opponent) : HTNCompound("CombatCompound")
 {
     AddMethod(new EvadeMethod());
     AddMethod(new AttackCompoundMethod(htnWorldState, opponent));
@@ -460,7 +474,7 @@ DoMissionCompound::DoMissionCompound(HTNWorldState &htnWorldState) : HTNCompound
 }
 
 //***********************************************************
-CombatMethod::CombatMethod(HTNWorldState &htnWorldState, Player* opponent)
+CombatMethod::CombatMethod(HTNWorldState &htnWorldState, UPlayerData* opponent)
 {
 	AddTask(new CombatCompound(htnWorldState, opponent));
 }

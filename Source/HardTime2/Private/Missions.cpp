@@ -1,6 +1,6 @@
 #include "Missions.hpp"
-#include "Player.hpp"
-#include "World.hpp"
+#include "PlayerData.h"
+#include "SimWorld.h"
 
 std::string MissionClass::MissionName()
 {
@@ -51,13 +51,13 @@ Missions GetRandomMission()
 		return Missions::bringItemToRoom;
 }
 
-MissionClass::MissionClass(Missions mission, Player* owner, double objective):
+MissionClass::MissionClass(Missions mission, UPlayerData* owner, double objective):
 	m_mission(mission),
 	m_owner(owner),
 	m_objective(objective)
 {}
 
-MissionClass::MissionClass(Missions mission, Player* owner, EItemType itemType, ELocations location):
+MissionClass::MissionClass(Missions mission, UPlayerData* owner, EItemType itemType, ELocations location):
 	m_mission(mission),
 	m_owner(owner),
 	m_itemType(itemType),
@@ -77,7 +77,7 @@ MissionClass::MissionClass(const MissionClass& missionClass) :
 	m_locationClass(missionClass.m_locationClass)
 {}
 
-MissionClass::MissionClass(Player* owner):
+MissionClass::MissionClass(UPlayerData* owner):
 	m_mission(GetRandomMission()),
 	m_owner(owner)
 {
@@ -106,7 +106,7 @@ MissionClass::MissionClass(Player* owner):
 	m_objective += 3; //todo ensure that the mission is achievable, ie 100 or below
 }
 
-bool MissionClass::IsMissionComplete(World &world)
+bool MissionClass::IsMissionComplete(USimWorld &world)
 {
 	switch (m_mission)
 	{

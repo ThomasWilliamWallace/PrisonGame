@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SimWorld.h"
 #include "GameFramework/GameModeBase.h"
 #include "HardTime2GameMode.generated.h"
 
@@ -13,6 +14,9 @@ class AHardTime2GameMode : public AGameModeBase
 
 public:
 	AHardTime2GameMode();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AHardTime2GameMode)
+		USimWorld* m_simWorld;
 };
 
 

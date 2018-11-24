@@ -2,7 +2,7 @@
 
 #include "HTNPlanner.hpp"
 
-class World;
+class USimWorld;
 
 enum class AI
 {
@@ -14,14 +14,14 @@ enum class AI
 class AIController
 {
     AI algo;
-    Actions ChooseRoom(Player* playerPtr, Player player[]);
-    Actions DoNothingAIChooseAction(Player* playerPtr, Player player[], bool playersInReach[], int countPlayersInReach);
-    Actions RandomAIChooseAction(Player* playerPtr, Player player[], bool playersInReach[], int countPlayersInReach);
-    void CreateMissionOffer(Player player[], Player* playerPtr, bool playersInReach[], int countPlayersInReach);
-    Player* TargetForMakeFriend(Player player[], Player* playerPtr, bool playersInReach[], int countPlayersInReach);
+    Actions ChooseRoom(UPlayerData* playerPtr, UPlayerData player[]);
+    Actions DoNothingAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
+    Actions RandomAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
+    void CreateMissionOffer(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach);
+    UPlayerData* TargetForMakeFriend(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach);
 public:
 	Actions HTNAIChooseAction(AAICharacterC* aiCharacterC);
-    Actions ChooseAction(Player* playerPtr, Player player[], World &world, AAICharacterC* aiCharacterC);
+    Actions ChooseAction(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world, AAICharacterC* aiCharacterC);
     AIController(AI _algo);
     AIController();
 	HTNPrimitiveList htnPlan;

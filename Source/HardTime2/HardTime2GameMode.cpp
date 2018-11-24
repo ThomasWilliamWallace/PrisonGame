@@ -17,4 +17,5 @@ AHardTime2GameMode::AHardTime2GameMode()
 	{
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
+	m_simWorld = CreateDefaultSubobject<USimWorld>(TEXT("SimWorld"));
 }

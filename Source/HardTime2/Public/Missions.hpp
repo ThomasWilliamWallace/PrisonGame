@@ -12,24 +12,24 @@ enum class Missions
 	bringItemToRoom
 };
 
-class Player;
-class World;
+class UPlayerData;
+class USimWorld;
 
 class MissionClass
 {
 public:
 	Missions m_mission;
-	Player* m_owner;
+	UPlayerData* m_owner;
 	double m_objective; //objective for stat increase missions
 	EItemType m_itemType;
 	LocationClass m_locationClass;
 	std::string MissionName();
-	MissionClass(Missions mission, Player* owner, double objective);
-	MissionClass(Missions mission, Player* owner, EItemType itemE, ELocations location);
+	MissionClass(Missions mission, UPlayerData* owner, double objective);
+	MissionClass(Missions mission, UPlayerData* owner, EItemType itemE, ELocations location);
 	MissionClass();
 	MissionClass(const MissionClass& missionClass);
-	MissionClass(Player* owner);
-	bool IsMissionComplete(World &world);
+	MissionClass(UPlayerData* owner);
+	bool IsMissionComplete(USimWorld &world);
     std::string MissionNarrative();
 };
 

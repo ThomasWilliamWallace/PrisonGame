@@ -1,14 +1,14 @@
 #include "HTNWorldState.hpp"
 #include <cmath>
 #include "ActorItem.h"
-#include "Player.hpp"
-#include "World.hpp"
+#include "PlayerData.h"
+#include "SimWorld.h"
 #include "HTNDomain.hpp"
 #include "pLog.hpp"
 #include <sstream>
 
 //***********************************************************
-HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
+HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	m_v(WorldE::last, 0),
 	m_ptrToSelf(playerPtr),
     m_itemCarriedPtr(nullptr),
@@ -43,10 +43,17 @@ HTNWorldState::HTNWorldState(Player* playerPtr, World &world):
 		pLog(ss);
 	}
     
-    	for (int i = 0; i < c_playerCount; i++)
-    	{
-        	m_inTheRoom[i] = false;  //TODO!
-    	}
+	int i = 0;
+    for (auto &p : world.m_players)
+    {
+        m_inTheRoom[i] = p->locationClass.location == static_cast<ELocations>(m_v.at(WorldE::location)) &&
+							playerPtr != p;
+		if (m_inTheRoom[i])
+		{
+			m_playersInTheRoom.push_back(p);
+		}
+		i++;
+    }
 
 	pLog("HTNWorldState::default constructor:");
 	Print();
@@ -58,6 +65,7 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
     m_itemCarriedPtr(nullptr),
 	m_attackers(ws2.m_attackers),
 	m_playerLocations(ws2.m_playerLocations),
+    m_playersInTheRoom(ws2.m_playersInTheRoom),
 	m_missionClass(ws2.m_missionClass)
 {
     std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
@@ -89,6 +97,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
 	std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));    
+    m_playersInTheRoom = ws2.m_playersInTheRoom;
 
     m_items.clear();
 	for (auto &item : ws2.m_items)
@@ -127,6 +136,10 @@ void HTNWorldState::Print()
 		}
 		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << simItem->m_realItem << "\n";
     }
+    for (auto &p : m_playersInTheRoom)
+    {
+        ss << "PlayerData " << p->name << " is also the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
+    }
 	ss << "m_missionClass:" << m_missionClass.MissionName() << "\n";
 	pLog(ss);
 }
@@ -148,7 +161,7 @@ std::string WorldEToString(WorldE worldE)
 	}
 }
 
-bool HTNWorldState::IsInTheRoom(Player* playerPtr)
+bool HTNWorldState::IsInTheRoom(UPlayerData* playerPtr)
 {
     return m_inTheRoom[playerPtr->m_playerIndex];
 }

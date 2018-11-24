@@ -220,7 +220,7 @@ bool Drink::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-Punch::Punch(Player* opponent) : HTNPrimitive("Punch"), m_targetPlayer(opponent) {}
+Punch::Punch(UPlayerData* opponent) : HTNPrimitive("Punch"), m_targetPlayer(opponent) {}
 
 void Punch::Effect(HTNWorldState &htnWorldState)
 {
@@ -229,7 +229,7 @@ void Punch::Effect(HTNWorldState &htnWorldState)
 
 Actions Punch::Operate(AAICharacterC* aiCharacterC)
 {
-	aiCharacterC->m_player.playerTargetPtr = m_targetPlayer;
+	aiCharacterC->m_player->playerTargetPtr = m_targetPlayer;
 	return Actions::attack;
 }
 
@@ -267,7 +267,7 @@ void PickUpItem::Effect(HTNWorldState &htnWorldState)
 
 Actions PickUpItem::Operate(AAICharacterC* aiCharacterC)
 {
-    aiCharacterC->m_player.itemFocusPtr = m_itemFocus->m_realItem;
+    aiCharacterC->m_player->itemFocusPtr = m_itemFocus->m_realItem;
 	return Actions::pickUpItem;
 }
 
@@ -304,16 +304,16 @@ void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 
 Actions PickUpItem2::Operate(AAICharacterC* aiCharacterC)
 {
-	for (auto &item : aiCharacterC->m_world.items)
+	for (auto &item : aiCharacterC->m_world->items)
 	{
 		if (item->m_itemType == m_itemType &&
-			item->m_locationClass.location == aiCharacterC->m_player.locationClass.location)
+			item->m_locationClass.location == aiCharacterC->m_player->locationClass.location)
 		{
-			aiCharacterC->m_player.itemFocusPtr = item;
+			aiCharacterC->m_player->itemFocusPtr = item;
 			return Actions::pickUpItem;
 		}
 	}
-	aiCharacterC->m_player.itemFocusPtr = nullptr;
+	aiCharacterC->m_player->itemFocusPtr = nullptr;
 	return Actions::noAction;
 }
 
@@ -360,4 +360,42 @@ bool DropItem::Preconditions(HTNWorldState &htnWorldState)
 bool DropItem::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
 {
 	return htnWorldState.m_itemCarriedPtr == nullptr;
+}
+
+//***********************************************************
+RequestItemPrim::RequestItemPrim(UPlayerData* player, EItemType itemType) : HTNPrimitive("RequestItem"), m_player(player), m_itemType(itemType) {}
+
+void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
+{
+    for (auto &item : htnWorldState.m_items)
+    {
+        if (item->m_carryingPlayer == m_player)
+        {
+            htnWorldState.m_itemCarriedPtr = item;
+            break;
+        }
+    }
+    htnWorldState.m_itemCarriedPtr->m_carryingPlayer = m_player;
+}
+
+Actions RequestItemPrim::Operate(AAICharacterC* aiCharacterC)
+{
+	aiCharacterC->m_player->playerTargetPtr = m_player;
+    return Actions::requestItem;
+}
+
+bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
+{
+    if (htnWorldState.m_itemCarriedPtr != nullptr)
+    {
+        return false;
+    }
+    for (auto &item : htnWorldState.m_items)
+    {
+        if (item->m_carryingPlayer == m_player && item->m_itemType == m_itemType && htnWorldState.IsInTheRoom(item->m_carryingPlayer))
+        {
+            return true;
+        }
+    }
+    return false; //TODO hook this into the actions code
 }

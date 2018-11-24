@@ -1,6 +1,6 @@
-#include "Player.hpp"
+#include "PlayerData.h"
 #include "Missions.hpp"
-#include "World.hpp"
+#include "SimWorld.h"
 #include "Locations.h"
 #include <sstream>
 #include "pLog.hpp"
@@ -75,7 +75,7 @@ void Relationship::deltaTrust(double delta)
     trust = transformStat(trust + delta);
 }
 
-std::string CharacterName(Player* playerPtr)
+std::string CharacterName(UPlayerData* playerPtr)
 {
     if (playerPtr == nullptr)
         return "c_empty";
@@ -83,7 +83,7 @@ std::string CharacterName(Player* playerPtr)
         return playerPtr->name;
 }
 
-void Player::PrintPlayer()
+void UPlayerData::PrintPlayer()
 {
 	std::stringstream ss;
     ss << "*** PLAYER " << name << " ***\n";
@@ -114,7 +114,7 @@ void Player::PrintPlayer()
 //    pStats.PrintStats();
 }
 
-MissionClass CreateNewMission(Player* playerPtr)
+MissionClass CreateNewMission(UPlayerData* playerPtr)
 {
     if (playerPtr == nullptr)
     {
@@ -144,7 +144,7 @@ MissionClass CreateNewMission(Player* playerPtr)
     return MissionClass(tempMission, playerPtr, tempObjective);
 }
 
-void Player::UpdateMissions(Player player[], World &world)
+void UPlayerData::UpdateMissions(UPlayerData player[], USimWorld &world)
 {
     if (missionClass.IsMissionComplete(world))
     {

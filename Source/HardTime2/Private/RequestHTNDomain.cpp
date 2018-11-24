@@ -1,7 +1,7 @@
 #include "RequestHTNDomain.hpp"
 #include "Locations.h"
-#include "Player.hpp"
-#include "World.hpp"
+#include "PlayerData.h"
+#include "SimWorld.h"
 #include "HTNDomain.hpp"
 /*
 //Start HTNPrimitives****************************************
@@ -20,7 +20,7 @@ void AcceptItemRequestPrim::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions AcceptItemRequestPrim::Operate(Player* playerPtr, Player player[], World &world)
+Actions AcceptItemRequestPrim::Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world)
 {
     return Actions::acceptRequest;
 }
@@ -38,7 +38,7 @@ void DeclineItemRequestPrim::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions DeclineItemRequestPrim::Operate(Player* playerPtr, Player player[], World &world)
+Actions DeclineItemRequestPrim::Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world)
 {
     return Actions::declineRequest;
 }
@@ -95,7 +95,7 @@ RespondToItemRequestCompound::RespondToItemRequestCompound(AActorItem* requested
 }
 
 //***********************************************************
-StartMethod::StartMethod(HTNWorldState &htnWorldState, Player player[])
+StartMethod::StartMethod(HTNWorldState &htnWorldState, UPlayerData player[])
 {
     AActorItem* requestedItem = htnWorldState.m_itemCarriedPtr;
     AddTask(new PrisonerBehaviourCompound(htnWorldState));
@@ -107,7 +107,7 @@ bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-StartCompound::StartCompound(HTNWorldState &htnWorldState, Player player[]) : HTNCompound("StartCompound")
+StartCompound::StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]) : HTNCompound("StartCompound")
 {
     AddMethod(new StartMethod(htnWorldState, player));
 }

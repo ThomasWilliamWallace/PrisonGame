@@ -115,9 +115,9 @@ public:
 //***********************************************************
 class Punch : public HTNPrimitive
 {
-	Player* m_targetPlayer;
+	UPlayerData* m_targetPlayer;
 public:
-	Punch(Player* opponent);
+	Punch(UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
 	Actions Operate(AAICharacterC* aiCharacterC);
@@ -165,4 +165,16 @@ public:
 	void Effect(HTNWorldState &htnWorldState);
 	Actions Operate(AAICharacterC* aiCharacterC);
 	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+};
+
+//***********************************************************
+class RequestItemPrim : public HTNPrimitive
+{
+    UPlayerData* m_player;
+    EItemType m_itemType;
+public:
+    RequestItemPrim(UPlayerData* player, EItemType itemType);
+    bool Preconditions(HTNWorldState &htnWorldState);
+    void Effect(HTNWorldState &htnWorldState);
+    Actions Operate(AAICharacterC* aiCharacterC);
 };

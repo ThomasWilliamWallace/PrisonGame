@@ -7,8 +7,8 @@
 #include "Locations.h"
 #include "Actions.hpp"
 #include "ActorItem.h"
-#include "World.hpp"
-#include "Player.hpp"
+#include "SimWorld.h"
+#include "PlayerData.h"
 #include "AICharacterC.generated.h"
 
 UCLASS()
@@ -22,13 +22,13 @@ public:
 		bool readyForNewAction = true;
 
 	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
-		void UpdateLocation(ELocations location);
+		void SetWorld(USimWorld* simWorld);
 
 	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
-		void UpdateItemLocation(AActorItem* item, ELocations location);
+		USimWorld* GetSimWorld();
 
 	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
-		void AddItem(AActorItem* item);
+		void UpdateLocation(AAICharacterC* aiCharacterC, ELocations location);
 
 	// Sets default values for this character's properties
 	AAICharacterC();
@@ -36,8 +36,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
 	bool lastActionSucceeded = true;
 	HTNPrimitivePtr lastPrimitiveAction;
-	Player m_player;
-	World m_world;
+	UPlayerData* m_player;
+	USimWorld* m_world;
 
 protected:
 	// Called when the game starts or when spawned
@@ -49,9 +49,6 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
-		void UpdateCarriedItemC(AActorItem* item, ACharacter* character);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
 		void GoToLocation(ELocations location);
@@ -70,4 +67,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
 		void Evade();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void RequestItem(ACharacter* character);
 };

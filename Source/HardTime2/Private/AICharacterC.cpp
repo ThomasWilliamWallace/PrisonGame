@@ -9,33 +9,34 @@ AAICharacterC::AAICharacterC(): lastPrimitiveAction(nullptr)
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	m_player = CreateDefaultSubobject<UPlayerData>(TEXT("PlayerData"));
 }
 
 // Called when the game starts or when spawned
 void AAICharacterC::BeginPlay()
 {
 	Super::BeginPlay();
-	m_player.missionClass = MissionClass(&m_player);
-	m_player.m_playerIndex = 0;
+	m_player->missionClass = MissionClass(m_player);
+	m_player->m_playerIndex = 0;
 }
 
 // Called every frame
 void AAICharacterC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (m_player.missionClass.IsMissionComplete(m_world))
+	if (m_player->missionClass.IsMissionComplete(*m_world))
 	{
-		m_player.missionClass.m_mission = Missions::noMission;
+		m_player->missionClass.m_mission = Missions::noMission;
 		pLog("Mission complete", true);
 	}
 
 	if (readyForNewAction)
 	{
-		m_player.PrintPlayer();
+		m_player->PrintPlayer();
 		readyForNewAction = false;
-		m_player.action = m_player.aiController.HTNAIChooseAction(this);
+		m_player->action = m_player->aiController.HTNAIChooseAction(this);
 		pLog("HTN Planner chose an action:", true);
-		switch (m_player.action)
+		switch (m_player->action)
 		{
 		case Actions::attack:
 			//AttackPlayer();
@@ -71,7 +72,7 @@ void AAICharacterC::Tick(float DeltaTime)
 			break;
 		case Actions::pickUpItem:
 			pLog("pickUpItem", true);
-			PickUpItem(m_player.itemFocusPtr);
+			PickUpItem(m_player->itemFocusPtr);
 			break;
 		case Actions::useRoom:
 			pLog("useRoom", true);
@@ -91,73 +92,30 @@ void AAICharacterC::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AAICharacterC::SetWorld(USimWorld* simWorld)
+{
+	pLog("AAICharacterC::SetWorld", true);
+	m_world = simWorld;
+	std::stringstream ss;
+	ss << "World in:" << simWorld << "\n";
+	ss << "World set" << m_world;
+	pLog(ss, true);
+}
+
+USimWorld* AAICharacterC::GetSimWorld()
+{
+	pLog("AAICharacterC::GetSimWorld", true);
+	std::stringstream ss;
+	ss << "World get " << m_world;
+	pLog(ss, true);
+	return m_world;
+}
+
 void AAICharacterC::UpdateLocation(ELocations location)
 {
 	pLog("AAICharacterC::UpdateLocation", true);
-	m_player.locationClass.location = location;
+	m_player->locationClass.location = location;
 	std::stringstream ss;
 	ss << "Location=" << static_cast<int>(location);
 	pLog(ss, true);
-}
-
-void AAICharacterC::UpdateItemLocation(AActorItem* item, ELocations location)
-{
-	pLog("AAICharacterC::UpdateItemLocation", true);
-	item->m_locationClass.location = location;
-	std::stringstream ss;
-	ss << "Location=" << static_cast<int>(location);
-	pLog(ss, true);
-}
-
-void AAICharacterC::AddItem(AActorItem* item)
-{
-	pLog("AAICharacterC::AddItem", true);
-	m_world.items.push_back(item);
-	std::stringstream ss;
-	ss << "item=" << item;
-	pLog(ss, true);
-}
-
-void AAICharacterC::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
-{
-	pLog("AAICharacterC::UpdateCarriedItemC", true);
-	std::stringstream ss;
-	ss << "item=" << item << ", character=" << character;
-	pLog(ss, true);
-
-	if (character == nullptr)
-	{
-		if (item != nullptr)
-		{
-			item->m_carryingPlayer = nullptr;
-		}
-		return;
-	}
-
-	AAICharacterC* aiCharacterC = Cast<AAICharacterC>(character);
-	if (aiCharacterC == nullptr)
-	{
-		return;
-	}
-
-	if (character == this)
-	{
-		m_player.itemPtr = item;
-	}
-
-	if (item == nullptr)
-	{
-		for (auto &m_item : m_world.items)
-		{
-			if (m_item->m_carryingPlayer == &(aiCharacterC->m_player))
-			{
-				m_item->m_carryingPlayer = nullptr;
-				break;
-			}
-		}
-	}
-	else
-	{
-		item->m_carryingPlayer = &(aiCharacterC->m_player);
-	}
 }

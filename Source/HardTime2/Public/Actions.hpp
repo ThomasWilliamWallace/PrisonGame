@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-class Player;
+class UPlayerData;
 
 enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
 {
@@ -16,8 +16,11 @@ enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
 	evade,
 	pickUpItem,
 	dropItem,
+    requestItem,
+    acceptRequest,
+    declineRequest,
 	noAction // serves as a flag for any unset actions
 };
 
-bool OtherInReach(Player* playerPtr, Player* otherPlayerPtr, Player player[]);
+bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, UPlayerData player[]);
 std::string ActionToString(Actions action);

@@ -1,15 +1,15 @@
 #include "BasicAI.hpp"
-#include "Player.hpp"
+#include "PlayerData.h"
 #include <stdexcept>
 #include "HTNDomain.hpp"
 #include "RequestHTNDomain.hpp"
-#include "World.hpp"
+#include "SimWorld.h"
 #include "Actions.hpp"
 #include <sstream>
 #include "pLog.hpp"
 #include "AICharacterC.h"
 
-Actions AIController::ChooseRoom(Player* playerPtr, Player player[])
+Actions AIController::ChooseRoom(UPlayerData* playerPtr, UPlayerData player[])
 {
     if (playerPtr->locationClass.location == ELocations::mainHall)
     {
@@ -33,7 +33,7 @@ Actions AIController::ChooseRoom(Player* playerPtr, Player player[])
     }
 }
 
-Actions AIController::ChooseAction(Player* playerPtr, Player player[], World &world, AAICharacterC* aiCharacterC)
+Actions AIController::ChooseAction(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world, AAICharacterC* aiCharacterC)
 {
     bool playersInReach[c_playerCount];
     int countPlayersInReach = 0;
@@ -60,7 +60,7 @@ Actions AIController::ChooseAction(Player* playerPtr, Player player[], World &wo
 	return RandomAIChooseAction(playerPtr, player, playersInReach, countPlayersInReach);
 }
 
-void AIController::CreateMissionOffer(Player player[], Player* playerPtr, bool playersInReach[], int countPlayersInReach)
+void AIController::CreateMissionOffer(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach)
 {
     double random = RandPercent();
     int target = 0;
@@ -79,7 +79,7 @@ void AIController::CreateMissionOffer(Player player[], Player* playerPtr, bool p
     }
 }
 
-Player* AIController::TargetForMakeFriend(Player player[], Player* playerPtr, bool playersInReach[], int countPlayersInReach)
+UPlayerData* AIController::TargetForMakeFriend(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach)
 {
     double random = RandPercent();
     int target = 0;
@@ -97,12 +97,12 @@ Player* AIController::TargetForMakeFriend(Player player[], Player* playerPtr, bo
     throw std::out_of_range("Failed to pick a player in reach to make friends with.");
 }
 
-Actions AIController::DoNothingAIChooseAction(Player* playerPtr, Player player[], bool playersInReach[], int countPlayersInReach)
+Actions AIController::DoNothingAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
 {
     return Actions::noAction;
 }
 
-Actions AIController::RandomAIChooseAction(Player* playerPtr, Player player[], bool playersInReach[], int countPlayersInReach)
+Actions AIController::RandomAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
 {
     if (countPlayersInReach > 0)
     {
@@ -146,7 +146,7 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 {
 	pLog("Entering htnAIChooseAction", true);
 	//update worldstate from real world
-	HTNWorldState htnWorldState(&(aiCharacterC->m_player), aiCharacterC->m_world);
+	HTNWorldState htnWorldState(aiCharacterC->m_player, *(aiCharacterC->m_world));
 
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
@@ -156,10 +156,10 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
 	}
-	else if (aiCharacterC->m_player.aiController.htnPlan.size() > 0)
+	else if (aiCharacterC->m_player->aiController.htnPlan.size() > 0)
 	{
 		pLog("Check Precondition of plan primitive step", true);
-		hasValidPlan = (aiCharacterC->m_player.aiController.htnPlan).at(0)->Preconditions(htnWorldState);
+		hasValidPlan = (aiCharacterC->m_player->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
 	}
 
 	//If plan is not valid, abandon it and try to make a new plan
@@ -169,12 +169,12 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 		pLog("No valid plan exists! Try to replan.", true);
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
-		aiCharacterC->m_player.aiController.htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
+		aiCharacterC->m_player->aiController.htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
 
 		//once again, check if next step of the plan is valid.
-		if ((aiCharacterC->m_player.aiController.htnPlan).size() > 0)
+		if ((aiCharacterC->m_player->aiController.htnPlan).size() > 0)
 		{
-			hasValidPlan = (aiCharacterC->m_player.aiController.htnPlan).at(0)->Preconditions(htnWorldState);
+			hasValidPlan = (aiCharacterC->m_player->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
 		}
 	}
 
@@ -188,14 +188,14 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 		//continue with current plan
 		std::stringstream ss;
 		ss << "Plan steps: ";
-		for (auto &prim : aiCharacterC->m_player.aiController.htnPlan)
+		for (auto &prim : aiCharacterC->m_player->aiController.htnPlan)
 		{
 			ss << prim->ToString() << ", ";
 		}
 		pLog(ss, true);
-		HTNPrimitivePtr currentPlanStep = (aiCharacterC->m_player.aiController.htnPlan).front();
+		HTNPrimitivePtr currentPlanStep = (aiCharacterC->m_player->aiController.htnPlan).front();
 		aiCharacterC->lastPrimitiveAction = currentPlanStep;
-		aiCharacterC->m_player.aiController.htnPlan.pop_front();
+		aiCharacterC->m_player->aiController.htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2", true);
 		return currentPlanStep->Operate(aiCharacterC);
 	}

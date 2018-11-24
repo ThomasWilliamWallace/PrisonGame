@@ -7,6 +7,8 @@
 #include "ActorItem.h"
 #include "Actions.hpp"
 #include "Constants.hpp"
+#include "Object.h"
+#include "PlayerData.generated.h"
 
 class Relationship //their opinion of another character. Asymptotically bound between 0 and 100.
 {
@@ -37,11 +39,13 @@ public:
     void deltaTrust(double delta);
 };
 
-class World;
+class USimWorld;
 class AActorItem;
 
-class Player
+UCLASS(BlueprintType, Blueprintable)
+class UPlayerData : public UObject
 {
+	GENERATED_BODY()
 public:
     PStats pStats;
 
@@ -60,14 +64,14 @@ public:
     MissionClass missionOffer; // a mission being offered to 'playerTarget'
     AActorItem* itemPtr = nullptr; //pointer to an item carried by the player
     
-    Player* playerTargetPtr = nullptr; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
+    UPlayerData* playerTargetPtr = nullptr; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
 	AActorItem* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
     
-    void UpdateMissions(Player player[], World &world);
+    void UpdateMissions(UPlayerData player[], USimWorld &world);
     void PrintPlayer();
     
     Relationship rel[c_playerCount];
 };
 
-std::string CharacterName(Player* playerPtr);
-MissionClass CreateNewMission(Player* playerPtr);
+std::string CharacterName(UPlayerData* playerPtr);
+MissionClass CreateNewMission(UPlayerData* playerPtr);

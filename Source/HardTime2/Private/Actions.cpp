@@ -1,7 +1,7 @@
 #include "Actions.hpp"
-#include "Player.hpp"
+#include "PlayerData.h"
 
-bool OtherInReach(Player* playerPtr, Player* otherPlayerPtr, Player player[])
+bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, UPlayerData player[])
 {
     if ((otherPlayerPtr->locationClass.location == playerPtr->locationClass.location) && (otherPlayerPtr != playerPtr))
         return true;
@@ -33,6 +33,12 @@ std::string ActionToString(Actions action)
             return "PickUpItem";
         case Actions::dropItem:
             return "DropItem";
+        case Actions::requestItem:
+            return "RequestItem";
+        case Actions::acceptRequest:
+            return "acceptRequest";
+        case Actions::declineRequest:
+            return "declineRequest";
         case Actions::noAction:
             return "ERROR NO ACTION";
     }

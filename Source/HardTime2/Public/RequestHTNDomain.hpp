@@ -4,9 +4,9 @@
 #include <iostream>
 #include "HTNPlanner.hpp"
 #include "HTNWorldState.hpp"
-#include "Player.hpp"
+#include "PlayerData.h"
 
-class World;
+class USimWorld;
 /*
 //***********************************************************
 class AcceptItemRequestPrim : public HTNPrimitive
@@ -15,7 +15,7 @@ public:
     AcceptItemRequestPrim();
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operate(Player* playerPtr, Player player[], World &world);
+    Actions Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world);
 };
 
 //***********************************************************
@@ -25,7 +25,7 @@ public:
     DeclineItemRequestPrim();
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operate(Player* playerPtr, Player player[], World &world);
+    Actions Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world);
 };
 
 //***********************************************************
@@ -68,13 +68,13 @@ public:
 class StartMethod : public HTNMethod
 {
 public:
-    StartMethod(HTNWorldState &htnWorldState, Player player[]);
+    StartMethod(HTNWorldState &htnWorldState, UPlayerData player[]);
     bool Preconditions(HTNWorldState &htnWorldState);
 };
 
 class StartCompound : public HTNCompound
 {
 public:
-    StartCompound(HTNWorldState &htnWorldState, Player player[]);
+    StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]);
 };
 */
