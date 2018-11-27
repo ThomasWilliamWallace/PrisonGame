@@ -150,7 +150,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-	if ((playerData->lastPrimitiveAction != nullptr) && !(playerData->lastPrimitiveAction->LastActionSucceeded(htnWorldState)))
+	if ((lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState)))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
@@ -193,7 +193,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		}
 		pLog(ss, true);
 		HTNPrimitivePtr currentPlanStep = (playerData->aiController.htnPlan).front();
-		playerData->lastPrimitiveAction = currentPlanStep;
+		lastPrimitiveAction = currentPlanStep;
 		playerData->aiController.htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2", true);
 		return currentPlanStep->Operate(playerData, htnWorldState);
@@ -202,12 +202,12 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	return Actions::noAction;
 }
 
-AIController::AIController(AI _algo)
+AIController::AIController(AI _algo):
+	algo(_algo)
 {
-    algo = _algo;
 }
 
-AIController::AIController()
+AIController::AIController() :
+	algo(AI::randomAI)
 {
-    algo = AI::randomAI;
 }

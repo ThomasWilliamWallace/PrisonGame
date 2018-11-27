@@ -25,4 +25,5 @@ public:
     AIController();
 	HTNPrimitiveList htnPlan;
 	AI algo;
+	HTNPrimitivePtr lastPrimitiveAction = nullptr;
 };

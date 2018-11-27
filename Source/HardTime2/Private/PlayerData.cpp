@@ -154,7 +154,6 @@ void UPlayerData::UpdateMissions(UPlayerData player[], USimWorld &world)
 }
 
 UPlayerData::UPlayerData():
-	m_playerName("No-name"),
-	lastPrimitiveAction(nullptr)
+	m_playerName("No-name")
 {
 }

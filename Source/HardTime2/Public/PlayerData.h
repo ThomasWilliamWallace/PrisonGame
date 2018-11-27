@@ -55,7 +55,6 @@ public:
     int sentence = 5; //days left in prison sentence, only bound is above -1.
     Actions action = Actions::useRoom; //stores the current action being attempted. This is held till the end of the frame, as it may be interrupted by another action.
     Actions lastAction = Actions::useRoom; //stores the last action taken. Useful for checking if hidden.
-	HTNPrimitivePtr lastPrimitiveAction;
     LocationClass locationClass; //location maps to a discrete set of locations, gym, library, circuit track, bed.
     LocationClass lastLocationClass; //location the character was at when the turn began. Used by the print display.
     bool attacked = false; //tracks whether an attack has disrupted his turn.
