@@ -138,10 +138,10 @@ public:
 class PickUpItem : public HTNPrimitive
 {
 public:
-	PickUpItem(SimActorItem* itemFocusPtr);
-	SimActorItem* m_itemFocus;
-	bool Preconditions(HTNWorldState &htnWorldState) override;
-	void Effect(HTNWorldState &htnWorldState) override;
+    PickUpItem(SimActorItem* itemFocus);
+    SimActorItem* m_itemFocus;
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 

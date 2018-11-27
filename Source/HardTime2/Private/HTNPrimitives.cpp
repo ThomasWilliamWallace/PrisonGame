@@ -261,27 +261,35 @@ PickUpItem::PickUpItem(SimActorItem* itemFocus) : HTNPrimitive("PickUpItem"), m_
 
 void PickUpItem::Effect(HTNWorldState &htnWorldState)
 {
-	m_itemFocus->m_carryingPlayer = htnWorldState.m_ptrToSelf;
-	htnWorldState.m_itemCarriedPtr = m_itemFocus;
+    SimActorItem* itemFocusSimItem = dynamic_cast<SimActorItem*>(m_itemFocus);
+    for (auto &item : htnWorldState.m_items)
+    {
+        SimActorItem* simItem = dynamic_cast<SimActorItem*>(item);
+        if (&(simItem->m_realItem) == &(itemFocusSimItem->m_realItem))
+        {
+            m_itemFocus->m_carryingPlayer = htnWorldState.m_ptrToSelf;
+        }
+    }
+    htnWorldState.m_itemCarriedPtr = m_itemFocus;
 }
 
 Actions PickUpItem::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	playerData->itemFocusPtr = m_itemFocus->m_realItem;
-	return Actions::pickUpItem;
+    playerData->itemFocusPtr = &(m_itemFocus->m_realItem);
+    return Actions::pickUpItem;
 }
 
 bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 {
-	//TODO hook this into the actions code
+    //TODO hook this into the actions code
     if (htnWorldState.m_itemCarriedPtr == nullptr
-      		&& m_itemFocus != nullptr
-		&& static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocus->m_locationClass.location
-		&& m_itemFocus->m_carryingPlayer == nullptr)
-	{
-		return true;
-	}
-	return false;
+      && m_itemFocus != nullptr
+      && static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocus->m_locationClass.location
+      && m_itemFocus->m_carryingPlayer == nullptr)
+    {
+        return true;
+    }
+    return false;
 }
 
 //***********************************************************
