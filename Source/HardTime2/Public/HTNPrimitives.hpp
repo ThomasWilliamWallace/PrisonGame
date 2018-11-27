@@ -6,6 +6,7 @@
 #include "Actions.hpp"
 
 class AActorItem;
+class USimWorld;
 
 //***********************************************************
 class Study : public HTNPrimitive
@@ -14,7 +15,7 @@ public:
 	Study();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -24,7 +25,7 @@ public:
 	Sleep();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -34,7 +35,7 @@ public:
 	UseGym();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -44,7 +45,7 @@ public:
 	RunCircuits();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -54,7 +55,7 @@ public:
 	GoToGym();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
@@ -65,7 +66,7 @@ public:
 	GoToLibrary();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
@@ -76,7 +77,7 @@ public:
 	GoToCircuitTrack();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
@@ -87,7 +88,7 @@ public:
 	GoToBedroom();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
@@ -98,7 +99,7 @@ public:
 	GoToMainHall();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
@@ -109,7 +110,7 @@ public:
 	Drink();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -120,7 +121,7 @@ public:
 	Punch(UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -130,7 +131,7 @@ public:
 	Evade();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -141,7 +142,7 @@ public:
 	SimActorItem* m_itemFocus;
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -152,7 +153,7 @@ public:
 	EItemType m_itemType;
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
@@ -163,7 +164,7 @@ public:
 	DropItem();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
@@ -176,5 +177,5 @@ public:
     RequestItemPrim(UPlayerData* player, EItemType itemType);
     bool Preconditions(HTNWorldState &htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };

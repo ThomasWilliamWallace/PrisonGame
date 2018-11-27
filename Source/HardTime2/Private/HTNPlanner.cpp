@@ -24,7 +24,7 @@ void HTNPrimitive::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions HTNPrimitive::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions HTNPrimitive::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::noAction;
 }

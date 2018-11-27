@@ -155,10 +155,10 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
 	}
-	else if (playerData->aiController.htnPlan.size() > 0)
+	else if (htnPlan.size() > 0)
 	{
 		pLog("Check Precondition of plan primitive step", true);
-		hasValidPlan = (playerData->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
+		hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
 	}
 
 	//If plan is not valid, abandon it and try to make a new plan
@@ -168,12 +168,12 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		pLog("No valid plan exists! Try to replan.", true);
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
-		playerData->aiController.htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
+		htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
 
 		//once again, check if next step of the plan is valid.
-		if ((playerData->aiController.htnPlan).size() > 0)
+		if (htnPlan.size() > 0)
 		{
-			hasValidPlan = (playerData->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
+			hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
 		}
 	}
 
@@ -192,11 +192,11 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 			ss << prim->ToString() << ", ";
 		}
 		pLog(ss, true);
-		HTNPrimitivePtr currentPlanStep = (playerData->aiController.htnPlan).front();
+		HTNPrimitivePtr currentPlanStep = htnPlan.front();
 		lastPrimitiveAction = currentPlanStep;
-		playerData->aiController.htnPlan.pop_front();
+		htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2", true);
-		return currentPlanStep->Operate(playerData, htnWorldState);
+		return currentPlanStep->Operate(playerData, *simWorld);
 	}
 	pLog("Leaving htnAIChooseAction #3", true);
 	return Actions::noAction;

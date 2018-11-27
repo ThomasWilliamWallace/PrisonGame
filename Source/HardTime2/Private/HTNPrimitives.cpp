@@ -13,7 +13,7 @@ void Study::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions Study::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions Study::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
@@ -32,7 +32,7 @@ void Sleep::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions Sleep::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions Sleep::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
@@ -51,7 +51,7 @@ void UseGym::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions UseGym::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions UseGym::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
@@ -70,7 +70,7 @@ void RunCircuits::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions RunCircuits::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions RunCircuits::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
@@ -89,7 +89,7 @@ void GoToGym::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToGym::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions GoToGym::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToGym;
 }
@@ -113,7 +113,7 @@ void GoToLibrary::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToLibrary::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions GoToLibrary::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToLibrary;
 }
@@ -137,7 +137,7 @@ void GoToBedroom::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToBedroom::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions GoToBedroom::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToBedroom;
 }
@@ -161,7 +161,7 @@ void GoToCircuitTrack::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToCircuitTrack::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions GoToCircuitTrack::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToCircuitTrack;
 }
@@ -185,7 +185,7 @@ void GoToMainHall::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToMainHall::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions GoToMainHall::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToMainHall;
 }
@@ -209,7 +209,7 @@ void Drink::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions Drink::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions Drink::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::noAction;
 }
@@ -227,7 +227,7 @@ void Punch::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_v.at(WorldE::punches) += 1;
 }
 
-Actions Punch::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions Punch::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	playerData->playerTargetPtr = m_targetPlayer;
 	return Actions::attack;
@@ -246,7 +246,7 @@ void Evade::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_v.at(WorldE::evading) = 1;
 }
 
-Actions Evade::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions Evade::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::evade;
 }
@@ -265,7 +265,7 @@ void PickUpItem::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_itemCarriedPtr = m_itemFocus;
 }
 
-Actions PickUpItem::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions PickUpItem::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	playerData->itemFocusPtr = m_itemFocus->m_realItem;
 	return Actions::pickUpItem;
@@ -302,14 +302,15 @@ void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 	}
 }
 
-Actions PickUpItem2::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions PickUpItem2::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	for (auto &item : htnWorldState.m_items)
+    for (auto &item : world.items)
 	{
 		if (item->m_itemType == m_itemType &&
-			item->m_locationClass.location == playerData->locationClass.location)
+			item->m_locationClass.location == playerData->locationClass.location &&
+			item->m_carryingPlayer == nullptr)
 		{
-			playerData->itemFocusPtr = item->m_realItem;
+			playerData->itemFocusPtr = item;
 			return Actions::pickUpItem;
 		}
 	}
@@ -347,7 +348,7 @@ void DropItem::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_itemCarriedPtr = nullptr;
 }
 
-Actions DropItem::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions DropItem::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::dropItem;
 }
@@ -378,7 +379,7 @@ void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_itemCarriedPtr->m_carryingPlayer = m_player;
 }
 
-Actions RequestItemPrim::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
+Actions RequestItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	playerData->playerTargetPtr = m_player;
     return Actions::requestItem;

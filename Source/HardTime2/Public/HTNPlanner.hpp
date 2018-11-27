@@ -40,7 +40,7 @@ public:
 	HTNPrimitive(std::string name);
 	virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
 	virtual void Effect(HTNWorldState &htnWorldState); //simplified, predicted effect of taking this action. Will be applied to the simulated world during planning.
-	virtual Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState); //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
+	virtual Actions Operate(UPlayerData* playerData, USimWorld &world); //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
 	virtual bool LastActionSucceeded(HTNWorldState &htnWorldState); //returns true if this operator appears to have succeeded. Is called after calling the 'Operate' function.
 	virtual ~HTNPrimitive() = default;
 };

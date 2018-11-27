@@ -20,7 +20,7 @@ void AcceptItemRequestPrim::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions AcceptItemRequestPrim::Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world)
+Actions AcceptItemRequestPrim::Operate(UPlayerData* playerPtr, USimWorld &world)
 {
     return Actions::acceptRequest;
 }
@@ -38,7 +38,7 @@ void DeclineItemRequestPrim::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-Actions DeclineItemRequestPrim::Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world)
+Actions DeclineItemRequestPrim::Operate(UPlayerData* playerPtr, USimWorld &world)
 {
     return Actions::declineRequest;
 }

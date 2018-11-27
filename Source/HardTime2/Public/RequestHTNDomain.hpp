@@ -15,7 +15,7 @@ public:
     AcceptItemRequestPrim();
     bool Preconditions(HTNWorldState &htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    Actions Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world) override;
+    Actions Operate(UPlayerData* playerPtr, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -25,7 +25,7 @@ public:
     DeclineItemRequestPrim();
     bool Preconditions(HTNWorldState &htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    Actions Operate(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world) override;
+    Actions Operate(UPlayerData* playerPtr, USimWorld &world) override;
 };
 
 //***********************************************************
