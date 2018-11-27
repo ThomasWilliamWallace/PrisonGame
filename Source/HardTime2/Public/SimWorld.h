@@ -17,7 +17,7 @@ public:
 		void AddItem(AActorItem* item);
 
 	UFUNCTION(BlueprintCallable, Category = USimWorld)
-		void AddPlayer(UPlayerData* playerData);
+		int AddPlayer(UPlayerData* playerData);
 
 	UFUNCTION(BlueprintCallable, Category = USimWorld)
 		void UpdateItemLocation(AActorItem* item, ELocations location);
@@ -25,10 +25,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = USimWorld)
 		void UpdateCarriedItemC(AActorItem* item, ACharacter* character);
 
-    UPlayerData* weightsOccupied;
-    UPlayerData* circuitsOccupied;
-    UPlayerData* studyOccupied;
-    UPlayerData* bedOccupied;
+	UPROPERTY()
+		UPlayerData* weightsOccupied;
+
+	UPROPERTY()
+		UPlayerData* circuitsOccupied;
+
+	UPROPERTY()
+		UPlayerData* studyOccupied;
+
+	UPROPERTY()
+		UPlayerData* bedOccupied;
+
     void WorldEffects(UPlayerData player[], int frame);
     void PrintWorld(UPlayerData player[]);
     void FullDisplay(UPlayerData player[]);

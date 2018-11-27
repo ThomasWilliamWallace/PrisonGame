@@ -13,16 +13,16 @@ enum class AI
 
 class AIController
 {
-    AI algo;
-    Actions ChooseRoom(UPlayerData* playerPtr, UPlayerData player[]);
-    Actions DoNothingAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
-    Actions RandomAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
-    void CreateMissionOffer(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach);
-    UPlayerData* TargetForMakeFriend(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach);
+    Actions ChooseRoom(UPlayerData* playerData, UPlayerData player[]);
+    Actions DoNothingAIChooseAction(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
+    Actions RandomAIChooseAction(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
+    void CreateMissionOffer(UPlayerData player[], UPlayerData* playerData, bool playersInReach[], int countPlayersInReach);
+    UPlayerData* TargetForMakeFriend(UPlayerData player[], UPlayerData* playerData, bool playersInReach[], int countPlayersInReach);
 public:
-	Actions HTNAIChooseAction(AAICharacterC* aiCharacterC);
-    Actions ChooseAction(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world, AAICharacterC* aiCharacterC);
+	Actions HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld);
+    Actions ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world);
     AIController(AI _algo);
     AIController();
 	HTNPrimitiveList htnPlan;
+	AI algo;
 };

@@ -7,11 +7,10 @@
 #include "Actions.hpp"
 #include <sstream>
 #include "pLog.hpp"
-#include "AICharacterC.h"
 
-Actions AIController::ChooseRoom(UPlayerData* playerPtr, UPlayerData player[])
+Actions AIController::ChooseRoom(UPlayerData* playerData, UPlayerData player[])
 {
-    if (playerPtr->locationClass.location == ELocations::mainHall)
+    if (playerData->locationClass.location == ELocations::mainHall)
     {
         int random = RandPercent();
         if (random < 25)
@@ -33,14 +32,14 @@ Actions AIController::ChooseRoom(UPlayerData* playerPtr, UPlayerData player[])
     }
 }
 
-Actions AIController::ChooseAction(UPlayerData* playerPtr, UPlayerData player[], USimWorld &world, AAICharacterC* aiCharacterC)
+Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world)
 {
     bool playersInReach[c_playerCount];
     int countPlayersInReach = 0;
     
     for (int i = 0; i < c_playerCount; i++)
     {
-        if (OtherInReach(playerPtr, &(player[i]), player))
+        if (OtherInReach(playerData, &(player[i]), player))
         {
             playersInReach[i] = true;
             countPlayersInReach += 1;
@@ -48,19 +47,19 @@ Actions AIController::ChooseAction(UPlayerData* playerPtr, UPlayerData player[],
             playersInReach[i] = false;
     }
     
-    switch(playerPtr->aiController.algo)
+    switch(playerData->aiController.algo)
     {
         case(AI::doNothingAI):
-            return DoNothingAIChooseAction(playerPtr, player, playersInReach, countPlayersInReach);
+            return DoNothingAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
         case(AI::randomAI):
-            return RandomAIChooseAction(playerPtr, player, playersInReach, countPlayersInReach);
+            return RandomAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
         case(AI::htnAI):
-            return HTNAIChooseAction(aiCharacterC);
+            return HTNAIChooseAction(playerData, &world);
     }
-	return RandomAIChooseAction(playerPtr, player, playersInReach, countPlayersInReach);
+	return RandomAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
 }
 
-void AIController::CreateMissionOffer(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach)
+void AIController::CreateMissionOffer(UPlayerData player[], UPlayerData* playerData, bool playersInReach[], int countPlayersInReach)
 {
     double random = RandPercent();
     int target = 0;
@@ -70,8 +69,8 @@ void AIController::CreateMissionOffer(UPlayerData player[], UPlayerData* playerP
         {
             if (random <= (100 * (target + 1) / countPlayersInReach))
             {
-                playerPtr->playerTargetPtr = &(player[i]);
-                playerPtr->missionOffer = CreateNewMission(playerPtr->playerTargetPtr);
+				playerData->playerTargetPtr = &(player[i]);
+				playerData->missionOffer = CreateNewMission(playerData->playerTargetPtr);
                 return;
             }
             target += 1;
@@ -79,7 +78,7 @@ void AIController::CreateMissionOffer(UPlayerData player[], UPlayerData* playerP
     }
 }
 
-UPlayerData* AIController::TargetForMakeFriend(UPlayerData player[], UPlayerData* playerPtr, bool playersInReach[], int countPlayersInReach)
+UPlayerData* AIController::TargetForMakeFriend(UPlayerData player[], UPlayerData* playerData, bool playersInReach[], int countPlayersInReach)
 {
     double random = RandPercent();
     int target = 0;
@@ -97,16 +96,16 @@ UPlayerData* AIController::TargetForMakeFriend(UPlayerData player[], UPlayerData
     throw std::out_of_range("Failed to pick a player in reach to make friends with.");
 }
 
-Actions AIController::DoNothingAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
+Actions AIController::DoNothingAIChooseAction(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
 {
     return Actions::noAction;
 }
 
-Actions AIController::RandomAIChooseAction(UPlayerData* playerPtr, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
+Actions AIController::RandomAIChooseAction(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
 {
     if (countPlayersInReach > 0)
     {
-        if (RandPercent() < playerPtr->pStats.aggression)
+        if (RandPercent() < playerData->pStats.aggression)
         {
             // attack --a random target in the room
             int target = 0;
@@ -117,49 +116,49 @@ Actions AIController::RandomAIChooseAction(UPlayerData* playerPtr, UPlayerData p
                 {
                     if (random <= (100 * (target + 1) / countPlayersInReach))
                     {
-                        playerPtr->playerTargetPtr = &(player[i]);
+                        playerData->playerTargetPtr = &(player[i]);
                         return Actions::attack;
                     }
                     target += 1;
                 }
             }
             std::cout << "ERROR: FAILED TO FIND ANY TARGET TO RANDOMLY ATTACK\n";
-            playerPtr->playerTargetPtr = nullptr;
+            playerData->playerTargetPtr = nullptr;
             return Actions::attack;
         } else if (RandPercent() < 25)
         {
             return Actions::evade;
         } else
         {
-            return ChooseRoom(playerPtr, player);
+            return ChooseRoom(playerData, player);
         }
     } else if (RandPercent() < 80) {
         return Actions::useRoom;
     } else
     {
-        return ChooseRoom(playerPtr, player);
+        return ChooseRoom(playerData, player);
     }
     return Actions::noAction;
 }
 
-Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
+Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld)
 {
 	pLog("Entering htnAIChooseAction", true);
 	//update worldstate from real world
-	HTNWorldState htnWorldState(aiCharacterC->m_player, *(aiCharacterC->m_world));
+	HTNWorldState htnWorldState(playerData, *(simWorld));
 
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-	if ((aiCharacterC->lastPrimitiveAction != nullptr) && !(aiCharacterC->lastPrimitiveAction->LastActionSucceeded(htnWorldState, aiCharacterC)))
+	if ((playerData->lastPrimitiveAction != nullptr) && !(playerData->lastPrimitiveAction->LastActionSucceeded(htnWorldState)))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
 	}
-	else if (aiCharacterC->m_player->aiController.htnPlan.size() > 0)
+	else if (playerData->aiController.htnPlan.size() > 0)
 	{
 		pLog("Check Precondition of plan primitive step", true);
-		hasValidPlan = (aiCharacterC->m_player->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
+		hasValidPlan = (playerData->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
 	}
 
 	//If plan is not valid, abandon it and try to make a new plan
@@ -169,12 +168,12 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 		pLog("No valid plan exists! Try to replan.", true);
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
-		aiCharacterC->m_player->aiController.htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
+		playerData->aiController.htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
 
 		//once again, check if next step of the plan is valid.
-		if ((aiCharacterC->m_player->aiController.htnPlan).size() > 0)
+		if ((playerData->aiController.htnPlan).size() > 0)
 		{
-			hasValidPlan = (aiCharacterC->m_player->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
+			hasValidPlan = (playerData->aiController.htnPlan).at(0)->Preconditions(htnWorldState);
 		}
 	}
 
@@ -188,16 +187,16 @@ Actions AIController::HTNAIChooseAction(AAICharacterC* aiCharacterC)
 		//continue with current plan
 		std::stringstream ss;
 		ss << "Plan steps: ";
-		for (auto &prim : aiCharacterC->m_player->aiController.htnPlan)
+		for (auto &prim : playerData->aiController.htnPlan)
 		{
 			ss << prim->ToString() << ", ";
 		}
 		pLog(ss, true);
-		HTNPrimitivePtr currentPlanStep = (aiCharacterC->m_player->aiController.htnPlan).front();
-		aiCharacterC->lastPrimitiveAction = currentPlanStep;
-		aiCharacterC->m_player->aiController.htnPlan.pop_front();
+		HTNPrimitivePtr currentPlanStep = (playerData->aiController.htnPlan).front();
+		playerData->lastPrimitiveAction = currentPlanStep;
+		playerData->aiController.htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2", true);
-		return currentPlanStep->Operate(aiCharacterC);
+		return currentPlanStep->Operate(playerData, htnWorldState);
 	}
 	pLog("Leaving htnAIChooseAction #3", true);
 	return Actions::noAction;

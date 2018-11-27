@@ -24,12 +24,12 @@ void HTNPrimitive::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions HTNPrimitive::Operate(AAICharacterC* aiCharacterC)
+Actions HTNPrimitive::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::noAction;
 }
 
-bool HTNPrimitive::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool HTNPrimitive::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return true;
 }

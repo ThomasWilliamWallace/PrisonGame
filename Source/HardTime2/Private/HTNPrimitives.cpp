@@ -13,7 +13,7 @@ void Study::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions Study::Operate(AAICharacterC* aiCharacterC)
+Actions Study::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::useRoom;
 }
@@ -32,7 +32,7 @@ void Sleep::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions Sleep::Operate(AAICharacterC* aiCharacterC)
+Actions Sleep::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::useRoom;
 }
@@ -51,7 +51,7 @@ void UseGym::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions UseGym::Operate(AAICharacterC* aiCharacterC)
+Actions UseGym::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::useRoom;
 }
@@ -70,7 +70,7 @@ void RunCircuits::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions RunCircuits::Operate(AAICharacterC* aiCharacterC)
+Actions RunCircuits::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::useRoom;
 }
@@ -89,7 +89,7 @@ void GoToGym::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToGym::Operate(AAICharacterC* aiCharacterC)
+Actions GoToGym::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::goToGym;
 }
@@ -99,7 +99,7 @@ bool GoToGym::Preconditions(HTNWorldState &htnWorldState)
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
-bool GoToGym::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool GoToGym::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
 }
@@ -113,7 +113,7 @@ void GoToLibrary::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToLibrary::Operate(AAICharacterC* aiCharacterC)
+Actions GoToLibrary::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::goToLibrary;
 }
@@ -123,7 +123,7 @@ bool GoToLibrary::Preconditions(HTNWorldState &htnWorldState)
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
-bool GoToLibrary::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool GoToLibrary::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
 }
@@ -137,7 +137,7 @@ void GoToBedroom::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToBedroom::Operate(AAICharacterC* aiCharacterC)
+Actions GoToBedroom::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::goToBedroom;
 }
@@ -147,7 +147,7 @@ bool GoToBedroom::Preconditions(HTNWorldState &htnWorldState)
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
-bool GoToBedroom::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool GoToBedroom::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
 }
@@ -161,7 +161,7 @@ void GoToCircuitTrack::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToCircuitTrack::Operate(AAICharacterC* aiCharacterC)
+Actions GoToCircuitTrack::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::goToCircuitTrack;
 }
@@ -171,7 +171,7 @@ bool GoToCircuitTrack::Preconditions(HTNWorldState &htnWorldState)
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
-bool GoToCircuitTrack::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool GoToCircuitTrack::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
 }
@@ -185,7 +185,7 @@ void GoToMainHall::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToMainHall::Operate(AAICharacterC* aiCharacterC)
+Actions GoToMainHall::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::goToMainHall;
 }
@@ -195,7 +195,7 @@ bool GoToMainHall::Preconditions(HTNWorldState &htnWorldState)
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) != ELocations::mainHall;
 }
 
-bool GoToMainHall::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool GoToMainHall::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
@@ -209,7 +209,7 @@ void Drink::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions Drink::Operate(AAICharacterC* aiCharacterC)
+Actions Drink::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::noAction;
 }
@@ -227,9 +227,9 @@ void Punch::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_v.at(WorldE::punches) += 1;
 }
 
-Actions Punch::Operate(AAICharacterC* aiCharacterC)
+Actions Punch::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
-	aiCharacterC->m_player->playerTargetPtr = m_targetPlayer;
+	playerData->playerTargetPtr = m_targetPlayer;
 	return Actions::attack;
 }
 
@@ -246,7 +246,7 @@ void Evade::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_v.at(WorldE::evading) = 1;
 }
 
-Actions Evade::Operate(AAICharacterC* aiCharacterC)
+Actions Evade::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::evade;
 }
@@ -265,9 +265,9 @@ void PickUpItem::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_itemCarriedPtr = m_itemFocus;
 }
 
-Actions PickUpItem::Operate(AAICharacterC* aiCharacterC)
+Actions PickUpItem::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
-    aiCharacterC->m_player->itemFocusPtr = m_itemFocus->m_realItem;
+	playerData->itemFocusPtr = m_itemFocus->m_realItem;
 	return Actions::pickUpItem;
 }
 
@@ -302,18 +302,18 @@ void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 	}
 }
 
-Actions PickUpItem2::Operate(AAICharacterC* aiCharacterC)
+Actions PickUpItem2::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
-	for (auto &item : aiCharacterC->m_world->items)
+	for (auto &item : htnWorldState.m_items)
 	{
 		if (item->m_itemType == m_itemType &&
-			item->m_locationClass.location == aiCharacterC->m_player->locationClass.location)
+			item->m_locationClass.location == playerData->locationClass.location)
 		{
-			aiCharacterC->m_player->itemFocusPtr = item;
+			playerData->itemFocusPtr = item->m_realItem;
 			return Actions::pickUpItem;
 		}
 	}
-	aiCharacterC->m_player->itemFocusPtr = nullptr;
+	playerData->itemFocusPtr = nullptr;
 	return Actions::noAction;
 }
 
@@ -332,7 +332,7 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 	return false;
 }
 
-bool PickUpItem2::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool PickUpItem2::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return (htnWorldState.m_itemCarriedPtr != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
@@ -347,7 +347,7 @@ void DropItem::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_itemCarriedPtr = nullptr;
 }
 
-Actions DropItem::Operate(AAICharacterC* aiCharacterC)
+Actions DropItem::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
 	return Actions::dropItem;
 }
@@ -357,7 +357,7 @@ bool DropItem::Preconditions(HTNWorldState &htnWorldState)
 	return htnWorldState.m_itemCarriedPtr != nullptr; //TODO hook this into the actions code
 }
 
-bool DropItem::LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC)
+bool DropItem::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return htnWorldState.m_itemCarriedPtr == nullptr;
 }
@@ -378,9 +378,9 @@ void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_itemCarriedPtr->m_carryingPlayer = m_player;
 }
 
-Actions RequestItemPrim::Operate(AAICharacterC* aiCharacterC)
+Actions RequestItemPrim::Operate(UPlayerData* playerData, HTNWorldState &htnWorldState)
 {
-	aiCharacterC->m_player->playerTargetPtr = m_player;
+	playerData->playerTargetPtr = m_player;
     return Actions::requestItem;
 }
 

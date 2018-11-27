@@ -47,10 +47,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
 	bool lastActionSucceeded = true;
-	HTNPrimitivePtr lastPrimitiveAction;
 
-	UPlayerData* m_player;
-	USimWorld* m_world;
+	UPROPERTY()
+		UPlayerData* m_player;
+
+	UPROPERTY()
+		USimWorld* m_world;
 
 protected:
 	// Called when the game starts or when spawned

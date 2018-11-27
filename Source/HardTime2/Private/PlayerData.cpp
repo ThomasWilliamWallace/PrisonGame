@@ -4,7 +4,6 @@
 #include "Locations.h"
 #include <sstream>
 #include "pLog.hpp"
-#include "HardTime2GameMode.h"
 
 double Relationship::getAggro()
 {
@@ -155,6 +154,7 @@ void UPlayerData::UpdateMissions(UPlayerData player[], USimWorld &world)
 }
 
 UPlayerData::UPlayerData():
-	m_playerName("No-name")
+	m_playerName("No-name"),
+	lastPrimitiveAction(nullptr)
 {
 }

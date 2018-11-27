@@ -1,6 +1,7 @@
 #include "SimWorld.h"
 #include "ActorItem.h"
 #include "AICharacterC.h"
+#include "HardTime2Character.h"
 #include <sstream>
 #include "pLog.hpp"
 
@@ -74,37 +75,63 @@ void USimWorld::FullDisplay(UPlayerData player[])
 
 void USimWorld::UpdateItemLocation(AActorItem* item, ELocations location)
 {
-	pLog("USimWorld::UpdateItemLocation", true);
+	pLog("USimWorld::UpdateItemLocation");
+	if (!IsValid(item))
+	{
+		pLog("ERROR: item IS NOT VALID DURING USimWorld::UpdateItemLocation", true);
+		return;
+	}
 	item->m_locationClass.location = location;
 	std::stringstream ss;
 	ss << "Location=" << static_cast<int>(location);
-	pLog(ss, true);
+	pLog(ss);
 }
 
 void USimWorld::AddItem(AActorItem* item)
 {
-	pLog("USimWorld::AddItem", true);
+	pLog("USimWorld::AddItem");
+	if (!IsValid(item))
+	{
+		pLog("ERROR: item IS NOT VALID DURING USimWorld::AddItem", true);
+		//return;
+	}
 	items.push_back(item);
 	std::stringstream ss;
 	ss << "item=" << item;
-	pLog(ss, true);
+	pLog(ss);
 }
 
-void USimWorld::AddPlayer(UPlayerData* playerData)
+int USimWorld::AddPlayer(UPlayerData* playerData)
 {
-	pLog("USimWorld::AddPlayer", true);
+	pLog("USimWorld::AddPlayer");
+	if (!IsValid(playerData))
+	{
+		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::AddPlayer", true);
+		return -1;
+	}
 	m_players.push_back(playerData);
 	std::stringstream ss;
 	ss << "player=" << playerData;
-	pLog(ss, true);
+	pLog(ss);
+	return static_cast<int>(m_players.size());
 }
 
 void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 {
-	pLog("USimWorld::UpdateCarriedItemC", true);
+	pLog("USimWorld::UpdateCarriedItemC");
+	if (!IsValid(item))
+	{
+		pLog("ERROR: item IS NOT VALID DURING USimWorld::UpdateCarriedItemC", true);
+		return;
+	}
+	if (!IsValid(character))
+	{
+		pLog("ERROR: character IS NOT VALID DURING USimWorld::UpdateCarriedItemC", true);
+		return;
+	}
 	std::stringstream ss;
 	ss << "item=" << item << ", character=" << character;
-	pLog(ss, true);
+	pLog(ss);
 
 	if (character == nullptr)
 	{
@@ -116,16 +143,26 @@ void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 	}
 
 	AAICharacterC* aiCharacterC = Cast<AAICharacterC>(character);
+	UPlayerData* playerData;
+	
 	if (aiCharacterC == nullptr)
 	{
-		return;
+		AHardTime2Character* hardTime2Character = Cast<AHardTime2Character>(character);
+		if (hardTime2Character == nullptr)
+		{
+			return;
+		} else {
+			playerData = hardTime2Character->m_player;
+		}
+	} else {
+		playerData = aiCharacterC->m_player;
 	}
 
 	for (auto &p : m_players)
 	{
-		if (aiCharacterC->m_player == p)
+		if (playerData == p)
 		{
-			aiCharacterC->m_player->itemPtr = item;
+			playerData->itemPtr = item;
 		}
 	}
 
@@ -133,7 +170,7 @@ void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 	{
 		for (auto &m_item : items)
 		{
-			if (m_item->m_carryingPlayer == aiCharacterC->m_player)
+			if (m_item->m_carryingPlayer == playerData)
 			{
 				m_item->m_carryingPlayer = nullptr;
 				break;
@@ -142,6 +179,6 @@ void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 	}
 	else
 	{
-		item->m_carryingPlayer = aiCharacterC->m_player;
+		item->m_carryingPlayer = playerData;
 	}
 }

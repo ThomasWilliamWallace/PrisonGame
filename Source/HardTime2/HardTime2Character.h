@@ -4,6 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "HTNPlanner.hpp"
+#include "Missions.hpp"
+#include "Locations.h"
+#include "Actions.hpp"
+#include "ActorItem.h"
+#include "SimWorld.h"
+#include "PlayerData.h"
 #include "HardTime2Character.generated.h"
 
 UCLASS(config=Game)
@@ -29,7 +36,39 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+		bool lastActionSucceeded = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+		bool readyForNewAction = true;
+
+	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+		void SetWorld(USimWorld* simWorld);
+
+	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+		USimWorld* GetSimWorld();
+
+	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+		void UpdateLocation(ELocations location);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaHealth(float delta);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaStrength(float delta);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaAgility(float delta);
+
+	UFUNCTION(BlueprintCallable, Category = Stats)
+		void DeltaIntelligence(float delta);
+
+	UPlayerData* m_player;  //this pointer owns and maintains the m_player, but other objects such as world may also access it
+	USimWorld* m_world;  //this is purely a reference to the single external world object used by the AI.
+
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -68,5 +107,29 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void GoToLocation(ELocations location);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void AttackPlayer(ACharacter* character);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void PickUpItem(AActorItem* item);
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void DropItem();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void UseRoom();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void Evade();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+		void RequestItem(ACharacter* character);
 };
 

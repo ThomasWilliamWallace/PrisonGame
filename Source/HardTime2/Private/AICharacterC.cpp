@@ -2,11 +2,12 @@
 #include "HTNWorldState.hpp"
 #include "pLog.hpp"
 #include "Engine/GameEngine.h"
+#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "HardTime2GameMode.h"
 
 
 // Sets default values
-AAICharacterC::AAICharacterC(): lastPrimitiveAction(nullptr)
+AAICharacterC::AAICharacterC()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -17,18 +18,50 @@ AAICharacterC::AAICharacterC(): lastPrimitiveAction(nullptr)
 void AAICharacterC::BeginPlay()
 {
 	Super::BeginPlay();
+	if (m_player == nullptr)
+		pLog("ERROR: M_PLAYER IS NULL DURING AAICHARACTERC::BEGINPLAY", true);
+	if (!IsValid(m_player))
+		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::BEGINPLAY", true);
 	m_player->m_playerName = "No-name";
 	m_player->missionClass = MissionClass(m_player);
 	m_player->m_playerIndex = 0;
 	auto gameMode = GetWorld()->GetAuthGameMode();
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
-	hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
+	m_player->m_playerIndex = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
+
+	m_player->aiController.algo = AI::htnAI;
+	for (FConstPlayerControllerIterator iterator = GetWorld()->GetPlayerControllerIterator(); iterator; ++iterator)
+	{
+		APlayerController* playerController = Cast<APlayerController>(*iterator);
+		if (playerController != nullptr && playerController == GetController())
+		{
+			if (playerController->IsLocalController())
+			{
+				m_player->aiController.algo = AI::doNothingAI;
+			}
+		}
+	}
 }
 
 // Called every frame
 void AAICharacterC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	pLog("AAICharacterC::Tick", true);
+	std::stringstream ss;
+	ss << "m_player=" << m_player << "\n";
+	ss << "m_world=" << m_world << "\n";
+	pLog(ss, true);
+	if (!IsValid(m_player))
+	{
+		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::Tick", true);
+		return;
+	}
+	if (!IsValid(m_world))
+	{
+		pLog("ERROR: M_WORLD IS NOT VALID DURING AAICHARACTERC::Tick", true);
+		return;
+	}
 	if (m_player->missionClass.IsMissionComplete(*m_world))
 	{
 		m_player->missionClass.m_mission = Missions::noMission;
@@ -37,11 +70,11 @@ void AAICharacterC::Tick(float DeltaTime)
 		pLog(m_player->missionClass.MissionNarrative(), true);
 	}
 
-	if (readyForNewAction)
+	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;
-		m_player->action = m_player->aiController.HTNAIChooseAction(this);
+		m_player->action = m_player->aiController.HTNAIChooseAction(this->m_player, this->m_world);
 		pLog("HTN Planner chose an action:", true);
 		switch (m_player->action)
 		{

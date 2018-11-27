@@ -55,6 +55,7 @@ public:
     int sentence = 5; //days left in prison sentence, only bound is above -1.
     Actions action = Actions::useRoom; //stores the current action being attempted. This is held till the end of the frame, as it may be interrupted by another action.
     Actions lastAction = Actions::useRoom; //stores the last action taken. Useful for checking if hidden.
+	HTNPrimitivePtr lastPrimitiveAction;
     LocationClass locationClass; //location maps to a discrete set of locations, gym, library, circuit track, bed.
     LocationClass lastLocationClass; //location the character was at when the turn began. Used by the print display.
     bool attacked = false; //tracks whether an attack has disrupted his turn.
@@ -63,16 +64,21 @@ public:
     MissionClass missionClass; //a mission currently assigned to the character
     AIController aiController; //controlling AI for this character
     MissionClass missionOffer; // a mission being offered to 'playerTarget'
-    AActorItem* itemPtr = nullptr; //pointer to an item carried by the player
-    
-    UPlayerData* playerTargetPtr = nullptr; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
-	AActorItem* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
+
+	UPROPERTY()
+		AActorItem* itemPtr = nullptr; //pointer to an item carried by the player
+
+	UPROPERTY()
+		UPlayerData* playerTargetPtr = nullptr; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
+
+	UPROPERTY()
+		AActorItem* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
     
     void UpdateMissions(UPlayerData player[], USimWorld &world);
     void PrintPlayer();
 	UPlayerData();
     
-    Relationship rel[c_playerCount];
+    //Relationship rel[c_playerCount];
 };
 
 std::string CharacterName(UPlayerData* playerPtr);

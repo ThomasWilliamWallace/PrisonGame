@@ -14,14 +14,30 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
     m_itemCarriedPtr(nullptr),
 	m_missionClass(playerPtr->missionClass)
 {
-	m_v.at(WorldE::health) = round(m_ptrToSelf->pStats.getHealth());
-	m_v.at(WorldE::sanity) = round(m_ptrToSelf->pStats.getSanity());
-	m_v.at(WorldE::strength) = round(m_ptrToSelf->pStats.getStrength());
-	m_v.at(WorldE::agility) = round(m_ptrToSelf->pStats.getAgility());
-	m_v.at(WorldE::intelligence) = round(m_ptrToSelf->pStats.getIntelligence());
-	m_v.at(WorldE::punches) = 0;
-	m_v.at(WorldE::evading) = m_ptrToSelf->lastAction == Actions::evade;
+	{std::stringstream ss;
+	ss << "PART 1 OF HTNWORLDSTATE CONSTRUCTOR, m_v.size=" << m_v.size() << "\n";
+	for (int i = 0; i < static_cast<int>(m_v.size()); i++)
+	{
+		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
+	}
+	ss << "playerPtr=" << playerPtr << ", world=" << &world << "\n";
+	pLog(ss); }
+	//m_v.at(WorldE::health) = round(m_ptrToSelf->pStats.getHealth());
+	//m_v.at(WorldE::sanity) = round(m_ptrToSelf->pStats.getSanity());
+	//m_v.at(WorldE::strength) = round(m_ptrToSelf->pStats.getStrength());
+	//m_v.at(WorldE::agility) = round(m_ptrToSelf->pStats.getAgility());
+	//m_v.at(WorldE::intelligence) = round(m_ptrToSelf->pStats.getIntelligence());
+	//m_v.at(WorldE::punches) = 0;
+	//m_v.at(WorldE::evading) = m_ptrToSelf->lastAction == Actions::evade;
 	m_v.at(WorldE::location) = static_cast<int>(m_ptrToSelf->locationClass.location);
+
+	{std::stringstream ss;
+	ss << "PART 2 OF HTNWORLDSTATE CONSTRUCTOR, m_v.size=" << m_v.size() << "\n";
+	for (int i = 0; i < static_cast<int>(m_v.size()); i++)
+	{
+		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
+	}
+	pLog(ss); }
 
 	//TODO reflect players sensors rather than being hardwired to the world
 	for (auto &item : world.items)
@@ -37,6 +53,14 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	int i = 0;
     for (auto &p : world.m_players)
     {
+		ELocations el = static_cast<ELocations>(m_v.at(WorldE::location));
+		ELocations el2 = p->locationClass.location;
+		{std::stringstream ss;
+		ss << "e1=" << static_cast<int>(el) << "\n";
+		ss << "el2=" << static_cast<int>(el2) << "\n";
+		ss << "playerPtr=" << playerPtr << "\n";
+		ss << "p=" << p << "\n";
+		pLog(ss); }
         m_inTheRoom[i] = p->locationClass.location == static_cast<ELocations>(m_v.at(WorldE::location)) &&
 							playerPtr != p;
 		if (m_inTheRoom[i])
@@ -46,6 +70,9 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 		i++;
     }
 
+	{std::stringstream ss;
+	ss << "m_v.size=" << m_v.size() << "\n";
+	pLog(ss); }
 	pLog("HTNWorldState::default constructor:");
 	Print();
 }
@@ -105,17 +132,18 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 }
 
 void HTNWorldState::Print()
-{
+{{
 	std::stringstream ss;
 	ss << "HTNWorldState::Print\n";
-    for (int i = 0; i < static_cast<int>(m_v.size()); i++)
-    {
+	ss << "m_v.size=" << m_v.size() << "\n";
+	for (int i = 0; i < static_cast<int>(m_v.size()); i++)
+	{
 		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
-    }
+	}
 	ss << "m_ptrToSelf:" << m_ptrToSelf << "\n";
 	ss << "m_itemCarriedPtr:" << m_itemCarriedPtr << "\n";
-    for (auto &simItem : m_items)
-    {
+	for (auto &simItem : m_items)
+	{
 		ss << "SimItem: " << simItem->ToString() << " carried by ";
 		if (simItem->m_carryingPlayer != nullptr)
 		{
@@ -126,10 +154,19 @@ void HTNWorldState::Print()
 			ss << "nullptr";
 		}
 		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << simItem->m_realItem << "\n";
-    }
+	}
+	ss << "m_v.size=" << m_v.size() << "\n";
+	pLog(ss);
+}
+
+std::stringstream ss;
     for (auto &p : m_playersInTheRoom)
     {
-        ss << "PlayerData " << p->m_playerName << " is also the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
+		if (p != nullptr)
+			ss << "PlayerData " << p->m_playerName << ".\n";
+			//ss << "PlayerData " << p->m_playerName << " is also the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
+		else
+			ss << "ERROR NULL PLAYERDATA VALUE\n";
     }
 	ss << "m_missionClass:" << m_missionClass.MissionName() << "\n";
 	pLog(ss);

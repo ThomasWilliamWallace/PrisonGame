@@ -1,6 +1,5 @@
 #include "HTNDomain.hpp"
 #include "Locations.h"
-#include "AICharacterC.h"
 #include "HTNPrimitives.hpp"
 #include "pLog.hpp"
 #include <sstream>

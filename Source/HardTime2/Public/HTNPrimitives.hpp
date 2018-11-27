@@ -14,7 +14,7 @@ public:
 	Study();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -24,7 +24,7 @@ public:
 	Sleep();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -34,7 +34,7 @@ public:
 	UseGym();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -44,7 +44,7 @@ public:
 	RunCircuits();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -54,8 +54,8 @@ public:
 	GoToGym();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
-	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
+	bool LastActionSucceeded(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -65,8 +65,8 @@ public:
 	GoToLibrary();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
-	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
+	bool LastActionSucceeded(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -76,8 +76,8 @@ public:
 	GoToCircuitTrack();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
-	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
+	bool LastActionSucceeded(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -87,8 +87,8 @@ public:
 	GoToBedroom();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
-	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
+	bool LastActionSucceeded(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -98,8 +98,8 @@ public:
 	GoToMainHall();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
-	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
+	bool LastActionSucceeded(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -109,7 +109,7 @@ public:
 	Drink();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -120,7 +120,7 @@ public:
 	Punch(UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -130,7 +130,7 @@ public:
 	Evade();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -141,7 +141,7 @@ public:
 	SimActorItem* m_itemFocus;
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -152,8 +152,8 @@ public:
 	EItemType m_itemType;
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
-	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
+	bool LastActionSucceeded(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -163,8 +163,8 @@ public:
 	DropItem();
 	bool Preconditions(HTNWorldState &htnWorldState);
 	void Effect(HTNWorldState &htnWorldState);
-	Actions Operate(AAICharacterC* aiCharacterC);
-	bool LastActionSucceeded(HTNWorldState &htnWorldState, AAICharacterC* aiCharacterC);
+	Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
+	bool LastActionSucceeded(HTNWorldState &htnWorldState);
 };
 
 //***********************************************************
@@ -176,5 +176,5 @@ public:
     RequestItemPrim(UPlayerData* player, EItemType itemType);
     bool Preconditions(HTNWorldState &htnWorldState);
     void Effect(HTNWorldState &htnWorldState);
-    Actions Operate(AAICharacterC* aiCharacterC);
+    Actions Operate(UPlayerData* playerData, HTNWorldState &htnWorldState);
 };

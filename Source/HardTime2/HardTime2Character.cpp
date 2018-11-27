@@ -8,6 +8,11 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "HTNWorldState.hpp"
+#include "pLog.hpp"
+#include "Engine/GameEngine.h"
+#include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
+#include "HardTime2GameMode.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AHardTime2Character
@@ -45,6 +50,10 @@ AHardTime2Character::AHardTime2Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+	m_player = CreateDefaultSubobject<UPlayerData>(TEXT("PlayerData"));
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -131,4 +140,161 @@ void AHardTime2Character::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+// Called when the game starts or when spawned
+void AHardTime2Character::BeginPlay()
+{
+	Super::BeginPlay();
+	m_player->m_playerName = "No-name";
+	m_player->missionClass = MissionClass(m_player);
+	m_player->m_playerIndex = 0;
+	auto gameMode = GetWorld()->GetAuthGameMode();
+	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
+	m_player->m_playerIndex = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
+
+	m_player->aiController.algo = AI::htnAI;
+	for (FConstPlayerControllerIterator iterator = GetWorld()->GetPlayerControllerIterator(); iterator; ++iterator)
+	{
+		APlayerController* playerController = Cast<APlayerController>(*iterator);
+		if (playerController != nullptr && playerController == GetController())
+		{
+			if (playerController->IsLocalController())
+			{
+				m_player->aiController.algo = AI::doNothingAI;
+			}
+		}
+	}
+}
+
+// Called every frame
+void AHardTime2Character::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (m_player->missionClass.IsMissionComplete(*m_world))
+	{
+		m_player->missionClass.m_mission = Missions::noMission;
+		pLog("********************** Mission complete, creating new mission:", true);
+		m_player->missionClass = MissionClass(m_player);
+		pLog(m_player->missionClass.MissionNarrative(), true);
+	}
+
+	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
+	{
+		m_player->PrintPlayer();
+		readyForNewAction = false;
+		m_player->action = m_player->aiController.HTNAIChooseAction(this->m_player, this->m_world);
+		pLog("HTN Planner chose an action:", true);
+		switch (m_player->action)
+		{
+		case Actions::attack:
+			//AttackPlayer();
+			pLog("attack", true);
+			break;
+		case Actions::dropItem:
+			pLog("dropItem", true);
+			DropItem();
+			break;
+		case Actions::evade:
+			pLog("evade", true);
+			Evade();
+			break;
+		case Actions::goToBedroom:
+			pLog("goToBedroom", true);
+			GoToLocation(ELocations::bedroom);
+			break;
+		case Actions::goToCircuitTrack:
+			pLog("goToCircuitTrack", true);
+			GoToLocation(ELocations::circuitTrack);
+			break;
+		case Actions::goToGym:
+			pLog("goToGym", true);
+			GoToLocation(ELocations::gym);
+			break;
+		case Actions::goToLibrary:
+			pLog("goToLibrary", true);
+			GoToLocation(ELocations::library);
+			break;
+		case Actions::goToMainHall:
+			pLog("goToMainHall", true);
+			GoToLocation(ELocations::mainHall);
+			break;
+		case Actions::pickUpItem:
+			pLog("pickUpItem", true);
+			PickUpItem(m_player->itemFocusPtr);
+			break;
+		case Actions::useRoom:
+			pLog("useRoom", true);
+			UseRoom();
+			break;
+		default:
+			pLog("NoAction", true);
+			readyForNewAction = true;
+			break;
+		}
+	}
+}
+
+void AHardTime2Character::SetWorld(USimWorld* simWorld)
+{
+	pLog("AHardTime2Character::SetWorld", true);
+	m_world = simWorld;
+	std::stringstream ss;
+	ss << "World in:" << simWorld << "\n";
+	ss << "World set" << m_world;
+	pLog(ss);
+}
+
+USimWorld* AHardTime2Character::GetSimWorld()
+{
+	pLog("AHardTime2Character::GetSimWorld", true);
+	std::stringstream ss;
+	ss << "World get " << m_world;
+	pLog(ss, true);
+	return m_world;
+}
+
+void AHardTime2Character::UpdateLocation(ELocations location)
+{
+	pLog("AHardTime2Character::UpdateLocation", true);
+	m_player->locationClass.location = location;
+	std::stringstream ss;
+	ss << "Location=" << static_cast<int>(location);
+	pLog(ss);
+}
+
+void AHardTime2Character::DeltaHealth(float delta)
+{
+	pLog("AHardTime2Character::DeltaHealth", true);
+	std::stringstream ss;
+	m_player->pStats.deltaHealth(delta);
+	ss << "m_player->pStats.getHealth():" << m_player->pStats.getHealth() << "\n";
+	pLog(ss);
+}
+
+void AHardTime2Character::DeltaStrength(float delta)
+{
+	pLog("AHardTime2Character::DeltaStrength", true);
+	std::stringstream ss;
+	m_player->pStats.deltaStrength(delta);
+	ss << "m_player->pStats.getStrength():" << m_player->pStats.getStrength() << "\n";
+	pLog(ss);
+}
+
+void AHardTime2Character::DeltaAgility(float delta)
+{
+	pLog("AHardTime2Character::DeltaAgility", true);
+	std::stringstream ss;
+	m_player->pStats.deltaAgility(delta);
+	ss << "m_player->pStats.getAgility():" << m_player->pStats.getAgility() << "\n";
+	pLog(ss);
+}
+
+void AHardTime2Character::DeltaIntelligence(float delta)
+{
+	pLog("AHardTime2Character::DeltaIntelligence", true);
+	std::stringstream ss;
+	m_player->pStats.deltaIntelligence(delta);
+	ss << "m_player->pStats.getIntelligence():" << m_player->pStats.getIntelligence() << "\n";
+	pLog(ss);
 }

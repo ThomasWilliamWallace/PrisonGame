@@ -81,10 +81,6 @@ MissionClass::MissionClass(UPlayerData* owner):
 	m_mission(GetRandomMission()),
 	m_owner(owner)
 {
-	//m_mission = Missions::bringItemToRoom;
-	//m_itemType = EItemType::sword;
-	//m_locationClass = LocationClass(ELocations::bedroom);
-	//return;
 	switch (m_mission)
 	{
 	case Missions::noMission:
