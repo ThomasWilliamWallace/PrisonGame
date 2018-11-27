@@ -45,8 +45,8 @@ public:
 	// Sets default values for this character's properties
 	AAICharacterC();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
-	bool lastActionSucceeded = true;
+	UFUNCTION(BlueprintCallable, Category = AI)
+		void SetLastActionInterrupted();
 
 	UPROPERTY()
 		UPlayerData* m_player;

@@ -32,7 +32,7 @@ Actions AIController::ChooseRoom(UPlayerData* playerData, UPlayerData player[])
     }
 }
 
-Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world, bool lastActionSucceedOverride)
+Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world)
 {
     bool playersInReach[c_playerCount];
     int countPlayersInReach = 0;
@@ -54,7 +54,7 @@ Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[]
         case(AI::randomAI):
             return RandomAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
         case(AI::htnAI):
-            return HTNAIChooseAction(playerData, &world, lastActionSucceedOverride);
+            return HTNAIChooseAction(playerData, &world);
     }
 	return RandomAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
 }
@@ -141,7 +141,7 @@ Actions AIController::RandomAIChooseAction(UPlayerData* playerData, UPlayerData 
     return Actions::noAction;
 }
 
-Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld, bool lastActionSucceedOverride)
+Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld)
 {
 	pLog("Entering htnAIChooseAction", true);
 	//update worldstate from real world
@@ -150,7 +150,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-	if (!lastActionSucceedOverride || (lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState)))
+    if (lastActionInterrupted || ((lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState))))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;

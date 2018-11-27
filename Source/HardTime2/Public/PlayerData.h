@@ -72,8 +72,8 @@ public:
 
 	UPROPERTY()
 		AActorItem* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
-    
-    void UpdateMissions(UPlayerData player[], USimWorld &world);
+
+	void UpdateMissions(USimWorld &world);
     void PrintPlayer();
 	UPlayerData();
     

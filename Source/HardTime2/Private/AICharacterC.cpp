@@ -62,19 +62,14 @@ void AAICharacterC::Tick(float DeltaTime)
 		pLog("ERROR: M_WORLD IS NOT VALID DURING AAICHARACTERC::Tick", true);
 		return;
 	}
-	if (m_player->missionClass.IsMissionComplete(*m_world))
-	{
-		m_player->missionClass.m_mission = Missions::noMission;
-		pLog("********************** Mission complete, creating new mission:", true);
-		m_player->missionClass = MissionClass(m_player);
-		pLog(m_player->missionClass.MissionNarrative(), true);
-	}
+	m_player->UpdateMissions(*m_world);
 
 	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;
-		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world, lastActionSucceeded);
+		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world);
+		m_player->aiController.lastActionInterrupted = false;
 		pLog("HTN Planner chose an action:", true);
 		switch (m_player->action)
 		{
@@ -194,4 +189,10 @@ void AAICharacterC::DeltaIntelligence(float delta)
 	m_player->pStats.deltaIntelligence(delta);
 	ss << "m_player->pStats.getIntelligence():" << m_player->pStats.getIntelligence() << "\n";
 	pLog(ss);
+}
+
+void AAICharacterC::SetLastActionInterrupted()
+{
+	pLog("AAICharacterC::SetLastActionInterrupted", true);
+	m_player->aiController.lastActionInterrupted = true;
 }

@@ -144,12 +144,16 @@ MissionClass CreateNewMission(UPlayerData* playerPtr)
     return MissionClass(tempMission, playerPtr, tempObjective);
 }
 
-void UPlayerData::UpdateMissions(UPlayerData player[], USimWorld &world)
+void UPlayerData::UpdateMissions(USimWorld &world)
 {
     if (missionClass.IsMissionComplete(world))
     {
+		std::stringstream ss;
+		ss << m_playerName << " has completed his mission to " << missionClass.MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
+		pLog(ss, true);
         pStats.deltaSanity(5);
-        missionClass = MissionClass(); //create a no_mission mission
+		missionClass = MissionClass(this);
+		pLog(missionClass.MissionNarrative(), true);
     }
 }
 

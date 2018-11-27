@@ -36,8 +36,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
-		bool lastActionSucceeded = true;
+	UFUNCTION(BlueprintCallable, Category = AI)
+		void SetLastActionInterrupted();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		bool readyForNewAction = true;
