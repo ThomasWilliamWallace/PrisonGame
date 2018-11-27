@@ -3,9 +3,6 @@
 #include <vector>
 #include "HTNPlanner.hpp"
 #include "HTNWorldState.hpp"
-#include "Actions.hpp"
-
-class AActorItem;
 
 //***********************************************************
 class GoToLibraryMethod1 : public HTNMethod
