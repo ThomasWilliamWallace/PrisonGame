@@ -17,10 +17,10 @@ class AIController
     Actions DoNothingAIChooseAction(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
     Actions RandomAIChooseAction(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
     void CreateMissionOffer(UPlayerData player[], UPlayerData* playerData, bool playersInReach[], int countPlayersInReach);
-    UPlayerData* TargetForMakeFriend(UPlayerData player[], UPlayerData* playerData, bool playersInReach[], int countPlayersInReach);
+    UPlayerData* TargetForMakeFriend(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
 public:
-	Actions HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld);
-    Actions ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world);
+	Actions HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld, bool lastActionSucceedOverride);
+    Actions ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world, bool lastActionSucceedOverride);
     AIController(AI _algo);
     AIController();
 	HTNPrimitiveList htnPlan;

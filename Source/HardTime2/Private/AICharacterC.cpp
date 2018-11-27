@@ -74,7 +74,7 @@ void AAICharacterC::Tick(float DeltaTime)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;
-		m_player->action = m_player->aiController.HTNAIChooseAction(this->m_player, this->m_world);
+		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world, lastActionSucceeded);
 		pLog("HTN Planner chose an action:", true);
 		switch (m_player->action)
 		{

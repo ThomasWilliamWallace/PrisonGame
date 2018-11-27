@@ -32,7 +32,7 @@ Actions AIController::ChooseRoom(UPlayerData* playerData, UPlayerData player[])
     }
 }
 
-Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world)
+Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world, bool lastActionSucceedOverride)
 {
     bool playersInReach[c_playerCount];
     int countPlayersInReach = 0;
@@ -54,7 +54,7 @@ Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[]
         case(AI::randomAI):
             return RandomAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
         case(AI::htnAI):
-            return HTNAIChooseAction(playerData, &world);
+            return HTNAIChooseAction(playerData, &world, lastActionSucceedOverride);
     }
 	return RandomAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
 }
@@ -78,7 +78,7 @@ void AIController::CreateMissionOffer(UPlayerData player[], UPlayerData* playerD
     }
 }
 
-UPlayerData* AIController::TargetForMakeFriend(UPlayerData player[], UPlayerData* playerData, bool playersInReach[], int countPlayersInReach)
+UPlayerData* AIController::TargetForMakeFriend(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
 {
     double random = RandPercent();
     int target = 0;
@@ -141,7 +141,7 @@ Actions AIController::RandomAIChooseAction(UPlayerData* playerData, UPlayerData 
     return Actions::noAction;
 }
 
-Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld)
+Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld, bool lastActionSucceedOverride)
 {
 	pLog("Entering htnAIChooseAction", true);
 	//update worldstate from real world
@@ -150,7 +150,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-	if ((lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState)))
+	if (!lastActionSucceedOverride || (lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState)))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
@@ -159,6 +159,8 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	{
 		pLog("Check Precondition of plan primitive step", true);
 		hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
+	} else {
+		pLog("No plan exists at all.", true);
 	}
 
 	//If plan is not valid, abandon it and try to make a new plan
