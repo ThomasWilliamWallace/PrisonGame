@@ -27,7 +27,6 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	//m_v.at(WorldE::strength) = round(m_ptrToSelf->pStats.getStrength());
 	//m_v.at(WorldE::agility) = round(m_ptrToSelf->pStats.getAgility());
 	//m_v.at(WorldE::intelligence) = round(m_ptrToSelf->pStats.getIntelligence());
-	//m_v.at(WorldE::punches) = 0;
 	//m_v.at(WorldE::evading) = m_ptrToSelf->lastAction == Actions::evade;
 	m_v.at(WorldE::location) = static_cast<int>(m_ptrToSelf->locationClass.location);
 
@@ -132,7 +131,7 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 }
 
 void HTNWorldState::Print()
-{{
+{
 	std::stringstream ss;
 	ss << "HTNWorldState::Print\n";
 	ss << "m_v.size=" << m_v.size() << "\n";
@@ -151,20 +150,16 @@ void HTNWorldState::Print()
 		}
 		else
 		{
-			ss << "nullptr";
+			ss << "NULLPTR";
 		}
 		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << &(simItem->m_realItem) << "\n";
 	}
 	ss << "m_v.size=" << m_v.size() << "\n";
-	pLog(ss);
-}
 
-std::stringstream ss;
     for (auto &p : m_playersInTheRoom)
     {
 		if (p != nullptr)
-			ss << "PlayerData " << p->m_playerName << ".\n";
-			//ss << "PlayerData " << p->m_playerName << " is also the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
+			ss << "PlayerData " << p->m_playerName << " is also the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
 		else
 			ss << "ERROR NULL PLAYERDATA VALUE\n";
     }
@@ -181,7 +176,6 @@ std::string WorldEToString(WorldE worldE)
 	case WorldE::strength: return "strength";
 	case WorldE::agility: return "agility";
 	case WorldE::intelligence: return "intelligence";
-	case WorldE::punches: return "punches";
 	case WorldE::evading: return "evading";
 	case WorldE::location: return "location";
 	case WorldE::last: return "LAST";

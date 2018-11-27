@@ -1,8 +1,7 @@
 #include "HTNPrimitives.hpp"
 #include "Locations.h"
-#include "AICharacterC.h"
-#include "Constants.hpp"
-#include "pLog.hpp"
+#include "PlayerData.h"
+#include "SimWorld.h"
 
 //***********************************************************
 Study::Study() : HTNPrimitive("Study") {}
@@ -224,7 +223,6 @@ Punch::Punch(UPlayerData* opponent) : HTNPrimitive("Punch"), m_targetPlayer(oppo
 
 void Punch::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::punches) += 1;
 }
 
 Actions Punch::Operate(UPlayerData* playerData, USimWorld &world)

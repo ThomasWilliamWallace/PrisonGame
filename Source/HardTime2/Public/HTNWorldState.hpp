@@ -14,7 +14,6 @@ enum WorldE
 	agility,
 	intelligence,
 
-	punches,
 	evading,
 
 	location,
