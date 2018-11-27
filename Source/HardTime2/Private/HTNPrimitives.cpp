@@ -290,6 +290,11 @@ bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
     return false;
 }
 
+bool PickUpItem::LastActionSucceeded(HTNWorldState &htnWorldState)
+{
+	return (htnWorldState.m_itemCarriedPtr == m_itemFocus);
+}
+
 //***********************************************************
 PickUpItem2::PickUpItem2(EItemType itemType) : HTNPrimitive("PickUpItem2"), m_itemType(itemType) {}
 

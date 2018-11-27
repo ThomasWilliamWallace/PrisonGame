@@ -142,6 +142,7 @@ public:
     bool Preconditions(HTNWorldState &htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
+	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
 
 //***********************************************************
