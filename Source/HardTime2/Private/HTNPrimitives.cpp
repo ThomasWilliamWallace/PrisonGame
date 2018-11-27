@@ -2,6 +2,7 @@
 #include "Locations.h"
 #include "PlayerData.h"
 #include "SimWorld.h"
+#include <stdexcept>
 
 //***********************************************************
 Study::Study() : HTNPrimitive("Study") {}
@@ -279,11 +280,22 @@ Actions PickUpItem::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 {
+    SimActorItem* currentSimItem = nullptr; //if we are re-checking the preconditions, we need to find the simulated item in htnWorldState, rather than use the old simulated item m_itemFocus
+    for (auto &simItem : htnWorldState.m_items)
+    {
+        if (&(simItem->m_realItem) == &(m_itemFocus->m_realItem))
+        {
+            currentSimItem = simItem;
+            break;
+        }
+    }
+	if (currentSimItem == nullptr)
+		throw std::runtime_error("Failed to find relevant SimItem in PickUpItem::preconditions");
     //TODO hook this into the actions code
     if (htnWorldState.m_itemCarriedPtr == nullptr
-      && m_itemFocus != nullptr
-      && static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == m_itemFocus->m_locationClass.location
-      && m_itemFocus->m_carryingPlayer == nullptr)
+      && currentSimItem != nullptr
+      && static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == currentSimItem->m_locationClass.location
+      && currentSimItem->m_carryingPlayer == nullptr)
     {
         return true;
     }

@@ -72,7 +72,6 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
         {
             ss << task->ToString() << ",";
         }
-        ss << "\n";
     }
     pLog(ss);
 
@@ -135,7 +134,6 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
             		{
                 		ss2 << htn->ToString() << ", ";
             		}
-            		ss2 << "\n";
             		pLog(ss2);
 			return htnPlan;
 		}
