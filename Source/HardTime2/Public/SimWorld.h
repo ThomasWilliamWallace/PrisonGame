@@ -20,6 +20,12 @@ public:
 		int AddPlayer(UPlayerData* playerData);
 
 	UFUNCTION(BlueprintCallable, Category = USimWorld)
+		void RemoveItem(AActorItem* item);
+
+	UFUNCTION(BlueprintCallable, Category = USimWorld)
+		void RemovePlayer(UPlayerData* playerData);
+
+	UFUNCTION(BlueprintCallable, Category = USimWorld)
 		void UpdateItemLocation(AActorItem* item, ELocations location);
 
 	UFUNCTION(BlueprintCallable, Category = USimWorld)

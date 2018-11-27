@@ -53,6 +53,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Enum)
 		EItemType m_itemType;
 
+	virtual void BeginDestroy() override;
+
 	LocationClass m_locationClass;
 	UPlayerData* m_carryingPlayer;
     std::string ToString();

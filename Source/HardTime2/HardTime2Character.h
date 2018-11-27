@@ -28,6 +28,8 @@ class AHardTime2Character : public ACharacter
 public:
 	AHardTime2Character();
 
+	virtual void BeginDestroy() override;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseTurnRate;

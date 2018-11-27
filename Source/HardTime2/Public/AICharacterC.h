@@ -18,6 +18,8 @@ class HARDTIME2_API AAICharacterC : public ACharacter
 
 public:
 
+	virtual void BeginDestroy() override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
 		bool readyForNewAction = true;
 

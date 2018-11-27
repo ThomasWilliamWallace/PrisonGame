@@ -116,6 +116,44 @@ int USimWorld::AddPlayer(UPlayerData* playerData)
 	return static_cast<int>(m_players.size());
 }
 
+void USimWorld::RemoveItem(AActorItem* item)
+{
+	pLog("USimWorld::RemoveItem");
+	if (!IsValid(item))
+	{
+		pLog("ERROR: item IS NOT VALID DURING USimWorld::RemoveItem", true);
+		//return;
+	}
+	for (int i = 0; i < static_cast<int>(items.size()); i++)
+	{
+		if (items.at(i) == item)
+		{
+			items.erase(items.begin() + i);
+			return;
+		}
+	}
+	pLog("ERROR: item was not found when trying to remove from world.items");
+}
+
+void USimWorld::RemovePlayer(UPlayerData* playerData)
+{
+	pLog("USimWorld::RemovePlayer");
+	if (!IsValid(playerData))
+	{
+		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::RemovePlayer", true);
+		//return;
+	}
+	for (int i = 0; i < static_cast<int>(m_players.size()); i++)
+	{
+		if (m_players.at(i) == playerData)
+		{
+			m_players.erase(m_players.begin() + i);
+			return;
+		}
+	}
+	pLog("ERROR: playerData was not found when trying to remove from world.m_players");
+}
+
 void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 {
 	pLog("USimWorld::UpdateCarriedItemC");

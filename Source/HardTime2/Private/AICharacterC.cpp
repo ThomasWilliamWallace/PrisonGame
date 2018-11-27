@@ -196,3 +196,31 @@ void AAICharacterC::SetLastActionInterrupted()
 	pLog("AAICharacterC::SetLastActionInterrupted", true);
 	m_player->aiController.lastActionInterrupted = true;
 }
+
+void AAICharacterC::BeginDestroy()
+{
+	Super::BeginDestroy();
+	if (GetWorld() == nullptr)
+	{
+		pLog("ERROR: AAICharacterC::BeginDestroy, GetWorld() is nullptr");
+		return;
+	}
+	auto gameMode = GetWorld()->GetAuthGameMode();
+	if (gameMode == nullptr)
+	{
+		pLog("ERROR: AAICharacterC::BeginDestroy, gameMode is nullptr");
+		return;
+	}
+	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
+	if (hardTime2GameMode == nullptr)
+	{
+		pLog("ERROR: AAICharacterC::BeginDestroy, hardTime2GameMode is nullptr");
+		return;
+	}
+	if (hardTime2GameMode->m_simWorld == nullptr)
+	{
+		pLog("ERROR: AAICharacterC::BeginDestroy, hardTime2GameMode->m_simWorld is nullptr");
+		return;
+	}
+	hardTime2GameMode->m_simWorld->RemovePlayer(this->m_player);
+}
