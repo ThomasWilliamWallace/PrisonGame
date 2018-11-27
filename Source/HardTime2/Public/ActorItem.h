@@ -64,8 +64,8 @@ public:
 	EItemType m_itemType;
 	LocationClass m_locationClass;
 	UPlayerData* m_carryingPlayer;
-	AActorItem* m_realItem;
-	SimActorItem(AActorItem* realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer = nullptr):
+	AActorItem& m_realItem;
+	SimActorItem(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer = nullptr):
 		m_itemType(itemType),
 		m_locationClass(location),
 		m_carryingPlayer(carryingPlayer),

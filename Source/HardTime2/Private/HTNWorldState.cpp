@@ -42,7 +42,7 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	//TODO reflect players sensors rather than being hardwired to the world
 	for (auto &item : world.items)
 	{
-		m_items.push_back(new SimActorItem(item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
+		m_items.push_back(new SimActorItem(*item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
 
 		if ((m_items.back()->m_carryingPlayer) == m_ptrToSelf)
 		{
@@ -153,7 +153,7 @@ void HTNWorldState::Print()
 		{
 			ss << "nullptr";
 		}
-		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << simItem->m_realItem << "\n";
+		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << &(simItem->m_realItem) << "\n";
 	}
 	ss << "m_v.size=" << m_v.size() << "\n";
 	pLog(ss);
