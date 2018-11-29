@@ -95,7 +95,7 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 		{
 			if (htnTask->m_isPrimitive)
 			{
-				HTNPrimitivePtr pPtr = static_cast<HTNPrimitivePtr>(htnTask); //This needs re-written to use unreal shared pointers
+				HTNPrimitivePtr pPtr = StaticCastSharedPtr<HTNPrimitive>(htnTask);
 				if (pPtr->Preconditions(ws2))
 				{
 					pPtr->Effect(ws2);
@@ -104,7 +104,7 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 					planningFailed = true;
 				}
 			} else {
-				HTNCompoundPtr cPtr = static_cast<HTNCompoundPtr>(htnTask); //This needs re-written to use unreal shared pointers
+				HTNCompoundPtr cPtr = StaticCastSharedPtr<HTNCompound>(htnTask);
 				HTNPrimitiveList subplan = HTNdfs(ws2, *cPtr, searchDepth + 1);
 				if (static_cast<int>(subplan.size()) > 0)
 				{
@@ -128,13 +128,13 @@ HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, 
 			//an htnMethod of htnCompound has been successfully planned
 			//copy the planned htnWorldState back into the parameter htnWorldState
 			htnWorldState.CopyFrom(ws2);
-            		std::stringstream ss2;
-            		ss2 << "Successfully planned an htnMethod for compound " + htnCompound.ToString() + ":";
-            		for (auto &htn : htnPlan)
-            		{
-                		ss2 << htn->ToString() << ", ";
-            		}
-            		pLog(ss2);
+            std::stringstream ss2;
+            ss2 << "Successfully planned an htnMethod for compound " + htnCompound.ToString() + ":";
+            for (auto &htn : htnPlan)
+            {
+            	ss2 << htn->ToString() << ", ";
+            }
+            pLog(ss2);
 			return htnPlan;
 		}
 	}

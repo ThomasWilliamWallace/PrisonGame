@@ -14,10 +14,10 @@ class HTNMethod;
 
 class AAICharacterC;
 
-typedef HTNPrimitive* HTNPrimitivePtr;
-typedef HTNCompound* HTNCompoundPtr;
-typedef HTNTask* HTNTaskPtr;
-typedef HTNMethod* HTNMethodPtr;
+typedef TSharedPtr<HTNPrimitive> HTNPrimitivePtr;
+typedef TSharedPtr<HTNCompound> HTNCompoundPtr;
+typedef TSharedPtr<HTNTask> HTNTaskPtr;
+typedef TSharedPtr<HTNMethod> HTNMethodPtr;
 
 typedef std::deque< HTNPrimitivePtr > HTNPrimitiveList;
 typedef std::vector< HTNCompoundPtr > HTNCompoundList;

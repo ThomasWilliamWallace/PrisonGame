@@ -22,12 +22,12 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	}
 	ss << "playerPtr=" << playerPtr << ", world=" << &world << "\n";
 	pLog(ss); }
-	//m_v.at(WorldE::health) = round(m_ptrToSelf->pStats.getHealth());
-	//m_v.at(WorldE::sanity) = round(m_ptrToSelf->pStats.getSanity());
-	//m_v.at(WorldE::strength) = round(m_ptrToSelf->pStats.getStrength());
-	//m_v.at(WorldE::agility) = round(m_ptrToSelf->pStats.getAgility());
-	//m_v.at(WorldE::intelligence) = round(m_ptrToSelf->pStats.getIntelligence());
-	//m_v.at(WorldE::evading) = m_ptrToSelf->lastAction == Actions::evade;
+	m_v.at(WorldE::health) = round(m_ptrToSelf->pStats.getHealth());
+	m_v.at(WorldE::sanity) = round(m_ptrToSelf->pStats.getSanity());
+	m_v.at(WorldE::strength) = round(m_ptrToSelf->pStats.getStrength());
+	m_v.at(WorldE::agility) = round(m_ptrToSelf->pStats.getAgility());
+	m_v.at(WorldE::intelligence) = round(m_ptrToSelf->pStats.getIntelligence());
+	m_v.at(WorldE::evading) = m_ptrToSelf->lastAction == Actions::evade;
 	m_v.at(WorldE::location) = static_cast<int>(m_ptrToSelf->locationClass.location);
 
 	{std::stringstream ss;
@@ -60,9 +60,8 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 		ss << "playerPtr=" << playerPtr << "\n";
 		ss << "p=" << p << "\n";
 		pLog(ss); }
-        m_inTheRoom[i] = p->locationClass.location == static_cast<ELocations>(m_v.at(WorldE::location)) &&
-							playerPtr != p;
-		if (m_inTheRoom[i])
+		if (p->locationClass.location == static_cast<ELocations>(m_v.at(WorldE::location)) &&
+			playerPtr != p)
 		{
 			m_playersInTheRoom.push_back(p);
 		}
@@ -85,7 +84,6 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
     m_playersInTheRoom(ws2.m_playersInTheRoom),
 	m_missionClass(ws2.m_missionClass)
 {
-    std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));
 	for (auto &item : ws2.m_items)
 	{
 		m_items.push_back(new SimActorItem(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
@@ -113,7 +111,6 @@ void HTNWorldState::CopyFrom(HTNWorldState &ws2)
 	m_itemCarriedPtr = nullptr;
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
-	std::copy(std::begin(ws2.m_inTheRoom), std::end(ws2.m_inTheRoom), std::begin(m_inTheRoom));    
     m_playersInTheRoom = ws2.m_playersInTheRoom;
 
     m_items.clear();
@@ -185,5 +182,12 @@ std::string WorldEToString(WorldE worldE)
 
 bool HTNWorldState::IsInTheRoom(UPlayerData* playerPtr)
 {
-    return m_inTheRoom[playerPtr->m_playerIndex];
+	for (auto &p : m_playersInTheRoom)
+	{
+		if (p == playerPtr)
+		{
+			return true;
+		}
+	}
+	return false;
 }

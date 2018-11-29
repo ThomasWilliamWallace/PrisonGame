@@ -28,7 +28,6 @@ class USimWorld;
 
 class HTNWorldState
 {
-    bool m_inTheRoom[c_playerCount];
 public:
 	std::vector<int> m_v;
 	std::vector< SimActorItem* > m_items;
