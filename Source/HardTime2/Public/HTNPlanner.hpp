@@ -7,7 +7,7 @@
 #include "HTNWorldState.hpp"
 #include "Actions.hpp"
 
-class HTNTask;
+class HTNNode;
 class HTNPrimitive;
 class HTNCompound;
 class HTNMethod;
@@ -16,25 +16,32 @@ class AAICharacterC;
 
 typedef TSharedPtr<HTNPrimitive> HTNPrimitivePtr;
 typedef TSharedPtr<HTNCompound> HTNCompoundPtr;
-typedef TSharedPtr<HTNTask> HTNTaskPtr;
+typedef TSharedPtr<HTNNode> HTNNodePtr;
 typedef TSharedPtr<HTNMethod> HTNMethodPtr;
 
 typedef std::deque< HTNPrimitivePtr > HTNPrimitiveList;
 typedef std::vector< HTNCompoundPtr > HTNCompoundList;
-typedef std::vector< HTNTaskPtr > HTNTaskList;
+typedef std::vector< HTNNodePtr > HTNNodeList;
 typedef std::vector< HTNMethodPtr > HTNMethodList;
 
-class HTNTask
+enum class HTNType
+{
+    Primitive,
+    Compound,
+    Method
+};
+
+class HTNNode
 {
 public:
 	std::string m_name;
-	bool m_isPrimitive;
-	HTNTask(std::string name, bool isPrimitive);
-	virtual ~HTNTask() = default;
+    HTNType m_HTNType;
+    HTNNode(std::string name, HTNType htnType);
+    virtual ~HTNNode() = default;
 	std::string ToString();
 };
 
-class HTNPrimitive : public HTNTask
+class HTNPrimitive : public HTNNode
 {
 public:
 	HTNPrimitive(std::string name);
@@ -45,31 +52,27 @@ public:
 	virtual ~HTNPrimitive() = default;
 };
 
-class HTNCompound : public HTNTask
+class HTNCompound : public HTNNode
 {
 public:
 	HTNCompound(std::string name);
 	HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
 	void AddMethod(HTNMethod* htnMethod);
+	virtual HTNMethodList& GetMethods() = 0; //constructs and returns methods
 	virtual ~HTNCompound() = default;
 };
 
 //list of either primitive or compound tasks
-class HTNMethod
+class HTNMethod : public HTNNode
 {
 public:
+    HTNMethod(std::string name);
 	virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
-	HTNTaskList m_taskList; //To complete this HTNCompound task, all the tasks in a method must be completed.
+    HTNNodeList m_nodeList; //To complete this HTNCompound task, all the tasks in a method must be completed. All in this list are Primitive Tasks or Compound Tasks.
+    virtual HTNNodeList& GetTasks() = 0; //constructs and returns tasks
 	void AddTask(HTNPrimitive* htnPrimitive);
 	void AddTask(HTNCompound* htnCompound);
 	virtual ~HTNMethod() = default;
 };
 
-class HTNPlan
-{
-public:
-	//list of primitive tasks
-	HTNPrimitiveList m_list;
-};
-
-HTNPrimitiveList HTNdfs(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth);
+HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth);

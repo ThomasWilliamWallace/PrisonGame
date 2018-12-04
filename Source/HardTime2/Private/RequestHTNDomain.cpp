@@ -49,9 +49,8 @@ bool DeclineItemRequestPrim::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //Start HTNCompounds*****************************************
- NeedItemDeclineRequestMethod::NeedItemDeclineRequestMethod(AActorItem* requestedItem) : m_requestedItem(requestedItem)
+ NeedItemDeclineRequestMethod::NeedItemDeclineRequestMethod(AActorItem* requestedItem): HTNMethod("NeedItemDeclineRequestMethod"), m_requestedItem(requestedItem)
 {
-    AddTask(new DeclineItemRequestPrim());
 }
 
 bool NeedItemDeclineRequestMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -67,9 +66,14 @@ bool NeedItemDeclineRequestMethod::Preconditions(HTNWorldState &htnWorldState)
     return false;
 }
 
-AcceptItemRequestMethod::AcceptItemRequestMethod()
+HTNNodeList& NeedItemDeclineRequestMethod::GetTasks()
 {
-    AddTask(new AcceptItemRequestPrim());
+    AddTask(new DeclineItemRequestPrim());
+    return m_nodeList;
+}
+
+AcceptItemRequestMethod::AcceptItemRequestMethod(): HTNMethod("AcceptItemRequestMethod")
+{
 }
 
 bool AcceptItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -77,9 +81,14 @@ bool AcceptItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-DeclineItemRequestMethod::DeclineItemRequestMethod()
+HTNNodeList& AcceptItemRequestMethod::GetTasks()
 {
-    AddTask(new DeclineItemRequestPrim());
+    AddTask(new AcceptItemRequestPrim());
+    return m_nodeList;
+}
+
+DeclineItemRequestMethod::DeclineItemRequestMethod(): HTNMethod("DeclineItemRequestMethod")
+{
 }
 
 bool DeclineItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -87,19 +96,27 @@ bool DeclineItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-RespondToItemRequestCompound::RespondToItemRequestCompound(AActorItem* requestedItem) : HTNCompound("RespondToItemRequestCompound")
+HTNNodeList& DeclineItemRequestMethod::GetTasks()
 {
-    AddMethod(new NeedItemDeclineRequestMethod(requestedItem));
+    AddTask(new DeclineItemRequestPrim());
+    return m_nodeList;
+}
+
+RespondToItemRequestCompound::RespondToItemRequestCompound(AActorItem* requestedItem) : HTNCompound("RespondToItemRequestCompound"), m_requestedItem(requestedItem)
+{
+}
+
+HTNMethodList& RespondToItemRequestCompound::GetMethods()
+{
+    AddMethod(new NeedItemDeclineRequestMethod(m_requestedItem));
     AddMethod(new AcceptItemRequestMethod());
     AddMethod(new DeclineItemRequestMethod());
+    return m_methods;
 }
 
 //***********************************************************
-StartMethod::StartMethod(HTNWorldState &htnWorldState, UPlayerData player[])
+StartMethod::StartMethod(HTNWorldState &htnWorldState, UPlayerData player[]): HTNMethod("StartMethod"), m_htnWorldState(htnWorldState)
 {
-    AActorItem* requestedItem = htnWorldState.m_itemCarriedPtr;
-    AddTask(new PrisonerBehaviourCompound(htnWorldState));
-    AddTask(new RespondToItemRequestCompound(requestedItem));
 }
 
 bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -107,8 +124,21 @@ bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-StartCompound::StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]) : HTNCompound("StartCompound")
+HTNNodeList& StartMethod::GetTasks()
 {
-    AddMethod(new StartMethod(htnWorldState, player));
+    AActorItem* requestedItem = m_htnWorldState.m_itemCarriedPtr;
+    AddTask(new PrisonerBehaviourCompound(m_htnWorldState));
+    AddTask(new RespondToItemRequestCompound(requestedItem));
+    return m_nodeList;
+}
+
+StartCompound::StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]): HTNCompound("StartCompound"), m_htnWorldState(htnWorldState), m_player(player)
+{
+}
+
+HTNMethodList& StartCompound::GetMethods()
+{
+    AddMethod(new StartMethod(m_htnWorldState, m_player));
+    return m_methods;
 }
 */

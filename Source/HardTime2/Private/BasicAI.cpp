@@ -171,7 +171,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
 
-		htnPlan = HTNdfs(htnWorldStateDFSCopy, *missionPtr, 0);
+        htnPlan = HTNIterative(htnWorldStateDFSCopy, *missionPtr, 0);
 		{std::stringstream ss;
 		for (auto &htnPrimitive : htnPlan)
 		{
@@ -189,7 +189,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	if (!hasValidPlan)
 	{
 		std::stringstream ss;
-		ss << playerData->m_playerName << ": Give up and return noAction\n";
+		ss << playerData->m_playerName << ": Give up and return noAction";
 		pLog(ss, true);
 		return Actions::noAction; //If next step of the plan is still not valid, then return failure state
 	} else {

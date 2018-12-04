@@ -35,6 +35,7 @@ public:
     NeedItemDeclineRequestMethod(AActorItem* requestedItem);
     AActorItem* m_requestedItem;
     bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual HTNNodeList& GetTasks() override;
 };
 
 class AcceptItemRequestMethod : public HTNMethod
@@ -42,6 +43,7 @@ class AcceptItemRequestMethod : public HTNMethod
 public:
     AcceptItemRequestMethod();
     bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual HTNNodeList& GetTasks() override;
 };
 
 class DeclineItemRequestMethod : public HTNMethod
@@ -49,12 +51,15 @@ class DeclineItemRequestMethod : public HTNMethod
 public:
     DeclineItemRequestMethod();
     bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual HTNNodeList& GetTasks() override;
 };
 
 class RespondToItemRequestCompound : public HTNCompound
 {
+    AActorItem* m_requestedItem;
 public:
     RespondToItemRequestCompound(AActorItem* requestedItem);
+    virtual HTNMethodList& GetMethods() override;
 };
 
 class RespondToItemRequestMethod : public HTNMethod
@@ -62,19 +67,25 @@ class RespondToItemRequestMethod : public HTNMethod
 public:
     RespondToItemRequestMethod(AActorItem* requestedItem);
     bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual HTNNodeList& GetTasks() override;
 };
 
 //***********************************************************
 class StartMethod : public HTNMethod
 {
+    HTNWorldState& m_htnWorldState;
 public:
     StartMethod(HTNWorldState &htnWorldState, UPlayerData player[]);
     bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual HTNNodeList& GetTasks() override;
 };
 
 class StartCompound : public HTNCompound
 {
+    HTNWorldState& m_htnWorldState;
+    UPlayerData* m_player;
 public:
     StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]);
+    virtual HTNMethodList& GetMethods() override;
 };
 */
