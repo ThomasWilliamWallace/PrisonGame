@@ -256,19 +256,11 @@ bool Evade::Preconditions(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-PickUpItem::PickUpItem(SimActorItem* itemFocus) : HTNPrimitive("PickUpItem"), m_itemFocus(itemFocus) {}
+PickUpItem::PickUpItem(SimActorItemPtr itemFocus) : HTNPrimitive("PickUpItem"), m_itemFocus(itemFocus) {}
 
 void PickUpItem::Effect(HTNWorldState &htnWorldState)
 {
-    SimActorItem* itemFocusSimItem = dynamic_cast<SimActorItem*>(m_itemFocus);
-    for (auto &item : htnWorldState.m_items)
-    {
-        SimActorItem* simItem = dynamic_cast<SimActorItem*>(item);
-        if (&(simItem->m_realItem) == &(itemFocusSimItem->m_realItem))
-        {
-            m_itemFocus->m_carryingPlayer = htnWorldState.m_ptrToSelf;
-        }
-    }
+    m_itemFocus->m_carryingPlayer = htnWorldState.m_ptrToSelf;
     htnWorldState.m_itemCarriedPtr = m_itemFocus;
 }
 
@@ -280,7 +272,7 @@ Actions PickUpItem::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
 {
-    SimActorItem* currentSimItem = nullptr; //if we are re-checking the preconditions, we need to find the simulated item in htnWorldState, rather than use the old simulated item m_itemFocus
+    SimActorItemPtr currentSimItem = nullptr; //if we are re-checking the preconditions, we need to find the simulated item in htnWorldState, rather than use the old simulated item m_itemFocus
     for (auto &simItem : htnWorldState.m_items)
     {
         if (&(simItem->m_realItem) == &(m_itemFocus->m_realItem))
@@ -289,11 +281,11 @@ bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
             break;
         }
     }
-	if (currentSimItem == nullptr)
+	if (currentSimItem.Get() == nullptr)
 		throw std::runtime_error("Failed to find relevant SimItem in PickUpItem::preconditions");
     //TODO hook this into the actions code
-    if (htnWorldState.m_itemCarriedPtr == nullptr
-      && currentSimItem != nullptr
+    if (htnWorldState.m_itemCarriedPtr.Get() == nullptr
+      && currentSimItem.Get() != nullptr
       && static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == currentSimItem->m_locationClass.location
       && currentSimItem->m_carryingPlayer == nullptr)
     {
@@ -345,7 +337,7 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 {
 	for (auto &item : htnWorldState.m_items)
 	{
-        if (htnWorldState.m_itemCarriedPtr == nullptr
+        if (htnWorldState.m_itemCarriedPtr.Get() == nullptr
             		&& item->m_itemType == m_itemType
 			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& item->m_carryingPlayer == nullptr)
@@ -358,7 +350,7 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 
 bool PickUpItem2::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return (htnWorldState.m_itemCarriedPtr != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
+	return (htnWorldState.m_itemCarriedPtr.Get() != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
 //***********************************************************
@@ -378,12 +370,12 @@ Actions DropItem::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool DropItem::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_itemCarriedPtr != nullptr; //TODO hook this into the actions code
+	return htnWorldState.m_itemCarriedPtr.Get() != nullptr; //TODO hook this into the actions code
 }
 
 bool DropItem::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_itemCarriedPtr == nullptr;
+	return htnWorldState.m_itemCarriedPtr.Get() == nullptr;
 }
 
 //***********************************************************
@@ -410,7 +402,7 @@ Actions RequestItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    if (htnWorldState.m_itemCarriedPtr != nullptr)
+    if (htnWorldState.m_itemCarriedPtr.Get() != nullptr)
     {
         return false;
     }

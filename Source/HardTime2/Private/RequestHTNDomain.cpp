@@ -55,10 +55,9 @@ bool DeclineItemRequestPrim::Preconditions(HTNWorldState &htnWorldState)
 
 bool NeedItemDeclineRequestMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    SimActorItem* simItem = dynamic_cast<SimActorItem*>(m_requestedItem);
     for (auto &item : htnWorldState.m_itemsToKeep)
     {
-        if (item == &(simItem->m_realItem))
+        if (item == m_requestedItem)
         {
             return true;
         }
@@ -126,7 +125,7 @@ bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
 
 HTNNodeList& StartMethod::GetTasks()
 {
-    AActorItem* requestedItem = m_htnWorldState.m_itemCarriedPtr;
+    AActorItem* requestedItem = &(m_htnWorldState.m_itemCarriedPtr->m_realItem);
     AddTask(new PrisonerBehaviourCompound(m_htnWorldState));
     AddTask(new RespondToItemRequestCompound(requestedItem));
     return m_nodeList;

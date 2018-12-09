@@ -259,7 +259,7 @@ public:
 
 class BringItemToLocationCompound : public HTNCompound
 {
-    HTNWorldState m_htnWorldState;
+    HTNWorldState& m_htnWorldState;
     EItemType m_itemType;
     LocationClass& m_locationClass;
 public:
@@ -270,10 +270,10 @@ public:
 //***********************************************************
 class AttackMethod1 : public HTNMethod
 {
-	SimActorItem* m_item;
+    SimActorItemPtr m_item;
 	UPlayerData* m_opponent;
 public:
-	AttackMethod1(SimActorItem* item, UPlayerData* opponent);
+    AttackMethod1(SimActorItemPtr item, UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual HTNNodeList& GetTasks() override;
 };
@@ -397,9 +397,9 @@ public:
 //***********************************************************
 class PickUpItemMethod1 : public HTNMethod
 {
-    SimActorItem* m_itemFocusPtr;
+    SimActorItemPtr m_itemFocusPtr;
 public:
-	PickUpItemMethod1(SimActorItem* itemFocus);
+    PickUpItemMethod1(SimActorItemPtr itemFocus);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual HTNNodeList& GetTasks() override;
 };

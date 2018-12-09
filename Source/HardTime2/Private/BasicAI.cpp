@@ -157,7 +157,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	} else if (htnPlan.size() > 0)
 	{
 		pLog("Check Precondition of plan primitive step", true);
-		hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
+		hasValidPlan = htnPlan.front()->Preconditions(htnWorldState);
 	} else {
 		pLog("No plan exists at all.", true);
 	}
@@ -166,12 +166,13 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 	if (!hasValidPlan)
 	{
 		{std::stringstream ss;
-		ss << playerData->m_playerName << ": Make a new plan:\n";
+		ss << playerData->m_playerName << ": Make a new plan:";
 		pLog(ss, true);}
+
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
-
-        htnPlan = HTNIterative(htnWorldStateDFSCopy, *missionPtr, 0);
+		htnPlan = HTNIterative(htnWorldStateDFSCopy, *missionPtr, 0);
+		
 		{std::stringstream ss;
 		for (auto &htnPrimitive : htnPlan)
 		{
@@ -182,7 +183,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		//once again, check if next step of the plan is valid.
 		if (htnPlan.size() > 0)
 		{
-			hasValidPlan = htnPlan.at(0)->Preconditions(htnWorldState);
+			hasValidPlan = htnPlan.front()->Preconditions(htnWorldState);
 		}
 	}
 

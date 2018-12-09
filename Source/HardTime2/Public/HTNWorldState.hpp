@@ -30,9 +30,9 @@ class HTNWorldState
 {
 public:
 	std::vector<int> m_v;
-	std::vector< SimActorItem* > m_items;
+	std::vector< SimActorItemPtr > m_items;
 	UPlayerData* m_ptrToSelf;
-	SimActorItem* m_itemCarriedPtr;
+	SimActorItemPtr m_itemCarriedPtr;
 	std::vector<bool> m_attackers;
 	std::vector<ELocations> m_playerLocations;
     std::vector< UPlayerData* > m_playersInTheRoom;
@@ -40,7 +40,6 @@ public:
 	MissionClass m_missionClass;
 	HTNWorldState(HTNWorldState &ws2);
 	HTNWorldState(UPlayerData* playerPtr, USimWorld &world);
-	~HTNWorldState();
-	void CopyFrom(HTNWorldState &ws2);
+    HTNWorldState& operator=(const HTNWorldState& ws2);
     void Print();
 };

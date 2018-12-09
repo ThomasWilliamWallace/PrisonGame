@@ -49,7 +49,7 @@ public:
 	virtual void Effect(HTNWorldState &htnWorldState); //simplified, predicted effect of taking this action. Will be applied to the simulated world during planning.
 	virtual Actions Operate(UPlayerData* playerData, USimWorld &world); //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
 	virtual bool LastActionSucceeded(HTNWorldState &htnWorldState); //returns true if this operator appears to have succeeded. Is called after calling the 'Operate' function.
-	virtual ~HTNPrimitive() = default;
+    virtual ~HTNPrimitive() override = default;
 };
 
 class HTNCompound : public HTNNode
@@ -59,7 +59,7 @@ public:
 	HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
 	void AddMethod(HTNMethod* htnMethod);
 	virtual HTNMethodList& GetMethods() = 0; //constructs and returns methods
-	virtual ~HTNCompound() = default;
+    virtual ~HTNCompound() override = default;
 };
 
 //list of either primitive or compound tasks
@@ -72,7 +72,7 @@ public:
     virtual HTNNodeList& GetTasks() = 0; //constructs and returns tasks
 	void AddTask(HTNPrimitive* htnPrimitive);
 	void AddTask(HTNCompound* htnCompound);
-	virtual ~HTNMethod() = default;
+    virtual ~HTNMethod() override = default;
 };
 
 HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth);

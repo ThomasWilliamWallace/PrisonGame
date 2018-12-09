@@ -79,13 +79,53 @@ struct StackNode //represents 'm_htnNode &&' or 'm_htnNode ||'
     StackNode(HTNNodePtr htnNode, bool isOr): m_htnNode(htnNode), m_isOr(isOr) {};
 };
 
-typedef std::shared_ptr<StackNode> StackNodePtr;
+typedef TSharedPtr<StackNode> StackNodePtr;
 
-HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth)
+void PrintHTNPlanStack(std::deque<HTNPrimitivePtr> htnPlanStack)
 {
     std::stringstream ss;
-    ss << "Entering HTNIterative, root HTNCompound node = " + htnCompound.ToString() + ", containing methods:\n";
-    for (auto &htnMethod : htnCompound.m_methods)
+    ss << "htnPlanStack size = " << htnPlanStack.size() << ": [";
+    for (std::deque<HTNPrimitivePtr> dump = htnPlanStack; !dump.empty(); dump.pop_front())
+        ss << dump.front()->ToString() << ", ";
+    ss << "]";
+    pLog(ss);
+}
+
+void PrintWorldStateStack(std::stack<HTNWorldState*> worldStateStack)
+{
+    std::stringstream ss;
+    ss << "WorldStateStack size = " << worldStateStack.size();
+    pLog(ss);
+    pLog("WorldStateStack: ");
+    for (std::stack<HTNWorldState*> dump = worldStateStack; !dump.empty(); dump.pop())
+        worldStateStack.top()->Print();
+}
+
+void PrintNodeStack(std::stack< StackNodePtr > nodeStack)
+{
+    std::stringstream ss;
+    ss << "NodeStack size = " << nodeStack.size() << ": [";
+    for (std::stack< StackNodePtr > dump = nodeStack; !dump.empty(); dump.pop())
+        ss << "(" << dump.top()->m_htnNode->m_name << ":" << (dump.top()->m_isOr ? "||": "&&") << "), ";
+    ss << "]";
+    pLog(ss);
+}
+
+void PrintDecompositions(std::stack< DecompositionFrame > decompositions)
+{
+    std::stringstream ss;
+    ss << "Decompositions size = " << decompositions.size() << ": [";
+    for (std::stack< DecompositionFrame > dump = decompositions; !dump.empty(); dump.pop())
+        ss <<  "(" << dump.top().m_stackCounter << ":" << dump.top().m_worldStateStackCounter << "), ";
+    ss << "]";
+    pLog(ss);
+}
+
+HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot, int searchDepth)
+{
+    std::stringstream ss;
+    ss << "Entering HTNIterative, root node = " + htnRoot.ToString() + ", containing methods:\n";
+    for (auto &htnMethod : htnRoot.m_methods)
     {
         ss << "Method: ";
         for (auto &task : htnMethod->m_nodeList)
@@ -97,20 +137,28 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnComp
     
     std::deque<HTNPrimitivePtr> htnPlanStack;
     std::stack<HTNWorldState*> worldStateStack;
-    worldStateStack.push(&htnWorldState);
     std::stack< StackNodePtr > nodeStack;
-    nodeStack.push( std::shared_ptr<StackNode>(new StackNode(HTNNodePtr(&htnCompound), false) ) );
     std::stack< DecompositionFrame > decompositions; // std::stack< stackCounter, worldStateCounter>
+
+    worldStateStack.push(&htnWorldState);
+    nodeStack.push( MakeShared<StackNode>(MakeShareable(&htnRoot), false) );
     bool lastTaskPrecon = true;
     
     StackNodePtr currentNode = nodeStack.top();
     
     while (searchDepth <= c_MaxSearchDepth && static_cast<int>(nodeStack.size()) > 0)
     {
+        if (c_debug)
+        {
+            pLog("");
+            PrintNodeStack(nodeStack);
+            PrintDecompositions(decompositions);
+            PrintHTNPlanStack(htnPlanStack);
+            PrintWorldStateStack(worldStateStack);
+            pLog("");
+        }
+
         currentNode = nodeStack.top(); // y takes the form (htnNode, &&) or (htnNode, ||), where htnNode is one of HTNPrimitive, HTNCompound or HTNMethod
-        std::stringstream ss;
-        ss << "currentNode->" << currentNode->m_htnNode->m_name << ", " << currentNode->m_isOr;
-        pLog(ss);
         nodeStack.pop();
         
         //process the node at the front of the nodeStack
@@ -130,18 +178,10 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnComp
                     {
                         pLog("lastTaskPrecon == true");
                         //construct the tasks of this method, and push them onto the nodeStack. The first task should be at the top of the nodeStack
-                        std::stack< StackNodePtr > tempNodeStack;
-                        for (auto &t : htnMethod->GetTasks())
+                        HTNNodeList taskList = htnMethod->GetTasks();
+                        for (auto task = taskList.rbegin(); task != taskList.rend(); ++task)
                         {
-                            tempNodeStack.push(std::shared_ptr<StackNode>(new StackNode(t, false)));
-                        }
-                        while (!(tempNodeStack.empty()))
-                        {
-                            std::stringstream ss3;
-                            ss3 << "Adding task to stack: " << tempNodeStack.top()->m_htnNode->ToString();
-                            pLog(ss3);
-                            nodeStack.push(tempNodeStack.top());
-                            tempNodeStack.pop();
+                            nodeStack.push(MakeShared<StackNode>(*task, false));
                         }
                     } else {
                         pLog("lastTaskPrecon == false");
@@ -170,21 +210,13 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnComp
                     HTNCompoundPtr htnCompound = StaticCastSharedPtr<HTNCompound>(currentNode->m_htnNode);
                     
                     // record the current worldState and plan. This will allow us to backtrack planning this task fails.
-                    decompositions.push(DecompositionFrame(static_cast<int>(nodeStack.size()), static_cast<int>(worldStateStack.size())));
+                    decompositions.push(DecompositionFrame(static_cast<int>(nodeStack.size()), static_cast<int>(htnPlanStack.size())));
                     
                     //construct methods of this task, and push them onto the nodeStack. The highest priority method should be at the top of the nodeStack.
-                    std::stack< StackNodePtr > tempNodeStack2;
-                    for (auto &m : htnCompound->GetMethods())
+                    HTNMethodList methodList = htnCompound->GetMethods();
+                    for (auto method = methodList.rbegin(); method != methodList.rend(); ++method)
                     {
-                        tempNodeStack2.push(std::shared_ptr<StackNode>(new StackNode(m, true)));
-                    }
-                    while (!(tempNodeStack2.empty()))
-                    {
-                        std::stringstream ss1;
-                        ss1 << "Adding method to stack: " << tempNodeStack2.top()->m_htnNode->ToString();
-                        pLog(ss1);
-                        nodeStack.push(tempNodeStack2.top());
-                        tempNodeStack2.pop();
+                        nodeStack.push(MakeShared<StackNode>(*method, true));
                     }
                     
                     lastTaskPrecon = false;
@@ -198,33 +230,28 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnComp
         //backtrack as necessary, using the decomposition markers
         if (!lastTaskPrecon && !(decompositions.empty()))
         {
-            std::stringstream ss5;
-            ss5 << "nodeStack.size()=" << static_cast<int>(nodeStack.size()) << "\n";
-            ss5 << "decompositions.size()=" << static_cast<int>(decompositions.size()) << "\n";
-            ss5 << "worldStateStack.size()=" << static_cast<int>(worldStateStack.size()) << "\n";
-            ss5 << "htnPlanStack.size()=" << static_cast<int>(htnPlanStack.size());
-            pLog(ss5);
-            while (static_cast<int>(nodeStack.size()) < decompositions.top().m_stackCounter)
+            pLog("Task preconditions failed. Backtrack?");
+            while (static_cast<int>(nodeStack.size()) <= decompositions.top().m_stackCounter)
             {
-                std::stringstream ss4;
-                ss4 << "decompositions.top()=[" << decompositions.top().m_stackCounter << ", " << decompositions.top().m_worldStateStackCounter << "]";
-                pLog(ss4);
-                while (static_cast<int>(worldStateStack.size()) > decompositions.top().m_worldStateStackCounter)
+                while (static_cast<int>(htnPlanStack.size()) > decompositions.top().m_worldStateStackCounter)
                 {
                     pLog("pop from worldStateStack, pop from htnPlanStack");
                     delete worldStateStack.top();
                     worldStateStack.pop();
                     htnPlanStack.pop_back();
                 }
+                pLog("pop from decompositions");
                 decompositions.pop();
             }
         }
         
         if (lastTaskPrecon && !(decompositions.empty()))
         {
+            pLog("Task preconditions succeeded.");
             //clear any finished decompositions from the decompositions stack.
             while (static_cast<int>(nodeStack.size()) < decompositions.top().m_stackCounter)
             {
+                pLog("pop from decompositions");
                 decompositions.pop();
             }
         }
@@ -235,7 +262,7 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnComp
     if (worldStateStack.size() > 0)
     {
         //copy the planned htnWorldState back into the parameter htnWorldState
-        htnWorldState.CopyFrom(*worldStateStack.top());
+        htnWorldState = (*worldStateStack.top());
     }
     
     return htnPlanStack;

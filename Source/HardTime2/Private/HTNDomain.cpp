@@ -320,8 +320,6 @@ HTNNodeList& IncreaseIntelligenceMethod1::GetTasks()
 
 IncreaseIntelligenceMethod2::IncreaseIntelligenceMethod2(): HTNMethod("IncreaseIntelligenceMethod2")
 {
-    AddTask(new GoToLibraryCompound());
-    AddTask(new Study());
 }
 
 bool IncreaseIntelligenceMethod2::Preconditions(HTNWorldState &htnWorldState)
@@ -395,7 +393,7 @@ BringItemToLocationMethod1::BringItemToLocationMethod1(EItemType itemType, Locat
 
 bool BringItemToLocationMethod1::Preconditions(HTNWorldState &htnWorldState)
 {
-	return (htnWorldState.m_itemCarriedPtr != nullptr) &&
+	return (htnWorldState.m_itemCarriedPtr.Get() != nullptr) &&
 		(htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType) &&
 		(static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == m_locationClass.location);
 }
@@ -415,7 +413,7 @@ BringItemToLocationMethod2::BringItemToLocationMethod2(EItemType itemType, Locat
 
 bool BringItemToLocationMethod2::Preconditions(HTNWorldState &htnWorldState)
 {
-    return (htnWorldState.m_itemCarriedPtr != nullptr) &&
+    return (htnWorldState.m_itemCarriedPtr.Get() != nullptr) &&
         (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
@@ -441,6 +439,7 @@ HTNNodeList& BringItemToLocationMethod2::GetTasks()
 	}
 
     AddTask(new DropItem());
+
     return m_nodeList;
 }
 
@@ -481,6 +480,7 @@ HTNNodeList& BringItemToLocationMethod3::GetTasks()
 	}
 
     AddTask(new DropItem());
+
     return m_nodeList;
 }
 
@@ -501,7 +501,7 @@ HTNMethodList& BringItemToLocationCompound::GetMethods()
 }
 
 //***********************************************************
-AttackMethod1::AttackMethod1(SimActorItem* item, UPlayerData* opponent):
+AttackMethod1::AttackMethod1(SimActorItemPtr item, UPlayerData* opponent):
     HTNMethod("AttackMethod1"),
     m_item(item),
     m_opponent(opponent)
@@ -747,7 +747,7 @@ HTNNodeList& IncreaseIntelligenceMethod::GetTasks()
 }
 
 //***********************************************************
-PickUpItemMethod1::PickUpItemMethod1(SimActorItem* itemFocusPtr):
+PickUpItemMethod1::PickUpItemMethod1(SimActorItemPtr itemFocusPtr):
     HTNMethod("PickUpItemMethod1"),
     m_itemFocusPtr(itemFocusPtr)
 {
@@ -786,7 +786,6 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
     HTNCompound("PrisonerBehaviourCompound"),
     m_htnWorldState(htnWorldState)
 {
-	pLog("Constructing PrisonerBehaviourCompound");
 }
 
 HTNMethodList& PrisonerBehaviourCompound::GetMethods()
