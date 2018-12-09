@@ -1,6 +1,7 @@
 #include "HTNDomain.hpp"
 #include "Locations.h"
 #include "HTNPrimitives.hpp"
+#include "pLog.hpp"
 
 //***********************************************************
 GoToLibraryMethod1::GoToLibraryMethod1(): HTNMethod("GoToLibraryMethod1")
@@ -785,6 +786,7 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
     HTNCompound("PrisonerBehaviourCompound"),
     m_htnWorldState(htnWorldState)
 {
+	pLog("Constructing PrisonerBehaviourCompound");
 }
 
 HTNMethodList& PrisonerBehaviourCompound::GetMethods()
