@@ -58,8 +58,8 @@ public:
     LocationClass locationClass; //location maps to a discrete set of locations, gym, library, circuit track, bed.
     LocationClass lastLocationClass; //location the character was at when the turn began. Used by the print display.
     bool attacked = false; //tracks whether an attack has disrupted his turn.
-    std::string narrative; //printed at the end of each round, giving the update for this character
-    std::string m_playerName; //name of the character, used in speech.
+    //std::string narrative; //printed at the end of each round, giving the update for this character
+    //std::string m_playerName; //name of the character, used in speech.
     MissionClass missionClass; //a mission currently assigned to the character
     AIController aiController; //controlling AI for this character
     MissionClass missionOffer; // a mission being offered to 'playerTarget'

@@ -98,7 +98,6 @@ void HTNWorldState::Print()
 		ss << "SimItem: " << simItem->ToString() << " carried by ";
 		if (simItem->m_carryingPlayer != nullptr)
 		{
-			ss << simItem->m_carryingPlayer->m_playerName;
 		}
 		else
 		{
@@ -111,7 +110,7 @@ void HTNWorldState::Print()
     for (auto &p : m_playersInTheRoom)
     {
 		if (p != nullptr)
-			ss << "PlayerData " << p->m_playerName << " is also in the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
+			ss << "PlayerData " << " is also in the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
 		else
 			ss << "ERROR NULL PLAYERDATA VALUE\n";
     }

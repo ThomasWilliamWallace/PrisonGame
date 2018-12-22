@@ -77,23 +77,23 @@ void Relationship::deltaTrust(double delta)
 
 std::string CharacterName(UPlayerData* playerPtr)
 {
-    if (playerPtr == nullptr)
-        return "c_empty";
-    else
-        return playerPtr->m_playerName;
+	if (playerPtr == nullptr)
+		return "c_empty";
+	else
+		//return playerPtr->m_playerName;
+		return "No-Name";
 }
 
 void UPlayerData::PrintPlayer()
 {
 	std::stringstream ss;
-    ss << "*** PLAYER " << m_playerName << " ***\n";
+    ss << "*** PLAYER " << " ***\n";
 	ss << "action=" << ActionToString(action) << "\n";
 	ss << "lastAction=" << ActionToString(lastAction) << "\n";
     ss << "location=" << locationClass.ToString() << "\n";
     ss << "lastLocation=" << lastLocationClass.ToString() << "\n";
 //    ss << "attacked=" << BoolToString(attacked) << "\n";
     ss << "playerTargetPtr=" << playerTargetPtr << "\n";
-    ss << "narrative=" << narrative << "\n";
     ss << "item=";
     if (itemPtr != nullptr)
         ss << itemPtr->ToString() << "\n";
@@ -149,7 +149,7 @@ void UPlayerData::UpdateMissions(USimWorld &world)
     if (missionClass.IsMissionComplete(world))
     {
 		std::stringstream ss;
-		ss << m_playerName << " has completed his mission to " << missionClass.MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
+		ss << " has completed his mission to " << missionClass.MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
 		pLog(ss, true);
         pStats.deltaSanity(5);
 		missionClass = MissionClass(this);
@@ -157,7 +157,6 @@ void UPlayerData::UpdateMissions(USimWorld &world)
     }
 }
 
-UPlayerData::UPlayerData():
-	m_playerName("No-name")
+UPlayerData::UPlayerData()
 {
 }

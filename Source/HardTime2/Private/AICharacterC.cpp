@@ -22,7 +22,6 @@ void AAICharacterC::BeginPlay()
 		pLog("ERROR: M_PLAYER IS NULL DURING AAICHARACTERC::BEGINPLAY", true);
 	if (!IsValid(m_player))
 		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::BEGINPLAY", true);
-	m_player->m_playerName = "No-name";
 	m_player->missionClass = MissionClass(m_player);
 	m_player->m_playerIndex = 0;
 	auto gameMode = GetWorld()->GetAuthGameMode();
@@ -64,8 +63,7 @@ void AAICharacterC::Tick(float DeltaTime)
 	}
 	m_player->UpdateMissions(*m_world);
 
-	if (false)
-	//if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
+	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;

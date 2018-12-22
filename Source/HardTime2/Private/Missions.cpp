@@ -27,13 +27,13 @@ std::string MissionClass::MissionNarrative()
         case Missions::noMission:
             return "No Mission\n";
         case Missions::increaseAgility:
-            return "Mission: " + m_owner->m_playerName + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getAgility()) + ")";
+            return "Mission: must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getAgility()) + ")";
         case Missions::increaseStrength:
-            return "Mission: " + m_owner->m_playerName + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getStrength()) + ")";
+            return "Mission: must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getStrength()) + ")";
         case Missions::increaseIntelligence:
-            return "Mission: " + m_owner->m_playerName + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getIntelligence()) + ")";
+            return "Mission: must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getIntelligence()) + ")";
         case Missions::bringItemToRoom:
-            return "Mission: " + m_owner->m_playerName + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".";
+            return "Mission: must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".";
     }
     return "ERROR: MISSION TYPE NOT RECOGNISED";
 }
@@ -81,6 +81,10 @@ MissionClass::MissionClass(UPlayerData* owner):
 	m_mission(GetRandomMission()),
 	m_owner(owner)
 {
+	m_mission = Missions::bringItemToRoom;
+	m_itemType = EItemType::ball;
+	m_locationClass = GetRandomLocation();
+	return;
 	switch (m_mission)
 	{
 	case Missions::noMission:

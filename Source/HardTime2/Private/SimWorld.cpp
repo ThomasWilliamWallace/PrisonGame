@@ -38,7 +38,7 @@ void USimWorld::WorldEffects(UPlayerData player[], int frame)
     if (weightsOccupied != nullptr)
     {
         weightsOccupied->pStats.deltaStrength(1);
-        weightsOccupied->narrative = "weightlift; strength = " + FormatDouble(weightsOccupied->pStats.getStrength());
+        //weightsOccupied->narrative = "weightlift; strength = " + FormatDouble(weightsOccupied->pStats.getStrength());
     }
 }
 

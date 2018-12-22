@@ -397,7 +397,7 @@ HTNMethodList& GetItemCompound::GetMethods()
     AddMethod(new GetItemMethod1(m_itemType));
     //for (auto &p : m_htnWorldState.m_playersInTheRoom)
     //{
-    //    AddMethod(new GetItemMethod2(p, m_itemType));
+        //AddMethod(new GetItemMethod2(p, m_itemType));
     //}
     return m_methods;
 }
