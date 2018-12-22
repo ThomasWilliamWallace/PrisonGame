@@ -173,7 +173,8 @@ void AHardTime2Character::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	m_player->UpdateMissions(*m_world);
 
-	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
+	if (false)
+	//if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;

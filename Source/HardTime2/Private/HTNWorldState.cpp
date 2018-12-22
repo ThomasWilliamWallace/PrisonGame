@@ -25,7 +25,6 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	for (auto &item : world.items)
 	{
 		m_items.push_back(MakeShared<SimActorItem>(*item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
-
 		if ((m_items.back()->m_carryingPlayer) == m_ptrToSelf)
 		{
 			m_itemCarriedPtr = m_items.back();

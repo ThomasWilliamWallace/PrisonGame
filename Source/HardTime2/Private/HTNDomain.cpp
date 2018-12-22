@@ -370,6 +370,21 @@ HTNNodeList& GetItemMethod1::GetTasks()
     return m_nodeList;
 }
 
+GetItemMethod2::GetItemMethod2(UPlayerData* player, EItemType itemType): HTNMethod("GetItemMethod2"), m_player(player), m_itemType(itemType)
+{
+}
+
+bool GetItemMethod2::Preconditions(HTNWorldState &htnWorldState)
+{
+    return true;
+}
+
+HTNNodeList& GetItemMethod2::GetTasks()
+{
+    AddTask(new RequestItemPrim(m_player, m_itemType));
+    return m_nodeList;
+}
+
 GetItemCompound::GetItemCompound(HTNWorldState &htnWorldState, EItemType itemType):
     HTNCompound("GetItemCompound(" + ItemTypeToString(itemType) + ")"),
     m_htnWorldState(htnWorldState),
@@ -380,6 +395,10 @@ GetItemCompound::GetItemCompound(HTNWorldState &htnWorldState, EItemType itemTyp
 HTNMethodList& GetItemCompound::GetMethods()
 {
     AddMethod(new GetItemMethod1(m_itemType));
+    //for (auto &p : m_htnWorldState.m_playersInTheRoom)
+    //{
+    //    AddMethod(new GetItemMethod2(p, m_itemType));
+    //}
     return m_methods;
 }
 

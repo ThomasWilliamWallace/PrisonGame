@@ -47,10 +47,10 @@ void AAICharacterC::BeginPlay()
 void AAICharacterC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	pLog("AAICharacterC::Tick", true);
+	//pLog("AAICharacterC::Tick", true);
 	std::stringstream ss;
-	ss << "m_player=" << m_player << "\n";
-	ss << "m_world=" << m_world << "\n";
+	//ss << "m_player=" << m_player << "\n";
+	//ss << "m_world=" << m_world << "\n";
 	pLog(ss, true);
 	if (!IsValid(m_player))
 	{
@@ -64,7 +64,8 @@ void AAICharacterC::Tick(float DeltaTime)
 	}
 	m_player->UpdateMissions(*m_world);
 
-	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
+	if (false)
+	//if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;

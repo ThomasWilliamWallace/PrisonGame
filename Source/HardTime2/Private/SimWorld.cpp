@@ -157,7 +157,7 @@ void USimWorld::RemovePlayer(UPlayerData* playerData)
 void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 {
 	pLog("USimWorld::UpdateCarriedItemC");
-	if (!IsValid(item))
+	if (item != nullptr && !IsValid(item))
 	{
 		pLog("ERROR: item IS NOT VALID DURING USimWorld::UpdateCarriedItemC", true);
 		return;
