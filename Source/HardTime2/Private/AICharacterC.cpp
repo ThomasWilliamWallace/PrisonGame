@@ -24,6 +24,7 @@ void AAICharacterC::BeginPlay()
 		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::BEGINPLAY", true);
 	m_player->missionClass = MissionClass(m_player);
 	m_player->m_playerIndex = 0;
+//	m_player->physicalCharacter = this;
 	auto gameMode = GetWorld()->GetAuthGameMode();
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
 	m_player->m_playerIndex = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
@@ -48,9 +49,6 @@ void AAICharacterC::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	//pLog("AAICharacterC::Tick", true);
 	std::stringstream ss;
-	//ss << "m_player=" << m_player << "\n";
-	//ss << "m_world=" << m_world << "\n";
-	pLog(ss, true);
 	if (!IsValid(m_player))
 	{
 		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::Tick", true);
@@ -111,6 +109,24 @@ void AAICharacterC::Tick(float DeltaTime)
 		case Actions::useRoom:
 			pLog("useRoom", true);
 			UseRoom();
+			break;
+		case Actions::requestItem:
+			pLog("requestItem", true);
+			ss << "m_player = " << m_player << "\n";
+			if (m_player != nullptr)
+			{
+				ss << "m_player->playerTargetPtr = " << m_player->playerTargetPtr << "\n";
+				if (m_player->playerTargetPtr != nullptr)
+				{
+					ss << "m_player->playerTargetPtr->physicalCharacter = " << m_player->playerTargetPtr->physicalCharacter << "\n";
+					if (m_player->playerTargetPtr->physicalCharacter != nullptr)
+					{
+						ss << "Successfully requesting item\n";
+						RequestItem(m_player->playerTargetPtr->physicalCharacter);
+					}
+				}
+			}
+			pLog(ss, true);
 			break;
 		default:
 			pLog("NoAction", true);

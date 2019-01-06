@@ -41,6 +41,7 @@ public:
 
 class USimWorld;
 class AActorItem;
+class AHardTime2Character;
 
 UCLASS(BlueprintType, Blueprintable)
 class UPlayerData : public UObject
@@ -72,6 +73,9 @@ public:
 
 	UPROPERTY()
 		AActorItem* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
+
+	UPROPERTY()
+		AHardTime2Character* physicalCharacter = nullptr;
 
 	void UpdateMissions(USimWorld &world);
     void PrintPlayer();

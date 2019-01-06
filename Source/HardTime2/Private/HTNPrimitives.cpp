@@ -3,6 +3,7 @@
 #include "PlayerData.h"
 #include "SimWorld.h"
 #include <stdexcept>
+#include "pLog.hpp"
 
 //***********************************************************
 Study::Study() : HTNPrimitive("Study") {}
@@ -414,4 +415,9 @@ bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
         }
     }
     return false; //TODO hook this into the actions code
+}
+
+bool RequestItemPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
+{
+	return (htnWorldState.m_itemCarriedPtr.Get() != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }

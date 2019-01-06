@@ -13,22 +13,22 @@ class USimWorld : public UObject //represents the simulated world
 	GENERATED_BODY()
 public:
 
-	UFUNCTION(BlueprintCallable, Category = USimWorld)
+	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void AddItem(AActorItem* item);
 
-	UFUNCTION(BlueprintCallable, Category = USimWorld)
+	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		int AddPlayer(UPlayerData* playerData);
 
-	UFUNCTION(BlueprintCallable, Category = USimWorld)
+	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void RemoveItem(AActorItem* item);
 
-	UFUNCTION(BlueprintCallable, Category = USimWorld)
+	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void RemovePlayer(UPlayerData* playerData);
 
-	UFUNCTION(BlueprintCallable, Category = USimWorld)
+	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void UpdateItemLocation(AActorItem* item, ELocations location);
 
-	UFUNCTION(BlueprintCallable, Category = USimWorld)
+	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void UpdateCarriedItemC(AActorItem* item, ACharacter* character);
 
 	UPROPERTY()

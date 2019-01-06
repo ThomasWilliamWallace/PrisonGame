@@ -13,6 +13,13 @@
 #include "Engine/GameEngine.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "HardTime2GameMode.h"
+#include "Runtime/Engine/Classes/Engine/EngineTypes.h"
+#include "Runtime/Engine/Public/TimerManager.h"
+#include "Runtime/AIModule/Classes/AITypes.h"
+#include "Runtime/AIModule/Classes/AIController.h"
+#include "Runtime/Engine/Classes/Components/ActorComponent.h"
+#include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
+#include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AHardTime2Character
@@ -53,7 +60,11 @@ AHardTime2Character::AHardTime2Character()
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	m_carriedItem = nullptr;
 	m_player = CreateDefaultSubobject<UPlayerData>(TEXT("PlayerData"));
+	m_aiCommand = EAICommand::useRoom;
+	m_aiState = EAIState::noTask;
+	m_useCount = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -152,11 +163,13 @@ void AHardTime2Character::BeginPlay()
 		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::BEGINPLAY", true);
 	m_player->missionClass = MissionClass(m_player);
 	m_player->m_playerIndex = 0;
+	m_player->physicalCharacter = this;
 	auto gameMode = GetWorld()->GetAuthGameMode();
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
 	m_player->m_playerIndex = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
 
 	m_player->aiController.algo = AI::htnAI;
+	m_player->aiController.lastActionInterrupted = false;
 	for (FConstPlayerControllerIterator iterator = GetWorld()->GetPlayerControllerIterator(); iterator; ++iterator)
 	{
 		APlayerController* playerController = Cast<APlayerController>(*iterator);
@@ -170,67 +183,15 @@ void AHardTime2Character::BeginPlay()
 	}
 }
 
-// Called every frame
-void AHardTime2Character::Tick(float DeltaTime)
+void AHardTime2Character::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-	Super::Tick(DeltaTime);
-	m_player->UpdateMissions(*m_world);
-
-	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
-	{
-		m_player->PrintPlayer();
-		readyForNewAction = false;
-		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world);
-		m_player->aiController.lastActionInterrupted = false;
-		pLog("HTN Planner chose an action:", true);
-		switch (m_player->action)
-		{
-		case Actions::attack:
-			//AttackPlayer();
-			pLog("attack", true);
-			break;
-		case Actions::dropItem:
-			pLog("dropItem", true);
-			DropItem();
-			break;
-		case Actions::evade:
-			pLog("evade", true);
-			Evade();
-			break;
-		case Actions::goToBedroom:
-			pLog("goToBedroom", true);
-			GoToLocation(ELocations::bedroom);
-			break;
-		case Actions::goToCircuitTrack:
-			pLog("goToCircuitTrack", true);
-			GoToLocation(ELocations::circuitTrack);
-			break;
-		case Actions::goToGym:
-			pLog("goToGym", true);
-			GoToLocation(ELocations::gym);
-			break;
-		case Actions::goToLibrary:
-			pLog("goToLibrary", true);
-			GoToLocation(ELocations::library);
-			break;
-		case Actions::goToMainHall:
-			pLog("goToMainHall", true);
-			GoToLocation(ELocations::mainHall);
-			break;
-		case Actions::pickUpItem:
-			pLog("pickUpItem", true);
-			PickUpItem(m_player->itemFocusPtr);
-			break;
-		case Actions::useRoom:
-			pLog("useRoom", true);
-			UseRoom();
-			break;
-		default:
-			pLog("NoAction", true);
-			readyForNewAction = true;
-			break;
-		}
-	}
+	//Remove delegates
+	//AAIController* controller = Cast<AAIController>(GetController());
+	//if (controller == nullptr)
+	//	throw std::invalid_argument("Cannot remove delegates because controller is NULL.");
+	//controller->GetPathFollowingComponent()->OnRequestFinished.Remove(pickUpItemMoveDelegateHandle);
+	//controller->GetPathFollowingComponent()->OnRequestFinished.Remove(goToLocationMoveDelegateHandle);
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 }
 
 void AHardTime2Character::SetWorld(USimWorld* simWorld)
@@ -256,6 +217,7 @@ void AHardTime2Character::UpdateLocation(ELocations location)
 {
 	pLog("AHardTime2Character::UpdateLocation", true);
 	m_player->locationClass.location = location;
+	m_location = location;
 	std::stringstream ss;
 	ss << "Location=" << static_cast<int>(location);
 	pLog(ss);
@@ -297,10 +259,13 @@ void AHardTime2Character::DeltaIntelligence(float delta)
 	pLog(ss);
 }
 
-void AHardTime2Character::SetLastActionInterrupted()
+void AHardTime2Character::SetLastActionInterrupted(bool interrupted)
 {
-	pLog("AAICharacterC::SetLastActionInterrupted", true);
-	m_player->aiController.lastActionInterrupted = true;
+	if (interrupted)
+		pLog("AAICharacterC::SetLastActionInterrupted(True)", true);
+	else
+		pLog("AAICharacterC::SetLastActionInterrupted(False)", true);
+	m_player->aiController.lastActionInterrupted = interrupted;
 }
 
 void AHardTime2Character::BeginDestroy()
@@ -329,4 +294,493 @@ void AHardTime2Character::BeginDestroy()
 		return;
 	}
 	hardTime2GameMode->m_simWorld->RemovePlayer(this->m_player);
+}
+
+void AHardTime2Character::GoToLocation(ELocations location)
+{
+	switch (location)
+	{
+	case (ELocations::mainHall):
+		m_targetLocation = m_mainHall;
+		break;
+	case (ELocations::gym):
+		m_targetLocation = m_gym;
+		break;
+	case (ELocations::circuitTrack):
+		m_targetLocation = m_circuitTrack;
+		break;
+	case (ELocations::library):
+		m_targetLocation = m_library;
+		break;
+	case (ELocations::bedroom):
+		m_targetLocation = m_bedroom;
+		break;
+	}
+	m_aiCommand = EAICommand::goToLocation;
+	m_aiState = EAIState::newCommand;
+	UpdateStatus();
+}
+
+void AHardTime2Character::PickUpItem(AActorItem* item)
+{
+	m_targetItem = item;
+	m_aiCommand = EAICommand::pickupItem;
+	m_aiState = EAIState::newCommand;
+	UpdateStatus();
+}
+
+void AHardTime2Character::DropItem()
+{
+	m_aiCommand = EAICommand::dropItem;
+	m_aiState = EAIState::newCommand;
+	UpdateStatus();
+}
+
+void AHardTime2Character::UseRoom()
+{
+	m_aiCommand = EAICommand::useRoom;
+	m_aiState = EAIState::newCommand;
+	UpdateStatus();
+}
+
+void AHardTime2Character::RequestItem(AHardTime2Character* character)
+{
+	m_targetPlayer = character;
+	m_targetItem = character->m_carriedItem;
+	m_aiCommand = EAICommand::requestItem;
+	m_aiState = EAIState::newCommand;
+	UpdateStatus();
+}
+
+// Called every frame
+void AHardTime2Character::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	m_player->UpdateMissions(*m_world);
+
+	//Planning
+	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
+	{
+		m_player->PrintPlayer();
+		readyForNewAction = false;
+		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world);
+		m_player->aiController.lastActionInterrupted = false;
+		pLog("HTN Planner chose an action:", true);
+		switch (m_player->action)
+		{
+		case Actions::goToBedroom:
+			pLog("goToBedroom", true);
+			GoToLocation(ELocations::bedroom);
+			break;
+		case Actions::goToCircuitTrack:
+			pLog("goToCircuitTrack", true);
+			GoToLocation(ELocations::circuitTrack);
+			break;
+		case Actions::goToGym:
+			pLog("goToGym", true);
+			GoToLocation(ELocations::gym);
+			break;
+		case Actions::goToLibrary:
+			pLog("goToLibrary", true);
+			GoToLocation(ELocations::library);
+			break;
+		case Actions::goToMainHall:
+			pLog("goToMainHall", true);
+			GoToLocation(ELocations::mainHall);
+			break;
+		case Actions::dropItem:
+			pLog("dropItem", true);
+			DropItem();
+			break;
+		case Actions::pickUpItem:
+			pLog("pickUpItem", true);
+			PickUpItem(m_player->itemFocusPtr);
+			break;
+		case Actions::requestItem:
+			pLog("requestItem", true);
+			if (m_player != nullptr)
+				pLog("m_player != nullptr", true);
+			if (m_player->playerTargetPtr != nullptr)
+				pLog("m_player->playerTargetPtr != nullptr", true);
+			if (m_player->playerTargetPtr->physicalCharacter != nullptr)
+				pLog("m_player->playerTargetPtr->physicalCharacter != nullptr", true);
+			RequestItem(m_player->playerTargetPtr->physicalCharacter);
+			break;
+		case Actions::useRoom:
+			pLog("useRoom", true);
+			UseRoom();
+			break;
+		default:
+			pLog("NoAction", true);
+			readyForNewAction = true;
+			break;
+		}
+	}
+
+	//Enact plan
+	switch (m_aiState)
+	{
+	case EAIState::cooldown:
+		OnCooldown();
+		break;
+	case EAIState::noTask:
+		OnNoTask();
+		break;
+	case EAIState::commandInProgress:
+		OnCommandInProgress();
+		break;
+	case EAIState::newCommand:
+		OnNewCommand();
+		break;
+	case EAIState::usingRoom:
+		OnUsingRoom();
+		break;
+	default:
+		throw std::invalid_argument("EAIState not recognized.");
+	}
+}
+
+void AHardTime2Character::OnCooldown_Implementation()
+{
+	if (!GetWorldTimerManager().IsTimerActive(cooldownTimerHandle))
+	{
+		pLog("set cooldown timer", true);
+		GetWorldTimerManager().SetTimer(
+			cooldownTimerHandle, this, &AHardTime2Character::CooldownTimerElapsed, 0.5f, false);
+	}
+}
+
+void AHardTime2Character::CooldownTimerElapsed()
+{
+	pLog("ENTERING CooldownTimerElapsed", true);
+	GetWorldTimerManager().ClearTimer(cooldownTimerHandle);
+	if (m_aiState == EAIState::cooldown)
+	{
+		pLog("move from cooldown state to noTask state", true);
+		readyForNewAction = true;
+		m_aiState = EAIState::noTask;
+		UpdateStatus();
+		readyForNewAction = true;
+	}
+}
+
+void AHardTime2Character::OnCommandInProgress_Implementation()
+{}
+
+void AHardTime2Character::OnNoTask_Implementation()
+{}
+
+void AHardTime2Character::OnNewCommand_Implementation()
+{
+	pLog("Entering AHardTime2Character::OnNewCommand_Implementation", true);
+	switch (m_aiCommand)
+	{
+		case EAICommand::dropItem:
+			if (m_carriedItem != nullptr)
+			{
+				DropItemAction();
+			}
+			m_aiState = EAIState::cooldown;
+			UpdateStatus();
+			break;
+		case EAICommand::goToLocation:
+			pLog("EAICommand::goToLocation", true);
+			if (m_targetLocation != nullptr)
+			{
+				pLog("ATTEMPTING TO GO TO LOCATION!");
+				m_aiState = EAIState::commandInProgress;
+				AAIController* controller = Cast<AAIController>(GetController());
+				if (controller != nullptr)
+				{
+					FAIMoveRequest req;
+					req.SetAcceptanceRadius(50);
+					req.SetUsePathfinding(true);
+					req.SetGoalActor(m_targetLocation);
+					controller->MoveTo(req);
+
+					goToLocationMoveDelegateHandle = controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AHardTime2Character::GoToLocationMoveCompleted);
+				}
+				else
+					throw std::invalid_argument("Failed to cast character controller as AIController.");
+			} else {
+				m_aiState = EAIState::cooldown;
+			}
+			UpdateStatus();
+			break;
+		case EAICommand::pickupItem:
+			pLog("ENTERING EAICommand::pickupItem", true);
+			if (m_carriedItem == nullptr && m_targetItem != nullptr)
+			{
+				pLog("ATTEMPTING TO GO TO ITEM!");
+				m_aiState = EAIState::commandInProgress;
+				AAIController* controller = Cast<AAIController>(GetController());
+				if (controller != nullptr)
+				{
+					pickUpItemMoveDelegateHandle = controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AHardTime2Character::PickUpItemMoveCompleted);
+				
+					FAIMoveRequest req;
+					req.SetAcceptanceRadius(30);
+					req.SetUsePathfinding(true);
+					req.SetGoalActor(m_targetItem);
+					controller->MoveTo(req);
+				}
+				else
+					throw std::invalid_argument("Failed to cast character controller as AIController.");
+			} else {
+				m_aiState = EAIState::cooldown;
+			}
+			UpdateStatus();
+			break;
+		case EAICommand::useRoom:
+			m_useCount = 0;
+			m_aiState = EAIState::usingRoom;
+			break;
+		case EAICommand::requestItem:
+			pLog("EAICommand::requestItem", true);
+			if (m_targetPlayer->m_carriedItem != nullptr)
+			{
+				pLog("ATTEMPTING TO GO TO PLAYER!");
+				AAIController* controller = Cast<AAIController>(GetController());
+				if (controller != nullptr)
+				{
+					m_aiState = EAIState::commandInProgress;
+
+					requestItemMoveDelegateHandle = controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AHardTime2Character::RequestItemMoveCompleted);
+
+					FAIMoveRequest req;
+					req.SetAcceptanceRadius(20);
+					req.SetUsePathfinding(true);
+					req.SetGoalActor(m_targetPlayer);
+					controller->MoveTo(req);
+				}
+				else
+					throw std::invalid_argument("Failed to cast character controller as AIController.");
+			}
+			else {
+				m_aiState = EAIState::cooldown;
+				pLog("m_aiState = EAIState::cooldown;", true);
+			}
+			UpdateStatus();
+			break;
+		default:
+			throw std::invalid_argument("Unrecognised AI command.");
+	}
+}
+
+void AHardTime2Character::GoToLocationMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
+{
+	pLog("GoToLocationMoveCompleted", true);
+	if (b.IsSuccess())
+	{
+		m_aiState = EAIState::cooldown;
+	} else {
+		m_aiState = EAIState::noTask;
+	}
+	UpdateStatus();
+	AAIController* controller = Cast<AAIController>(GetController());
+	if (controller == nullptr)
+		throw std::invalid_argument("Cannot unbind goToLocationMoveDelegateHandle because controller is NULL.");
+	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(goToLocationMoveDelegateHandle);
+}
+
+void AHardTime2Character::PickUpItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
+{
+	pLog("PickUpItemMoveCompleted", true);
+	TArray <AActor*> overlappingActors;
+	GetOverlappingActors(overlappingActors, TSubclassOf <AActorItem>());
+	for (AActor* actor : overlappingActors)
+	{
+		if (actor == m_targetItem)
+		{
+			PickupItemAction(m_targetItem);
+			break;
+		}
+	}
+	AAIController* controller = Cast<AAIController>(GetController());
+	if (controller == nullptr)
+		throw std::invalid_argument("Cannot unbind pickUpItemMoveDelegateHandle because controller is NULL.");
+	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(pickUpItemMoveDelegateHandle);
+	m_aiState = EAIState::cooldown;
+	UpdateStatus();
+}
+
+void AHardTime2Character::RequestItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
+{
+	pLog("RequestItemMoveCompleted", true);
+	m_aiState = EAIState::commandInProgress;
+	UpdateStatus();
+	AAIController* controller = Cast<AAIController>(GetController());
+	if (controller == nullptr)
+		throw std::invalid_argument("Cannot unbind requestItemMoveDelegateHandle because controller is NULL.");
+	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(requestItemMoveDelegateHandle);
+	RequestItemAction(m_targetPlayer);
+}
+
+void AHardTime2Character::OnUsingRoom_Implementation()
+{
+	pLog("ENTERING OnUsingRoom_Implementation", true);
+	if (m_useCount >= 4)
+	{
+		pLog("m_useCount >= 4", true);
+		m_aiState = EAIState::cooldown;
+		UpdateStatus();
+	} else {
+		pLog("m_useCount < 4", true);
+		Jump();
+		switch (m_location)
+		{
+			case ELocations::bedroom:
+				DeltaHealth(1);
+				break;
+			case ELocations::circuitTrack:
+				DeltaAgility(1);
+				break;
+			case ELocations::gym:
+				DeltaStrength(1);
+				break;
+			case ELocations::library:
+				DeltaIntelligence(1);
+				break;
+			case ELocations::mainHall:
+				throw std::invalid_argument("Cannot use main hall!");
+			default:
+				throw std::invalid_argument("Location not recognised when using room");
+		}
+		m_useCount += 1;
+		m_aiState = EAIState::commandInProgress;
+		UpdateStatus();
+
+		pLog("About to try and set timer", true);
+		if (!GetWorldTimerManager().IsTimerActive(usingRoomTimerHandle))
+		{
+			GetWorldTimerManager().SetTimer(
+				usingRoomTimerHandle, this, &AHardTime2Character::UsingRoomTimerElapsed, 1.4, false);
+			pLog("Timer was set successfully!", true);
+		}
+	}
+}
+
+void AHardTime2Character::UsingRoomTimerElapsed()
+{
+	pLog("ENTERING UsingRoomTimerElapsed", true);
+	GetWorldTimerManager().ClearTimer(usingRoomTimerHandle);
+	if (!(m_player->aiController.lastActionInterrupted))
+	{
+		m_aiState = EAIState::usingRoom;
+	} else {
+		pLog("using room interrupted!", true);
+		m_aiState = EAIState::cooldown;
+	}
+	UpdateStatus();
+}
+
+void AHardTime2Character::UpdateStatus()
+{
+	FString status = "No status";
+	status = FindObject<UEnum>(ANY_PACKAGE, TEXT("EAIState"), true)->GetDisplayNameTextByIndex(static_cast<int32>(m_aiState)).ToString();
+	status.Append(", ");
+	status.Append(FindObject<UEnum>(ANY_PACKAGE, TEXT("EAICommand"), true)->GetDisplayNameTextByIndex(static_cast<int32>(m_aiCommand)).ToString());
+	DisplayStatus(status);
+}
+
+void AHardTime2Character::PickupItemAction(AActorItem* item)
+{
+	if (item->m_carryingPlayer != nullptr || m_carriedItem != nullptr)
+	{
+		return;
+	};
+	UActorComponent* itemComp = item->GetComponentByClass(UStaticMeshComponent::StaticClass());
+	UStaticMeshComponent* itemMeshComp = Cast<UStaticMeshComponent>(itemComp);
+	itemMeshComp->SetSimulatePhysics(false);
+	itemMeshComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+	capsule->IgnoreActorWhenMoving(item, true);
+	USkeletalMeshComponent* skeletalMesh = GetMesh();
+	skeletalMesh->IgnoreActorWhenMoving(item, true);
+	itemMeshComp->IgnoreActorWhenMoving(this, true);
+	FName socketName = "itemSocket";
+	FAttachmentTransformRules attachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
+	item->AttachToComponent(skeletalMesh, attachRules, socketName);
+
+	m_carriedItem = item;
+	if (item->m_carryingPlayer != nullptr)
+	{
+		if (item->m_carryingPlayer->physicalCharacter == nullptr)
+		{
+			throw std::invalid_argument("Cannot remove item from current carrying player. Physical character is NULL.");
+		}
+		item->m_carryingPlayer->physicalCharacter->m_carriedItem = nullptr;
+	}
+	item->m_carryingPlayer = this->m_player;
+
+	auto gameMode = GetWorld()->GetAuthGameMode();
+	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
+	if (hardTime2GameMode != nullptr)
+	{
+		hardTime2GameMode->m_simWorld->UpdateCarriedItemC(m_carriedItem, this);
+	}
+	else {
+		throw std::invalid_argument("Failed to cast gameMode to AHardTime2GameMode.");
+	}
+}
+
+void AHardTime2Character::DropItemAction()
+{
+	if (m_carriedItem == nullptr)
+	{
+		return;
+	}
+	UActorComponent* itemComp = m_carriedItem->GetComponentByClass(UStaticMeshComponent::StaticClass());
+	UStaticMeshComponent* itemMeshComp = Cast<UStaticMeshComponent>(itemComp);
+	FDetachmentTransformRules rules(EDetachmentRule::KeepWorld, false);
+	itemMeshComp->DetachFromComponent(rules);
+	itemMeshComp->ClearMoveIgnoreActors();
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+	capsule->ClearMoveIgnoreActors();
+	USkeletalMeshComponent* skeletalMesh = GetMesh();
+	skeletalMesh->ClearMoveIgnoreActors();
+	itemMeshComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	itemMeshComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Overlap);
+	itemMeshComp->SetSimulatePhysics(true);
+
+	m_carriedItem->m_carryingPlayer = nullptr;
+	m_carriedItem = nullptr;
+
+	auto gameMode = GetWorld()->GetAuthGameMode();
+	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
+	if (hardTime2GameMode != nullptr)
+	{
+		hardTime2GameMode->m_simWorld->UpdateCarriedItemC(nullptr, this);
+	}
+	else {
+		throw std::invalid_argument("Failed to cast gameMode to AHardTime2GameMode.");
+	}
+}
+
+void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter)
+{
+	targetCharacter->RespondToItemRequest(this);
+}
+
+void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Character* requestingCharacter)
+{
+	pLog("RespondToItemRequest", true);
+	DropItemAction();
+	requestingCharacter->RequestItemHandleResponse(this);
+}
+
+void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetCharacter)
+{
+	pLog("RequestItemHandleResponse", true);
+	if (m_targetItem->m_carryingPlayer == nullptr)
+	{
+		pLog("Item pickedup", true);
+		PickupItemAction(m_targetItem);
+		m_aiState = EAIState::cooldown;
+		UpdateStatus();
+	} else {
+		pLog("No item pickedup", true);
+		m_aiState = EAIState::cooldown;
+		UpdateStatus();
+	}
 }

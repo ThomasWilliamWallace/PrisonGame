@@ -3,6 +3,7 @@
 #include "SimWorld.h"
 #include "Locations.h"
 #include <sstream>
+#include "HardTime2Character.h"
 #include "pLog.hpp"
 
 double Relationship::getAggro()

@@ -11,7 +11,28 @@
 #include "ActorItem.h"
 #include "SimWorld.h"
 #include "PlayerData.h"
+#include "Runtime/AIModule/Classes/Navigation/PathFollowingComponent.h"
 #include "HardTime2Character.generated.h"
+
+UENUM(BlueprintType, Blueprintable)
+enum class EAIState : uint8
+{
+	cooldown			UMETA(DisplayName = "Cooldown"),
+	noTask				UMETA(DisplayName = "No task"),
+	commandInProgress	UMETA(DisplayName = "Command in progress"),
+	newCommand			UMETA(DisplayName = "New command"),
+	usingRoom			UMETA(DisplayName = "Using room"),
+};
+
+UENUM(BlueprintType, Blueprintable)
+enum class EAICommand : uint8
+{
+	goToLocation		UMETA(DisplayName = "Go to location"),
+	pickupItem			UMETA(DisplayName = "Pickup item"),
+	dropItem			UMETA(DisplayName = "Drop item"),
+	useRoom				UMETA(DisplayName = "Use room"),
+	requestItem			UMETA(DisplayName = "Request item"),
+};
 
 UCLASS(config=Game)
 class AHardTime2Character : public ACharacter
@@ -32,25 +53,25 @@ public:
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseTurnRate;
+		float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
-	float BaseLookUpRate;
+		float BaseLookUpRate;
 
-	UFUNCTION(BlueprintCallable, Category = AI)
-		void SetLastActionInterrupted();
+	UFUNCTION(BlueprintCallable, Category = Planning_AI)
+		void SetLastActionInterrupted(bool interrupted);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Planning_AI)
 		bool readyForNewAction = true;
 
-	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = Planning_AI)
 		void SetWorld(USimWorld* simWorld);
 
-	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = Planning_AI)
 		USimWorld* GetSimWorld();
 
-	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = Planning_AI)
 		void UpdateLocation(ELocations location);
 
 	UFUNCTION(BlueprintCallable, Category = Stats)
@@ -71,6 +92,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	/** Resets HMD orientation in VR. */
 	void OnResetVR();
@@ -113,25 +136,112 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void GoToLocation(ELocations location);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
-		void AttackPlayer(ACharacter* character);
-
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void PickUpItem(AActorItem* item);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void DropItem();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void UseRoom();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
-		void Evade();
+	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
+		void RequestItem(AHardTime2Character* character);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
+		EAIState m_aiState;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
-		void RequestItem(ACharacter* character);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
+		EAICommand m_aiCommand;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
+		AActorItem* m_targetItem;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
+		AHardTime2Character* m_targetPlayer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
+		AActor* m_targetLocation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Knowledge)
+		AActor* m_mainHall;  //TODO move these to game world state
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Knowledge)
+		AActor* m_bedroom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Knowledge)
+		AActor* m_circuitTrack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Knowledge)
+		AActor* m_gym;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Knowledge)
+		AActor* m_library;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
+		int m_useCount;
+
+	UPROPERTY(VisibleAnywhere, Category = LowLevelAI)
+		ELocations m_location;
+
+	UPROPERTY(VisibleAnywhere, Category = LowLevelAI)
+		AActorItem* m_carriedItem;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = LowLevelAI)
+		void OnCooldown();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = LowLevelAI)
+		void OnCommandInProgress();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = LowLevelAI)
+		void OnNoTask();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = LowLevelAI)
+		void OnNewCommand();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = LowLevelAI)
+		void OnUsingRoom();
+
+	UFUNCTION()
+	void CooldownTimerElapsed();
+	FTimerHandle cooldownTimerHandle;
+
+	UFUNCTION()
+	void UsingRoomTimerElapsed();
+	FTimerHandle usingRoomTimerHandle;
+
+	void PickUpItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b);
+	FDelegateHandle pickUpItemMoveDelegateHandle;
+
+	void GoToLocationMoveCompleted(FAIRequestID a, const FPathFollowingResult &b);
+	FDelegateHandle goToLocationMoveDelegateHandle;
+
+	void RequestItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b);
+	FDelegateHandle requestItemMoveDelegateHandle;
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void DisplayStatus(const FString& displayString);
+
+	UFUNCTION(BlueprintCallable, Category = Action)
+		void PickupItemAction(AActorItem* item);
+
+	UFUNCTION(BlueprintCallable, Category = Action)
+		void DropItemAction();
+
+	UFUNCTION(BlueprintCallable, Category = Action)
+		void RequestItemAction(AHardTime2Character* targetCharacter);
+
+	void UpdateStatus();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Action)
+		void RespondToItemRequest(AHardTime2Character* requestingCharacter);
+
+	UFUNCTION(BlueprintCallable, Category = Action)
+		void RequestItemHandleResponse(AHardTime2Character* targetCharacter);
+
+private:
+
 };
-

@@ -88,7 +88,7 @@ Actions AIController::DoNothingAIChooseAction(UPlayerData* playerData, UPlayerDa
 
 Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld)
 {
-	pLog("Entering htnAIChooseAction", true);
+	pLog("Entering htnAIChooseAction");
 	//update worldstate from real world
 	HTNWorldState htnWorldState(playerData, *(simWorld));
 
@@ -101,10 +101,10 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		hasValidPlan = false;
 	} else if (htnPlan.size() > 0)
 	{
-		pLog("Check Precondition of plan primitive step", true);
+		pLog("Check Precondition of plan primitive step");
 		hasValidPlan = htnPlan.front()->Preconditions(htnWorldState);
 	} else {
-		pLog("No plan exists at all.", true);
+		pLog("No plan exists at all.");
 	}
 
 	//If plan is not valid, abandon it and try to make a new plan
@@ -117,13 +117,6 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
 		htnPlan = HTNIterative(htnWorldStateDFSCopy, *missionPtr, 0);
-		
-		{std::stringstream ss;
-		for (auto &htnPrimitive : htnPlan)
-		{
-			ss << htnPrimitive->ToString() << ", ";
-		}
-		pLog(ss, true);}
 
 		//once again, check if next step of the plan is valid.
 		if (htnPlan.size() > 0)
@@ -139,7 +132,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		pLog(ss, true);
 		return Actions::noAction; //If next step of the plan is still not valid, then return failure state
 	} else {
-		pLog("Valid plan found!", true);
+		pLog("Valid plan found!");
 		std::stringstream ss;
 		ss << "Plan steps: ";
 		for (auto &prim : playerData->aiController.htnPlan)
@@ -150,10 +143,10 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 		HTNPrimitivePtr currentPlanStep = htnPlan.front();
 		lastPrimitiveAction = currentPlanStep;
 		htnPlan.pop_front();
-		pLog("Leaving htnAIChooseAction #2", true);
+		pLog("Leaving htnAIChooseAction #2");
 		return currentPlanStep->Operate(playerData, *simWorld);
 	}
-	pLog("Leaving htnAIChooseAction #3", true);
+	pLog("Leaving htnAIChooseAction #3");
 	return Actions::noAction;
 }
 

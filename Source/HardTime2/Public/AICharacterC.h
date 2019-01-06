@@ -20,16 +20,16 @@ public:
 
 	virtual void BeginDestroy() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AAICharacterC)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AI)
 		bool readyForNewAction = true;
 
-	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = AI_World)
 		void SetWorld(USimWorld* simWorld);
 
-	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = AI_World)
 		USimWorld* GetSimWorld();
 
-	UFUNCTION(BlueprintCallable, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, Category = AI_World)
 		void UpdateLocation(ELocations location);
 
 	UFUNCTION(BlueprintCallable, Category = Stats)
@@ -67,24 +67,24 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AIControl)
 		void GoToLocation(ELocations location);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AIControl)
 		void AttackPlayer(ACharacter* character);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AIControl)
 		void PickUpItem(AActorItem* item);
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AIControl)
 		void DropItem();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AIControl)
 		void UseRoom();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AIControl)
 		void Evade();
 
-	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AAICharacterC)
-		void RequestItem(ACharacter* character);
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = AIControl)
+		void RequestItem(AHardTime2Character* character);
 };
