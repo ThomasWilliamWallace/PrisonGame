@@ -5,215 +5,215 @@
 #include "HTNWorldState.hpp"
 
 //***********************************************************
-class GoToLibraryMethod1 : public HTNMethod
+class GoToNearbyLibraryMethod : public HTNMethod
 {
 public:
-	GoToLibraryMethod1();
+    GoToNearbyLibraryMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class GoToLibraryMethod2 : public HTNMethod
+class GoToDistantLibraryMethod : public HTNMethod
 {
 public:
-	GoToLibraryMethod2();
+    GoToDistantLibraryMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class GoToLibraryCompound : public HTNCompound
 {
 public:
 	GoToLibraryCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class GoToGymMethod1 : public HTNMethod
+class GoToNearbyGymMethod : public HTNMethod
 {
 public:
-	GoToGymMethod1();
+    GoToNearbyGymMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class GoToGymMethod2 : public HTNMethod
+class GoToDistantGymMethod : public HTNMethod
 {
 public:
-	GoToGymMethod2();
+    GoToDistantGymMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class GoToGymCompound : public HTNCompound
 {
 public:
 	GoToGymCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class GoToCircuitTrackMethod1 : public HTNMethod
+class GoToNearbyCircuitTrackMethod : public HTNMethod
 {
 public:
-	GoToCircuitTrackMethod1();
+    GoToNearbyCircuitTrackMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class GoToCircuitTrackMethod2 : public HTNMethod
+class GoToDistantCircuitTrackMethod : public HTNMethod
 {
 public:
-	GoToCircuitTrackMethod2();
+    GoToDistantCircuitTrackMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class GoToCircuitTrackCompound : public HTNCompound
 {
 public:
 	GoToCircuitTrackCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class GoToBedroomMethod1 : public HTNMethod
+class GoToNearbyBedroomMethod : public HTNMethod
 {
 public:
-	GoToBedroomMethod1();
+    GoToNearbyBedroomMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class GoToBedroomMethod2 : public HTNMethod
+class GoToDistantBedroomMethod : public HTNMethod
 {
 public:
-	GoToBedroomMethod2();
+    GoToDistantBedroomMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class GoToBedroomCompound : public HTNCompound
 {
 public:
 	GoToBedroomCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class IncreaseHealthMethod1 : public HTNMethod
+class IncreaseHealthImmediateMethod : public HTNMethod
 {
 public:
-	IncreaseHealthMethod1();
+    IncreaseHealthImmediateMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class IncreaseHealthMethod2 : public HTNMethod
+class GoToAndIncreaseHealthMethod : public HTNMethod
 {
 public:
-	IncreaseHealthMethod2();
+    GoToAndIncreaseHealthMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class IncreaseHealthCompound : public HTNCompound
 {
 public:
 	IncreaseHealthCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class IncreaseStrengthMethod1 : public HTNMethod
+class IncreaseStrengthImmediateMethod : public HTNMethod
 {
 public:
-	IncreaseStrengthMethod1();
+    IncreaseStrengthImmediateMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class IncreaseStrengthMethod2 : public HTNMethod
+class GoToAndIncreaseStrengthMethod : public HTNMethod
 {
 public:
-	IncreaseStrengthMethod2();
+    GoToAndIncreaseStrengthMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class IncreaseStrengthCompound : public HTNCompound
 {
 public:
 	IncreaseStrengthCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class IncreaseAgilityMethod1 : public HTNMethod
+class IncreaseAgilityImmediateMethod : public HTNMethod
 {
 public:
-	IncreaseAgilityMethod1();
+    IncreaseAgilityImmediateMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class IncreaseAgilityMethod2 : public HTNMethod
+class GoToAndIncreaseAgilityMethod : public HTNMethod
 {
 public:
-	IncreaseAgilityMethod2();
+    GoToAndIncreaseAgilityMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class IncreaseAgilityCompound : public HTNCompound
 {
 public:
 	IncreaseAgilityCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class IncreaseIntelligenceMethod1 : public HTNMethod
+class IncreaseIntelligenceImmediateMethod : public HTNMethod
 {
 public:
-	IncreaseIntelligenceMethod1();
+    IncreaseIntelligenceImmediateMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class IncreaseIntelligenceMethod2 : public HTNMethod
+class GoToAndIncreaseIntelligenceMethod : public HTNMethod
 {
 public:
-	IncreaseIntelligenceMethod2();
+    GoToAndIncreaseIntelligenceMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class IncreaseIntelligenceCompound : public HTNCompound
 {
 public:
 	IncreaseIntelligenceCompound();
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class GetItemMethod1 : public HTNMethod
+class PickupItemMethod : public HTNMethod
 {
 	EItemType m_itemType;
 public:
-	GetItemMethod1(EItemType itemType);
+    PickupItemMethod(EItemType itemType);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class GetItemMethod2 : public HTNMethod
+class RequestItemMethod : public HTNMethod
 {
     UPlayerData* m_player;
     EItemType m_itemType;
 public:
-    GetItemMethod2(UPlayerData* player, EItemType itemType);
+    RequestItemMethod(UPlayerData* player, EItemType itemType);
     bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class GetItemCompound : public HTNCompound
@@ -222,39 +222,39 @@ class GetItemCompound : public HTNCompound
     EItemType m_itemType;
 public:
     GetItemCompound(HTNWorldState &htnWorldState, EItemType itemType);
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class BringItemToLocationMethod1 : public HTNMethod
+class DropItemMethod : public HTNMethod
 {
 	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-	BringItemToLocationMethod1(EItemType itemType, LocationClass &locationClass);
+    DropItemMethod(EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class BringItemToLocationMethod2 : public HTNMethod
+class BringAndDropItemMethod : public HTNMethod
 {
 	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-	BringItemToLocationMethod2(EItemType itemType, LocationClass &locationClass);
+    BringAndDropItemMethod(EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class BringItemToLocationMethod3 : public HTNMethod
+class GetBringAndDropItemMethod : public HTNMethod
 {
     HTNWorldState& m_htnWorldState;
 	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-    BringItemToLocationMethod3(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass);
+    GetBringAndDropItemMethod(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class BringItemToLocationCompound : public HTNCompound
@@ -264,27 +264,27 @@ class BringItemToLocationCompound : public HTNCompound
     LocationClass& m_locationClass;
 public:
     BringItemToLocationCompound(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass); //be wary with this. Probably just refactor to pass locationClass by value rather than reference
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
-class AttackMethod1 : public HTNMethod
+class PickupItemAndAttackMethod : public HTNMethod
 {
     SimActorItemPtr m_item;
 	UPlayerData* m_opponent;
 public:
-    AttackMethod1(SimActorItemPtr item, UPlayerData* opponent);
+    PickupItemAndAttackMethod(SimActorItemPtr item, UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
-class AttackMethod2 : public HTNMethod
+class AttackImmediateMethod : public HTNMethod
 {
 	UPlayerData* m_opponent;
 public:
-	AttackMethod2(UPlayerData* opponent);
+    AttackImmediateMethod(UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class AttackCompound : public HTNCompound
@@ -293,68 +293,26 @@ class AttackCompound : public HTNCompound
     UPlayerData* m_opponent;
 public:
 	AttackCompound(HTNWorldState &htnWorldState, UPlayerData* opponent);
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };
 
-class AttackCompoundMethod : public HTNMethod
+class AttackMethod : public HTNMethod
 {
     HTNWorldState& m_htnWorldState;
     UPlayerData* m_opponent;
 public:
-	AttackCompoundMethod(HTNWorldState &htnWorldState, UPlayerData* opponent);
+    AttackMethod(HTNWorldState &htnWorldState, UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
-};
-
-//***********************************************************
-class DoMissionMethod1 : public HTNMethod
-{
-public:
-	DoMissionMethod1();
-	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
-};
-
-class DoMissionMethod2 : public HTNMethod
-{
-public:
-	DoMissionMethod2();
-	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
-};
-
-class DoMissionMethod3 : public HTNMethod
-{
-public:
-	DoMissionMethod3();
-	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
-};
-
-class DoMissionMethod4 : public HTNMethod
-{
-    HTNWorldState& m_htnWorldState;
-public:
-	DoMissionMethod4(HTNWorldState &htnWorldState);
-	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
-};
-
-class DoMissionCompound : public HTNCompound
-{
-    HTNWorldState& m_htnWorldState;
-public:
-	DoMissionCompound(HTNWorldState &htnWorldState);
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateTasks() override;
 };
 
 //***********************************************************
 class EvadeMethod : public HTNMethod
 {
 public:
-	EvadeMethod();
+    EvadeMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class CombatCompound : public HTNCompound
@@ -362,8 +320,50 @@ class CombatCompound : public HTNCompound
     HTNWorldState& m_htnWorldState;
     UPlayerData* m_opponent;
 public:
-	CombatCompound(HTNWorldState &htnWorldState, UPlayerData* opponent);
-    virtual HTNMethodList& GetMethods() override;
+    CombatCompound(HTNWorldState &htnWorldState, UPlayerData* opponent);
+    virtual void CreateMethods() override;
+};
+
+//***********************************************************
+class IncreaseStrengthMissionMethod : public HTNMethod
+{
+public:
+    IncreaseStrengthMissionMethod();
+	bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
+class IncreaseAgilityMissionMethod : public HTNMethod
+{
+public:
+    IncreaseAgilityMissionMethod();
+	bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
+class IncreaseIntelligenceMissionMethod : public HTNMethod
+{
+public:
+    IncreaseIntelligenceMissionMethod();
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
+class BringItemToRoomMissionMethod : public HTNMethod
+{
+    HTNWorldState& m_htnWorldState;
+public:
+    BringItemToRoomMissionMethod(HTNWorldState &htnWorldState);
+	bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
+class DoMissionCompound : public HTNCompound
+{
+    HTNWorldState& m_htnWorldState;
+public:
+	DoMissionCompound(HTNWorldState &htnWorldState);
+    virtual void CreateMethods() override;
 };
 
 //***********************************************************
@@ -374,7 +374,7 @@ class CombatMethod : public HTNMethod
 public:
 	CombatMethod(HTNWorldState &htnWorldState, UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class DoMissionMethod : public HTNMethod
@@ -383,7 +383,7 @@ class DoMissionMethod : public HTNMethod
 public:
 	DoMissionMethod(HTNWorldState &htnWorldState);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 class IncreaseIntelligenceMethod : public HTNMethod
@@ -391,26 +391,26 @@ class IncreaseIntelligenceMethod : public HTNMethod
 public:
 	IncreaseIntelligenceMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 //***********************************************************
-class PickUpItemMethod1 : public HTNMethod
+class PickUpItemByPtrMethod : public HTNMethod
 {
     SimActorItemPtr m_itemFocusPtr;
 public:
-    PickUpItemMethod1(SimActorItemPtr itemFocus);
+    PickUpItemByPtrMethod(SimActorItemPtr itemFocus);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 //***********************************************************
-class DropItemMethod1 : public HTNMethod
+class DropAnyItemImmediateMethod : public HTNMethod
 {
 public:
-	DropItemMethod1();
+	DropAnyItemImmediateMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual HTNNodeList& GetTasks() override;
+    virtual void CreateTasks() override;
 };
 
 //***********************************************************
@@ -419,5 +419,5 @@ class PrisonerBehaviourCompound : public HTNCompound
     HTNWorldState& m_htnWorldState;
 public:
 	PrisonerBehaviourCompound(HTNWorldState &htnWorldState);
-    virtual HTNMethodList& GetMethods() override;
+    virtual void CreateMethods() override;
 };

@@ -8,61 +8,50 @@ class AActorItem;
 class USimWorld;
 
 //***********************************************************
-class Study : public HTNPrimitive
+class StudyPrim : public HTNPrimitive
 {
 public:
-	Study();
+    StudyPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
-class Sleep : public HTNPrimitive
+class SleepPrim : public HTNPrimitive
 {
 public:
-	Sleep();
+    SleepPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
-class UseGym : public HTNPrimitive
+class UseGymPrim : public HTNPrimitive
 {
 public:
-	UseGym();
+    UseGymPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
-class RunCircuits : public HTNPrimitive
+class RunCircuitsPrim : public HTNPrimitive
 {
 public:
-	RunCircuits();
+    RunCircuitsPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
-class GoToGym : public HTNPrimitive
+class GoToGymPrim : public HTNPrimitive
 {
 public:
-	GoToGym();
-	bool Preconditions(HTNWorldState &htnWorldState) override;
-	void Effect(HTNWorldState &htnWorldState) override;
-    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
-	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
-};
-
-//***********************************************************
-class GoToLibrary : public HTNPrimitive
-{
-public:
-	GoToLibrary();
+    GoToGymPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
@@ -70,10 +59,10 @@ public:
 };
 
 //***********************************************************
-class GoToCircuitTrack : public HTNPrimitive
+class GoToLibraryPrim : public HTNPrimitive
 {
 public:
-	GoToCircuitTrack();
+    GoToLibraryPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
@@ -81,10 +70,10 @@ public:
 };
 
 //***********************************************************
-class GoToBedroom : public HTNPrimitive
+class GoToCircuitTrackPrim : public HTNPrimitive
 {
 public:
-	GoToBedroom();
+    GoToCircuitTrackPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
@@ -92,10 +81,10 @@ public:
 };
 
 //***********************************************************
-class GoToMainHall : public HTNPrimitive
+class GoToBedroomPrim : public HTNPrimitive
 {
 public:
-	GoToMainHall();
+    GoToBedroomPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
@@ -103,41 +92,52 @@ public:
 };
 
 //***********************************************************
-class Drink : public HTNPrimitive
+class GoToMainHallPrim : public HTNPrimitive
 {
 public:
-	Drink();
+    GoToMainHallPrim();
+	bool Preconditions(HTNWorldState &htnWorldState) override;
+	void Effect(HTNWorldState &htnWorldState) override;
+    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
+	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
+};
+
+//***********************************************************
+class DrinkPrim : public HTNPrimitive
+{
+public:
+    DrinkPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
-class Punch : public HTNPrimitive
+class PunchPrim : public HTNPrimitive
 {
 	UPlayerData* m_targetPlayer;
 public:
-	Punch(UPlayerData* opponent);
+    PunchPrim(UPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
-class Evade : public HTNPrimitive
+class EvadePrim : public HTNPrimitive
 {
 public:
-	Evade();
+    EvadePrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;
 };
 
 //***********************************************************
-class PickUpItem : public HTNPrimitive
+class PickUpItemByPtrPrim : public HTNPrimitive
 {
 public:
-    PickUpItem(SimActorItemPtr itemFocus);
+    PickUpItemByPtrPrim(SimActorItemPtr itemFocus);
     SimActorItemPtr m_itemFocus;
     bool Preconditions(HTNWorldState &htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
@@ -146,10 +146,10 @@ public:
 };
 
 //***********************************************************
-class PickUpItem2 : public HTNPrimitive
+class PickUpItemByTypePrim : public HTNPrimitive
 {
 public:
-	PickUpItem2(EItemType itemType);
+    PickUpItemByTypePrim(EItemType itemType);
 	EItemType m_itemType;
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
@@ -158,10 +158,10 @@ public:
 };
 
 //***********************************************************
-class DropItem : public HTNPrimitive
+class DropItemPrim : public HTNPrimitive
 {
 public:
-	DropItem();
+    DropItemPrim();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     Actions Operate(UPlayerData* playerData, USimWorld &world) override;

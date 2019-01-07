@@ -37,15 +37,25 @@ bool HTNPrimitive::LastActionSucceeded(HTNWorldState &htnWorldState)
 }
 
 //*******************************************************************
-HTNCompound::HTNCompound(std::string name): HTNNode(name, HTNType::Compound) {}
+HTNCompound::HTNCompound(std::string name): HTNNode(name, HTNType::Compound), m_alreadyCreatedMethods(false) {}
 
 void HTNCompound::AddMethod(HTNMethod* htnMethod)
 {
     m_methods.push_back(HTNMethodPtr(htnMethod));
 }
 
+HTNMethodList& HTNCompound::GetMethods()
+{
+    if (!m_alreadyCreatedMethods)
+    {
+        CreateMethods();
+        m_alreadyCreatedMethods = true;
+    }
+    return m_methods;
+}
+
 //*******************************************************************
-HTNMethod::HTNMethod(std::string name): HTNNode(name, HTNType::Method) {}
+HTNMethod::HTNMethod(std::string name): HTNNode(name, HTNType::Method), m_alreadyCreatedTasks(false) {}
 
 bool HTNMethod::Preconditions(HTNWorldState &htnWorldState)
 {
@@ -60,6 +70,16 @@ void HTNMethod::AddTask(HTNPrimitive* htnPrimitive)
 void HTNMethod::AddTask(HTNCompound* htnCompound)
 {
     m_nodeList.push_back(HTNCompoundPtr(htnCompound));
+}
+
+HTNNodeList& HTNMethod::GetTasks()
+{
+    if (!m_alreadyCreatedTasks)
+    {
+        CreateTasks();
+        m_alreadyCreatedTasks = true;
+    }
+    return m_nodeList;
 }
 
 //*******************************************************************

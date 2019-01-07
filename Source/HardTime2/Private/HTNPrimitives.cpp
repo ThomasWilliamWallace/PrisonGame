@@ -6,272 +6,272 @@
 #include "pLog.hpp"
 
 //***********************************************************
-Study::Study() : HTNPrimitive("Study") {}
+StudyPrim::StudyPrim() : HTNPrimitive("StudyPrim") {}
 
-void Study::Effect(HTNWorldState &htnWorldState)
+void StudyPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::intelligence) += 1;
 	return;
 }
 
-Actions Study::Operate(UPlayerData* playerData, USimWorld &world)
+Actions StudyPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
 
-bool Study::Preconditions(HTNWorldState &htnWorldState)
+bool StudyPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
 }
 
 //***********************************************************
-Sleep::Sleep() : HTNPrimitive("Sleep") {}
+SleepPrim::SleepPrim() : HTNPrimitive("SleepPrim") {}
 
-void Sleep::Effect(HTNWorldState &htnWorldState)
+void SleepPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::health) += 1;
 	return;
 }
 
-Actions Sleep::Operate(UPlayerData* playerData, USimWorld &world)
+Actions SleepPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
 
-bool Sleep::Preconditions(HTNWorldState &htnWorldState)
+bool SleepPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
 }
 
 //***********************************************************
-UseGym::UseGym() : HTNPrimitive("UseGym") {}
+UseGymPrim::UseGymPrim() : HTNPrimitive("UseGymPrim") {}
 
-void UseGym::Effect(HTNWorldState &htnWorldState)
+void UseGymPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::strength) += 1;
 	return;
 }
 
-Actions UseGym::Operate(UPlayerData* playerData, USimWorld &world)
+Actions UseGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
 
-bool UseGym::Preconditions(HTNWorldState &htnWorldState)
+bool UseGymPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
 }
 
 //***********************************************************
-RunCircuits::RunCircuits() : HTNPrimitive("RunCircuits") {}
+RunCircuitsPrim::RunCircuitsPrim() : HTNPrimitive("RunCircuitsPrim") {}
 
-void RunCircuits::Effect(HTNWorldState &htnWorldState)
+void RunCircuitsPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::agility) += 1;
 	return;
 }
 
-Actions RunCircuits::Operate(UPlayerData* playerData, USimWorld &world)
+Actions RunCircuitsPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::useRoom;
 }
 
-bool RunCircuits::Preconditions(HTNWorldState &htnWorldState)
+bool RunCircuitsPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
 }
 
 //***********************************************************
-GoToGym::GoToGym() : HTNPrimitive("GoToGym") {}
+GoToGymPrim::GoToGymPrim() : HTNPrimitive("GoToGymPrim") {}
 
-void GoToGym::Effect(HTNWorldState &htnWorldState)
+void GoToGymPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::gym);
 	return;
 }
 
-Actions GoToGym::Operate(UPlayerData* playerData, USimWorld &world)
+Actions GoToGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToGym;
 }
 
-bool GoToGym::Preconditions(HTNWorldState &htnWorldState)
+bool GoToGymPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
-bool GoToGym::LastActionSucceeded(HTNWorldState &htnWorldState)
+bool GoToGymPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
 }
 
 //***********************************************************
-GoToLibrary::GoToLibrary() : HTNPrimitive("GoToLibrary") {}
+GoToLibraryPrim::GoToLibraryPrim() : HTNPrimitive("GoToLibraryPrim") {}
 
-void GoToLibrary::Effect(HTNWorldState &htnWorldState)
+void GoToLibraryPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::library);
 	return;
 }
 
-Actions GoToLibrary::Operate(UPlayerData* playerData, USimWorld &world)
+Actions GoToLibraryPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToLibrary;
 }
 
-bool GoToLibrary::Preconditions(HTNWorldState &htnWorldState)
+bool GoToLibraryPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
-bool GoToLibrary::LastActionSucceeded(HTNWorldState &htnWorldState)
+bool GoToLibraryPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
 }
 
 //***********************************************************
-GoToBedroom::GoToBedroom() : HTNPrimitive("GoToBedroom") {}
+GoToCircuitTrackPrim::GoToCircuitTrackPrim() : HTNPrimitive("GoToCircuitTrackPrim") {}
 
-void GoToBedroom::Effect(HTNWorldState &htnWorldState)
-{
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::bedroom);
-	return;
-}
-
-Actions GoToBedroom::Operate(UPlayerData* playerData, USimWorld &world)
-{
-	return Actions::goToBedroom;
-}
-
-bool GoToBedroom::Preconditions(HTNWorldState &htnWorldState)
-{
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
-}
-
-bool GoToBedroom::LastActionSucceeded(HTNWorldState &htnWorldState)
-{
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
-}
-
-//***********************************************************
-GoToCircuitTrack::GoToCircuitTrack() : HTNPrimitive("GoToCircuitTrack") {}
-
-void GoToCircuitTrack::Effect(HTNWorldState &htnWorldState)
+void GoToCircuitTrackPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::circuitTrack);
 	return;
 }
 
-Actions GoToCircuitTrack::Operate(UPlayerData* playerData, USimWorld &world)
+Actions GoToCircuitTrackPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToCircuitTrack;
 }
 
-bool GoToCircuitTrack::Preconditions(HTNWorldState &htnWorldState)
+bool GoToCircuitTrackPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
-bool GoToCircuitTrack::LastActionSucceeded(HTNWorldState &htnWorldState)
+bool GoToCircuitTrackPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
 }
 
 //***********************************************************
-GoToMainHall::GoToMainHall() : HTNPrimitive("GoToMainHall") {}
+GoToBedroomPrim::GoToBedroomPrim() : HTNPrimitive("GoToBedroomPrim") {}
 
-void GoToMainHall::Effect(HTNWorldState &htnWorldState)
+void GoToBedroomPrim::Effect(HTNWorldState &htnWorldState)
+{
+	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::bedroom);
+	return;
+}
+
+Actions GoToBedroomPrim::Operate(UPlayerData* playerData, USimWorld &world)
+{
+	return Actions::goToBedroom;
+}
+
+bool GoToBedroomPrim::Preconditions(HTNWorldState &htnWorldState)
+{
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
+}
+
+bool GoToBedroomPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
+{
+	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
+}
+
+//***********************************************************
+GoToMainHallPrim::GoToMainHallPrim() : HTNPrimitive("GoToMainHallPrim") {}
+
+void GoToMainHallPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::mainHall);
 	return;
 }
 
-Actions GoToMainHall::Operate(UPlayerData* playerData, USimWorld &world)
+Actions GoToMainHallPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::goToMainHall;
 }
 
-bool GoToMainHall::Preconditions(HTNWorldState &htnWorldState)
+bool GoToMainHallPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) != ELocations::mainHall;
 }
 
-bool GoToMainHall::LastActionSucceeded(HTNWorldState &htnWorldState)
+bool GoToMainHallPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
 }
 
 //***********************************************************
-Drink::Drink() : HTNPrimitive("Drink") {}
+DrinkPrim::DrinkPrim() : HTNPrimitive("DrinkPrim") {}
 
-void Drink::Effect(HTNWorldState &htnWorldState)
+void DrinkPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::intelligence) -= 1;
 	return;
 }
 
-Actions Drink::Operate(UPlayerData* playerData, USimWorld &world)
+Actions DrinkPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::noAction;
 }
 
-bool Drink::Preconditions(HTNWorldState &htnWorldState)
+bool DrinkPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return true;
 }
 
 //***********************************************************
-Punch::Punch(UPlayerData* opponent) : HTNPrimitive("Punch"), m_targetPlayer(opponent) {}
+PunchPrim::PunchPrim(UPlayerData* opponent) : HTNPrimitive("PunchPrim"), m_targetPlayer(opponent) {}
 
-void Punch::Effect(HTNWorldState &htnWorldState)
+void PunchPrim::Effect(HTNWorldState &htnWorldState)
 {
 }
 
-Actions Punch::Operate(UPlayerData* playerData, USimWorld &world)
+Actions PunchPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	playerData->playerTargetPtr = m_targetPlayer;
 	return Actions::attack;
 }
 
-bool Punch::Preconditions(HTNWorldState &htnWorldState)
+bool PunchPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return htnWorldState.m_playerLocations[m_targetPlayer->m_playerIndex] == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location));
 }
 
 //***********************************************************
-Evade::Evade() : HTNPrimitive("Evade") {}
+EvadePrim::EvadePrim() : HTNPrimitive("EvadePrim") {}
 
-void Evade::Effect(HTNWorldState &htnWorldState)
+void EvadePrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_v.at(WorldE::evading) = 1;
 }
 
-Actions Evade::Operate(UPlayerData* playerData, USimWorld &world)
+Actions EvadePrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::evade;
 }
 
-bool Evade::Preconditions(HTNWorldState &htnWorldState)
+bool EvadePrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return true;
 }
 
 //***********************************************************
-PickUpItem::PickUpItem(SimActorItemPtr itemFocus) : HTNPrimitive("PickUpItem"), m_itemFocus(itemFocus) {}
+PickUpItemByPtrPrim::PickUpItemByPtrPrim(SimActorItemPtr itemFocus) : HTNPrimitive("PickUpItemByPtrPrim"), m_itemFocus(itemFocus) {}
 
-void PickUpItem::Effect(HTNWorldState &htnWorldState)
+void PickUpItemByPtrPrim::Effect(HTNWorldState &htnWorldState)
 {
     m_itemFocus->m_carryingPlayer = htnWorldState.m_ptrToSelf;
     htnWorldState.m_itemCarriedPtr = m_itemFocus;
 }
 
-Actions PickUpItem::Operate(UPlayerData* playerData, USimWorld &world)
+Actions PickUpItemByPtrPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
     playerData->itemFocusPtr = &(m_itemFocus->m_realItem);
     return Actions::pickUpItem;
 }
 
-bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
+bool PickUpItemByPtrPrim::Preconditions(HTNWorldState &htnWorldState)
 {
     SimActorItemPtr currentSimItem = nullptr; //if we are re-checking the preconditions, we need to find the simulated item in htnWorldState, rather than use the old simulated item m_itemFocus
     for (auto &simItem : htnWorldState.m_items)
@@ -295,15 +295,15 @@ bool PickUpItem::Preconditions(HTNWorldState &htnWorldState)
     return false;
 }
 
-bool PickUpItem::LastActionSucceeded(HTNWorldState &htnWorldState)
+bool PickUpItemByPtrPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return (htnWorldState.m_itemCarriedPtr == m_itemFocus);
 }
 
 //***********************************************************
-PickUpItem2::PickUpItem2(EItemType itemType) : HTNPrimitive("PickUpItem2"), m_itemType(itemType) {}
+PickUpItemByTypePrim::PickUpItemByTypePrim(EItemType itemType) : HTNPrimitive("PickUpItemByTypePrim"), m_itemType(itemType) {}
 
-void PickUpItem2::Effect(HTNWorldState &htnWorldState)
+void PickUpItemByTypePrim::Effect(HTNWorldState &htnWorldState)
 {
 	for (auto &item : htnWorldState.m_items)
 	{
@@ -318,7 +318,7 @@ void PickUpItem2::Effect(HTNWorldState &htnWorldState)
 	}
 }
 
-Actions PickUpItem2::Operate(UPlayerData* playerData, USimWorld &world)
+Actions PickUpItemByTypePrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
     for (auto &item : world.items)
 	{
@@ -334,7 +334,7 @@ Actions PickUpItem2::Operate(UPlayerData* playerData, USimWorld &world)
 	return Actions::noAction;
 }
 
-bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
+bool PickUpItemByTypePrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	for (auto &item : htnWorldState.m_items)
 	{
@@ -349,32 +349,32 @@ bool PickUpItem2::Preconditions(HTNWorldState &htnWorldState)
 	return false;
 }
 
-bool PickUpItem2::LastActionSucceeded(HTNWorldState &htnWorldState)
+bool PickUpItemByTypePrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return (htnWorldState.m_itemCarriedPtr.Get() != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
 //***********************************************************
-DropItem::DropItem() : HTNPrimitive("DropItem") {}
+DropItemPrim::DropItemPrim() : HTNPrimitive("DropItemPrim") {}
 
-void DropItem::Effect(HTNWorldState &htnWorldState)
+void DropItemPrim::Effect(HTNWorldState &htnWorldState)
 {
 	htnWorldState.m_itemCarriedPtr->m_locationClass.location = static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location));
 	htnWorldState.m_itemCarriedPtr->m_carryingPlayer = nullptr;
 	htnWorldState.m_itemCarriedPtr = nullptr;
 }
 
-Actions DropItem::Operate(UPlayerData* playerData, USimWorld &world)
+Actions DropItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	return Actions::dropItem;
 }
 
-bool DropItem::Preconditions(HTNWorldState &htnWorldState)
+bool DropItemPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return htnWorldState.m_itemCarriedPtr.Get() != nullptr; //TODO hook this into the actions code
 }
 
-bool DropItem::LastActionSucceeded(HTNWorldState &htnWorldState)
+bool DropItemPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
 	return htnWorldState.m_itemCarriedPtr.Get() == nullptr;
 }

@@ -65,10 +65,9 @@ bool NeedItemDeclineRequestMethod::Preconditions(HTNWorldState &htnWorldState)
     return false;
 }
 
-HTNNodeList& NeedItemDeclineRequestMethod::GetTasks()
+void NeedItemDeclineRequestMethod::CreateTasks()
 {
     AddTask(new DeclineItemRequestPrim());
-    return m_nodeList;
 }
 
 AcceptItemRequestMethod::AcceptItemRequestMethod(): HTNMethod("AcceptItemRequestMethod")
@@ -80,10 +79,9 @@ bool AcceptItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-HTNNodeList& AcceptItemRequestMethod::GetTasks()
+void AcceptItemRequestMethod::CreateTasks()
 {
     AddTask(new AcceptItemRequestPrim());
-    return m_nodeList;
 }
 
 DeclineItemRequestMethod::DeclineItemRequestMethod(): HTNMethod("DeclineItemRequestMethod")
@@ -95,22 +93,20 @@ bool DeclineItemRequestMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-HTNNodeList& DeclineItemRequestMethod::GetTasks()
+void DeclineItemRequestMethod::CreateTasks()
 {
     AddTask(new DeclineItemRequestPrim());
-    return m_nodeList;
 }
 
 RespondToItemRequestCompound::RespondToItemRequestCompound(AActorItem* requestedItem) : HTNCompound("RespondToItemRequestCompound"), m_requestedItem(requestedItem)
 {
 }
 
-HTNMethodList& RespondToItemRequestCompound::GetMethods()
+void RespondToItemRequestCompound::CreateMethods()
 {
     AddMethod(new NeedItemDeclineRequestMethod(m_requestedItem));
     AddMethod(new AcceptItemRequestMethod());
     AddMethod(new DeclineItemRequestMethod());
-    return m_methods;
 }
 
 //***********************************************************
@@ -123,21 +119,19 @@ bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
     return true;
 }
 
-HTNNodeList& StartMethod::GetTasks()
+void StartMethod::CreateTasks()
 {
     AActorItem* requestedItem = &(m_htnWorldState.m_itemCarriedPtr->m_realItem);
     AddTask(new PrisonerBehaviourCompound(m_htnWorldState));
     AddTask(new RespondToItemRequestCompound(requestedItem));
-    return m_nodeList;
 }
 
 StartCompound::StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]): HTNCompound("StartCompound"), m_htnWorldState(htnWorldState), m_player(player)
 {
 }
 
-HTNMethodList& StartCompound::GetMethods()
+void StartCompound::CreateMethods()
 {
     AddMethod(new StartMethod(m_htnWorldState, m_player));
-    return m_methods;
 }
 */

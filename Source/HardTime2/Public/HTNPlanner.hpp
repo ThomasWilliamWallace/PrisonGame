@@ -54,22 +54,30 @@ public:
 
 class HTNCompound : public HTNNode
 {
+private:
+    bool m_alreadyCreatedMethods;
+protected:
+    virtual void CreateMethods() = 0;
 public:
+    HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
 	HTNCompound(std::string name);
-	HTNMethodList m_methods;  //Vector of methods. Each method is a vector of tasks.
 	void AddMethod(HTNMethod* htnMethod);
-	virtual HTNMethodList& GetMethods() = 0; //constructs and returns methods
+    HTNMethodList& GetMethods();
     virtual ~HTNCompound() override = default;
 };
 
 //list of either primitive or compound tasks
 class HTNMethod : public HTNNode
 {
+private:
+    bool m_alreadyCreatedTasks;
+protected:
+    virtual void CreateTasks() = 0; //constructs tasks
 public:
+    HTNNodeList m_nodeList; //To complete this HTNCompound task, all the tasks in a method must be completed. All in this list are Primitive Tasks or Compound Tasks.
     HTNMethod(std::string name);
 	virtual bool Preconditions(HTNWorldState &htnWorldState); //must be true before this task can occur in the plan.
-    HTNNodeList m_nodeList; //To complete this HTNCompound task, all the tasks in a method must be completed. All in this list are Primitive Tasks or Compound Tasks.
-    virtual HTNNodeList& GetTasks() = 0; //constructs and returns tasks
+    HTNNodeList& GetTasks(); //returns tasks
 	void AddTask(HTNPrimitive* htnPrimitive);
 	void AddTask(HTNCompound* htnCompound);
     virtual ~HTNMethod() override = default;
