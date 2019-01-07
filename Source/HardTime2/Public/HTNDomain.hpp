@@ -5,6 +5,14 @@
 #include "HTNWorldState.hpp"
 
 //***********************************************************
+class AlreadyInLibraryMethod : public HTNMethod
+{
+public:
+    AlreadyInLibraryMethod();
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
 class GoToNearbyLibraryMethod : public HTNMethod
 {
 public:
@@ -29,6 +37,14 @@ public:
 };
 
 //***********************************************************
+class AlreadyInGymMethod : public HTNMethod
+{
+public:
+    AlreadyInGymMethod();
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
 class GoToNearbyGymMethod : public HTNMethod
 {
 public:
@@ -53,6 +69,14 @@ public:
 };
 
 //***********************************************************
+class AlreadyInCircuitTrackMethod : public HTNMethod
+{
+public:
+    AlreadyInCircuitTrackMethod();
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
 class GoToNearbyCircuitTrackMethod : public HTNMethod
 {
 public:
@@ -77,6 +101,14 @@ public:
 };
 
 //***********************************************************
+class AlreadyInBedroomMethod : public HTNMethod
+{
+public:
+    AlreadyInBedroomMethod();
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
 class GoToNearbyBedroomMethod : public HTNMethod
 {
 public:
@@ -197,6 +229,15 @@ public:
 };
 
 //***********************************************************
+class HaveItemMethod : public HTNMethod
+{
+    EItemType m_itemType;
+public:
+    HaveItemMethod(EItemType itemType);
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks() override;
+};
+
 class PickupItemMethod : public HTNMethod
 {
 	EItemType m_itemType;
