@@ -570,6 +570,12 @@ void AHardTime2Character::OnNewCommand_Implementation()
 void AHardTime2Character::GoToLocationMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
 {
 	pLog("GoToLocationMoveCompleted", true);
+
+	AAIController* controller = Cast<AAIController>(GetController());
+	if (controller == nullptr)
+		throw std::invalid_argument("Cannot unbind goToLocationMoveDelegateHandle because controller is NULL.");
+	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(goToLocationMoveDelegateHandle);
+
 	if (b.IsSuccess())
 	{
 		m_aiState = EAIState::cooldown;
@@ -577,42 +583,33 @@ void AHardTime2Character::GoToLocationMoveCompleted(FAIRequestID a, const FPathF
 		m_aiState = EAIState::noTask;
 	}
 	UpdateStatus();
-	AAIController* controller = Cast<AAIController>(GetController());
-	if (controller == nullptr)
-		throw std::invalid_argument("Cannot unbind goToLocationMoveDelegateHandle because controller is NULL.");
-	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(goToLocationMoveDelegateHandle);
 }
 
 void AHardTime2Character::PickUpItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
 {
 	pLog("PickUpItemMoveCompleted", true);
-	TArray <AActor*> overlappingActors;
-	GetOverlappingActors(overlappingActors, TSubclassOf <AActorItem>());
-	for (AActor* actor : overlappingActors)
-	{
-		if (actor == m_targetItem)
-		{
-			PickupItemAction(m_targetItem);
-			break;
-		}
-	}
+
 	AAIController* controller = Cast<AAIController>(GetController());
 	if (controller == nullptr)
 		throw std::invalid_argument("Cannot unbind pickUpItemMoveDelegateHandle because controller is NULL.");
 	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(pickUpItemMoveDelegateHandle);
+
 	m_aiState = EAIState::cooldown;
 	UpdateStatus();
+	PickupItemAction(m_targetItem);
 }
 
 void AHardTime2Character::RequestItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
 {
 	pLog("RequestItemMoveCompleted", true);
-	m_aiState = EAIState::commandInProgress;
-	UpdateStatus();
+
 	AAIController* controller = Cast<AAIController>(GetController());
 	if (controller == nullptr)
 		throw std::invalid_argument("Cannot unbind requestItemMoveDelegateHandle because controller is NULL.");
 	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(requestItemMoveDelegateHandle);
+
+	m_aiState = EAIState::commandInProgress;
+	UpdateStatus();
 	RequestItemAction(m_targetPlayer);
 }
 
@@ -642,7 +639,10 @@ void AHardTime2Character::OnUsingRoom_Implementation()
 				DeltaIntelligence(1);
 				break;
 			case ELocations::mainHall:
-				throw std::invalid_argument("Cannot use main hall!");
+				m_aiState = EAIState::cooldown;
+				UpdateStatus();
+				pLog("Tried to use main hall and failed.", true);
+				return;
 			default:
 				throw std::invalid_argument("Location not recognised when using room");
 		}
@@ -689,6 +689,22 @@ void AHardTime2Character::PickupItemAction(AActorItem* item)
 	{
 		return;
 	};
+	bool canReachItem = false;
+	TArray <AActor*> overlappingActors;
+	GetOverlappingActors(overlappingActors, TSubclassOf <AActorItem>());
+	for (AActor* actor : overlappingActors)
+	{
+		if (actor == item)
+		{
+			canReachItem = true;
+			break;
+		}
+	}
+	if (!canReachItem)
+	{
+		pLog("PickupItemAction: Couldn't reach item.", true);
+		return;
+	}
 	UActorComponent* itemComp = item->GetComponentByClass(UStaticMeshComponent::StaticClass());
 	UStaticMeshComponent* itemMeshComp = Cast<UStaticMeshComponent>(itemComp);
 	itemMeshComp->SetSimulatePhysics(false);
@@ -728,6 +744,7 @@ void AHardTime2Character::DropItemAction()
 {
 	if (m_carriedItem == nullptr)
 	{
+		pLog("DropItemAction: couldn't drop item as no item was being carried.", true);
 		return;
 	}
 	UActorComponent* itemComp = m_carriedItem->GetComponentByClass(UStaticMeshComponent::StaticClass());
@@ -759,6 +776,14 @@ void AHardTime2Character::DropItemAction()
 
 void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter)
 {
+	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();
+	if (abs(displacement.Size()) > 120)
+	{
+		pLog("RequestItemAction: couldn't reach character.", true);
+		m_aiState = EAIState::cooldown;
+		UpdateStatus();
+		return;
+	}
 	targetCharacter->RespondToItemRequest(this);
 }
 
