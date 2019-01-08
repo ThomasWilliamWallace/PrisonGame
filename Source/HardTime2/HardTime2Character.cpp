@@ -777,7 +777,7 @@ void AHardTime2Character::DropItemAction()
 void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter)
 {
 	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();
-	if (abs(displacement.Size()) > 120)
+	if (abs(displacement.Size()) > 140)
 	{
 		pLog("RequestItemAction: couldn't reach character.", true);
 		m_aiState = EAIState::cooldown;
