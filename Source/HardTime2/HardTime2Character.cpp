@@ -874,7 +874,7 @@ void AHardTime2Character::AttackAction(AHardTime2Character* targetCharacter)
 {
 	pLog("ENTERING AHardTime2Character::AttackAction");
 	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();
-	if (abs(displacement.Size()) > 50)
+	if (abs(displacement.Size()) > 200)
 	{
 		pLog("AttackAction: couldn't reach character.", true);
 	} else {
