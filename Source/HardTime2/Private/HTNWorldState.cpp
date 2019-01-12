@@ -8,19 +8,17 @@
 
 //***********************************************************
 HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
-	m_v(WorldE::last, 0),
 	m_ptrToSelf(playerPtr),
+    m_health(round(m_ptrToSelf->pStats.getHealth())),
+    m_sanity(round(m_ptrToSelf->pStats.getSanity())),
+    m_strength(round(m_ptrToSelf->pStats.getStrength())),
+    m_agility(round(m_ptrToSelf->pStats.getAgility())),
+    m_intelligence(round(m_ptrToSelf->pStats.getIntelligence())),
+    m_evading(m_ptrToSelf->lastAction == Actions::evade),
+    m_location(m_ptrToSelf->locationClass.location),
     m_itemCarriedPtr(nullptr),
 	m_missionClass(playerPtr->missionClass)
 {
-	m_v.at(WorldE::health) = round(m_ptrToSelf->pStats.getHealth());
-	m_v.at(WorldE::sanity) = round(m_ptrToSelf->pStats.getSanity());
-	m_v.at(WorldE::strength) = round(m_ptrToSelf->pStats.getStrength());
-	m_v.at(WorldE::agility) = round(m_ptrToSelf->pStats.getAgility());
-	m_v.at(WorldE::intelligence) = round(m_ptrToSelf->pStats.getIntelligence());
-	m_v.at(WorldE::evading) = m_ptrToSelf->lastAction == Actions::evade;
-	m_v.at(WorldE::location) = static_cast<int>(m_ptrToSelf->locationClass.location);
-
 	//TODO reflect players sensors rather than being hardwired to the world
 	for (auto &item : world.items)
 	{
@@ -33,7 +31,7 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 
     for (auto &p : world.m_players)
     {
-		if (p->locationClass.location == static_cast<ELocations>(m_v.at(WorldE::location)) &&
+		if (p->locationClass.location == m_location &&
 			playerPtr != p)
 		{
 			m_playersInTheRoom.push_back(p);
@@ -43,8 +41,14 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 }
 
 HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
-	m_v(ws2.m_v),
 	m_ptrToSelf(ws2.m_ptrToSelf),
+    m_health(ws2.m_health),
+    m_sanity(ws2.m_sanity),
+    m_strength(ws2.m_strength),
+    m_agility(ws2.m_agility),
+    m_intelligence(ws2.m_intelligence),
+    m_evading(ws2.m_evading),
+    m_location(ws2.m_location),
     m_itemCarriedPtr(nullptr),
 	m_attackers(ws2.m_attackers),
 	m_playerLocations(ws2.m_playerLocations),
@@ -63,8 +67,14 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 
 HTNWorldState& HTNWorldState::operator=(const HTNWorldState& ws2)
 {
-	m_v = ws2.m_v;
 	m_ptrToSelf = ws2.m_ptrToSelf;
+    m_health = ws2.m_health;
+    m_sanity = ws2.m_sanity;
+    m_strength = ws2.m_strength;
+    m_agility = ws2.m_agility;
+    m_intelligence = ws2.m_intelligence;
+    m_evading = ws2.m_evading;
+    m_location = ws2.m_location;
 	m_itemCarriedPtr = nullptr;
 	m_attackers = ws2.m_attackers;
 	m_playerLocations = ws2.m_playerLocations;
@@ -87,11 +97,13 @@ void HTNWorldState::Print()
 {
 	std::stringstream ss;
 	ss << "HTNWorldState::Print\n";
-	ss << "m_v.size=" << m_v.size() << "\n";
-	for (int i = 0; i < static_cast<int>(m_v.size()); i++)
-	{
-		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
-	}
+    ss << "m_health:" << m_health << "\n";
+    ss << "m_sanity:" << m_sanity << "\n";
+    ss << "m_strength:" << m_strength << "\n";
+    ss << "m_agility:" << m_agility << "\n";
+    ss << "m_intelligence:" << m_intelligence << "\n";
+    ss << "m_evading:" << m_evading << "\n";
+    ss << "m_location:" << static_cast<int>(m_location) << "\n";
 	ss << "m_ptrToSelf:" << m_ptrToSelf << "\n";
 	ss << "m_itemCarriedPtr:" << GetRaw(m_itemCarriedPtr) << "\n";
 	for (auto &simItem : m_items)
@@ -106,33 +118,16 @@ void HTNWorldState::Print()
 		}
 		ss << " in the " << simItem->m_locationClass.ToString() << " with a link to real item " << &(simItem->m_realItem) << "\n";
 	}
-	ss << "m_v.size=" << m_v.size() << "\n";
 
     for (auto &p : m_playersInTheRoom)
     {
 		if (p != nullptr)
-			ss << "PlayerData " << " is also in the " << LocationToString(static_cast<ELocations>(m_v.at(WorldE::location))) << ".\n";
+			ss << "PlayerData " << " is also in the " << LocationToString(m_location) << ".\n";
 		else
 			ss << "ERROR NULL PLAYERDATA VALUE\n";
     }
 	ss << "m_missionClass:" << m_missionClass.MissionName() << "\n";
 	pLog(ss);
-}
-
-std::string WorldEToString(WorldE worldE)
-{
-	switch (worldE)
-	{
-	case WorldE::health: return "health";
-	case WorldE::sanity: return "sanity";
-	case WorldE::strength: return "strength";
-	case WorldE::agility: return "agility";
-	case WorldE::intelligence: return "intelligence";
-	case WorldE::evading: return "evading";
-	case WorldE::location: return "location";
-	case WorldE::last: return "LAST";
-	default: return "ERROR_NO_WORLDE_STRING_FOUND";
-	}
 }
 
 bool HTNWorldState::IsInTheRoom(UPlayerData* playerPtr)

@@ -10,7 +10,7 @@ AlreadyInLibraryMethod::AlreadyInLibraryMethod(): HTNMethod("AlreadyInLibraryMet
 
 bool AlreadyInLibraryMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
+    return htnWorldState.m_location == ELocations::library;
 }
 
 void AlreadyInLibraryMethod::CreateTasks()
@@ -59,7 +59,7 @@ AlreadyInGymMethod::AlreadyInGymMethod(): HTNMethod("AlreadyInGymMethod")
 
 bool AlreadyInGymMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
+    return htnWorldState.m_location == ELocations::gym;
 }
 
 void AlreadyInGymMethod::CreateTasks()
@@ -108,7 +108,7 @@ AlreadyInCircuitTrackMethod::AlreadyInCircuitTrackMethod(): HTNMethod("AlreadyIn
 
 bool AlreadyInCircuitTrackMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
+    return htnWorldState.m_location == ELocations::circuitTrack;
 }
 
 void AlreadyInCircuitTrackMethod::CreateTasks()
@@ -157,7 +157,7 @@ AlreadyInBedroomMethod::AlreadyInBedroomMethod(): HTNMethod("AlreadyInBedroomMet
 
 bool AlreadyInBedroomMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
+    return htnWorldState.m_location == ELocations::bedroom;
 }
 
 void AlreadyInBedroomMethod::CreateTasks()
@@ -318,7 +318,7 @@ bool PickupItemMethod::Preconditions(HTNWorldState &htnWorldState)
 	for (auto &item : htnWorldState.m_items)
 	{
 		if (item->m_itemType == m_itemType
-			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
+          && item->m_locationClass.location == htnWorldState.m_location
 			&& (item->m_carryingPlayer == nullptr))
 		{
 			return true;
@@ -432,7 +432,7 @@ bool PickupItemAndAttackMethod::Preconditions(HTNWorldState &htnWorldState)
 	}
 
     return htnWorldState.IsInTheRoom(m_opponent)
-        && (m_item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)))
+        && (m_item->m_locationClass.location == htnWorldState.m_location)
         && !carryingItemAlready;
 }
 
@@ -467,7 +467,7 @@ void AttackCompound::CreateMethods()
 		{
     for (auto &item : m_htnWorldState.m_items)
     {
-        if (item->m_locationClass.location == static_cast<ELocations>(m_htnWorldState.m_v.at(WorldE::location)))
+        if (item->m_locationClass.location == m_htnWorldState.m_location)
         {
             AddMethod(new PickupItemAndAttackMethod(item, m_opponent));
 		}
@@ -497,7 +497,7 @@ EvadeMethod::EvadeMethod(): HTNMethod("EvadeMethod")
 
 bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return (htnWorldState.m_v.at(WorldE::health) < 67);
+	return htnWorldState.m_health < 67;
 }
 
 void EvadeMethod::CreateTasks()

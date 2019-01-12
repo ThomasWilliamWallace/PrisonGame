@@ -30,9 +30,15 @@ class USimWorld;
 class HTNWorldState
 {
 public:
-	std::vector<int> m_v;
+    UPlayerData* m_ptrToSelf;
+    int m_health;
+    int m_sanity;
+    int m_strength;
+    int m_agility;
+    int m_intelligence;
+    int m_evading;
+    ELocations m_location;
 	std::vector< SimActorItemPtr > m_items;
-	UPlayerData* m_ptrToSelf;
 	SimActorItemPtr m_itemCarriedPtr;
 	std::vector< UPlayerData* > m_attackers;
 	std::vector< ELocations > m_playerLocations;

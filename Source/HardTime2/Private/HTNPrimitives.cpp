@@ -11,7 +11,7 @@ StudyPrim::StudyPrim() : HTNPrimitive("StudyPrim") {}
 
 void StudyPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::intelligence) += 1;
+    htnWorldState.m_intelligence += 1;
 	return;
 }
 
@@ -22,7 +22,7 @@ Actions StudyPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool StudyPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
+    return htnWorldState.m_location == ELocations::library;
 }
 
 //***********************************************************
@@ -30,7 +30,7 @@ SleepPrim::SleepPrim() : HTNPrimitive("SleepPrim") {}
 
 void SleepPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::health) += 1;
+    htnWorldState.m_health += 1;
 	return;
 }
 
@@ -41,7 +41,7 @@ Actions SleepPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool SleepPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
+    return htnWorldState.m_location == ELocations::bedroom;
 }
 
 //***********************************************************
@@ -49,7 +49,7 @@ UseGymPrim::UseGymPrim() : HTNPrimitive("UseGymPrim") {}
 
 void UseGymPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::strength) += 1;
+    htnWorldState.m_strength += 1;
 	return;
 }
 
@@ -60,7 +60,7 @@ Actions UseGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool UseGymPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
+    return htnWorldState.m_location == ELocations::gym;
 }
 
 //***********************************************************
@@ -68,7 +68,7 @@ RunCircuitsPrim::RunCircuitsPrim() : HTNPrimitive("RunCircuitsPrim") {}
 
 void RunCircuitsPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::agility) += 1;
+    htnWorldState.m_agility += 1;
 	return;
 }
 
@@ -79,7 +79,7 @@ Actions RunCircuitsPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool RunCircuitsPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
+    return htnWorldState.m_location == ELocations::circuitTrack;
 }
 
 //***********************************************************
@@ -87,7 +87,7 @@ GoToGymPrim::GoToGymPrim() : HTNPrimitive("GoToGymPrim") {}
 
 void GoToGymPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::gym);
+    htnWorldState.m_location = ELocations::gym;
 	return;
 }
 
@@ -98,12 +98,12 @@ Actions GoToGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToGymPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToGymPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::gym;
+	return htnWorldState.m_location == ELocations::gym;
 }
 
 //***********************************************************
@@ -111,7 +111,7 @@ GoToLibraryPrim::GoToLibraryPrim() : HTNPrimitive("GoToLibraryPrim") {}
 
 void GoToLibraryPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::library);
+    htnWorldState.m_location = ELocations::library;
 	return;
 }
 
@@ -122,12 +122,12 @@ Actions GoToLibraryPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToLibraryPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToLibraryPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::library;
+	return htnWorldState.m_location == ELocations::library;
 }
 
 //***********************************************************
@@ -135,7 +135,7 @@ GoToCircuitTrackPrim::GoToCircuitTrackPrim() : HTNPrimitive("GoToCircuitTrackPri
 
 void GoToCircuitTrackPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::circuitTrack);
+    htnWorldState.m_location = ELocations::circuitTrack;
 	return;
 }
 
@@ -146,12 +146,12 @@ Actions GoToCircuitTrackPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToCircuitTrackPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToCircuitTrackPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::circuitTrack;
+	return htnWorldState.m_location == ELocations::circuitTrack;
 }
 
 //***********************************************************
@@ -159,7 +159,7 @@ GoToBedroomPrim::GoToBedroomPrim() : HTNPrimitive("GoToBedroomPrim") {}
 
 void GoToBedroomPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::bedroom);
+    htnWorldState.m_location = ELocations::bedroom;
 	return;
 }
 
@@ -170,12 +170,12 @@ Actions GoToBedroomPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToBedroomPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToBedroomPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::bedroom;
+	return htnWorldState.m_location == ELocations::bedroom;
 }
 
 //***********************************************************
@@ -183,7 +183,7 @@ GoToMainHallPrim::GoToMainHallPrim() : HTNPrimitive("GoToMainHallPrim") {}
 
 void GoToMainHallPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::location) = static_cast<int>(ELocations::mainHall);
+    htnWorldState.m_location = ELocations::mainHall;
 	return;
 }
 
@@ -194,12 +194,12 @@ Actions GoToMainHallPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToMainHallPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) != ELocations::mainHall;
+    return htnWorldState.m_location != ELocations::mainHall;
 }
 
 bool GoToMainHallPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == ELocations::mainHall;
+	return htnWorldState.m_location == ELocations::mainHall;
 }
 
 //***********************************************************
@@ -207,7 +207,7 @@ DrinkPrim::DrinkPrim() : HTNPrimitive("DrinkPrim") {}
 
 void DrinkPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::intelligence) -= 1;
+    htnWorldState.m_intelligence -= 1;
 	return;
 }
 
@@ -245,7 +245,7 @@ EvadePrim::EvadePrim() : HTNPrimitive("EvadePrim") {}
 
 void EvadePrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_v.at(WorldE::evading) = 1;
+    htnWorldState.m_evading = 1;
 }
 
 Actions EvadePrim::Operate(UPlayerData* playerData, USimWorld &world)
@@ -289,7 +289,7 @@ bool PickUpItemByPtrPrim::Preconditions(HTNWorldState &htnWorldState)
     //TODO hook this into the actions code
     if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
       && GetRaw(currentSimItem) != nullptr
-      && static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == currentSimItem->m_locationClass.location
+      && htnWorldState.m_location == currentSimItem->m_locationClass.location
       && currentSimItem->m_carryingPlayer == nullptr)
     {
         return true;
@@ -310,7 +310,7 @@ void PickUpItemByTypePrim::Effect(HTNWorldState &htnWorldState)
 	for (auto &item : htnWorldState.m_items)
 	{
 		if (item->m_itemType == m_itemType
-			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
+            && item->m_locationClass.location == htnWorldState.m_location
 			&& item->m_carryingPlayer == nullptr)
 		{
 			item->m_carryingPlayer = htnWorldState.m_ptrToSelf;
@@ -342,7 +342,7 @@ bool PickUpItemByTypePrim::Preconditions(HTNWorldState &htnWorldState)
 	{
         if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
             		&& item->m_itemType == m_itemType
-			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
+            && item->m_locationClass.location == htnWorldState.m_location
 			&& item->m_carryingPlayer == nullptr)
 		{
 			return true;
@@ -361,7 +361,7 @@ DropItemPrim::DropItemPrim() : HTNPrimitive("DropItemPrim") {}
 
 void DropItemPrim::Effect(HTNWorldState &htnWorldState)
 {
-	htnWorldState.m_itemCarriedPtr->m_locationClass.location = static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location));
+    htnWorldState.m_itemCarriedPtr->m_locationClass.location = htnWorldState.m_location;
 	htnWorldState.m_itemCarriedPtr->m_carryingPlayer = nullptr;
 	htnWorldState.m_itemCarriedPtr = nullptr;
 }
