@@ -1,26 +1,34 @@
 #include "PlatformSpecific.hpp"
 #include "HTNPlanner.hpp"
+#include "ActorItem.h"
+#include "Locations.h"
+#include "PlayerData.h"
 
 #ifdef TEXT_ONLY_HTN
 
-HTNPrimitivePtr GetRaw(HTNPrimitivePtr ptr)
+HTNPrimitive* GetRaw(HTNPrimitivePtr ptr)
 {
-    return ptr;
+    return ptr.get();
 }
 
-HTNCompoundPtr GetRaw(HTNCompoundPtr ptr)
+HTNCompound* GetRaw(HTNCompoundPtr ptr)
 {
-    return ptr;
+    return ptr.get();
 }
 
-HTNNodePtr GetRaw(HTNNodePtr ptr)
+HTNNode* GetRaw(HTNNodePtr ptr)
 {
-    return ptr;
+    return ptr.get();
 }
 
-HTNMethodPtr GetRaw(HTNMethodPtr ptr)
+HTNMethod* GetRaw(HTNMethodPtr ptr)
 {
-    return ptr;
+    return ptr.get();
+}
+
+SimActorItem* GetRaw(SimActorItemPtr ptr)
+{
+    return ptr.get();
 }
 
 HTNPrimitivePtr CastNodeToPrimitive(HTNNodePtr htnNodePtr)
@@ -43,6 +51,11 @@ StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr)
     return std::make_shared<StackNode>(htnNodePtr, isOr);
 }
 
+SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer)
+{
+    return std::make_shared<SimActorItem>(realItem, itemType, location, carryingPlayer);
+}
+
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
 {
     return HTNNodePtr(&htnCompound);
@@ -50,10 +63,6 @@ HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
 
 #else
 #include "ActorItem.h"
-SimActorItem* GetRaw(SimActorItemPtr ptr)
-{
-	return ptr.Get();
-}
 
 HTNPrimitive* GetRaw(HTNPrimitivePtr ptr)
 {
@@ -71,6 +80,11 @@ HTNNode* GetRaw(HTNNodePtr ptr)
 }
 
 HTNMethod* GetRaw(HTNMethodPtr ptr)
+{
+    return ptr.Get();
+}
+
+SimActorItem* GetRaw(SimActorItemPtr ptr)
 {
     return ptr.Get();
 }
@@ -93,6 +107,11 @@ HTNMethodPtr CastNodeToMethod(HTNNodePtr htnNodePtr)
 StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr)
 {
     return MakeShared<StackNode>(htnNodePtr, isOr);
+}
+
+SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer)
+{
+	return MakeShared<SimActorItem>(realItem, itemType, location, carryingPlayer);
 }
 
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)

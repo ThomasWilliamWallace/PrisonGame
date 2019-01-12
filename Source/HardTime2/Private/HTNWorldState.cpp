@@ -24,7 +24,7 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 	//TODO reflect players sensors rather than being hardwired to the world
 	for (auto &item : world.items)
 	{
-		m_items.push_back(MakeShared<SimActorItem>(*item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(MakeSharedSimActorItemPtr(*item, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
 		if ((m_items.back()->m_carryingPlayer) == m_ptrToSelf)
 		{
 			m_itemCarriedPtr = m_items.back();
@@ -52,7 +52,7 @@ HTNWorldState::HTNWorldState(HTNWorldState &ws2) :
 {
 	for (auto &item : ws2.m_items)
 	{
-		m_items.push_back(MakeShared<SimActorItem>(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(MakeSharedSimActorItemPtr(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
 		if (ws2.m_itemCarriedPtr == item)
 		{
 			m_itemCarriedPtr = m_items.back();
@@ -72,7 +72,7 @@ HTNWorldState& HTNWorldState::operator=(const HTNWorldState& ws2)
     m_items.clear();
 	for (auto &item : ws2.m_items)
 	{
-		m_items.push_back(MakeShared<SimActorItem>(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
+        m_items.push_back(MakeSharedSimActorItemPtr(item->m_realItem, item->m_itemType, item->m_locationClass.location, item->m_carryingPlayer));
 		if (ws2.m_itemCarriedPtr == item)
 		{
 			m_itemCarriedPtr = m_items.back();

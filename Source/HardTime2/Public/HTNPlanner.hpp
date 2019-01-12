@@ -7,8 +7,6 @@
 #include "Actions.hpp"
 #include "PlatformSpecific.hpp"
 
-class AAICharacterC;
-
 typedef std::deque< HTNPrimitivePtr > HTNPrimitiveList;
 typedef std::vector< HTNCompoundPtr > HTNCompoundList;
 typedef std::vector< HTNNodePtr > HTNNodeList;

@@ -284,7 +284,7 @@ bool PickUpItemByPtrPrim::Preconditions(HTNWorldState &htnWorldState)
         }
     }
 	if (GetRaw(currentSimItem) == nullptr)
-		throw std::runtime_error("Failed to find relevant SimItem in PickUpItem::preconditions");
+		throw std::runtime_error("Failed to find relevant SimItem in PickUpItemByPtrPrim::preconditions");
     //TODO hook this into the actions code
     if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
       && GetRaw(currentSimItem) != nullptr
