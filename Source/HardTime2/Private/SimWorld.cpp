@@ -179,20 +179,13 @@ void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
 		return;
 	}
 
-	AAICharacterC* aiCharacterC = Cast<AAICharacterC>(character);
 	UPlayerData* playerData;
-	
-	if (aiCharacterC == nullptr)
+	AHardTime2Character* hardTime2Character = Cast<AHardTime2Character>(character);
+	if (hardTime2Character == nullptr)
 	{
-		AHardTime2Character* hardTime2Character = Cast<AHardTime2Character>(character);
-		if (hardTime2Character == nullptr)
-		{
-			return;
-		} else {
-			playerData = hardTime2Character->m_player;
-		}
+		return;
 	} else {
-		playerData = aiCharacterC->m_player;
+		playerData = hardTime2Character->m_player;
 	}
 
 	for (auto &p : m_players)
