@@ -1,6 +1,5 @@
 #include "SimWorld.h"
 #include "ActorItem.h"
-#include "AICharacterC.h"
 #include "HardTime2Character.h"
 #include <sstream>
 #include "pLog.hpp"
