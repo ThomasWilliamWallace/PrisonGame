@@ -352,6 +352,14 @@ void AHardTime2Character::RequestItem(AHardTime2Character* character)
 	UpdateStatus();
 }
 
+void AHardTime2Character::Attack(AHardTime2Character* character)
+{
+	m_targetPlayer = character;
+	m_aiCommand = EAICommand::attack;
+	m_aiState = EAIState::newCommand;
+	UpdateStatus();
+}
+
 // Called every frame
 void AHardTime2Character::Tick(float DeltaTime)
 {
@@ -409,6 +417,16 @@ void AHardTime2Character::Tick(float DeltaTime)
 		case Actions::useRoom:
 			pLog("useRoom", true);
 			UseRoom();
+			break;
+		case Actions::attack:
+			pLog("attack", true);
+			if (m_player != nullptr)
+				pLog("m_player != nullptr", true);
+			if (m_player->playerTargetPtr != nullptr)
+				pLog("m_player->playerTargetPtr != nullptr", true);
+			if (m_player->playerTargetPtr->physicalCharacter != nullptr)
+				pLog("m_player->playerTargetPtr->physicalCharacter != nullptr", true);
+			Attack(m_player->playerTargetPtr->physicalCharacter);
 			break;
 		default:
 			pLog("NoAction", true);
@@ -473,6 +491,7 @@ void AHardTime2Character::OnNoTask_Implementation()
 void AHardTime2Character::OnNewCommand_Implementation()
 {
 	pLog("Entering AHardTime2Character::OnNewCommand_Implementation", true);
+	AAIController* controller;
 	switch (m_aiCommand)
 	{
 		case EAICommand::dropItem:
@@ -489,7 +508,7 @@ void AHardTime2Character::OnNewCommand_Implementation()
 			{
 				pLog("ATTEMPTING TO GO TO LOCATION!");
 				m_aiState = EAIState::commandInProgress;
-				AAIController* controller = Cast<AAIController>(GetController());
+				controller = Cast<AAIController>(GetController());
 				if (controller != nullptr)
 				{
 					FAIMoveRequest req;
@@ -513,7 +532,7 @@ void AHardTime2Character::OnNewCommand_Implementation()
 			{
 				pLog("ATTEMPTING TO GO TO ITEM!");
 				m_aiState = EAIState::commandInProgress;
-				AAIController* controller = Cast<AAIController>(GetController());
+				controller = Cast<AAIController>(GetController());
 				if (controller != nullptr)
 				{
 					pickUpItemMoveDelegateHandle = controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AHardTime2Character::PickUpItemMoveCompleted);
@@ -540,7 +559,7 @@ void AHardTime2Character::OnNewCommand_Implementation()
 			if (m_targetPlayer->m_carriedItem != nullptr)
 			{
 				pLog("ATTEMPTING TO GO TO PLAYER!");
-				AAIController* controller = Cast<AAIController>(GetController());
+				controller = Cast<AAIController>(GetController());
 				if (controller != nullptr)
 				{
 					m_aiState = EAIState::commandInProgress;
@@ -561,6 +580,24 @@ void AHardTime2Character::OnNewCommand_Implementation()
 				pLog("m_aiState = EAIState::cooldown;", true);
 			}
 			UpdateStatus();
+			break;
+		case EAICommand::attack:
+			pLog("ATTEMPTING TO CHASE PLAYER FOR ATTACK!");
+			controller = Cast<AAIController>(GetController());
+			if (controller != nullptr)
+			{
+				m_aiState = EAIState::commandInProgress;
+
+				attackMoveDelegateHandle = controller->GetPathFollowingComponent()->OnRequestFinished.AddUObject(this, &AHardTime2Character::AttackMoveCompleted);
+
+				FAIMoveRequest req;
+				req.SetAcceptanceRadius(20);
+				req.SetUsePathfinding(true);
+				req.SetGoalActor(m_targetPlayer);
+				controller->MoveTo(req);
+			}
+			else
+				throw std::invalid_argument("Failed to cast character controller as AIController.");
 			break;
 		default:
 			throw std::invalid_argument("Unrecognised AI command.");
@@ -611,6 +648,20 @@ void AHardTime2Character::RequestItemMoveCompleted(FAIRequestID a, const FPathFo
 	m_aiState = EAIState::commandInProgress;
 	UpdateStatus();
 	RequestItemAction(m_targetPlayer);
+}
+
+void AHardTime2Character::AttackMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
+{
+	pLog("AttackMoveCompleted", true);
+
+	AAIController* controller = Cast<AAIController>(GetController());
+	if (controller == nullptr)
+		throw std::invalid_argument("Cannot unbind attackMoveDelegateHandle because controller is NULL.");
+	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(attackMoveDelegateHandle);
+
+	m_aiState = EAIState::commandInProgress;
+	UpdateStatus();
+	AttackAction(m_targetPlayer);
 }
 
 void AHardTime2Character::OnUsingRoom_Implementation()
@@ -817,4 +868,18 @@ void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetC
 		m_aiState = EAIState::cooldown;
 		UpdateStatus();
 	}
+}
+
+void AHardTime2Character::AttackAction(AHardTime2Character* targetCharacter)
+{
+	pLog("ENTERING AHardTime2Character::AttackAction");
+	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();
+	if (abs(displacement.Size()) > 50)
+	{
+		pLog("AttackAction: couldn't reach character.", true);
+	} else {
+		AttackEffect(targetCharacter);
+	}
+	m_aiState = EAIState::cooldown;
+	UpdateStatus();
 }

@@ -34,8 +34,8 @@ public:
 	std::vector< SimActorItemPtr > m_items;
 	UPlayerData* m_ptrToSelf;
 	SimActorItemPtr m_itemCarriedPtr;
-	std::vector<bool> m_attackers;
-	std::vector<ELocations> m_playerLocations;
+	std::vector< UPlayerData* > m_attackers;
+	std::vector< ELocations > m_playerLocations;
     std::vector< UPlayerData* > m_playersInTheRoom;
     bool IsInTheRoom(UPlayerData* playerPtr);
 	MissionClass m_missionClass;

@@ -669,12 +669,10 @@ PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldStat
 
 void PrisonerBehaviourCompound::CreateMethods()
 {
-/*
     for (auto &attacker : m_htnWorldState.m_attackers)
     {
         AddMethod(new CombatMethod(m_htnWorldState, attacker));
     }
-*/
     AddMethod(new DoMissionMethod(m_htnWorldState));
 	AddMethod(new IncreaseIntelligenceMethod());
 }

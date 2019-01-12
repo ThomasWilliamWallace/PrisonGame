@@ -37,6 +37,7 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 			playerPtr != p)
 		{
 			m_playersInTheRoom.push_back(p);
+			m_attackers.push_back(p);
 		}
     }
 }

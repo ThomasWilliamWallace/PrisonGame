@@ -32,6 +32,7 @@ enum class EAICommand : uint8
 	dropItem			UMETA(DisplayName = "Drop item"),
 	useRoom				UMETA(DisplayName = "Use room"),
 	requestItem			UMETA(DisplayName = "Request item"),
+	attack				UMETA(DisplayName = "Attack"),
 };
 
 UCLASS(config=Game)
@@ -150,6 +151,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void RequestItem(AHardTime2Character* character);
+
+	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
+		void Attack(AHardTime2Character* character);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
 		EAIState m_aiState;
@@ -222,6 +226,9 @@ public:
 	void RequestItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b);
 	FDelegateHandle requestItemMoveDelegateHandle;
 
+	void AttackMoveCompleted(FAIRequestID a, const FPathFollowingResult &b);
+	FDelegateHandle attackMoveDelegateHandle;
+
 	UFUNCTION(BlueprintImplementableEvent)
 		void DisplayStatus(const FString& displayString);
 
@@ -233,6 +240,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Action)
 		void RequestItemAction(AHardTime2Character* targetCharacter);
+
+	UFUNCTION(BlueprintCallable, Category = Action)
+		void AttackAction(AHardTime2Character* targetCharacter);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = Action)
+		void AttackEffect(AHardTime2Character* targetCharacter);
 
 	void UpdateStatus();
 
