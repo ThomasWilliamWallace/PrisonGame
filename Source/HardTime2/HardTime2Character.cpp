@@ -799,6 +799,7 @@ void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Characte
 {
 	pLog("RespondToItemRequest", true);
 	DropItemAction();
+	SetLastActionInterrupted(true);
 	requestingCharacter->RequestItemHandleResponse(this);
 }
 
