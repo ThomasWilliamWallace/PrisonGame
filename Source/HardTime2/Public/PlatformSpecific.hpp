@@ -8,8 +8,6 @@ class HTNMethod;
 struct StackNode;
 class SimActorItem;
 class AActorItem;
-enum class EItemType : uint8;
-enum class ELocations : uint8;
 class UPlayerData;
 
 #ifdef TEXT_ONLY_HTN
@@ -21,6 +19,8 @@ typedef std::shared_ptr<HTNMethod> HTNMethodPtr;
 typedef std::shared_ptr<StackNode> StackNodePtr;
 
 typedef std::shared_ptr<SimActorItem> SimActorItemPtr;
+
+typedef uint8_t uint8;
 #else
 typedef TSharedPtr<HTNPrimitive> HTNPrimitivePtr;
 typedef TSharedPtr<HTNCompound> HTNCompoundPtr;
@@ -31,6 +31,9 @@ typedef TSharedPtr<StackNode> StackNodePtr;
 
 typedef TSharedPtr<SimActorItem> SimActorItemPtr;
 #endif
+
+enum class EItemType : uint8;
+enum class ELocations : uint8;
 
 HTNPrimitive* GetRaw(HTNPrimitivePtr ptr);
 HTNCompound* GetRaw(HTNCompoundPtr ptr);
