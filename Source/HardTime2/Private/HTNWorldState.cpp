@@ -92,7 +92,7 @@ void HTNWorldState::Print()
 		ss << WorldEToString(static_cast<WorldE>(i)) << ":" << m_v.at(i) << "\n";
 	}
 	ss << "m_ptrToSelf:" << m_ptrToSelf << "\n";
-	ss << "m_itemCarriedPtr:" << m_itemCarriedPtr.Get() << "\n";
+	ss << "m_itemCarriedPtr:" << GetRaw(m_itemCarriedPtr) << "\n";
 	for (auto &simItem : m_items)
 	{
 		ss << "SimItem: " << simItem->ToString() << " carried by ";

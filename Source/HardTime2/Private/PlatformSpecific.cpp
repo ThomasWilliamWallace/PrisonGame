@@ -49,6 +49,11 @@ HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
 }
 
 #else
+#include "ActorItem.h"
+SimActorItem* GetRaw(SimActorItemPtr ptr)
+{
+	return ptr.Get();
+}
 
 HTNPrimitive* GetRaw(HTNPrimitivePtr ptr)
 {

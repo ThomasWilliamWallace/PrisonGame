@@ -21,6 +21,10 @@ typedef TSharedPtr<HTNNode> HTNNodePtr;
 typedef TSharedPtr<HTNMethod> HTNMethodPtr;
 
 typedef TSharedPtr<StackNode> StackNodePtr;
+
+class SimActorItem;
+typedef TSharedPtr<SimActorItem> SimActorItemPtr;
+SimActorItem* GetRaw(SimActorItemPtr ptr);
 #endif
 
 HTNPrimitive* GetRaw(HTNPrimitivePtr ptr);

@@ -5,6 +5,7 @@
 #include "Locations.h"
 #include "Missions.hpp"
 #include "Constants.hpp"
+#include "PlatformSpecific.hpp"
 
 enum WorldE
 {

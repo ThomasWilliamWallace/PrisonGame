@@ -75,5 +75,3 @@ public:
     {};
     std::string ToString();
 };
-
-typedef TSharedPtr<SimActorItem> SimActorItemPtr;

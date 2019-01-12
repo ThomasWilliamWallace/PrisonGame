@@ -2,6 +2,7 @@
 #include "Locations.h"
 #include "HTNPrimitives.hpp"
 #include "pLog.hpp"
+#include "PlatformSpecific.hpp"
 
 //***********************************************************
 AlreadyInLibraryMethod::AlreadyInLibraryMethod(): HTNMethod("AlreadyInLibraryMethod")
@@ -297,7 +298,7 @@ HaveItemMethod::HaveItemMethod(EItemType itemType): HTNMethod("HaveItemMethod"),
 
 bool HaveItemMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    if (htnWorldState.m_itemCarriedPtr.Get() != nullptr
+    if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr
         && htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType)
     {
         return true;

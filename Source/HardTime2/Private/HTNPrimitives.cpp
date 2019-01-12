@@ -4,6 +4,7 @@
 #include "SimWorld.h"
 #include <stdexcept>
 #include "pLog.hpp"
+#include "PlatformSpecific.hpp"
 
 //***********************************************************
 StudyPrim::StudyPrim() : HTNPrimitive("StudyPrim") {}
@@ -282,11 +283,11 @@ bool PickUpItemByPtrPrim::Preconditions(HTNWorldState &htnWorldState)
             break;
         }
     }
-	if (currentSimItem.Get() == nullptr)
+	if (GetRaw(currentSimItem) == nullptr)
 		throw std::runtime_error("Failed to find relevant SimItem in PickUpItem::preconditions");
     //TODO hook this into the actions code
-    if (htnWorldState.m_itemCarriedPtr.Get() == nullptr
-      && currentSimItem.Get() != nullptr
+    if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
+      && GetRaw(currentSimItem) != nullptr
       && static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location)) == currentSimItem->m_locationClass.location
       && currentSimItem->m_carryingPlayer == nullptr)
     {
@@ -338,7 +339,7 @@ bool PickUpItemByTypePrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	for (auto &item : htnWorldState.m_items)
 	{
-        if (htnWorldState.m_itemCarriedPtr.Get() == nullptr
+        if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
             		&& item->m_itemType == m_itemType
 			&& item->m_locationClass.location == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location))
 			&& item->m_carryingPlayer == nullptr)
@@ -351,7 +352,7 @@ bool PickUpItemByTypePrim::Preconditions(HTNWorldState &htnWorldState)
 
 bool PickUpItemByTypePrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return (htnWorldState.m_itemCarriedPtr.Get() != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
+	return (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
 //***********************************************************
@@ -371,12 +372,12 @@ Actions DropItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool DropItemPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_itemCarriedPtr.Get() != nullptr; //TODO hook this into the actions code
+	return GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr; //TODO hook this into the actions code
 }
 
 bool DropItemPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_itemCarriedPtr.Get() == nullptr;
+	return GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr;
 }
 
 //***********************************************************
@@ -403,7 +404,7 @@ Actions RequestItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    if (htnWorldState.m_itemCarriedPtr.Get() != nullptr)
+    if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr)
     {
         return false;
     }
@@ -419,5 +420,5 @@ bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
 
 bool RequestItemPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 {
-	return (htnWorldState.m_itemCarriedPtr.Get() != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
+	return (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
