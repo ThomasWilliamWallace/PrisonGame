@@ -776,6 +776,14 @@ void AHardTime2Character::DropItemAction()
 
 void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter)
 {
+	if (targetCharacter->m_carriedItem == nullptr)
+	{
+		pLog("RequestItemAction: character isn't carrying any item.", true);
+		m_aiState = EAIState::cooldown;
+		UpdateStatus();
+		return;
+	}
+
 	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();
 	if (abs(displacement.Size()) > 140)
 	{

@@ -3,7 +3,6 @@
 #include "pLog.hpp"
 #include <sstream>
 #include <stack>
-#include <memory>
 
 //*******************************************************************
 HTNNode::HTNNode(std::string name, HTNType htnType) : m_name(name), m_HTNType(htnType) {}
@@ -92,15 +91,6 @@ struct DecompositionFrame
     DecompositionFrame(int s, int w) : m_stackCounter(s), m_worldStateStackCounter(w) {}
 };
 
-struct StackNode //represents 'm_htnNode &&' or 'm_htnNode ||'
-{
-    HTNNodePtr m_htnNode;
-    bool m_isOr;
-    StackNode(HTNNodePtr htnNode, bool isOr): m_htnNode(htnNode), m_isOr(isOr) {};
-};
-
-typedef TSharedPtr<StackNode> StackNodePtr;
-
 void PrintHTNPlanStack(std::deque<HTNPrimitivePtr> htnPlanStack)
 {
     std::stringstream ss;
@@ -161,7 +151,7 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot
     std::stack< DecompositionFrame > decompositions; // std::stack< stackCounter, worldStateCounter>
 
     worldStateStack.push(&htnWorldState);
-    nodeStack.push( MakeShared<StackNode>(MakeShareable(&htnRoot), false) );
+    nodeStack.push( MakeSharedStackNodePtr(MakeShareableCompound(htnRoot), false) );
     bool lastTaskPrecon = true;
     
     StackNodePtr currentNode = nodeStack.top();
@@ -191,7 +181,7 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot
                 case HTNType::Method:
                 {
                     pLog("Processing HTNType::Method");
-                    HTNMethodPtr htnMethod = StaticCastSharedPtr<HTNMethod>(currentNode->m_htnNode);
+                    HTNMethodPtr htnMethod = CastNodeToMethod(currentNode->m_htnNode);
                     
                     lastTaskPrecon = htnMethod->Preconditions(*worldStateStack.top());
                     if (lastTaskPrecon)
@@ -201,7 +191,7 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot
                         HTNNodeList taskList = htnMethod->GetTasks();
                         for (auto task = taskList.rbegin(); task != taskList.rend(); ++task)
                         {
-                            nodeStack.push(MakeShared<StackNode>(*task, false));
+                            nodeStack.push(MakeSharedStackNodePtr(*task, false));
                         }
                     } else {
                         pLog("lastTaskPrecon == false");
@@ -211,7 +201,7 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot
                 case HTNType::Primitive:
                 {
                     pLog("Processing HTNType::Primitive");
-                    HTNPrimitivePtr htnPrimitive = StaticCastSharedPtr<HTNPrimitive>(currentNode->m_htnNode);
+                    HTNPrimitivePtr htnPrimitive = CastNodeToPrimitive(currentNode->m_htnNode);
                     lastTaskPrecon = htnPrimitive->Preconditions(*worldStateStack.top());
                     if (lastTaskPrecon)
                     {
@@ -227,7 +217,7 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot
                 case HTNType::Compound:
                 {
                     pLog("Processing HTNType::Compound");
-                    HTNCompoundPtr htnCompound = StaticCastSharedPtr<HTNCompound>(currentNode->m_htnNode);
+                    HTNCompoundPtr htnCompound = CastNodeToCompound(currentNode->m_htnNode);
                     
                     // record the current worldState and plan. This will allow us to backtrack planning this task fails.
                     decompositions.push(DecompositionFrame(static_cast<int>(nodeStack.size()), static_cast<int>(htnPlanStack.size())));
@@ -236,7 +226,7 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot
                     HTNMethodList methodList = htnCompound->GetMethods();
                     for (auto method = methodList.rbegin(); method != methodList.rend(); ++method)
                     {
-                        nodeStack.push(MakeShared<StackNode>(*method, true));
+                        nodeStack.push(MakeSharedStackNodePtr(*method, true));
                     }
                     
                     lastTaskPrecon = false;

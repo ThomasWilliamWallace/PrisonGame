@@ -3,21 +3,11 @@
 #include <vector>
 #include <deque>
 #include <iostream>
-#include <memory>
 #include "HTNWorldState.hpp"
 #include "Actions.hpp"
-
-class HTNNode;
-class HTNPrimitive;
-class HTNCompound;
-class HTNMethod;
+#include "PlatformSpecific.hpp"
 
 class AAICharacterC;
-
-typedef TSharedPtr<HTNPrimitive> HTNPrimitivePtr;
-typedef TSharedPtr<HTNCompound> HTNCompoundPtr;
-typedef TSharedPtr<HTNNode> HTNNodePtr;
-typedef TSharedPtr<HTNMethod> HTNMethodPtr;
 
 typedef std::deque< HTNPrimitivePtr > HTNPrimitiveList;
 typedef std::vector< HTNCompoundPtr > HTNCompoundList;
@@ -81,6 +71,13 @@ public:
 	void AddTask(HTNPrimitive* htnPrimitive);
 	void AddTask(HTNCompound* htnCompound);
     virtual ~HTNMethod() override = default;
+};
+
+struct StackNode //represents 'm_htnNode &&' or 'm_htnNode ||'
+{
+    HTNNodePtr m_htnNode;
+    bool m_isOr;
+    StackNode(HTNNodePtr htnNode, bool isOr): m_htnNode(htnNode), m_isOr(isOr) {};
 };
 
 HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnCompound, int searchDepth);

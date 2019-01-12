@@ -184,10 +184,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
 		int m_useCount;
 
-	UPROPERTY(VisibleAnywhere, Category = LowLevelAI)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LowLevelAI)
 		ELocations m_location;
 
-	UPROPERTY(VisibleAnywhere, Category = LowLevelAI)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = LowLevelAI)
 		AActorItem* m_carriedItem;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = LowLevelAI)

@@ -1,5 +1,27 @@
 #include "pLog.hpp"
 #include "Constants.hpp"
+
+#ifdef TEXT_ONLY_HTN
+
+void pLog(std::string logText, bool forcePrint)
+{
+	if (c_debug || forcePrint)
+		std::cout << logText << std::endl;
+}
+
+void pLog(std::string logText, std::string logText2, bool forcePrint)
+{
+	if (c_debug || forcePrint)
+		std::cout << logText << logText << std::endl;
+}
+
+void pLog(std::stringstream& ss, bool forcePrint)
+{
+    pLog(ss.str(), forcePrint);
+}
+
+#else
+
 #include "Engine/GameEngine.h"
 
 void pLog(std::string logText, bool forcePrint)
@@ -25,3 +47,5 @@ void pLog(std::stringstream& ss, bool forcePrint)
 {
     pLog(ss.str(), forcePrint);
 }
+
+#endif
