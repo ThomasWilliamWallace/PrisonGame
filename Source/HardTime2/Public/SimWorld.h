@@ -29,7 +29,7 @@ public:
 		void UpdateItemLocation(AActorItem* item, ELocations location);
 
 	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
-		void UpdateCarriedItemC(AActorItem* item, ACharacter* character);
+		void UpdateCarriedItem(AActorItem* item, ACharacter* character);
 
 	UPROPERTY()
 		UPlayerData* weightsOccupied;

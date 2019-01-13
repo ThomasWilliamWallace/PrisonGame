@@ -784,7 +784,7 @@ void AHardTime2Character::PickupItemAction(AActorItem* item)
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
 	if (hardTime2GameMode != nullptr)
 	{
-		hardTime2GameMode->m_simWorld->UpdateCarriedItemC(m_carriedItem, this);
+		hardTime2GameMode->m_simWorld->UpdateCarriedItem(m_carriedItem, this);
 	}
 	else {
 		throw std::invalid_argument("Failed to cast gameMode to AHardTime2GameMode.");
@@ -818,7 +818,7 @@ void AHardTime2Character::DropItemAction()
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
 	if (hardTime2GameMode != nullptr)
 	{
-		hardTime2GameMode->m_simWorld->UpdateCarriedItemC(nullptr, this);
+		hardTime2GameMode->m_simWorld->UpdateCarriedItem(nullptr, this);
 	}
 	else {
 		throw std::invalid_argument("Failed to cast gameMode to AHardTime2GameMode.");

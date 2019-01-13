@@ -153,7 +153,7 @@ void USimWorld::RemovePlayer(UPlayerData* playerData)
 	pLog("ERROR: playerData was not found when trying to remove from world.m_players");
 }
 
-void USimWorld::UpdateCarriedItemC(AActorItem* item, ACharacter* character)
+void USimWorld::UpdateCarriedItem(AActorItem* item, ACharacter* character)
 {
 	pLog("USimWorld::UpdateCarriedItemC");
 	if (item != nullptr && !IsValid(item))
