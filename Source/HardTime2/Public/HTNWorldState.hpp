@@ -7,22 +7,6 @@
 #include "Constants.hpp"
 #include "PlatformSpecific.hpp"
 
-enum WorldE
-{
-	health,
-	sanity,
-	strength,
-	agility,
-	intelligence,
-
-	evading,
-
-	location,
-	last
-};
-
-std::string WorldEToString(WorldE worldE);
-
 class UPlayerData;
 class SimActorItem;
 class USimWorld;
