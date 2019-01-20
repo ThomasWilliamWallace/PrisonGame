@@ -51,5 +51,5 @@ public:
     USimWorld();
     std::vector< AActorItem* > items;
 	std::vector< UPlayerData* > m_players;
-	PlayerMap2 playerMap;
+	PlayerMap playerMap;
 };

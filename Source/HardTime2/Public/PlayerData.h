@@ -51,7 +51,7 @@ class UPlayerData : public UObject
 public:
     PStats pStats;
 
-    int m_playerIndex; //players array index
+    int m_key; //players array index
     int cash = 0; //cash, in dollars, no bounds.
     int sentence = 5; //days left in prison sentence, only bound is above -1.
     Actions action = Actions::useRoom; //stores the current action being attempted. This is held till the end of the frame, as it may be interrupted by another action.

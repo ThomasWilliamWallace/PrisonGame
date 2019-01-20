@@ -109,7 +109,7 @@ void UPlayerData::PrintPlayer()
     ss << "missionOffer=" << missionOffer.MissionNarrative() << "\n";
     ss << "cash=" << cash << "\n";
     ss << "sentence=" << sentence << "\n";
-    ss << "m_playerIndex=" << m_playerIndex << "\n";
+    ss << "m_key=" << m_key << "\n";
     ss << "\n";
 	pLog(ss);
 //    pStats.PrintStats();

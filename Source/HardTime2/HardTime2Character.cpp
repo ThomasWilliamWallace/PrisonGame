@@ -162,11 +162,11 @@ void AHardTime2Character::BeginPlay()
 	if (!IsValid(m_player))
 		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::BEGINPLAY", true);
 	m_player->missionClass = MissionClass(m_player);
-	m_player->m_playerIndex = 0;
+	m_player->m_key = -1;
 	m_player->physicalCharacter = this;
 	auto gameMode = GetWorld()->GetAuthGameMode();
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
-	m_player->m_playerIndex = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
+	m_player->m_key = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
 
 	m_player->aiController.algo = AI::htnAI;
 	m_player->aiController.lastActionInterrupted = false;

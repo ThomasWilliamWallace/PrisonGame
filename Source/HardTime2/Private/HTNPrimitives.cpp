@@ -237,7 +237,7 @@ Actions PunchPrim::Operate(UPlayerData* playerData, USimWorld &world)
 bool PunchPrim::Preconditions(HTNWorldState &htnWorldState)
 {
 	return true;
-	//return htnWorldState.m_playerLocations[m_targetPlayer->m_playerIndex] == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location));
+	//return htnWorldState.m_playerLocations[m_targetPlayer->m_key] == static_cast<ELocations>(htnWorldState.m_v.at(WorldE::location));
 }
 
 //***********************************************************
