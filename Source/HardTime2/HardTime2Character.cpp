@@ -859,6 +859,7 @@ void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetC
 	pLog("RequestItemHandleResponse", true);
 	if (m_targetItem->m_carryingPlayer == nullptr)
 	{
+		DropItemAction();
 		pLog("Item pickedup", true);
 		PickupItemAction(m_targetItem);
 		m_aiState = EAIState::cooldown;
