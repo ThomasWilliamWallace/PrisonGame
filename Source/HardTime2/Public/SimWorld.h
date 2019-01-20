@@ -3,7 +3,7 @@
 #include <vector>
 #include "PlayerData.h"
 #include "Object.h"
-#include "PlayerMapFwd.hpp"
+#include "PlayerRegistry.hpp"
 #include "SimWorld.generated.h"
 
 class AActorItem;
@@ -51,5 +51,6 @@ public:
     USimWorld();
     std::vector< AActorItem* > items;
 	std::vector< UPlayerData* > m_players;
-	PlayerMap playerMap;
+
+	PlayerRegistry m_playerRegistry;
 };

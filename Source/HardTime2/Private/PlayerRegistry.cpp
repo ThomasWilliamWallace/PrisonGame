@@ -12,11 +12,10 @@ void PlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
     addPlayerData->m_key = addKey;
     
     //add relationships
-	/*
-    for(auto playerIter = m_playerMap.cbegin(); playerIter != m_playerMap.cend(); ++playerIter)
+    for(auto &playerIter : m_playerMap)
     {
-        int otherKey = playerIter->first;
-        UPlayerData* otherPlayerData = playerIter->second;
+        int otherKey = playerIter.Key;
+        UPlayerData* otherPlayerData = playerIter.Value;
         
         if (addKey != otherKey)
         {
@@ -24,24 +23,25 @@ void PlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
             otherPlayerData->relMap.Add(addKey, new Relationship());
         }
     }
-	*/
 }
 
 void PlayerRegistry::DeregisterPlayer(int removeKey)
 {
     UPlayerData* removePlayerData = m_playerMap[removeKey];
-    //RelMap& removeRelMap = removePlayerData->relMap;
+    RelMap& removeRelMap = removePlayerData->relMap;
     
     //remove relationships
     //for(auto relIter = removeRelMap.cbegin(); relIter != removeRelMap.cend(); /* no increment */)
-		/*
+    for(auto &relIter : removeRelMap)
+
     {
-        int otherKey = relIter->first;
+        int otherKey = relIter.Key;
         UPlayerData* otherPlayerData = m_playerMap[otherKey];
-        otherPlayerData->relMap.erase(removeKey);
-        relIter = removeRelMap.erase(relIter);
+        otherPlayerData->relMap.Remove(removeKey);
+        removeRelMap.Remove(otherKey);
+		//NOT SAFE TO CONTINUE ITERATING. IF YOU NEED TO CONTINUE ITERATING, USE ITERATOR.REMOVECURRENT().
+		break;
     }
-	*/
     
     //remove from player registry
     m_playerMap.Remove(removeKey);

@@ -108,6 +108,7 @@ int USimWorld::AddPlayer(UPlayerData* playerData)
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::AddPlayer", true);
 		return -1;
 	}
+	m_playerRegistry.RegisterPlayer(playerData);
 	m_players.push_back(playerData);
 	std::stringstream ss;
 	ss << "player=" << playerData;
@@ -142,6 +143,7 @@ void USimWorld::RemovePlayer(UPlayerData* playerData)
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::RemovePlayer", true);
 		//return;
 	}
+	m_playerRegistry.DeregisterPlayer(playerData->m_key);
 	for (int i = 0; i < static_cast<int>(m_players.size()); i++)
 	{
 		if (m_players.at(i) == playerData)
