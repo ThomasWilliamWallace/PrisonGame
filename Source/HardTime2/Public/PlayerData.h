@@ -8,6 +8,7 @@
 #include "Actions.hpp"
 #include "Constants.hpp"
 #include "Object.h"
+#include "RelMapFwd.hpp"
 #include "PlayerData.generated.h"
 
 class Relationship //their opinion of another character. Asymptotically bound between 0 and 100.
@@ -81,7 +82,7 @@ public:
     void PrintPlayer();
 	UPlayerData();
     
-    //Relationship rel[c_playerCount];
+	RelMap relMap;
 };
 
 std::string CharacterName(UPlayerData* playerPtr);

@@ -160,4 +160,7 @@ void UPlayerData::UpdateMissions(USimWorld &world)
 
 UPlayerData::UPlayerData()
 {
+	itemPtr = nullptr;
+	itemFocusPtr = nullptr;
+	action = Actions::goToGym;
 }
