@@ -1,7 +1,7 @@
 #pragma once
 
 #include "HTNPlanner.hpp"
-#include "PlayerMapFwd.hpp"  //TODO rename to just PlayerMap
+#include "PlayerMap.hpp"
 
 class USimWorld;
 

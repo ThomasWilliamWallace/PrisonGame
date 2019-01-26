@@ -6,7 +6,7 @@
 #include "Missions.hpp"
 #include "Constants.hpp"
 #include "PlatformSpecific.hpp"
-#include "PlayerMapFwd.hpp"
+#include "PlayerMap.hpp"
 
 class UPlayerData;
 class SimActorItem;

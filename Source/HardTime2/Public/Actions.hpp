@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "PlayerMapFwd.hpp"
+#include "PlayerMap.hpp"
 
 enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
 {

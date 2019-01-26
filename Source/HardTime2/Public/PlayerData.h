@@ -8,7 +8,7 @@
 #include "Actions.hpp"
 #include "Constants.hpp"
 #include "Object.h"
-#include "RelMapFwd.hpp"
+#include "RelMap.hpp"
 #include "PlayerData.generated.h"
 
 class Relationship //their opinion of another character. Asymptotically bound between 0 and 100.

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PlayerMapFwd.hpp"
+#include "PlayerMap.hpp"
 
 class PlayerRegistry{
 
