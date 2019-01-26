@@ -1,8 +1,8 @@
 #pragma once
 
-#include <map>
+#include "Runtime/Core/Public/Containers/Map.h"
 
 class UPlayerData;
 
-typedef std::map<int, UPlayerData*> PlayerMap;
-typedef std::pair<int, UPlayerData*> IntPlayerPair;
+typedef TMap<int, UPlayerData*> PlayerMap;
+typedef TPair<int, UPlayerData*> IntPlayerPair;
