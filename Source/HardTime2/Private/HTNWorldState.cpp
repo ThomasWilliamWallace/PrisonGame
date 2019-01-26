@@ -7,7 +7,7 @@
 #include <sstream>
 
 //***********************************************************
-HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
+HTNWorldState::HTNWorldState(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld &world):
 	m_ptrToSelf(playerPtr),
     m_health(round(m_ptrToSelf->pStats.getHealth())),
     m_sanity(round(m_ptrToSelf->pStats.getSanity())),
@@ -29,13 +29,13 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, USimWorld &world):
 		}
 	}
 
-    for (auto &p : world.m_players)
+    for (auto &p : playerMap)
     {
-		if (p->locationClass.location == m_location &&
-			playerPtr != p)
+		if (p.Value->locationClass.location == m_location &&
+			playerPtr != p.Value)
 		{
-			m_playersInTheRoom.push_back(p);
-			//m_attackers.push_back(p);
+			m_playersInTheRoom.push_back(p.Value);
+			//m_attackers.push_back(p.Value);
 		}
     }
 }

@@ -6,6 +6,7 @@
 #include "Missions.hpp"
 #include "Constants.hpp"
 #include "PlatformSpecific.hpp"
+#include "PlayerMapFwd.hpp"
 
 class UPlayerData;
 class SimActorItem;
@@ -30,7 +31,7 @@ public:
     bool IsInTheRoom(UPlayerData* playerPtr);
 	MissionClass m_missionClass;
 	HTNWorldState(HTNWorldState &ws2);
-	HTNWorldState(UPlayerData* playerPtr, USimWorld &world);
+	HTNWorldState(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld &world);
     HTNWorldState& operator=(const HTNWorldState& ws2);
     void Print();
 };

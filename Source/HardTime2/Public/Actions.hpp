@@ -1,8 +1,7 @@
 #pragma once
 
 #include <iostream>
-
-class UPlayerData;
+#include "PlayerMapFwd.hpp"
 
 enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
 {
@@ -22,5 +21,5 @@ enum class Actions //MUST KEEP IN SYNC WITH V_ACTION
 	noAction // serves as a flag for any unset actions
 };
 
-bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, UPlayerData player[]);
+bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, PlayerMap &playerMap);
 std::string ActionToString(Actions action);

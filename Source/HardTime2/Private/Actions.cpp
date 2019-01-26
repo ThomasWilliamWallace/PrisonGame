@@ -1,7 +1,7 @@
 #include "Actions.hpp"
 #include "PlayerData.h"
 
-bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, UPlayerData player[])
+bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, PlayerMap &playerMap)
 {
     if ((otherPlayerPtr->locationClass.location == playerPtr->locationClass.location) && (otherPlayerPtr != playerPtr))
         return true;

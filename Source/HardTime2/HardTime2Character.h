@@ -91,7 +91,7 @@ public:
 		UPlayerData* m_player;  //this pointer owns and maintains the m_player, but other objects such as world may also access it
 
 	UPROPERTY()
-		USimWorld* m_world;  //this is purely a reference to the single external world object used by the AI.
+		USimWorld* m_world;  //a reference to the single external world object used by the AI.
 
 protected:
 	// Called when the game starts or when spawned

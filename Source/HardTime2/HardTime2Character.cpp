@@ -162,11 +162,11 @@ void AHardTime2Character::BeginPlay()
 	if (!IsValid(m_player))
 		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::BEGINPLAY", true);
 	m_player->missionClass = MissionClass(m_player);
-	m_player->m_key = -1;
+	m_player->m_oldKey = -1;
 	m_player->physicalCharacter = this;
 	auto gameMode = GetWorld()->GetAuthGameMode();
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
-	m_player->m_key = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
+	m_player->m_oldKey = hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
 
 	m_player->aiController.algo = AI::htnAI;
 	m_player->aiController.lastActionInterrupted = false;
@@ -371,7 +371,7 @@ void AHardTime2Character::Tick(float DeltaTime)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;
-		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world);
+		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry.m_playerMap, m_world);
 		m_player->aiController.lastActionInterrupted = false;
 		pLog("HTN Planner chose an action:", true);
 		switch (m_player->action)

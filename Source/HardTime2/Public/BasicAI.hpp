@@ -1,23 +1,24 @@
 #pragma once
 
 #include "HTNPlanner.hpp"
+#include "PlayerMapFwd.hpp"  //TODO rename to just PlayerMap
 
 class USimWorld;
 
 enum class AI
 {
     doNothingAI, //does nothing
-    htnAI //uses an HTN to search with utility
+    htnAI //uses an HTN task planner
 };
 
 class AIController
 {
-    Actions ChooseRoom(UPlayerData* playerData, UPlayerData player[]);
-    Actions DoNothingAIChooseAction(UPlayerData* playerData, UPlayerData player[], std::vector<bool> playersInReach, int countPlayersInReach);
-    //UPlayerData* TargetForMakeFriend(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach);
+    Actions ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap);
+    Actions DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach);
+    //UPlayerData* TargetForMakeFriend(UPlayerData* playerData, PlayerMap &playerMap, bool playersInReach[], int countPlayersInReach);
 public:
-	Actions HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld);
-    Actions ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world);
+	Actions HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld);
+    Actions ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world);
     AIController(AI _algo);
     AIController();
 	HTNPrimitiveList htnPlan;

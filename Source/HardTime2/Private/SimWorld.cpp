@@ -143,7 +143,7 @@ void USimWorld::RemovePlayer(UPlayerData* playerData)
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::RemovePlayer", true);
 		//return;
 	}
-	m_playerRegistry.DeregisterPlayer(playerData->m_key);
+	m_playerRegistry.DeregisterPlayer(playerData->m_newKey);
 	for (int i = 0; i < static_cast<int>(m_players.size()); i++)
 	{
 		if (m_players.at(i) == playerData)

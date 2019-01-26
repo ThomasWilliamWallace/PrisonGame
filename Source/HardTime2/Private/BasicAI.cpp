@@ -9,7 +9,7 @@
 #include "pLog.hpp"
 #include <vector>
 
-Actions AIController::ChooseRoom(UPlayerData* playerData, UPlayerData player[])
+Actions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
 {
     if (playerData->locationClass.location == ELocations::mainHall)
     {
@@ -33,35 +33,38 @@ Actions AIController::ChooseRoom(UPlayerData* playerData, UPlayerData player[])
     }
 }
 
-Actions AIController::ChooseAction(UPlayerData* playerData, UPlayerData player[], USimWorld &world)
+Actions AIController::ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world)
 {
-	int currentPlayerCount = static_cast<int>(world.m_players.size());
-    std::vector<bool> playersInReach(currentPlayerCount);
+	int tempPlayerCount = playerMap.Num();
+    std::vector<bool> playersInReach(tempPlayerCount);
     int countPlayersInReach = 0;
     
-    for (int i = 0; i < currentPlayerCount; i++)
+	int i = 0;
+	for (auto &playerIter : playerMap)
     {
-        if (OtherInReach(playerData, &(player[i]), player))
+		UPlayerData* currPlayerData = playerIter.Value;
+        if (OtherInReach(playerData, currPlayerData, playerMap))
         {
             playersInReach[i] = true;
             countPlayersInReach += 1;
         } else
             playersInReach.at(i) = false;
+		i += 1;
     }
     
     switch(playerData->aiController.algo)
     {
         case(AI::doNothingAI):
-            return DoNothingAIChooseAction(playerData, player, playersInReach, countPlayersInReach);
+            return DoNothingAIChooseAction(playerData, playerMap, playersInReach, countPlayersInReach);
         case(AI::htnAI):
-            return HTNAIChooseAction(playerData, &world);
+            return HTNAIChooseAction(playerData, playerMap, &world);
 		default:
 			throw std::invalid_argument("Selected an invalid AI controller type.");
     }
 }
 
 /*
-UPlayerData* AIController::TargetForMakeFriend(UPlayerData* playerData, UPlayerData player[], bool playersInReach[], int countPlayersInReach)
+UPlayerData* AIController::TargetForMakeFriend(UPlayerData* playerData, PlayerMap &playerMap, bool playersInReach[], int countPlayersInReach)
 {
 	int currentPlayerCount = static_cast<int>(world.m_players.size());
     double random = RandPercent();
@@ -81,16 +84,16 @@ UPlayerData* AIController::TargetForMakeFriend(UPlayerData* playerData, UPlayerD
 }
 */
 
-Actions AIController::DoNothingAIChooseAction(UPlayerData* playerData, UPlayerData player[], std::vector<bool> playersInReach, int countPlayersInReach)
+Actions AIController::DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach)
 {
     return Actions::noAction;
 }
 
-Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simWorld)
+Actions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld)
 {
 	pLog("Entering htnAIChooseAction");
 	//update worldstate from real world
-	HTNWorldState htnWorldState(playerData, *(simWorld));
+	HTNWorldState htnWorldState(playerData, playerMap, *(simWorld));
 
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
