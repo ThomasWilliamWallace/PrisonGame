@@ -110,7 +110,7 @@ void RespondToItemRequestCompound::CreateMethods()
 }
 
 //***********************************************************
-StartMethod::StartMethod(HTNWorldState &htnWorldState, UPlayerData player[]): HTNMethod("StartMethod"), m_htnWorldState(htnWorldState)
+StartMethod::StartMethod(HTNWorldState &htnWorldState, PlayerMap &playerMap): HTNMethod("StartMethod"), m_htnWorldState(htnWorldState)
 {
 }
 
@@ -126,12 +126,12 @@ void StartMethod::CreateTasks()
     AddTask(new RespondToItemRequestCompound(requestedItem));
 }
 
-StartCompound::StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]): HTNCompound("StartCompound"), m_htnWorldState(htnWorldState), m_player(player)
+StartCompound::StartCompound(HTNWorldState &htnWorldState, PlayerMap &playerMap): HTNCompound("StartCompound"), m_htnWorldState(htnWorldState), m_playerMap(playerMap)
 {
 }
 
 void StartCompound::CreateMethods()
 {
-    AddMethod(new StartMethod(m_htnWorldState, m_player));
+    AddMethod(new StartMethod(m_htnWorldState, m_playerMap));
 }
 */

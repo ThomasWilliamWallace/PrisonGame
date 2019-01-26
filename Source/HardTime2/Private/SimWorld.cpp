@@ -20,6 +20,7 @@ void USimWorld::Clean()
     weightsOccupied  = nullptr;
 }
 
+/*
 void USimWorld::WorldEffects(UPlayerData player[], int frame)
 {
     if (bedOccupied != nullptr)
@@ -40,9 +41,10 @@ void USimWorld::WorldEffects(UPlayerData player[], int frame)
         //weightsOccupied->narrative = "weightlift; strength = " + FormatDouble(weightsOccupied->pStats.getStrength());
     }
 }
+*/
 
-void USimWorld::PrintWorld(UPlayerData player[])
-{
+//void USimWorld::PrintWorld(UPlayerData player[])
+//{
 	/*
 	std::sstringstream ss;
     ss << "*** WORLD DATA ***\n";
@@ -58,10 +60,10 @@ void USimWorld::PrintWorld(UPlayerData player[])
     ss << "\n";
 	pLog(ss);
 	*/
-}
+//}
 
-void USimWorld::FullDisplay(UPlayerData player[])
-{
+//void USimWorld::FullDisplay(UPlayerData player[])
+//{
 	/*
     PrintWorld(player);
     
@@ -70,7 +72,7 @@ void USimWorld::FullDisplay(UPlayerData player[])
         player[playerIndex].PrintPlayer(player);
     }
 	*/
-}
+//}
 
 void USimWorld::UpdateItemLocation(AActorItem* item, ELocations location)
 {

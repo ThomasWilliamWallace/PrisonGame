@@ -75,7 +75,7 @@ class StartMethod : public HTNMethod
 {
     HTNWorldState& m_htnWorldState;
 public:
-    StartMethod(HTNWorldState &htnWorldState, UPlayerData player[]);
+    StartMethod(HTNWorldState &htnWorldState, PlayerMap &playerMap);
     bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks() override;
 };
@@ -83,9 +83,9 @@ public:
 class StartCompound : public HTNCompound
 {
     HTNWorldState& m_htnWorldState;
-    UPlayerData* m_player;
+    PlayerMap m_playerMap;
 public:
-    StartCompound(HTNWorldState &htnWorldState, UPlayerData player[]);
+    StartCompound(HTNWorldState &htnWorldState, PlayerMap &playerMap);
     virtual void CreateMethods() override;
 };
 */

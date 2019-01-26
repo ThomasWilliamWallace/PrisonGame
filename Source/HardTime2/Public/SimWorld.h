@@ -44,9 +44,9 @@ public:
 	UPROPERTY()
 		UPlayerData* bedOccupied;
 
-    void WorldEffects(UPlayerData player[], int frame);
-    void PrintWorld(UPlayerData player[]);
-    void FullDisplay(UPlayerData player[]);
+    //void WorldEffects(UPlayerData player[], int frame);
+    //void PrintWorld(UPlayerData player[]);
+    //void FullDisplay(UPlayerData player[]);
     void Clean();
     USimWorld();
     std::vector< AActorItem* > items;
