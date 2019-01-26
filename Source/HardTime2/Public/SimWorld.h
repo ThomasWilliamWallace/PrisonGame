@@ -18,7 +18,7 @@ public:
 		void AddItem(AActorItem* item);
 
 	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
-		int AddPlayer(UPlayerData* playerData);
+		void AddPlayer(UPlayerData* playerData);
 
 	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void RemoveItem(AActorItem* item);
@@ -44,13 +44,9 @@ public:
 	UPROPERTY()
 		UPlayerData* bedOccupied;
 
-    //void WorldEffects(UPlayerData player[], int frame);
-    //void PrintWorld(UPlayerData player[]);
-    //void FullDisplay(UPlayerData player[]);
     void Clean();
     USimWorld();
     std::vector< AActorItem* > items;
-	std::vector< UPlayerData* > m_players;
 
 	PlayerRegistry m_playerRegistry;
 };

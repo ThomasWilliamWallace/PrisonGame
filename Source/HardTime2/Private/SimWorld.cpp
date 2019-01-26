@@ -20,60 +20,6 @@ void USimWorld::Clean()
     weightsOccupied  = nullptr;
 }
 
-/*
-void USimWorld::WorldEffects(UPlayerData player[], int frame)
-{
-    if (bedOccupied != nullptr)
-    {
-        bedOccupied->pStats.deltaHealth(1);
-    }
-    if (circuitsOccupied != nullptr)
-    {
-        circuitsOccupied->pStats.deltaAgility(1);
-    }
-    if (studyOccupied != nullptr)
-    {
-        studyOccupied->pStats.deltaIntelligence(1);
-    }
-    if (weightsOccupied != nullptr)
-    {
-        weightsOccupied->pStats.deltaStrength(1);
-        //weightsOccupied->narrative = "weightlift; strength = " + FormatDouble(weightsOccupied->pStats.getStrength());
-    }
-}
-*/
-
-//void USimWorld::PrintWorld(UPlayerData player[])
-//{
-	/*
-	std::sstringstream ss;
-    ss << "*** WORLD DATA ***\n";
-    ss << "weightsOccupied=" << CharacterName(weightsOccupied) << "\n";
-    ss << "circuitsOccupied=" << CharacterName(circuitsOccupied) << "\n";
-    ss << "studyOccupied=" << CharacterName(studyOccupied) << "\n";
-    ss << "bedOccupied=" << CharacterName(bedOccupied) << "\n";
-    ss << "\n";
-    for (auto &item : items)
-    {
-        ss << item->ToString() << " is in the " << item->m_locationClass.ToString() << ".\n";
-    }
-    ss << "\n";
-	pLog(ss);
-	*/
-//}
-
-//void USimWorld::FullDisplay(UPlayerData player[])
-//{
-	/*
-    PrintWorld(player);
-    
-    for (int playerIndex = 0; playerIndex < c_playerCount; playerIndex++)
-    {
-        player[playerIndex].PrintPlayer(player);
-    }
-	*/
-//}
-
 void USimWorld::UpdateItemLocation(AActorItem* item, ELocations location)
 {
 	pLog("USimWorld::UpdateItemLocation");
@@ -102,20 +48,18 @@ void USimWorld::AddItem(AActorItem* item)
 	pLog(ss);
 }
 
-int USimWorld::AddPlayer(UPlayerData* playerData)
+void USimWorld::AddPlayer(UPlayerData* playerData)
 {
 	pLog("USimWorld::AddPlayer");
 	if (!IsValid(playerData))
 	{
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::AddPlayer", true);
-		return -1;
+		return;
 	}
 	m_playerRegistry.RegisterPlayer(playerData);
-	m_players.push_back(playerData);
 	std::stringstream ss;
 	ss << "player=" << playerData;
 	pLog(ss);
-	return static_cast<int>(m_players.size());
 }
 
 void USimWorld::RemoveItem(AActorItem* item)
@@ -145,16 +89,7 @@ void USimWorld::RemovePlayer(UPlayerData* playerData)
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::RemovePlayer", true);
 		//return;
 	}
-	m_playerRegistry.DeregisterPlayer(playerData->m_newKey);
-	for (int i = 0; i < static_cast<int>(m_players.size()); i++)
-	{
-		if (m_players.at(i) == playerData)
-		{
-			m_players.erase(m_players.begin() + i);
-			return;
-		}
-	}
-	pLog("ERROR: playerData was not found when trying to remove from world.m_players");
+	m_playerRegistry.DeregisterPlayer(playerData->m_key);
 }
 
 void USimWorld::UpdateCarriedItem(AActorItem* item, ACharacter* character)

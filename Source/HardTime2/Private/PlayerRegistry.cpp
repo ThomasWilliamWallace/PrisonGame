@@ -9,7 +9,7 @@ void PlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
         addKey += 1;
     } while (m_playerMap.Contains(addKey));
     m_playerMap.Add(addKey, addPlayerData);
-    addPlayerData->m_newKey = addKey;
+    addPlayerData->m_key = addKey;
     
     //add relationships
     for(auto &playerIter : m_playerMap)
