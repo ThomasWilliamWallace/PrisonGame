@@ -140,6 +140,8 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, USimWorld* simW
 			ss << prim->ToString() << ", ";
 		}
 		pLog(ss, true);
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Emerald, ss.str().c_str());
 		HTNPrimitivePtr currentPlanStep = htnPlan.front();
 		lastPrimitiveAction = currentPlanStep;
 		htnPlan.pop_front();
