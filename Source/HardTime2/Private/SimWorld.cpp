@@ -192,9 +192,9 @@ void USimWorld::UpdateCarriedItem(AActorItem* item, ACharacter* character)
 		playerData = hardTime2Character->m_player;
 	}
 
-	for (auto &p : m_players)
+	for (auto &p : m_playerRegistry.m_playerMap)
 	{
-		if (playerData == p)
+		if (playerData == p.Value)
 		{
 			playerData->itemPtr = item;
 		}
