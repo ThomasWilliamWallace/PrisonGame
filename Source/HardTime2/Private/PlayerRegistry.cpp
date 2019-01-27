@@ -14,8 +14,8 @@ void PlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
     //add relationships
     for(auto &playerIter : m_playerMap)
     {
-        int otherKey = playerIter.Key;
-        UPlayerData* otherPlayerData = playerIter.Value;
+        int otherKey = GetKey(playerIter);
+        UPlayerData* otherPlayerData = GetPlayer(playerIter);
         
         if (addKey != otherKey)
         {
@@ -33,10 +33,10 @@ void PlayerRegistry::DeregisterPlayer(int removeKey)
     //remove relationships
 	for (auto relIter = removeRelMap.CreateIterator(); relIter; ++relIter)
     {
-		int otherKey = relIter->Key;
+        int otherKey = GetKey(*relIter);
         UPlayerData* otherPlayerData = m_playerMap[otherKey];
         Remove(otherPlayerData->relMap, removeKey);
-		relIter.RemoveCurrent();
+		RemoveCurrent(removeRelMap, relIter);
     }
     
     //remove from player registry

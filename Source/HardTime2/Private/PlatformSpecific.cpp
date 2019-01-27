@@ -61,37 +61,8 @@ HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
     return HTNNodePtr(&htnCompound);
 }
 
-bool Contains(PlayerMap &playerMap, int key)
-{
-	return m_playerMap.find(key) != playerMap.end();
-}
-
-bool Contains(RelMap &relMap, int key)
-{
-	return relMap.find(key) != relMap.end();
-}
-
-void Add(PlayerMap &playerMap, int addKey, UPlayerData* addPlayerData)
-{
-	playerMap.insert(IntPlayerPair(addKey, addPlayerData));
-}
-
-void Add(RelMap &relMap, int addKey, Relationship* relationship)
-{
-	relMap.insert(IntRelPair(addKey, relationship));
-}
-
-void Remove(PlayerMap &playerMap, int removeKey)
-{
-	playerMap.erase(removeKey);
-}
-
-void Remove(RelMap &relMap, int removeKey)
-{
-	relMap.erase(removeKey);
-}
-
 #else
+
 #include "ActorItem.h"
 
 HTNPrimitive* GetRaw(HTNPrimitivePtr ptr)
@@ -147,36 +118,6 @@ SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemTy
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
 {
     return MakeShareable(&htnCompound);
-}
-
-bool Contains(PlayerMap &playerMap, int key)
-{
-	return playerMap.Contains(key);
-}
-
-bool Contains(RelMap &relMap, int key)
-{
-	return relMap.Contains(key);
-}
-
-void Add(PlayerMap &playerMap, int addKey, UPlayerData* addPlayerData)
-{
-	playerMap.Add(addKey, addPlayerData);
-}
-
-void Add(RelMap &relMap, int addKey, Relationship* relationship)
-{
-	relMap.Add(addKey, relationship);
-}
-
-void Remove(PlayerMap &playerMap, int removeKey)
-{
-	playerMap.Remove(removeKey);
-}
-
-void Remove(RelMap &relMap, int removeKey)
-{
-	relMap.Remove(removeKey);
 }
 
 #endif

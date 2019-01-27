@@ -29,6 +29,49 @@ typedef std::map<int, UPlayerData*> PlayerMap;
 typedef std::pair<int, UPlayerData*> IntPlayerPair;
 typedef std::map<int, Relationship*> RelMap;
 typedef std::pair<int, Relationship*> IntRelPair;
+
+template <typename Iterator>
+int GetKey(Iterator &iterator)
+{
+	return iterator.first;
+};
+
+template <typename Iterator>
+UPlayerData* GetPlayer(Iterator &iterator)
+{
+	return iterator.second;
+};
+
+template <typename Iterator>
+Relationship* GetRel(Iterator &iterator)
+{
+	return iterator.second;
+};
+
+template <typename Container>
+bool Contains(Container &container, int key)
+{
+	return container.find(key) != container.end();
+};
+
+template <typename Container, typename Element>
+void Add(Container &container, int addKey, Element addElem)
+{
+	container.insert(typename Container::value_type(addKey, addElem));
+};
+
+template <typename Container>
+void Remove(Container &container, int removeKey)
+{
+	container.erase(removeKey);
+};
+
+template <typename Container, typename Iterator>
+void RemoveCurrent(Container &container, Iterator iter)
+{
+	iter = container.erase(iter);
+};
+
 #else
 
 #include "Runtime/Core/Public/Containers/Map.h"
@@ -45,6 +88,49 @@ typedef TMap<int, UPlayerData*> PlayerMap;
 typedef TPair<int, UPlayerData*> IntPlayerPair;
 typedef TMap<int, Relationship*> RelMap;
 typedef TPair<int, Relationship*> IntRelPair;
+
+template <typename Iterator>
+int GetKey(Iterator &iterator)
+{
+	return iterator.Key;
+};
+
+template <typename Iterator>
+UPlayerData* GetPlayer(Iterator &iterator)
+{
+	return iterator.Value;
+};
+
+template <typename Iterator>
+Relationship* GetRel(Iterator &iterator)
+{
+	return iterator.second;
+};
+
+template <typename Container>
+bool Contains(Container &container, int key)
+{
+	return container.Contains(key);
+};
+
+template <typename Container, typename Element>
+void Add(Container &container, int addKey, Element addElem)
+{
+	container.Add(addKey, addElem);
+};
+
+template <typename Container>
+void Remove(Container &container, int removeKey)
+{
+	container.Remove(removeKey);
+};
+
+template <typename Container, typename Iterator>
+void RemoveCurrent(Container &container, Iterator iter)
+{
+	iter.RemoveCurrent();
+};
+
 #endif
 
 enum class EItemType : uint8;
@@ -64,11 +150,3 @@ StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr);
 SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer);
 
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound);
-
-//TODO make PlayerMap and RelMap into classes?
-bool Contains(PlayerMap &playerMap, int key);
-bool Contains(RelMap &relMap, int key);
-void Add(PlayerMap &playerMap, int addKey, UPlayerData* addPlayerData);
-void Add(RelMap &relMap, int addKey, Relationship* relationship);
-void Remove(PlayerMap &playerMap, int removeKey);
-void Remove(RelMap &relMap, int removeKey);
