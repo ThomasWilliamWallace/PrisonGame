@@ -262,7 +262,7 @@ public:
 	void UpdateStatus();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Action)
-		void RespondToItemRequest(AHardTime2Character* requestingCharacter);
+		void RespondToItemRequest(AHardTime2Character* requestingCharacter, const FText &question);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
 		void RequestItemHandleResponse(AHardTime2Character* targetCharacter);

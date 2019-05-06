@@ -20,6 +20,7 @@
 #include "Runtime/Engine/Classes/Components/ActorComponent.h"
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
+#include "Runtime/Core/Public/Internationalization/Text.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AHardTime2Character
@@ -932,10 +933,14 @@ void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter
 		UpdateStatus();
 		return;
 	}
-	targetCharacter->RespondToItemRequest(this);
+	std::string itemString = ItemTypeToString(targetCharacter->m_carriedItem->m_itemType);
+	std::string questionString = "AI: Give me the " + itemString + " you are carrying.";
+	FString questionFString(questionString.c_str());
+	const FText questionText = FText::FromString(questionFString);
+	targetCharacter->RespondToItemRequest(this , questionText);
 }
 
-void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Character* requestingCharacter)
+void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Character* requestingCharacter, const FText &question)
 {
 	pLog("RespondToItemRequest", true);
 	DropItemAction();
