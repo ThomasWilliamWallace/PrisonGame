@@ -35,7 +35,10 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, PlayerMap &playerMap, USimW
 			playerPtr != p.Value)
 		{
 			m_playersInTheRoom.push_back(p.Value);
-			//m_attackers.push_back(p.Value);
+			if (m_health < 65)
+			{
+				m_attackers.push_back(p.Value);
+			}
 		}
     }
 }
@@ -126,6 +129,14 @@ void HTNWorldState::Print()
 		else
 			ss << "ERROR NULL PLAYERDATA VALUE\n";
     }
+
+	for (auto &p : m_attackers)
+	{
+		if (p != nullptr)
+			ss << "PlayerData " << " is attacking.\n";
+		else
+			ss << "ERROR NULL PLAYERDATA VALUE\n";
+	}
 	ss << "m_missionClass:" << m_missionClass.MissionName() << "\n";
 	pLog(ss);
 }

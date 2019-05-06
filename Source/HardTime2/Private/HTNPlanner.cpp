@@ -158,10 +158,10 @@ HTNPrimitiveList HTNIterative(HTNWorldState &htnWorldState, HTNCompound &htnRoot
     
     while (searchDepth <= c_MaxSearchDepth && static_cast<int>(nodeStack.size()) > 0)
     {
+        PrintNodeStack(nodeStack);
         if (c_debug)
         {
             pLog("");
-            PrintNodeStack(nodeStack);
             PrintDecompositions(decompositions);
             PrintHTNPlanStack(htnPlanStack);
             PrintWorldStateStack(worldStateStack);

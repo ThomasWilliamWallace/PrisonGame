@@ -163,4 +163,14 @@ UPlayerData::UPlayerData()
 	itemPtr = nullptr;
 	itemFocusPtr = nullptr;
 	action = Actions::goToGym;
+	pLog("Constructing UPlayerData");
+}
+
+UPlayerData::UPlayerData(const FObjectInitializer& ObjectInitializer)
+{
+	pLog("Constructing UPlayerData with FObjectInitializer");
+
+	itemPtr = nullptr;
+	itemFocusPtr = nullptr;
+	action = Actions::goToGym;
 }

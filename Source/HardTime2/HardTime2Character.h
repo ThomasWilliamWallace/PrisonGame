@@ -47,7 +47,16 @@ class AHardTime2Character : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
+	void InitCameraBoom();
+
+	void InitCamera();
+
+	void Init();
+
 public:
+
+	AHardTime2Character(const FObjectInitializer& ObjectInitializer);
 	AHardTime2Character();
 
 	virtual void BeginDestroy() override;
@@ -87,7 +96,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Stats)
 		void DeltaIntelligence(float delta);
 
-	UPROPERTY()
+	UPROPERTY(Instanced)
 		UPlayerData* m_player;  //this pointer owns and maintains the m_player, but other objects such as world may also access it
 
 	UPROPERTY()

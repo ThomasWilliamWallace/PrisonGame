@@ -24,8 +24,23 @@
 //////////////////////////////////////////////////////////////////////////
 // AHardTime2Character
 
-AHardTime2Character::AHardTime2Character()
+void AHardTime2Character::InitCamera()
 {
+	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
+	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+}
+
+void AHardTime2Character::InitCameraBoom()
+{
+	CameraBoom->SetupAttachment(RootComponent);
+	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
+	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
+}
+
+void AHardTime2Character::Init()
+{
+	pLog("AHardTime2Character::Init");
+
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -44,27 +59,75 @@ AHardTime2Character::AHardTime2Character()
 	GetCharacterMovement()->JumpZVelocity = 600.f;
 	GetCharacterMovement()->AirControl = 0.2f;
 
-	// Create a camera boom (pulls in towards the player if there is a collision)
-	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
-	CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
-
-	// Create a follow camera
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
-	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 	m_carriedItem = nullptr;
-	m_player = CreateDefaultSubobject<UPlayerData>(TEXT("PlayerData"));
 	m_aiCommand = EAICommand::useRoom;
 	m_aiState = EAIState::noTask;
 	m_useCount = 0;
+
+	m_player->missionClass = MissionClass(m_player);
+	m_player->physicalCharacter = this;
+	m_player->aiController.algo = AI::htnAI;
+	m_player->aiController.lastActionInterrupted = false;
+}
+
+AHardTime2Character::AHardTime2Character()
+{
+	pLog("AHardTime2Character::AHardTime2Character");
+
+	if (CameraBoom == nullptr)
+	{
+		// Create a camera boom (pulls in towards the player if there is a collision)
+		CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	}
+	InitCameraBoom();
+
+	if (FollowCamera == nullptr)
+	{
+		// Create a follow camera
+		FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	}
+	InitCamera();
+
+	if (m_player == nullptr)
+	{
+		m_player = CreateDefaultSubobject<UPlayerData>(TEXT("PlayerData"));
+	}
+
+	Init();
+}
+
+AHardTime2Character::AHardTime2Character(const FObjectInitializer& ObjectInitializer):
+	Super(ObjectInitializer)
+{
+	pLog("AHardTime2Character::AHardTime2Character with FObjectInitializer");
+	
+	if (CameraBoom == nullptr)
+	{
+		// Create a camera boom (pulls in towards the player if there is a collision)
+		CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
+	}
+	InitCameraBoom();
+
+	if (FollowCamera == nullptr)
+	{
+		// Create a follow camera
+		FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
+	}
+	InitCamera();
+
+	
+	if (m_player == nullptr)
+	{
+		m_player = CreateDefaultSubobject<UPlayerData>(TEXT("PlayerData"));
+	}
+
+	Init();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -156,19 +219,41 @@ void AHardTime2Character::MoveRight(float Value)
 // Called when the game starts or when spawned
 void AHardTime2Character::BeginPlay()
 {
+	pLog("AHardTime2Character::BeginPlay before SUPER");
 	Super::BeginPlay();
+
+	pLog("AHardTime2Character::BeginPlay after SUPER");
+
+	/*
+	if (CameraBoom == nullptr)
+	{
+		pLog("Constructing a CameraBoom");
+		// Create a camera boom (pulls in towards the player if there is a collision)
+		CameraBoom = NewObject<USpringArmComponent>();
+	}
+	InitCameraBoom();
+
+	if (FollowCamera == nullptr)
+	{
+		pLog("Constructing a FollowCamera");
+		// Create a follow camera
+		FollowCamera = NewObject<UCameraComponent>();
+	}
+	InitCamera();
+	*/
 	if (m_player == nullptr)
-		pLog("ERROR: M_PLAYER IS NULL DURING AAICHARACTERC::BEGINPLAY", true);
-	if (!IsValid(m_player))
-		pLog("ERROR: M_PLAYER IS NOT VALID DURING AAICHARACTERC::BEGINPLAY", true);
-	m_player->missionClass = MissionClass(m_player);
-	m_player->physicalCharacter = this;
+	{
+		pLog("Constructing an m_player");
+		m_player = NewObject<UPlayerData>();
+	}
+
+	Init();
+
+	pLog("Registering player with the worldState.");
 	auto gameMode = GetWorld()->GetAuthGameMode();
 	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
 	hardTime2GameMode->m_simWorld->AddPlayer(this->m_player);
 
-	m_player->aiController.algo = AI::htnAI;
-	m_player->aiController.lastActionInterrupted = false;
 	for (FConstPlayerControllerIterator iterator = GetWorld()->GetPlayerControllerIterator(); iterator; ++iterator)
 	{
 		APlayerController* playerController = Cast<APlayerController>(*iterator);
@@ -215,6 +300,11 @@ USimWorld* AHardTime2Character::GetSimWorld()
 void AHardTime2Character::UpdateLocation(ELocations location)
 {
 	pLog("AHardTime2Character::UpdateLocation", true);
+	if (m_player == nullptr)
+	{
+		pLog("M_PLAYER == NULLPTR, FAILED TO UPDATE LOCATION");
+		return;
+	}
 	m_player->locationClass.location = location;
 	m_location = location;
 	std::stringstream ss;
@@ -261,9 +351,9 @@ void AHardTime2Character::DeltaIntelligence(float delta)
 void AHardTime2Character::SetLastActionInterrupted(bool interrupted)
 {
 	if (interrupted)
-		pLog("AAICharacterC::SetLastActionInterrupted(True)", true);
+		pLog("AHARDTIME2CHARACTER::SetLastActionInterrupted(True)", true);
 	else
-		pLog("AAICharacterC::SetLastActionInterrupted(False)", true);
+		pLog("AHARDTIME2CHARACTER::SetLastActionInterrupted(False)", true);
 	m_player->aiController.lastActionInterrupted = interrupted;
 }
 
@@ -878,6 +968,7 @@ void AHardTime2Character::AttackAction(AHardTime2Character* targetCharacter)
 	{
 		pLog("AttackAction: couldn't reach character.", true);
 	} else {
+		targetCharacter->DeltaHealth(-1);
 		AttackEffect(targetCharacter);
 	}
 	m_aiState = EAIState::cooldown;

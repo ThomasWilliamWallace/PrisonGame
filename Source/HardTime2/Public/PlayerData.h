@@ -81,6 +81,7 @@ public:
 	void UpdateMissions(USimWorld &world);
     void PrintPlayer();
 	UPlayerData();
+	UPlayerData(const FObjectInitializer& ObjectInitializer);
     
 	RelMap relMap;
 };
