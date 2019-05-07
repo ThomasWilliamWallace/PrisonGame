@@ -6,7 +6,7 @@ std::string RandomName()
 	std::string nickName;
 	std::string lastName;
 	std::string playerName;
-	int random = rand() % 140;
+	int random = rand() % 115;
 	if (random < 4)
 		nickName = "Mechanical";
 	else if (random < 8)
