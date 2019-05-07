@@ -19,6 +19,9 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, PlayerMap &playerMap, USimW
     m_itemCarriedPtr(nullptr),
 	m_missionClass(playerPtr->missionClass)
 {
+	std::stringstream ss;
+	ss << "CONSTRUCTING HTNWorldState " << static_cast<int>(m_ptrToSelf->locationClass.location) << "\n";
+	pLog(ss, true);
 	//TODO reflect players sensors rather than being hardwired to the world
 	for (auto &item : world.items)
 	{
@@ -114,6 +117,7 @@ void HTNWorldState::Print()
 		ss << "SimItem: " << simItem->ToString() << " carried by ";
 		if (simItem->m_carryingPlayer != nullptr)
 		{
+			ss << std::string(TCHAR_TO_UTF8(*(simItem->m_carryingPlayer->m_playerName.ToString())));
 		}
 		else
 		{
@@ -125,7 +129,10 @@ void HTNWorldState::Print()
     for (auto &p : m_playersInTheRoom)
     {
 		if (p != nullptr)
-			ss << "PlayerData " << " is also in the " << LocationToString(m_location) << ".\n";
+		{
+			ss << std::string(TCHAR_TO_UTF8(*(p->m_playerName.ToString())));
+			ss << " is also in the " << LocationToString(m_location) << ".\n";
+		}
 		else
 			ss << "ERROR NULL PLAYERDATA VALUE\n";
     }
@@ -133,7 +140,10 @@ void HTNWorldState::Print()
 	for (auto &p : m_attackers)
 	{
 		if (p != nullptr)
-			ss << "PlayerData " << " is attacking.\n";
+		{
+			ss << std::string(TCHAR_TO_UTF8(*(p->m_playerName.ToString())));
+			ss << " is attacking.\n";
+		}
 		else
 			ss << "ERROR NULL PLAYERDATA VALUE\n";
 	}

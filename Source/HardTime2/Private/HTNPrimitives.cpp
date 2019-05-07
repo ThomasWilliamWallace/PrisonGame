@@ -98,7 +98,8 @@ Actions GoToGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToGymPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall ||
+		htnWorldState.m_location == ELocations::gym;
 }
 
 bool GoToGymPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -122,7 +123,8 @@ Actions GoToLibraryPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToLibraryPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall ||
+		htnWorldState.m_location == ELocations::library;
 }
 
 bool GoToLibraryPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -146,7 +148,8 @@ Actions GoToCircuitTrackPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToCircuitTrackPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall ||
+		htnWorldState.m_location == ELocations::circuitTrack;
 }
 
 bool GoToCircuitTrackPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -170,7 +173,8 @@ Actions GoToBedroomPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToBedroomPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    return htnWorldState.m_location == ELocations::mainHall ||
+		   htnWorldState.m_location == ELocations::bedroom;
 }
 
 bool GoToBedroomPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -194,7 +198,7 @@ Actions GoToMainHallPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToMainHallPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location != ELocations::mainHall;
+	return true; //htnWorldState.m_location != ELocations::mainHall;
 }
 
 bool GoToMainHallPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -405,14 +409,17 @@ Actions RequestItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
 {
+	pLog("ENTERING RequestItemPrim", true);
     if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr)
     {
+		pLog("GetRaw(htnWorldState.m_itemCarriedPtr) is not null", true);
         return false;
     }
     for (auto &item : htnWorldState.m_items)
     {
         if (item->m_carryingPlayer == m_player && item->m_itemType == m_itemType && htnWorldState.IsInTheRoom(item->m_carryingPlayer))
         {
+			pLog("item->m_carryingPlayer == m_player && item->m_itemType == m_itemType && htnWorldState.IsInTheRoom(item->m_carryingPlayer)", true);
             return true;
         }
     }
