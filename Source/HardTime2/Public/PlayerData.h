@@ -9,6 +9,7 @@
 #include "Constants.hpp"
 #include "Object.h"
 #include "RelMap.hpp"
+#include "Runtime/Core/Public/UObject/NameTypes.h"
 #include "PlayerData.generated.h"
 
 class Relationship //their opinion of another character. Asymptotically bound between 0 and 100.
@@ -61,7 +62,7 @@ public:
     LocationClass lastLocationClass; //location the character was at when the turn began. Used by the print display.
     bool attacked = false; //tracks whether an attack has disrupted his turn.
     //std::string narrative; //printed at the end of each round, giving the update for this character
-    //std::string m_playerName; //name of the character, used in speech.
+    FName m_playerName; //name of the character, used in speech.
     MissionClass missionClass; //a mission currently assigned to the character
     AIController aiController; //controlling AI for this character
     MissionClass missionOffer; // a mission being offered to 'playerTarget'

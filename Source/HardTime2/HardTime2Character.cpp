@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "HTNWorldState.hpp"
 #include "pLog.hpp"
+#include "Names.hpp"
 #include "Engine/GameEngine.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "HardTime2GameMode.h"
@@ -75,6 +76,9 @@ void AHardTime2Character::Init()
 	m_player->physicalCharacter = this;
 	m_player->aiController.algo = AI::htnAI;
 	m_player->aiController.lastActionInterrupted = false;
+
+	std::string playerName = RandomName();
+	m_player->m_playerName = FName(playerName.c_str());
 }
 
 AHardTime2Character::AHardTime2Character()
@@ -933,11 +937,10 @@ void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter
 		UpdateStatus();
 		return;
 	}
-	std::string itemString = ItemTypeToString(targetCharacter->m_carriedItem->m_itemType);
-	std::string questionString = "AI: Give me the " + itemString + " you are carrying.";
-	FString questionFString(questionString.c_str());
-	const FText questionText = FText::FromString(questionFString);
-	targetCharacter->RespondToItemRequest(this , questionText);
+	FString itemString(ItemTypeToString(targetCharacter->m_carriedItem->m_itemType).c_str());
+	FString questionString = m_player->m_playerName.ToString() + ": Give me the " + itemString + " you are carrying.";
+	const FText questionText = FText::FromString(questionString);
+	targetCharacter->RespondToItemRequest(this, questionText);
 }
 
 void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Character* requestingCharacter, const FText &question)
