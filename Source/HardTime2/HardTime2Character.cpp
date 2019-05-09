@@ -964,6 +964,7 @@ void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetC
 	} else {
 		pLog("No item pickedup", true);
 		m_aiState = EAIState::cooldown;
+		SetLastActionInterrupted(true);
 		UpdateStatus();
 	}
 }

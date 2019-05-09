@@ -98,8 +98,7 @@ Actions GoToGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToGymPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall ||
-		htnWorldState.m_location == ELocations::gym;
+	return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToGymPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -123,8 +122,7 @@ Actions GoToLibraryPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToLibraryPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall ||
-		htnWorldState.m_location == ELocations::library;
+	return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToLibraryPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -148,8 +146,7 @@ Actions GoToCircuitTrackPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToCircuitTrackPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall ||
-		htnWorldState.m_location == ELocations::circuitTrack;
+	return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToCircuitTrackPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -173,8 +170,7 @@ Actions GoToBedroomPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToBedroomPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall ||
-		   htnWorldState.m_location == ELocations::bedroom;
+	return htnWorldState.m_location == ELocations::mainHall;
 }
 
 bool GoToBedroomPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
@@ -198,7 +194,7 @@ Actions GoToMainHallPrim::Operate(UPlayerData* playerData, USimWorld &world)
 
 bool GoToMainHallPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true; //htnWorldState.m_location != ELocations::mainHall;
+	return htnWorldState.m_location != ELocations::mainHall;
 }
 
 bool GoToMainHallPrim::LastActionSucceeded(HTNWorldState &htnWorldState)

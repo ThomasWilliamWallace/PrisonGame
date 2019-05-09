@@ -83,7 +83,7 @@ MissionClass::MissionClass(UPlayerData* owner):
 {
 	m_mission = Missions::bringItemToRoom;
 	m_itemType = EItemType::ball;
-	m_locationClass = GetRandomLocation();
+	m_locationClass = ELocations::mainHall; // GetRandomLocation();
 	return;
 	switch (m_mission)
 	{
