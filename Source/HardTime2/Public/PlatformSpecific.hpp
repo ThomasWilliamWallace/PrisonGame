@@ -9,7 +9,7 @@ struct StackNode;
 class SimActorItem;
 class AActorItem;
 class UPlayerData;
-class Relationship;
+class URelationship;
 
 #ifdef TEXT_ONLY_HTN
 
@@ -27,8 +27,8 @@ typedef uint8_t uint8;
 
 typedef std::map<int, UPlayerData*> PlayerMap;
 typedef std::pair<int, UPlayerData*> IntPlayerPair;
-typedef std::map<int, Relationship*> RelMap;
-typedef std::pair<int, Relationship*> IntRelPair;
+typedef std::map<int, URelationship*> RelMap;
+typedef std::pair<int, URelationship*> IntRelPair;
 
 template <typename Iterator>
 int GetKey(Iterator &iterator)
@@ -43,7 +43,7 @@ UPlayerData* GetPlayer(Iterator &iterator)
 };
 
 template <typename Iterator>
-Relationship* GetRel(Iterator &iterator)
+URelationship* GetRel(Iterator &iterator)
 {
 	return iterator.second;
 };
@@ -86,8 +86,8 @@ typedef TSharedPtr<SimActorItem> SimActorItemPtr;
 
 typedef TMap<int, UPlayerData*> PlayerMap;
 typedef TPair<int, UPlayerData*> IntPlayerPair;
-typedef TMap<int, Relationship*> RelMap;
-typedef TPair<int, Relationship*> IntRelPair;
+typedef TMap<int, URelationship*> RelMap;
+typedef TPair<int, URelationship*> IntRelPair;
 
 template <typename Iterator>
 int GetKey(Iterator &iterator)
@@ -102,7 +102,7 @@ UPlayerData* GetPlayer(Iterator &iterator)
 };
 
 template <typename Iterator>
-Relationship* GetRel(Iterator &iterator)
+URelationship* GetRel(Iterator &iterator)
 {
 	return iterator.second;
 };

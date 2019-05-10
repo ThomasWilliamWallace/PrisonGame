@@ -9,79 +9,100 @@
 #include "pLog.hpp"
 //TODO cull unused includes
 
-double Relationship::getAggro()
+double URelationship::getAggro()
 {
     return aggro;
 }
 
-double Relationship::getFriendliness()
+double URelationship::getFriendliness()
 {
     return friendliness;
 }
 
-double Relationship::getFear()
+double URelationship::getFear()
 {
     return fear;
 }
 
-double Relationship::getThreat()
+double URelationship::getThreat()
 {
     return threat;
 }
 
-double Relationship::getSubmissiveness()
+double URelationship::getSubmissiveness()
 {
     return submissiveness;
 }
 
-double Relationship::getPlotImportance()
+double URelationship::getPlotImportance()
 {
     return plotImportance;
 }
 
-double Relationship::getTrust()
+double URelationship::getTrust()
 {
     return trust;
 }
 
-void Relationship::deltaAggro(double delta)
+void URelationship::deltaAggro(double delta)
 {
     aggro = transformStat(aggro + delta);
 }
 
-void Relationship::deltaFriendliness(double delta)
+void URelationship::deltaFriendliness(double delta)
 {
     friendliness = transformStat(friendliness + delta);
 }
 
-void Relationship::deltaFear(double delta)
+void URelationship::deltaFear(double delta)
 {
     fear = transformStat(fear + delta);
 }
 
-void Relationship::deltaThreat(double delta)
+void URelationship::deltaThreat(double delta)
 {
     threat = transformStat(threat + delta);
 }
 
-void Relationship::deltaSubmissiveness(double delta)
+void URelationship::deltaSubmissiveness(double delta)
 {
     submissiveness = transformStat(submissiveness + delta);
 }
 
-void Relationship::deltaPlotImportance(double delta)
+void URelationship::deltaPlotImportance(double delta)
 {
     plotImportance = transformStat(plotImportance + delta);
 }
 
-void Relationship::deltaTrust(double delta)
+void URelationship::deltaTrust(double delta)
 {
     trust = transformStat(trust + delta);
 }
 
-//void Relationship::RequestCooldownTimerElapsed()
-//{
-//	pLog("ENTERING RequestCooldownTimerElapsed", true);
-//	isRequestedRecently = false;
-//	GetWorldTimerManager().ClearTimer(requestCooldownTimer);
-//}
+void URelationship::SetRecentlyRequested()
+{
+	isRequestedRecently = true;
+	if (!(GetWorld()->GetTimerManager().IsTimerActive(requestCooldownTimer)))
+	{
+		pLog("set request cooldown timer", true);
+		GetWorld()->GetTimerManager().SetTimer(
+			requestCooldownTimer, this, &URelationship::RequestCooldownTimerElapsed, 10.0f, false);
+	}
+}
+
+void URelationship::RequestCooldownTimerElapsed()
+{
+	pLog("ENTERING RequestCooldownTimerElapsed", true);
+	isRequestedRecently = false;
+	GetWorld()->GetTimerManager().ClearTimer(requestCooldownTimer);
+}
+
+class UWorld* URelationship::GetWorld() const
+{
+	UPlayerData* owningPlayerData = Cast<UPlayerData>(GetOuter());
+
+	if (owningPlayerData)
+		return owningPlayerData->GetWorld();
+	else
+		return nullptr;
+}

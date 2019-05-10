@@ -12,9 +12,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Runtime/Core/Public/UObject/NameTypes.h"
+#include "Relationship.generated.h"
 
-class Relationship //their opinion of another character. Asymptotically bound between 0 and 100.
+UCLASS()
+class URelationship : public UObject  //their opinion of another character. Asymptotically bound between 0 and 100.
 {
+	GENERATED_BODY()
+
 private:
 	double aggro = 0; //your temporary heat against a character.
 	double friendliness = 50; //your friendliness with this character. The default relationship gauge.
@@ -44,7 +48,11 @@ public:
 	void deltaTrust(double delta);
 
 	bool isRequestedRecently = false;
-	//UFUNCTION()
-	//	void RequestCooldownTimerElapsed();
-	//FTimerHandle requestCooldownTimer;
+	UFUNCTION()
+		void SetRecentlyRequested();
+	UFUNCTION()
+		void RequestCooldownTimerElapsed();
+	FTimerHandle requestCooldownTimer;
+
+	virtual class UWorld* GetWorld() const override;
 };

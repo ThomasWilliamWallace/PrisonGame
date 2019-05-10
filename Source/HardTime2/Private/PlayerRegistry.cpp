@@ -19,8 +19,8 @@ void PlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
         
         if (addKey != otherKey)
         {
-            Add(addPlayerData->relMap, otherKey, new Relationship());
-            Add(otherPlayerData->relMap, addKey, new Relationship());
+            Add(addPlayerData->relMap, otherKey, NewObject<URelationship>(addPlayerData));
+            Add(otherPlayerData->relMap, addKey, NewObject<URelationship>(otherPlayerData));
         }
     }
 }

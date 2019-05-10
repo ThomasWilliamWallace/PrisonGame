@@ -95,8 +95,7 @@ bool UPlayerData::IsRequestedRecently(UPlayerData* requestedPlayer, EItemType m_
 
 void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 {
-	(*(relMap.Find(requestedPlayer->m_key)))->isRequestedRecently = true;
-	//TODO implement timer here.
+	(*(relMap.Find(requestedPlayer->m_key)))->SetRecentlyRequested();
 }
 
 UPlayerData::UPlayerData()
