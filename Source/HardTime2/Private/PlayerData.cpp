@@ -158,6 +158,17 @@ void UPlayerData::UpdateMissions(USimWorld &world)
     }
 }
 
+bool UPlayerData::IsRequestedRecently(UPlayerData* requestedPlayer, EItemType m_itemType)
+{
+	return (*(relMap.Find(requestedPlayer->m_key)))->isRequestedRecently;
+}
+
+void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
+{
+	(*(relMap.Find(requestedPlayer->m_key)))->isRequestedRecently = true;
+	//TODO implement timer here.
+}
+
 UPlayerData::UPlayerData()
 {
 	itemPtr = nullptr;

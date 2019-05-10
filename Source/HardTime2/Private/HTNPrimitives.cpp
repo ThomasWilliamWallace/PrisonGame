@@ -382,24 +382,29 @@ bool DropItemPrim::LastActionSucceeded(HTNWorldState &htnWorldState)
 }
 
 //***********************************************************
-RequestItemPrim::RequestItemPrim(UPlayerData* player, EItemType itemType) : HTNPrimitive("RequestItem"), m_player(player), m_itemType(itemType) {}
+RequestItemPrim::RequestItemPrim(UPlayerData* requestedPlayer, EItemType itemType):
+	HTNPrimitive("RequestItem"),
+	m_requestedPlayer(requestedPlayer),
+	m_itemType(itemType)
+{}
 
 void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
 {
     for (auto &item : htnWorldState.m_items)
     {
-        if (item->m_carryingPlayer == m_player)
+        if (item->m_carryingPlayer == m_requestedPlayer)
         {
             htnWorldState.m_itemCarriedPtr = item;
             break;
         }
     }
-    htnWorldState.m_itemCarriedPtr->m_carryingPlayer = m_player;
+    htnWorldState.m_itemCarriedPtr->m_carryingPlayer = m_requestedPlayer;
 }
 
-Actions RequestItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
+Actions RequestItemPrim::Operate(UPlayerData* selfPlayer, USimWorld &world)
 {
-	playerData->playerTargetPtr = m_player;
+	selfPlayer->playerTargetPtr = m_requestedPlayer;
+	selfPlayer->SetRequested(m_requestedPlayer);
     return Actions::requestItem;
 }
 
@@ -413,9 +418,12 @@ bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
     }
     for (auto &item : htnWorldState.m_items)
     {
-        if (item->m_carryingPlayer == m_player && item->m_itemType == m_itemType && htnWorldState.IsInTheRoom(item->m_carryingPlayer))
+        if (item->m_carryingPlayer == m_requestedPlayer
+			&& item->m_itemType == m_itemType
+			&& htnWorldState.IsInTheRoom(item->m_carryingPlayer)
+			&& !htnWorldState.m_ptrToSelf->IsRequestedRecently(m_requestedPlayer, m_itemType))
         {
-			pLog("item->m_carryingPlayer == m_player && item->m_itemType == m_itemType && htnWorldState.IsInTheRoom(item->m_carryingPlayer)", true);
+			pLog("return true", true);
             return true;
         }
     }

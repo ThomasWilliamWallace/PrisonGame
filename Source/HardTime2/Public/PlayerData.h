@@ -24,6 +24,8 @@ class Relationship //their opinion of another character. Asymptotically bound be
     double trust = 50; //whether you consider this character to be trusted or a traitor
     
 public:
+	bool isRequestedRecently = false;
+
     double getAggro();
     double getFriendliness();
     double getFear();
@@ -81,6 +83,8 @@ public:
 
 	void UpdateMissions(USimWorld &world);
     void PrintPlayer();
+	bool IsRequestedRecently(UPlayerData* requestedPlayer, EItemType m_itemType);
+	void SetRequested(UPlayerData* requestedPlayer);
 	UPlayerData();
 	UPlayerData(const FObjectInitializer& ObjectInitializer);
     

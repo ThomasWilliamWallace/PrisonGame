@@ -171,12 +171,12 @@ public:
 //***********************************************************
 class RequestItemPrim : public HTNPrimitive
 {
-    UPlayerData* m_player;
+    UPlayerData* m_requestedPlayer;
     EItemType m_itemType;
 public:
-    RequestItemPrim(UPlayerData* player, EItemType itemType);
+    RequestItemPrim(UPlayerData* requestedPlayer, EItemType itemType);
     bool Preconditions(HTNWorldState &htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    Actions Operate(UPlayerData* playerData, USimWorld &world) override;
+    Actions Operate(UPlayerData* selfPlayer, USimWorld &world) override;
 	bool LastActionSucceeded(HTNWorldState &htnWorldState) override;
 };
