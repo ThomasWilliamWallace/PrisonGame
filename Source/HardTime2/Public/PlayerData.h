@@ -59,6 +59,8 @@ public:
 	UPlayerData(const FObjectInitializer& ObjectInitializer);
     
 	RelMap relMap;
+
+	virtual class UWorld* GetWorld() const override;
 };
 
 std::string CharacterName(UPlayerData* playerPtr);

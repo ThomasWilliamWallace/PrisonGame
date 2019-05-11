@@ -82,11 +82,14 @@ void URelationship::deltaTrust(double delta)
 void URelationship::SetRecentlyRequested()
 {
 	isRequestedRecently = true;
-	if (!(GetWorld()->GetTimerManager().IsTimerActive(requestCooldownTimer)))
+	UWorld* w = GetWorld();
+	FTimerManager& tm = w->GetTimerManager();
+	if (!(tm.IsTimerActive(requestCooldownTimer)))
 	{
 		pLog("set request cooldown timer", true);
-		GetWorld()->GetTimerManager().SetTimer(
-			requestCooldownTimer, this, &URelationship::RequestCooldownTimerElapsed, 10.0f, false);
+		float cooldownTime = 5;//20 + rand() % 600;  //ask again sometime in the next 20 seconds to 10 minutes
+		tm.SetTimer(
+			requestCooldownTimer, this, &URelationship::RequestCooldownTimerElapsed, cooldownTime, false);
 	}
 }
 
@@ -101,8 +104,14 @@ class UWorld* URelationship::GetWorld() const
 {
 	UPlayerData* owningPlayerData = Cast<UPlayerData>(GetOuter());
 
+	UWorld* w;
 	if (owningPlayerData)
-		return owningPlayerData->GetWorld();
+	{
+		w = owningPlayerData->GetWorld();
+		if (w == nullptr)
+			pLog("Disaster", true);
+	}
 	else
-		return nullptr;
+		w = nullptr;
+	return w;
 }

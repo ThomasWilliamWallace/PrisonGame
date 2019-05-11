@@ -954,6 +954,7 @@ void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Characte
 void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetCharacter)
 {
 	pLog("RequestItemHandleResponse", true);
+	m_player->SetRequested(targetCharacter->m_player);
 	if (m_targetItem->m_carryingPlayer == nullptr)
 	{
 		DropItemAction();

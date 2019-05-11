@@ -404,7 +404,6 @@ void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
 Actions RequestItemPrim::Operate(UPlayerData* selfPlayer, USimWorld &world)
 {
 	selfPlayer->playerTargetPtr = m_requestedPlayer;
-	selfPlayer->SetRequested(m_requestedPlayer);
     return Actions::requestItem;
 }
 

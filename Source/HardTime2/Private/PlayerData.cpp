@@ -114,3 +114,8 @@ UPlayerData::UPlayerData(const FObjectInitializer& ObjectInitializer)
 	itemFocusPtr = nullptr;
 	action = Actions::goToGym;
 }
+
+class UWorld* UPlayerData::GetWorld() const
+{
+	return physicalCharacter->GetWorld();
+}

@@ -9,7 +9,7 @@ AHardTime2GameMode::AHardTime2GameMode()
 {
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPersonCPP/Blueprints/ThirdPersonCharacter"));
-	static ConstructorHelpers::FClassFinder<APlayerController> PlayerControllerBPClass (TEXT("/Game/ThirdPersonCPP/Blueprints/MasterControllerBP"));
+	static ConstructorHelpers::FClassFinder<APlayerController> PlayerControllerBPClass(TEXT("/Game/ThirdPersonCPP/Blueprints/MasterControllerBP"));
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
