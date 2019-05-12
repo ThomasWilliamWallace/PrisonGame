@@ -19,9 +19,9 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, PlayerMap &playerMap, USimW
     m_itemCarriedPtr(nullptr),
 	m_missionClass(playerPtr->missionClass)
 {
-	std::stringstream ss;
-	ss << "CONSTRUCTING HTNWorldState " << static_cast<int>(m_ptrToSelf->locationClass.location) << "\n";
-	pLog(ss, true);
+	//std::stringstream ss;
+	//ss << "CONSTRUCTING HTNWorldState " << static_cast<int>(m_ptrToSelf->locationClass.location) << "\n";
+	//pLog(ss, true);
 	//TODO reflect players sensors rather than being hardwired to the world
 	for (auto &item : world.items)
 	{

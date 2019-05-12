@@ -409,7 +409,6 @@ Actions RequestItemPrim::Operate(UPlayerData* selfPlayer, USimWorld &world)
 
 bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
 {
-	pLog("ENTERING RequestItemPrim", true);
     if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr)
     {
 		pLog("GetRaw(htnWorldState.m_itemCarriedPtr) is not null", true);
@@ -422,7 +421,6 @@ bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)
 			&& htnWorldState.IsInTheRoom(item->m_carryingPlayer)
 			&& !htnWorldState.m_ptrToSelf->IsRequestedRecently(m_requestedPlayer, m_itemType))
         {
-			pLog("return true", true);
             return true;
         }
     }

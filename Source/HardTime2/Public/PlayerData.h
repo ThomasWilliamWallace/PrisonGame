@@ -58,7 +58,7 @@ public:
 	UPlayerData();
 	UPlayerData(const FObjectInitializer& ObjectInitializer);
     
-	RelMap relMap;
+	RelMap relMap; //Relationships have manual memory management, as they are kept in a TMap without UProperty()
 
 	virtual class UWorld* GetWorld() const override;
 };

@@ -281,6 +281,11 @@ void AHardTime2Character::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	//controller->GetPathFollowingComponent()->OnRequestFinished.Remove(pickUpItemMoveDelegateHandle);
 	//controller->GetPathFollowingComponent()->OnRequestFinished.Remove(goToLocationMoveDelegateHandle);
 	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
+
+	pLog("De-registering player from the worldState.");
+	auto gameMode = GetWorld()->GetAuthGameMode();
+	AHardTime2GameMode* hardTime2GameMode = static_cast<AHardTime2GameMode*>(gameMode);
+	hardTime2GameMode->m_simWorld->RemovePlayer(this->m_player);
 }
 
 void AHardTime2Character::SetWorld(USimWorld* simWorld)
@@ -500,12 +505,6 @@ void AHardTime2Character::Tick(float DeltaTime)
 			break;
 		case Actions::requestItem:
 			pLog("requestItem", true);
-			if (m_player != nullptr)
-				pLog("m_player != nullptr", true);
-			if (m_player->playerTargetPtr != nullptr)
-				pLog("m_player->playerTargetPtr != nullptr", true);
-			if (m_player->playerTargetPtr->physicalCharacter != nullptr)
-				pLog("m_player->playerTargetPtr->physicalCharacter != nullptr", true);
 			RequestItem(m_player->playerTargetPtr->physicalCharacter);
 			break;
 		case Actions::useRoom:
@@ -514,12 +513,6 @@ void AHardTime2Character::Tick(float DeltaTime)
 			break;
 		case Actions::attack:
 			pLog("attack", true);
-			if (m_player != nullptr)
-				pLog("m_player != nullptr", true);
-			if (m_player->playerTargetPtr != nullptr)
-				pLog("m_player->playerTargetPtr != nullptr", true);
-			if (m_player->playerTargetPtr->physicalCharacter != nullptr)
-				pLog("m_player->playerTargetPtr->physicalCharacter != nullptr", true);
 			Attack(m_player->playerTargetPtr->physicalCharacter);
 			break;
 		default:
@@ -556,7 +549,7 @@ void AHardTime2Character::OnCooldown_Implementation()
 {
 	if (!GetWorldTimerManager().IsTimerActive(cooldownTimerHandle))
 	{
-		pLog("set cooldown timer", true);
+		pLog("set cooldown timer");
 		GetWorldTimerManager().SetTimer(
 			cooldownTimerHandle, this, &AHardTime2Character::CooldownTimerElapsed, 0.5f, false);
 	}
@@ -564,11 +557,11 @@ void AHardTime2Character::OnCooldown_Implementation()
 
 void AHardTime2Character::CooldownTimerElapsed()
 {
-	pLog("ENTERING CooldownTimerElapsed", true);
+	pLog("ENTERING CooldownTimerElapsed");
 	GetWorldTimerManager().ClearTimer(cooldownTimerHandle);
 	if (m_aiState == EAIState::cooldown)
 	{
-		pLog("move from cooldown state to noTask state", true);
+		pLog("move from cooldown state to noTask state");
 		readyForNewAction = true;
 		m_aiState = EAIState::noTask;
 		UpdateStatus();
@@ -584,7 +577,7 @@ void AHardTime2Character::OnNoTask_Implementation()
 
 void AHardTime2Character::OnNewCommand_Implementation()
 {
-	pLog("Entering AHardTime2Character::OnNewCommand_Implementation", true);
+	pLog("Entering AHardTime2Character::OnNewCommand_Implementation");
 	AAIController* controller;
 	switch (m_aiCommand)
 	{
@@ -760,14 +753,14 @@ void AHardTime2Character::AttackMoveCompleted(FAIRequestID a, const FPathFollowi
 
 void AHardTime2Character::OnUsingRoom_Implementation()
 {
-	pLog("ENTERING OnUsingRoom_Implementation", true);
+	pLog("ENTERING OnUsingRoom_Implementation");
 	if (m_useCount >= 4)
 	{
-		pLog("m_useCount >= 4", true);
+		pLog("m_useCount >= 4");
 		m_aiState = EAIState::cooldown;
 		UpdateStatus();
 	} else {
-		pLog("m_useCount < 4", true);
+		pLog("m_useCount < 4");
 		Jump();
 		switch (m_location)
 		{
@@ -795,25 +788,25 @@ void AHardTime2Character::OnUsingRoom_Implementation()
 		m_aiState = EAIState::commandInProgress;
 		UpdateStatus();
 
-		pLog("About to try and set timer", true);
+		pLog("About to try and set timer");
 		if (!GetWorldTimerManager().IsTimerActive(usingRoomTimerHandle))
 		{
 			GetWorldTimerManager().SetTimer(
 				usingRoomTimerHandle, this, &AHardTime2Character::UsingRoomTimerElapsed, 1.4, false);
-			pLog("Timer was set successfully!", true);
+			pLog("Timer was set successfully!");
 		}
 	}
 }
 
 void AHardTime2Character::UsingRoomTimerElapsed()
 {
-	pLog("ENTERING UsingRoomTimerElapsed", true);
+	pLog("ENTERING UsingRoomTimerElapsed");
 	GetWorldTimerManager().ClearTimer(usingRoomTimerHandle);
 	if (!(m_player->aiController.lastActionInterrupted))
 	{
 		m_aiState = EAIState::usingRoom;
 	} else {
-		pLog("using room interrupted!", true);
+		pLog("using room interrupted!");
 		m_aiState = EAIState::cooldown;
 	}
 	UpdateStatus();
@@ -958,12 +951,12 @@ void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetC
 	if (m_targetItem->m_carryingPlayer == nullptr)
 	{
 		DropItemAction();
-		pLog("Item pickedup", true);
+		pLog("Item pickedup");
 		PickupItemAction(m_targetItem);
 		m_aiState = EAIState::cooldown;
 		UpdateStatus();
 	} else {
-		pLog("No item pickedup", true);
+		pLog("No item pickedup");
 		m_aiState = EAIState::cooldown;
 		SetLastActionInterrupted(true);
 		UpdateStatus();
