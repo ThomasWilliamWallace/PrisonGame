@@ -82,8 +82,37 @@ void URelationship::deltaTrust(double delta)
 void URelationship::SetRecentlyRequested()
 {
 	isRequestedRecently = true;
+	pLog("Entering SetRecentlyRequested", true);
 	UWorld* w = GetWorld();
+	if (!IsValid(w))
+	{
+		if (w == nullptr)
+		{
+			pLog("Disaster: w set to NULLPTR!", true);
+		}
+		else {
+			pLog("Disaster: w is not valid!", true);
+		}
+	}
+	else
+	{
+		pLog("w successfully set to GetWorld()", true);
+	}
 	FTimerManager& tm = w->GetTimerManager();
+//	if (!IsValid(tm))
+//	{
+//		if (tm == nullptr)
+//		{
+//			pLog("Disaster: tm set to NULLPTR!", true);
+//		}
+//		else {
+//			pLog("Disaster: tm is not valid!", true);
+//		}
+//	}
+//	else
+//	{
+		pLog("tm successfully set to w->GetTimerManager()", true);
+//	}
 	if (!(tm.IsTimerActive(requestCooldownTimer)))
 	{
 		pLog("set request cooldown timer", true);
@@ -102,7 +131,15 @@ void URelationship::RequestCooldownTimerElapsed()
 
 class UWorld* URelationship::GetWorld() const
 {
-	UPlayerData* owningPlayerData = Cast<UPlayerData>(GetOuter());
+	UObject* outer = GetOuter();
+
+	if (!IsValid(outer))
+		return nullptr;
+
+	UPlayerData* owningPlayerData = Cast<UPlayerData>(outer);
+
+	if (!IsValid(owningPlayerData))
+		return nullptr;
 
 	UWorld* w;
 	if (owningPlayerData)

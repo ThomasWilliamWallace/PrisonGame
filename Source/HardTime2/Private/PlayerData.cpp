@@ -117,5 +117,23 @@ UPlayerData::UPlayerData(const FObjectInitializer& ObjectInitializer)
 
 class UWorld* UPlayerData::GetWorld() const
 {
+	if (!IsValid(this))
+	{
+		pLog("!IsValid(this) inside UPlayerData::GetWorld()", true);
+		return nullptr;
+	}
+
+	if (!IsValid(physicalCharacter))
+	{
+		pLog("!IsValid(physicalCharacter) inside UPlayerData::GetWorld()", true);
+		return nullptr;
+	}
+
+	if (nullptr == physicalCharacter->GetWorld())
+	{
+		pLog("nullptr == physicalCharacter->GetWorld() inside UPlayerData::GetWorld()", true);
+		return nullptr;
+	}
+
 	return physicalCharacter->GetWorld();
 }

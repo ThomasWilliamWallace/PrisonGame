@@ -249,7 +249,7 @@ void AHardTime2Character::BeginPlay()
 	if (m_player == nullptr)
 	{
 		pLog("Constructing an m_player");
-		m_player = NewObject<UPlayerData>();
+		m_player = NewObject<UPlayerData>(this);
 	}
 
 	Init();
