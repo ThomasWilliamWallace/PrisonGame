@@ -11,15 +11,15 @@ class AActorItem;
 class UPlayerData;
 class URelationship;
 
-#ifdef TEXT_ONLY_HTN
-
-#include <map>
 typedef std::shared_ptr<HTNPrimitive> HTNPrimitivePtr;
 typedef std::shared_ptr<HTNCompound> HTNCompoundPtr;
 typedef std::shared_ptr<HTNNode> HTNNodePtr;
 typedef std::shared_ptr<HTNMethod> HTNMethodPtr;
-
 typedef std::shared_ptr<StackNode> StackNodePtr;
+
+#ifdef TEXT_ONLY_HTN
+
+#include <map>
 
 typedef std::shared_ptr<SimActorItem> SimActorItemPtr;
 
@@ -75,12 +75,6 @@ void RemoveCurrent(Container &container, Iterator iter)
 #else
 
 #include "Runtime/Core/Public/Containers/Map.h"
-typedef TSharedPtr<HTNPrimitive> HTNPrimitivePtr;
-typedef TSharedPtr<HTNCompound> HTNCompoundPtr;
-typedef TSharedPtr<HTNNode> HTNNodePtr;
-typedef TSharedPtr<HTNMethod> HTNMethodPtr;
-
-typedef TSharedPtr<StackNode> StackNodePtr;
 
 typedef TSharedPtr<SimActorItem> SimActorItemPtr;
 

@@ -98,7 +98,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &play
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-    if (lastActionInterrupted || ((lastPrimitiveAction.IsValid()) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState))))
+    if (lastActionInterrupted || ((lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState))))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
