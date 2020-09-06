@@ -2,7 +2,7 @@
 #include "Locations.h"
 #include "HTNPrimitives.h"
 #include "pLog.hpp"
-#include "PlatformSpecific.hpp"
+#include "PlatformSpecific.h"
 
 //***********************************************************
 AlreadyInLibraryMethod::AlreadyInLibraryMethod(): HTNMethod("AlreadyInLibraryMethod")

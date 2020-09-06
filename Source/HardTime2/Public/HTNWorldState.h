@@ -5,8 +5,8 @@
 #include "Locations.h"
 #include "Missions.h"
 #include "Constants.h"
-#include "PlatformSpecific.hpp"
-#include "PlayerMap.hpp"
+#include "PlatformSpecific.h"
+#include "PlayerMap.h"
 
 class UPlayerData;
 class SimActorItem;

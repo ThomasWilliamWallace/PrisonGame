@@ -1,4 +1,4 @@
-#include "Names.hpp"
+#include "Names.h"
 #include "Runtime/Core/Public/Internationalization/Text.h"
 
 std::string RandomName()

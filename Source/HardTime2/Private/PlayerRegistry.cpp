@@ -1,4 +1,4 @@
-#include "PlayerRegistry.hpp"
+#include "PlayerRegistry.h"
 #include "PlayerData.h"
 
 void PlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)

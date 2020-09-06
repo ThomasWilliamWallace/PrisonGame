@@ -3,7 +3,7 @@
 #include <vector>
 #include "PlayerData.h"
 #include "Object.h"
-#include "PlayerRegistry.hpp"
+#include "PlayerRegistry.h"
 #include "SimWorld.generated.h"
 
 class AActorItem;

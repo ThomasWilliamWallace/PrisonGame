@@ -10,7 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "HTNWorldState.h"
 #include "pLog.hpp"
-#include "Names.hpp"
+#include "Names.h"
 #include "Engine/GameEngine.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
 #include "HardTime2GameMode.h"

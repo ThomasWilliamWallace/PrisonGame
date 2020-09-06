@@ -8,7 +8,7 @@
 #include "Actions.h"
 #include "Constants.h"
 #include "Object.h"
-#include "RelMap.hpp"
+#include "RelMap.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Runtime/Core/Public/UObject/NameTypes.h"

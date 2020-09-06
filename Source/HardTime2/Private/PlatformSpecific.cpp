@@ -1,4 +1,4 @@
-#include "PlatformSpecific.hpp"
+#include "PlatformSpecific.h"
 #include "HTNPlanner.h"
 #include "ActorItem.h"
 #include "Locations.h"

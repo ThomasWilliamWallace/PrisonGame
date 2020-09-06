@@ -5,7 +5,7 @@
 #include <iostream>
 #include "HTNWorldState.h"
 #include "Actions.h"
-#include "PlatformSpecific.hpp"
+#include "PlatformSpecific.h"
 
 typedef std::deque< HTNPrimitivePtr > HTNPrimitiveList;
 typedef std::vector< HTNCompoundPtr > HTNCompoundList;

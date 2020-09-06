@@ -4,7 +4,7 @@
 #include "SimWorld.h"
 #include <stdexcept>
 #include "pLog.hpp"
-#include "PlatformSpecific.hpp"
+#include "PlatformSpecific.h"
 
 //***********************************************************
 StudyPrim::StudyPrim() : HTNPrimitive("StudyPrim") {}
