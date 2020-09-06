@@ -4,7 +4,7 @@
 #include <deque>
 #include <iostream>
 #include "HTNWorldState.hpp"
-#include "Actions.hpp"
+#include "Actions.h"
 #include "PlatformSpecific.hpp"
 
 typedef std::deque< HTNPrimitivePtr > HTNPrimitiveList;

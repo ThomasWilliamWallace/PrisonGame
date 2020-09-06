@@ -4,7 +4,7 @@
 #include "HTNDomain.hpp"
 #include "RequestHTNDomain.hpp"
 #include "SimWorld.h"
-#include "Actions.hpp"
+#include "Actions.h"
 #include <sstream>
 #include "pLog.hpp"
 #include <vector>

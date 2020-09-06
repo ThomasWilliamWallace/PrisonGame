@@ -5,7 +5,7 @@
 #include "Missions.hpp"
 #include "BasicAI.hpp"
 #include "ActorItem.h"
-#include "Actions.hpp"
+#include "Actions.h"
 #include "Constants.hpp"
 #include "Object.h"
 #include "RelMap.hpp"

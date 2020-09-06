@@ -7,7 +7,7 @@
 #include "HTNPlanner.hpp"
 #include "Missions.hpp"
 #include "Locations.h"
-#include "Actions.hpp"
+#include "Actions.h"
 #include "ActorItem.h"
 #include "SimWorld.h"
 #include "PlayerData.h"
