@@ -4,7 +4,7 @@
 #include "Locations.h"
 #include <sstream>
 #include "HardTime2Character.h"
-#include "pLog.hpp"
+#include "pLog.h"
 
 std::string CharacterName(UPlayerData* playerPtr)
 {

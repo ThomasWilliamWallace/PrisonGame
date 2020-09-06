@@ -1,4 +1,4 @@
-#include "RequestHTNDomain.hpp"
+#include "RequestHTNDomain.h"
 #include "Locations.h"
 #include "PlayerData.h"
 #include "SimWorld.h"

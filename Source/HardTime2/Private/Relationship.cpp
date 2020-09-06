@@ -6,7 +6,7 @@
 #include <sstream>
 #include "HardTime2Character.h"
 #include "Runtime/Engine/Public/TimerManager.h"
-#include "pLog.hpp"
+#include "pLog.h"
 //TODO cull unused includes
 
 double URelationship::getAggro()

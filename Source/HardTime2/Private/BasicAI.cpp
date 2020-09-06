@@ -2,11 +2,11 @@
 #include "PlayerData.h"
 #include <stdexcept>
 #include "HTNDomain.h"
-#include "RequestHTNDomain.hpp"
+#include "RequestHTNDomain.h"
 #include "SimWorld.h"
 #include "Actions.h"
 #include <sstream>
-#include "pLog.hpp"
+#include "pLog.h"
 #include <vector>
 
 Actions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)

@@ -2,7 +2,7 @@
 
 #include "HardTime2GameMode.h"
 #include "HardTime2Character.h"
-#include "pLog.hpp"
+#include "pLog.h"
 #include "UObject/ConstructorHelpers.h"
 
 AHardTime2GameMode::AHardTime2GameMode()

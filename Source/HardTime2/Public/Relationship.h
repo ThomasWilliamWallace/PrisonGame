@@ -1,7 +1,7 @@
 #pragma once
 //TODO cull unused includes
 #include <iostream>
-#include "PStats.hpp"
+#include "PStats.h"
 #include "Missions.h"
 #include "BasicAI.h"
 #include "ActorItem.h"

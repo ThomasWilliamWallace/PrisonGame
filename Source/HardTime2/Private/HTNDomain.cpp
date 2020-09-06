@@ -1,7 +1,7 @@
 #include "HTNDomain.h"
 #include "Locations.h"
 #include "HTNPrimitives.h"
-#include "pLog.hpp"
+#include "pLog.h"
 #include "PlatformSpecific.h"
 
 //***********************************************************

@@ -1,9 +1,9 @@
-#include "PStats.hpp"
+#include "PStats.h"
 #include "Missions.h"
 #include <algorithm>
 #include "Constants.h"
 #include <sstream>
-#include "pLog.hpp"
+#include "pLog.h"
 
 //TODO write an exponentially decreasing add/subtract function, to adjust stats whilst keeping them within 0-100.
 double transformStat(double inputStat)

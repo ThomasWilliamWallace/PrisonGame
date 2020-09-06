@@ -9,7 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "HTNWorldState.h"
-#include "pLog.hpp"
+#include "pLog.h"
 #include "Names.h"
 #include "Engine/GameEngine.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
