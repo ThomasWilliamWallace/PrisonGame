@@ -1,0 +1,3 @@
+[submodule "Source/htn_planner"]
+	path = Source/htn_planner
+	url = https://github.com/ThomasWilliamWallace/htn_planner
