@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 #include "Locations.h"
-#include "Missions.hpp"
+#include "Missions.h"
 #include "Constants.h"
 #include "PlatformSpecific.hpp"
 #include "PlayerMap.hpp"

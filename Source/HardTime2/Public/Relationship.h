@@ -2,7 +2,7 @@
 //TODO cull unused includes
 #include <iostream>
 #include "PStats.hpp"
-#include "Missions.hpp"
+#include "Missions.h"
 #include "BasicAI.h"
 #include "ActorItem.h"
 #include "Actions.h"

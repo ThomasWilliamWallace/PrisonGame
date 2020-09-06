@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "Locations.h"
-#include "Missions.hpp"
+#include "Missions.h"
 
 class PStats //the abilities of the character. Generally linear and bound between 0 and 100.
 {

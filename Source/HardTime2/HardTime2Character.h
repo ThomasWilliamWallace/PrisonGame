@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "HTNPlanner.h"
-#include "Missions.hpp"
+#include "Missions.h"
 #include "Locations.h"
 #include "Actions.h"
 #include "ActorItem.h"
