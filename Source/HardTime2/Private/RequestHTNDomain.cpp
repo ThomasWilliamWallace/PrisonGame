@@ -2,7 +2,7 @@
 #include "Locations.h"
 #include "PlayerData.h"
 #include "SimWorld.h"
-#include "HTNDomain.hpp"
+#include "HTNDomain.h"
 /*
 //Start HTNPrimitives****************************************
 AcceptItemRequestPrim::AcceptItemRequestPrim() : HTNPrimitive("AcceptItemRequest") {}

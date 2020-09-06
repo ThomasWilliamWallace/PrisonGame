@@ -3,10 +3,10 @@
 #include <iostream>
 #include "PStats.hpp"
 #include "Missions.hpp"
-#include "BasicAI.hpp"
+#include "BasicAI.h"
 #include "ActorItem.h"
 #include "Actions.h"
-#include "Constants.hpp"
+#include "Constants.h"
 #include "Object.h"
 #include "RelMap.hpp"
 #include "Relationship.h"

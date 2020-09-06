@@ -1,6 +1,6 @@
 #include <iomanip> // setprecision
 #include <sstream>
-#include "Constants.hpp"
+#include "Constants.h"
 
 std::string FormatDouble(double input)
 {

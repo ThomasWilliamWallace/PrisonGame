@@ -8,7 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "HTNWorldState.hpp"
+#include "HTNWorldState.h"
 #include "pLog.hpp"
 #include "Names.hpp"
 #include "Engine/GameEngine.h"

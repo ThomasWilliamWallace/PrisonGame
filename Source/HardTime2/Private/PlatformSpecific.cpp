@@ -1,5 +1,5 @@
 #include "PlatformSpecific.hpp"
-#include "HTNPlanner.hpp"
+#include "HTNPlanner.h"
 #include "ActorItem.h"
 #include "Locations.h"
 #include "PlayerData.h"

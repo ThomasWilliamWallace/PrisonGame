@@ -1,7 +1,7 @@
-#include "BasicAI.hpp"
+#include "BasicAI.h"
 #include "PlayerData.h"
 #include <stdexcept>
-#include "HTNDomain.hpp"
+#include "HTNDomain.h"
 #include "RequestHTNDomain.hpp"
 #include "SimWorld.h"
 #include "Actions.h"

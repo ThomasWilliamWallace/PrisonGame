@@ -1,6 +1,6 @@
 #pragma once
 
-#include "HTNPlanner.hpp"
+#include "HTNPlanner.h"
 #include "PlayerMap.hpp"
 
 class USimWorld;

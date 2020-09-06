@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "HTNPlanner.hpp"
+#include "HTNPlanner.h"
 #include "Missions.hpp"
 #include "Locations.h"
 #include "Actions.h"

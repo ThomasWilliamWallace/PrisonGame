@@ -3,7 +3,7 @@
 #include <vector>
 #include <deque>
 #include <iostream>
-#include "HTNWorldState.hpp"
+#include "HTNWorldState.h"
 #include "Actions.h"
 #include "PlatformSpecific.hpp"
 

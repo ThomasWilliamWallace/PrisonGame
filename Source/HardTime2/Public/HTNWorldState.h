@@ -4,7 +4,7 @@
 #include <iostream>
 #include "Locations.h"
 #include "Missions.hpp"
-#include "Constants.hpp"
+#include "Constants.h"
 #include "PlatformSpecific.hpp"
 #include "PlayerMap.hpp"
 

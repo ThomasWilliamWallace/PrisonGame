@@ -2,8 +2,8 @@
 
 #include <vector>
 #include <iostream>
-#include "HTNPlanner.hpp"
-#include "HTNWorldState.hpp"
+#include "HTNPlanner.h"
+#include "HTNWorldState.h"
 #include "PlayerData.h"
 
 class USimWorld;

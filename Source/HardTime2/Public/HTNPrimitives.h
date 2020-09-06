@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include "HTNPlanner.hpp"
-#include "HTNWorldState.hpp"
+#include "HTNPlanner.h"
+#include "HTNWorldState.h"
 
 class AActorItem;
 class USimWorld;

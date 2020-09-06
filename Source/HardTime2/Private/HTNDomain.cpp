@@ -1,6 +1,6 @@
-#include "HTNDomain.hpp"
+#include "HTNDomain.h"
 #include "Locations.h"
-#include "HTNPrimitives.hpp"
+#include "HTNPrimitives.h"
 #include "pLog.hpp"
 #include "PlatformSpecific.hpp"
 
