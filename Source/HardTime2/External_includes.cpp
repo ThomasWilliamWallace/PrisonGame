@@ -3,3 +3,4 @@
 
 #include "../htn_planner/htn_planner/Private/Constants.cpp"
 #include "../htn_planner/htn_planner/Private/pLog.cpp"
+#include "../htn_planner/htn_planner/Private/Locations.cpp"
