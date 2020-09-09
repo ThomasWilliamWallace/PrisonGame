@@ -7,6 +7,7 @@
 #include "Actions.h"
 #include <sstream>
 #include "pLog.h"
+#include "Constants.h"
 #include <vector>
 
 Actions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)

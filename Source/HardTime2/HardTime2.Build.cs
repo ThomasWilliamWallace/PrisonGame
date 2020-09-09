@@ -9,5 +9,8 @@ public class HardTime2 : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "AIModule" });
+
+		PublicIncludePaths.Add("C:/Users/triha/OneDrive/Documents/Unreal Projects/HardTime2 4.25/Source/imports");
+		//PublicIncludePaths.Add("C:/Users/triha/OneDrive/Documents/Unreal Projects/HardTime2 4.25/Source/htn_planner/htn_planner/Public");
 	}
 }
