@@ -141,6 +141,8 @@ HTNCompoundPtr CastNodeToCompound(HTNNodePtr htnNodePtr);
 HTNMethodPtr CastNodeToMethod(HTNNodePtr htnNodePtr);
 
 StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr);
+HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound);
 SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer);
 
-HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound);
+// Encapsulated because Unreal Engine uses a different exception system
+[[noreturn]] void ThrowException(const std::string& errorMessage);

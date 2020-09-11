@@ -50,6 +50,12 @@ HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
 }
 
 #ifdef TEXT_ONLY_HTN
+// Default case
+
+[[noreturn]] void ThrowException(const std::string& errorMessage)
+{    
+    throw errorMessage;
+}
 
 SimActorItem* GetRaw(SimActorItemPtr ptr)
 {
@@ -62,8 +68,10 @@ SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemTy
 }
 
 #else
+// Unreal engine case
 
 #include "ActorItem.h"
+#include "Engine/GameEngine.h"
 
 SimActorItem* GetRaw(SimActorItemPtr ptr)
 {
@@ -73,6 +81,15 @@ SimActorItem* GetRaw(SimActorItemPtr ptr)
 SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer)
 {
 	return MakeShared<SimActorItem>(realItem, itemType, location, carryingPlayer);
+}
+
+    // TODO split the platform specific code into separate cpp files. The PlatformSpecific.cpp file can then be included from the appropriate location for different builds.
+    // The TEXT_ONLY_HTN flag can then be done away with.
+
+[[noreturn]] void ThrowException(const std::string& errorMessage)
+{
+    FString fStringErrorMessage = FString(errorMessage.c_str());
+    UE_LOG(LogTemp, Fatal, TEXT("%s"), *fStringErrorMessage);
 }
 
 #endif
