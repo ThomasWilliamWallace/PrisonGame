@@ -5,3 +5,4 @@
 #include "../htn_planner/htn_planner/Private/pLog.cpp"
 #include "../htn_planner/htn_planner/Private/Locations.cpp"
 #include "../htn_planner/htn_planner/Private/AbstractItem.cpp"
+#include "../htn_planner/htn_planner/Private/AbstractAction.cpp"

@@ -5,7 +5,7 @@
 #include "Missions.h"
 #include "BasicAI.h"
 #include "ActorItem.h"
-#include "Actions.h"
+#include "AbstractAction.h"
 #include "Constants.h"
 #include "Object.h"
 #include "PlatformSpecific.h"

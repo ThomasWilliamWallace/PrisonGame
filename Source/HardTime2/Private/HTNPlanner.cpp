@@ -1,5 +1,4 @@
 #include "HTNPlanner.h"
-#include "HTNDomain.h"
 #include "pLog.h"
 #include <sstream>
 #include <stack>
