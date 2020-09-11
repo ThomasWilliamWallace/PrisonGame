@@ -25,9 +25,9 @@ void HTNPrimitive::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions HTNPrimitive::Operate(UPlayerData* playerData, USimWorld &world)
+EActions HTNPrimitive::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::noAction;
+	return EActions::noAction;
 }
 
 bool HTNPrimitive::LastActionSucceeded(HTNWorldState &htnWorldState)

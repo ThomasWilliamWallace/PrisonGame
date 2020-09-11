@@ -15,9 +15,9 @@ void StudyPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions StudyPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions StudyPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::useRoom;
+	return EActions::useRoom;
 }
 
 bool StudyPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -34,9 +34,9 @@ void SleepPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions SleepPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions SleepPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::useRoom;
+	return EActions::useRoom;
 }
 
 bool SleepPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -53,9 +53,9 @@ void UseGymPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions UseGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions UseGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::useRoom;
+	return EActions::useRoom;
 }
 
 bool UseGymPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -72,9 +72,9 @@ void RunCircuitsPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions RunCircuitsPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions RunCircuitsPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::useRoom;
+	return EActions::useRoom;
 }
 
 bool RunCircuitsPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -91,9 +91,9 @@ void GoToGymPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions GoToGymPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::goToGym;
+	return EActions::goToGym;
 }
 
 bool GoToGymPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -115,9 +115,9 @@ void GoToLibraryPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToLibraryPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions GoToLibraryPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::goToLibrary;
+	return EActions::goToLibrary;
 }
 
 bool GoToLibraryPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -139,9 +139,9 @@ void GoToCircuitTrackPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToCircuitTrackPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions GoToCircuitTrackPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::goToCircuitTrack;
+	return EActions::goToCircuitTrack;
 }
 
 bool GoToCircuitTrackPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -163,9 +163,9 @@ void GoToBedroomPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToBedroomPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions GoToBedroomPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::goToBedroom;
+	return EActions::goToBedroom;
 }
 
 bool GoToBedroomPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -187,9 +187,9 @@ void GoToMainHallPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions GoToMainHallPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions GoToMainHallPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::goToMainHall;
+	return EActions::goToMainHall;
 }
 
 bool GoToMainHallPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -211,9 +211,9 @@ void DrinkPrim::Effect(HTNWorldState &htnWorldState)
 	return;
 }
 
-Actions DrinkPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions DrinkPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::noAction;
+	return EActions::noAction;
 }
 
 bool DrinkPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -228,10 +228,10 @@ void PunchPrim::Effect(HTNWorldState &htnWorldState)
 {
 }
 
-Actions PunchPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions PunchPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
 	playerData->playerTargetPtr = m_targetPlayer;
-	return Actions::attack;
+	return EActions::attack;
 }
 
 bool PunchPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -248,9 +248,9 @@ void EvadePrim::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_evading = 1;
 }
 
-Actions EvadePrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions EvadePrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::evade;
+	return EActions::evade;
 }
 
 bool EvadePrim::Preconditions(HTNWorldState &htnWorldState)
@@ -267,10 +267,10 @@ void PickUpItemByPtrPrim::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_itemCarriedPtr = m_itemFocus;
 }
 
-Actions PickUpItemByPtrPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions PickUpItemByPtrPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
     playerData->itemFocusPtr = &(m_itemFocus->m_realItem);
-    return Actions::pickUpItem;
+    return EActions::pickUpItemByPtr;
 }
 
 bool PickUpItemByPtrPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -320,7 +320,7 @@ void PickUpItemByTypePrim::Effect(HTNWorldState &htnWorldState)
 	}
 }
 
-Actions PickUpItemByTypePrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions PickUpItemByTypePrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
     for (auto &item : world.items)
 	{
@@ -329,11 +329,11 @@ Actions PickUpItemByTypePrim::Operate(UPlayerData* playerData, USimWorld &world)
 			item->m_carryingPlayer == nullptr)
 		{
 			playerData->itemFocusPtr = item;
-			return Actions::pickUpItem;
+			return EActions::pickUpItemByPtr;
 		}
 	}
 	playerData->itemFocusPtr = nullptr;
-	return Actions::noAction;
+	return EActions::noAction;
 }
 
 bool PickUpItemByTypePrim::Preconditions(HTNWorldState &htnWorldState)
@@ -366,9 +366,9 @@ void DropItemPrim::Effect(HTNWorldState &htnWorldState)
 	htnWorldState.m_itemCarriedPtr = nullptr;
 }
 
-Actions DropItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
+EActions DropItemPrim::Operate(UPlayerData* playerData, USimWorld &world)
 {
-	return Actions::dropItem;
+	return EActions::dropItem;
 }
 
 bool DropItemPrim::Preconditions(HTNWorldState &htnWorldState)
@@ -401,10 +401,10 @@ void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
     htnWorldState.m_itemCarriedPtr->m_carryingPlayer = m_requestedPlayer;
 }
 
-Actions RequestItemPrim::Operate(UPlayerData* selfPlayer, USimWorld &world)
+EActions RequestItemPrim::Operate(UPlayerData* selfPlayer, USimWorld &world)
 {
 	selfPlayer->playerTargetPtr = m_requestedPlayer;
-    return Actions::requestItem;
+    return EActions::requestItem;
 }
 
 bool RequestItemPrim::Preconditions(HTNWorldState &htnWorldState)

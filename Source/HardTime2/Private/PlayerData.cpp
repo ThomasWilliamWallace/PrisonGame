@@ -51,22 +51,22 @@ MissionClass CreateNewMission(UPlayerData* playerPtr)
     {
         return MissionClass();
     }
-    Missions tempMission = GetRandomMission();
+    EMissions tempMission = GetRandomMission();
     double tempObjective;
     switch (tempMission)
     {
-        case Missions::noMission:
+        case EMissions::noMission:
             return MissionClass();
-        case Missions::increaseAgility:
+        case EMissions::increaseAgility:
             tempObjective = playerPtr->pStats.getAgility();
             break;
-        case Missions::increaseStrength:
+        case EMissions::increaseStrength:
             tempObjective = playerPtr->pStats.getStrength();
             break;
-        case Missions::increaseIntelligence:
+        case EMissions::increaseIntelligence:
             tempObjective = playerPtr->pStats.getIntelligence();
             break;
-        case Missions::bringItemToRoom:
+        case EMissions::bringItemToRoom:
             return MissionClass(tempMission, playerPtr, GetRandomItemType(), GetRandomLocation());
 		default:
 			throw std::invalid_argument("Selected an invalid mission type.");
@@ -102,7 +102,7 @@ UPlayerData::UPlayerData()
 {
 	itemPtr = nullptr;
 	itemFocusPtr = nullptr;
-	action = Actions::goToGym;
+	action = EActions::goToGym;
 	pLog("Constructing UPlayerData");
 }
 
@@ -112,7 +112,7 @@ UPlayerData::UPlayerData(const FObjectInitializer& ObjectInitializer)
 
 	itemPtr = nullptr;
 	itemFocusPtr = nullptr;
-	action = Actions::goToGym;
+	action = EActions::goToGym;
 }
 
 class UWorld* UPlayerData::GetWorld() const

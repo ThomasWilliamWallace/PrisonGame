@@ -7,15 +7,15 @@ std::string MissionClass::MissionName()
 {
 	switch (m_mission)
 	{
-	case (Missions::increaseAgility):
+	case (EMissions::increaseAgility):
 		return "increase agility";
-	case (Missions::increaseStrength):
+	case (EMissions::increaseStrength):
 		return "increase strength";
-	case (Missions::increaseIntelligence):
+	case (EMissions::increaseIntelligence):
 		return "increase intelligence";
-	case (Missions::bringItemToRoom):
+	case (EMissions::bringItemToRoom):
 		return "bring item to room";
-	case (Missions::noMission):
+	case (EMissions::noMission):
 		return "no mission";
 	}
 	return "UnrecognisedMission";
@@ -25,40 +25,40 @@ std::string MissionClass::MissionNarrative()
 {
     switch (m_mission)
     {
-        case Missions::noMission:
+        case EMissions::noMission:
             return "No Mission\n";
-        case Missions::increaseAgility:
+        case EMissions::increaseAgility:
             return "Mission: must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getAgility()) + ")";
-        case Missions::increaseStrength:
+        case EMissions::increaseStrength:
             return "Mission: must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getStrength()) + ")";
-        case Missions::increaseIntelligence:
+        case EMissions::increaseIntelligence:
             return "Mission: must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getIntelligence()) + ")";
-        case Missions::bringItemToRoom:
+        case EMissions::bringItemToRoom:
             return "Mission: must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".";
     }
     return "ERROR: MISSION TYPE NOT RECOGNISED";
 }
 
-Missions GetRandomMission()
+EMissions GetRandomMission()
 {
 	int random = rand() % 100;
 	if (random<25)
-	    return Missions::increaseStrength;
+	    return EMissions::increaseStrength;
 	else if (random<50)
-	    return Missions::increaseAgility;
+	    return EMissions::increaseAgility;
 	else if (random<75)
-	    return Missions::increaseIntelligence;
+	    return EMissions::increaseIntelligence;
 	else
-		return Missions::bringItemToRoom;
+		return EMissions::bringItemToRoom;
 }
 
-MissionClass::MissionClass(Missions mission, UPlayerData* owner, double objective):
+MissionClass::MissionClass(EMissions mission, UPlayerData* owner, double objective):
 	m_mission(mission),
 	m_owner(owner),
 	m_objective(objective)
 {}
 
-MissionClass::MissionClass(Missions mission, UPlayerData* owner, EItemType itemType, ELocations location):
+MissionClass::MissionClass(EMissions mission, UPlayerData* owner, EItemType itemType, ELocations location):
 	m_mission(mission),
 	m_owner(owner),
 	m_itemType(itemType),
@@ -66,7 +66,7 @@ MissionClass::MissionClass(Missions mission, UPlayerData* owner, EItemType itemT
 {}
 
 MissionClass::MissionClass():
-	m_mission(Missions::noMission),
+	m_mission(EMissions::noMission),
 	m_owner(nullptr)
 {}
 
@@ -82,24 +82,24 @@ MissionClass::MissionClass(UPlayerData* owner):
 	m_mission(GetRandomMission()),
 	m_owner(owner)
 {
-	m_mission = Missions::bringItemToRoom;
+	m_mission = EMissions::bringItemToRoom;
 	m_itemType = EItemType::ball;
 	m_locationClass = ELocations::mainHall; // GetRandomLocation();
 	return;
 	switch (m_mission)
 	{
-	case Missions::noMission:
+	case EMissions::noMission:
 		break;
-	case Missions::increaseAgility:
+	case EMissions::increaseAgility:
 		m_objective = m_owner->pStats.getAgility();
 		break;
-	case Missions::increaseStrength:
+	case EMissions::increaseStrength:
 		m_objective = m_owner->pStats.getStrength();
 		break;
-	case Missions::increaseIntelligence:
+	case EMissions::increaseIntelligence:
 		m_objective = m_owner->pStats.getIntelligence();
 		break;
-	case Missions::bringItemToRoom:
+	case EMissions::bringItemToRoom:
 		m_itemType = GetRandomItemType();
 		m_locationClass = GetRandomLocation();
 		break;
@@ -111,13 +111,13 @@ bool MissionClass::IsMissionComplete(USimWorld &world)
 {
 	switch (m_mission)
 	{
-	case Missions::increaseAgility:
+	case EMissions::increaseAgility:
 		return (m_objective <= m_owner->pStats.getAgility());
-	case Missions::increaseStrength:
+	case EMissions::increaseStrength:
 		return (m_objective <= m_owner->pStats.getStrength());
-	case Missions::increaseIntelligence:
+	case EMissions::increaseIntelligence:
 		return (m_objective <= m_owner->pStats.getIntelligence());
-	case Missions::bringItemToRoom:
+	case EMissions::bringItemToRoom:
 		for (auto &item : world.items)
 		{
 			if ((item->m_itemType == m_itemType) &&
@@ -128,7 +128,7 @@ bool MissionClass::IsMissionComplete(USimWorld &world)
 			}
 		}
 		return false;
-	case Missions::noMission:
+	case EMissions::noMission:
 		return false;
 	}
 	return false;

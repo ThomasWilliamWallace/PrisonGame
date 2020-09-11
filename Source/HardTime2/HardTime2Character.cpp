@@ -475,43 +475,43 @@ void AHardTime2Character::Tick(float DeltaTime)
 		pLog("HTN Planner chose an action:", true);
 		switch (m_player->action)
 		{
-		case Actions::goToBedroom:
+		case EActions::goToBedroom:
 			pLog("goToBedroom", true);
 			GoToLocation(ELocations::bedroom);
 			break;
-		case Actions::goToCircuitTrack:
+		case EActions::goToCircuitTrack:
 			pLog("goToCircuitTrack", true);
 			GoToLocation(ELocations::circuitTrack);
 			break;
-		case Actions::goToGym:
+		case EActions::goToGym:
 			pLog("goToGym", true);
 			GoToLocation(ELocations::gym);
 			break;
-		case Actions::goToLibrary:
+		case EActions::goToLibrary:
 			pLog("goToLibrary", true);
 			GoToLocation(ELocations::library);
 			break;
-		case Actions::goToMainHall:
+		case EActions::goToMainHall:
 			pLog("goToMainHall", true);
 			GoToLocation(ELocations::mainHall);
 			break;
-		case Actions::dropItem:
+		case EActions::dropItem:
 			pLog("dropItem", true);
 			DropItem();
 			break;
-		case Actions::pickUpItem:
+		case EActions::pickUpItemByPtr:
 			pLog("pickUpItem", true);
 			PickUpItem(m_player->itemFocusPtr);
 			break;
-		case Actions::requestItem:
+		case EActions::requestItem:
 			pLog("requestItem", true);
 			RequestItem(m_player->playerTargetPtr->physicalCharacter);
 			break;
-		case Actions::useRoom:
+		case EActions::useRoom:
 			pLog("useRoom", true);
 			UseRoom();
 			break;
-		case Actions::attack:
+		case EActions::attack:
 			pLog("attack", true);
 			Attack(m_player->playerTargetPtr->physicalCharacter);
 			break;

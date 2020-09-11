@@ -2,17 +2,8 @@
 
 #include <iostream>
 #include "GameFramework/Actor.h"
+#include "ELocations.h"
 #include "Locations.generated.h"
-
-UENUM(BlueprintType, Blueprintable)
-enum class ELocations : uint8
-{
-	mainHall		UMETA(DisplayName="Main hall"),
-	gym				UMETA(DisplayName="Gym"),
-	circuitTrack	UMETA(DisplayName="Circuit track"),
-	library			UMETA(DisplayName="Library"),
-	bedroom			UMETA(DisplayName="Bedroom")
-};
 
 UCLASS()
 class ALocations : public AActor  //just here so that locations show in editor TODO remove, since it's referenced in character instead?

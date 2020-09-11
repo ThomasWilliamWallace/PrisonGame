@@ -2,15 +2,7 @@
 
 #include <iostream>
 #include "ActorItem.h"
-
-enum class Missions
-{
-	noMission,
-	increaseStrength,
-	increaseAgility,
-	increaseIntelligence,
-	bringItemToRoom
-};
+#include "EMissions.h"
 
 class UPlayerData;
 class USimWorld;
@@ -18,14 +10,14 @@ class USimWorld;
 class MissionClass
 {
 public:
-	Missions m_mission;
+	EMissions m_mission;
 	UPlayerData* m_owner;
 	double m_objective; //objective for stat increase missions
 	EItemType m_itemType;
 	LocationClass m_locationClass;
 	std::string MissionName();
-	MissionClass(Missions mission, UPlayerData* owner, double objective);
-	MissionClass(Missions mission, UPlayerData* owner, EItemType itemE, ELocations location);
+	MissionClass(EMissions mission, UPlayerData* owner, double objective);
+	MissionClass(EMissions mission, UPlayerData* owner, EItemType itemE, ELocations location);
 	MissionClass();
 	MissionClass(const MissionClass& missionClass);
 	MissionClass(UPlayerData* owner);
@@ -33,4 +25,4 @@ public:
     std::string MissionNarrative();
 };
 
-Missions GetRandomMission();
+EMissions GetRandomMission();

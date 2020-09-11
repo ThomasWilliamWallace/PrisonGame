@@ -14,7 +14,7 @@ HTNWorldState::HTNWorldState(UPlayerData* playerPtr, PlayerMap &playerMap, USimW
     m_strength(round(m_ptrToSelf->pStats.getStrength())),
     m_agility(round(m_ptrToSelf->pStats.getAgility())),
     m_intelligence(round(m_ptrToSelf->pStats.getIntelligence())),
-    m_evading(m_ptrToSelf->lastAction == Actions::evade),
+    m_evading(m_ptrToSelf->lastAction == EActions::evade),
     m_location(m_ptrToSelf->locationClass.location),
     m_itemCarriedPtr(nullptr),
 	m_missionClass(playerPtr->missionClass)

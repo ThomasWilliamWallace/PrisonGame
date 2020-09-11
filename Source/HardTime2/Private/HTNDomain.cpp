@@ -523,7 +523,7 @@ IncreaseStrengthMissionMethod::IncreaseStrengthMissionMethod(): HTNMethod("Incre
 
 bool IncreaseStrengthMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == Missions::increaseStrength;
+	return htnWorldState.m_missionClass.m_mission == EMissions::increaseStrength;
 }
 
 void IncreaseStrengthMissionMethod::CreateTasks()
@@ -536,7 +536,7 @@ IncreaseAgilityMissionMethod::IncreaseAgilityMissionMethod(): HTNMethod("Increas
 
 bool IncreaseAgilityMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == Missions::increaseAgility;
+	return htnWorldState.m_missionClass.m_mission == EMissions::increaseAgility;
 }
 
 void IncreaseAgilityMissionMethod::CreateTasks()
@@ -549,7 +549,7 @@ IncreaseIntelligenceMissionMethod::IncreaseIntelligenceMissionMethod(): HTNMetho
 
 bool IncreaseIntelligenceMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == Missions::increaseIntelligence;
+	return htnWorldState.m_missionClass.m_mission == EMissions::increaseIntelligence;
 }
 
 void IncreaseIntelligenceMissionMethod::CreateTasks()
@@ -564,7 +564,7 @@ BringItemToRoomMissionMethod::BringItemToRoomMissionMethod(HTNWorldState &htnWor
 
 bool BringItemToRoomMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == Missions::bringItemToRoom;
+	return htnWorldState.m_missionClass.m_mission == EMissions::bringItemToRoom;
 }
 
 void BringItemToRoomMissionMethod::CreateTasks()
@@ -609,7 +609,7 @@ DoMissionMethod::DoMissionMethod(HTNWorldState &htnWorldState):
 
 bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission != Missions::noMission;
+	return htnWorldState.m_missionClass.m_mission != EMissions::noMission;
 }
 
 void DoMissionMethod::CreateTasks()

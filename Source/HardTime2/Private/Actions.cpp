@@ -9,37 +9,39 @@ bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, PlayerMap
         return false;
 }
 
-std::string ActionToString(Actions action)
+std::string ActionToString(EActions action)
 {
     switch(action)
     {
-        case Actions::evade:
+        case EActions::evade:
             return "Evade";
-        case Actions::attack:
+        case EActions::attack:
             return "Attack";
-        case Actions::useRoom:
+        case EActions::useRoom:
             return "UseRoom";
-        case Actions::goToGym:
+        case EActions::goToGym:
             return "GoToGym";
-        case Actions::goToBedroom:
+        case EActions::goToBedroom:
             return "GoToBedroom";
-        case Actions::goToLibrary:
+        case EActions::goToLibrary:
             return "GoToLibrary";
-        case Actions::goToMainHall:
+        case EActions::goToMainHall:
             return "GoToMainHall";
-        case Actions::goToCircuitTrack:
+        case EActions::goToCircuitTrack:
             return "GoToCircuitTrack";
-        case Actions::pickUpItem:
-            return "PickUpItem";
-        case Actions::dropItem:
+        case EActions::pickUpItemByPtr:
+            return "PickUpItemByPtr";
+        case EActions::pickUpItemByType:
+            return "PickUpItemByType";
+        case EActions::dropItem:
             return "DropItem";
-        case Actions::requestItem:
+        case EActions::requestItem:
             return "RequestItem";
-        case Actions::acceptRequest:
+        case EActions::acceptRequest:
             return "acceptRequest";
-        case Actions::declineRequest:
+        case EActions::declineRequest:
             return "declineRequest";
-        case Actions::noAction:
+        case EActions::noAction:
             return "ERROR NO ACTION";
     }
     return "ERROR UnrecognisedAction";

@@ -10,31 +10,31 @@
 #include "Constants.h"
 #include <vector>
 
-Actions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
+EActions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
 {
     if (playerData->locationClass.location == ELocations::mainHall)
     {
         int random = RandPercent();
         if (random < 25)
         {
-            return Actions::goToLibrary;
+            return EActions::goToLibrary;
         }
         if (random < 50)
         {
-            return Actions::goToGym;
+            return EActions::goToGym;
         }
         if (random < 75)
         {
-            return Actions::goToCircuitTrack;
+            return EActions::goToCircuitTrack;
         }
-        return Actions::goToBedroom;
+        return EActions::goToBedroom;
     } else
     {
-        return Actions::goToMainHall;
+        return EActions::goToMainHall;
     }
 }
 
-Actions AIController::ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world)
+EActions AIController::ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world)
 {
 	int tempPlayerCount = playerMap.Num();
     std::vector<bool> playersInReach(tempPlayerCount);
@@ -85,12 +85,12 @@ UPlayerData* AIController::TargetForMakeFriend(UPlayerData* playerData, PlayerMa
 }
 */
 
-Actions AIController::DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach)
+EActions AIController::DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach)
 {
-    return Actions::noAction;
+    return EActions::noAction;
 }
 
-Actions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld)
+EActions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld)
 {
 	pLog("Entering htnAIChooseAction");
 	//update worldstate from real world
@@ -134,7 +134,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &play
 		std::stringstream ss;
 		ss <<  ": Give up and return noAction";
 		pLog(ss, true);
-		return Actions::noAction; //If next step of the plan is still not valid, then return failure state
+		return EActions::noAction; //If next step of the plan is still not valid, then return failure state
 	} else {
 		pLog("Valid plan found!");
 		std::stringstream ss;
@@ -153,7 +153,7 @@ Actions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &play
 		return currentPlanStep->Operate(playerData, *simWorld);
 	}
 	pLog("Leaving htnAIChooseAction #3");
-	return Actions::noAction;
+	return EActions::noAction;
 }
 
 AIController::AIController(AI _algo):
