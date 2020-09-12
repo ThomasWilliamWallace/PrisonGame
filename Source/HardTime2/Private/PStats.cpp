@@ -117,7 +117,7 @@ void PStats::PrintStats()
     ss << "forgiving=" << forgiving << "\n";
     ss << "discreet=" << discreet << "\n";
     ss << "\n";
-	pLog(ss);
+    pLog(ss, true);
 }
 
 PStats::PStats()
