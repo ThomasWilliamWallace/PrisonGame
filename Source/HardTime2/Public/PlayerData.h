@@ -58,8 +58,8 @@ public:
 	void SetRequested(UPlayerData* requestedPlayer);
 	UPlayerData();
 	UPlayerData(const FObjectInitializer& ObjectInitializer);
-    
-	RelMap relMap; //Relationships have manual memory management, as they are kept in a TMap without UProperty()
+
+	RelMap relMap; //Relationships have manual memory management, as they are kept in a TMap without UProperty(). TODO Change to unreal memory management
 
 	virtual class UWorld* GetWorld() const override;
 

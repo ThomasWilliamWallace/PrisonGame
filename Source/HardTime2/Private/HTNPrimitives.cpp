@@ -371,7 +371,7 @@ std::shared_ptr<BaseAction> DropItemPrim::Operate(AbstractPlayerData* playerData
 
 //***********************************************************
 RequestItemPrim::RequestItemPrim(AbstractPlayerData* requestedPlayer, EItemType itemType):
-	HTNPrimitive("RequestItem"),
+	HTNPrimitive("RequestItemPrim"),
 	m_requestedPlayer(requestedPlayer),
 	m_itemType(itemType)
 {}
