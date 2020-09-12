@@ -1,8 +1,6 @@
 #include "PlatformSpecific.h"
 #include "HTNPlanner.h"
-#include "ActorItem.h"
 #include "Locations.h"
-#include "PlayerData.h"
 
 HTNPrimitive* GetRaw(HTNPrimitivePtr ptr)
 {
@@ -20,6 +18,11 @@ HTNNode* GetRaw(HTNNodePtr ptr)
 }
 
 HTNMethod* GetRaw(HTNMethodPtr ptr)
+{
+    return ptr.get();
+}
+
+AbstractItem* GetRaw(AbstractItemPtr ptr)
 {
     return ptr.get();
 }
@@ -52,6 +55,11 @@ StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr)
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
 {
     return HTNNodePtr(&htnCompound);
+}
+
+AbstractItemPtr MakeSharedAbstractItemPtr(EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer)
+{
+    return std::make_shared<AbstractItem>(itemType, location, carryingPlayer);
 }
 
 SimItemPtr MakeSharedSimItemPtr(AbstractItem* realItem, EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer)
