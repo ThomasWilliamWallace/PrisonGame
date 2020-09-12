@@ -5,7 +5,7 @@
 #include "ActorItem.h"
 #include <vector>
 
-HTNWorldState const& TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simworld, PlayerMap& playerMap, UPlayerData* requester) {
+std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simworld, PlayerMap& playerMap, UPlayerData* requester) {
     //TODO reflect players sensors rather than being hardwired to the world
 
     std::vector<AbstractItem*> world_items;
@@ -37,5 +37,11 @@ HTNWorldState const& TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld&
         }
     }
 
-    return HTNWorldState(&(playerPtr->abstractPlayerData), playerMap, world_items, &(requester->abstractPlayerData), attackers, playersInTheRoom);
+    AbstractPlayerData* requesterAbstractPlayerData = nullptr;
+    if (requester != nullptr)
+    {
+        requesterAbstractPlayerData = &(requester->abstractPlayerData);
+    }
+
+    return std::make_unique<HTNWorldState>(&(playerPtr->abstractPlayerData), playerMap, world_items, requesterAbstractPlayerData, attackers, playersInTheRoom);
 }

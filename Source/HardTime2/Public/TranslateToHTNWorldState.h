@@ -6,4 +6,4 @@ class UPlayerData;
 class USimWorld;
 class PlayerRegistry;
 
-HTNWorldState const& TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simworld, PlayerMap& playerMap, UPlayerData* requester);
+std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simworld, PlayerMap& playerMap, UPlayerData* requester);

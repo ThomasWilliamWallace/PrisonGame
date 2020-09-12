@@ -95,19 +95,19 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 {
 	pLog("Entering htnAIChooseAction");
 	//update worldstate from real world
-	HTNWorldState const& htnWorldState = TranslateToHTNWorldState(playerData, *simWorld, playerMap, nullptr);
+	std::unique_ptr<HTNWorldState> htnWorldState = TranslateToHTNWorldState(playerData, *simWorld, playerMap, nullptr);
 
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-    if (lastActionInterrupted || ((lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(htnWorldState))))
+    if (lastActionInterrupted || ((lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(*(htnWorldState.get())))))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
 	} else if (htnPlan.size() > 0)
 	{
 		pLog("Check Precondition of plan primitive step");
-		hasValidPlan = htnPlan.front()->Preconditions(htnWorldState);
+		hasValidPlan = htnPlan.front()->Preconditions(*(htnWorldState.get()));
 	} else {
 		pLog("No plan exists at all.");
 	}
@@ -119,14 +119,14 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 		ss << ": Make a new plan:";
 		pLog(ss, true);}
 
-		HTNWorldState htnWorldStateDFSCopy(htnWorldState);
+		HTNWorldState htnWorldStateDFSCopy(*(htnWorldState.get()));
 		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
 		htnPlan = HTNIterative(htnWorldStateDFSCopy, *missionPtr, 0);
 
 		//once again, check if next step of the plan is valid.
 		if (htnPlan.size() > 0)
 		{
-			hasValidPlan = htnPlan.front()->Preconditions(htnWorldState);
+			hasValidPlan = htnPlan.front()->Preconditions(*(htnWorldState.get()));
 		}
 	}
 
