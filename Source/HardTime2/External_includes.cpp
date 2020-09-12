@@ -10,3 +10,4 @@
 #include "../htn_planner/htn_planner/Private/AbstractMission.cpp"
 #include "../htn_planner/htn_planner/Private/HTNPlanner.cpp"
 #include "../htn_planner/htn_planner/Private/HTNWorldState.cpp"
+#include "../htn_planner/htn_planner/Private/PlatformSpecific.cpp"

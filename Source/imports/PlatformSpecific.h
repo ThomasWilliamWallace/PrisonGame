@@ -97,13 +97,13 @@ int GetKey(Iterator &iterator)
 };
 
 template <typename Iterator>
-UPlayerData* GetPlayer(Iterator& iterator)
+UPlayerData* GetPlayer(Iterator &iterator)
 {
 	return iterator.Value;
 };
 
 template <typename Iterator>
-URelationship* GetRel(Iterator& iterator)
+URelationship* GetRel(Iterator &iterator)
 {
 	return iterator.second;
 };
