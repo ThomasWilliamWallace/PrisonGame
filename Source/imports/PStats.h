@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <iostream>
 #include "Locations.h"
-#include "Missions.h"
 
 class PStats //the abilities of the character. Generally linear and bound between 0 and 100.
 {
@@ -53,9 +52,9 @@ public:
     void deltaCharisma(double delta);
     void deltaReputation(double delta);
     void deltaRespect(double delta);
-
+    
     void PrintStats();
-	PStats();
+    PStats();
 };
 
 double transformStat(double inputStat);
