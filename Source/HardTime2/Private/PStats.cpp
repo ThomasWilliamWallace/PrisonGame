@@ -92,8 +92,7 @@ void PStats::deltaRespect(double delta)
 
 void PStats::PrintStats()
 {
-	/*
-	std::sstringstreams ss;
+	std::stringstream ss;
     ss << "*** STATS ***\n";
     ss << "health=" << FormatDouble(getHealth()) << "\n";
     ss << "sanity=" << FormatDouble(getSanity()) << "\n";
@@ -119,7 +118,6 @@ void PStats::PrintStats()
     ss << "discreet=" << discreet << "\n";
     ss << "\n";
 	pLog(ss);
-	*/
 }
 
 PStats::PStats()
