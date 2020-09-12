@@ -72,7 +72,7 @@ void AHardTime2Character::Init()
 	m_aiState = EAIState::noTask;
 	m_useCount = 0;
 
-	m_player->missionClass = MissionClass(m_player);
+	m_player->missionClass = MissionClass(&(m_player->abstractPlayerData));
 	m_player->physicalCharacter = this;
 	m_player->aiController.algo = AI::htnAI;
 	m_player->aiController.lastActionInterrupted = false;
@@ -473,7 +473,7 @@ void AHardTime2Character::Tick(float DeltaTime)
 		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry.m_playerMap, m_world);
 		m_player->aiController.lastActionInterrupted = false;
 		pLog("HTN Planner chose an action:", true);
-		switch (m_player->action)
+		switch (m_player->action->m_action)
 		{
 		case EActions::goToBedroom:
 			pLog("goToBedroom", true);

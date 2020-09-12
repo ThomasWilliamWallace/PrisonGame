@@ -6,3 +6,7 @@
 #include "../htn_planner/htn_planner/Private/Locations.cpp"
 #include "../htn_planner/htn_planner/Private/AbstractItem.cpp"
 #include "../htn_planner/htn_planner/Private/AbstractAction.cpp"
+#include "../htn_planner/htn_planner/Private/AbstractPlayerData.cpp"
+#include "../htn_planner/htn_planner/Private/AbstractMission.cpp"
+#include "../htn_planner/htn_planner/Private/HTNPlanner.cpp"
+#include "../htn_planner/htn_planner/Private/HTNWorldState.cpp"

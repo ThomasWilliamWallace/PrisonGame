@@ -32,17 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void UpdateCarriedItem(AActorItem* item, ACharacter* character);
 
-	UPROPERTY()
-		UPlayerData* weightsOccupied;
-
-	UPROPERTY()
-		UPlayerData* circuitsOccupied;
-
-	UPROPERTY()
-		UPlayerData* studyOccupied;
-
-	UPROPERTY()
-		UPlayerData* bedOccupied;
+	AbstractPlayerData* weightsOccupied;
+	AbstractPlayerData* circuitsOccupied;
+	AbstractPlayerData* studyOccupied;
+	AbstractPlayerData* bedOccupied;
 
     void Clean();
     USimWorld();

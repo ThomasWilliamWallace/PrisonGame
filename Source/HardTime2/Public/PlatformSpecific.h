@@ -6,9 +6,11 @@ class HTNPrimitive;
 class HTNCompound;
 class HTNMethod;
 struct StackNode;
-class SimActorItem;
+class SimItem;
+class AbstractItem;
 class AActorItem;
 class UPlayerData;
+class AbstractPlayerData;
 class URelationship;
 
 typedef std::shared_ptr<HTNPrimitive> HTNPrimitivePtr;
@@ -17,35 +19,34 @@ typedef std::shared_ptr<HTNNode> HTNNodePtr;
 typedef std::shared_ptr<HTNMethod> HTNMethodPtr;
 typedef std::shared_ptr<StackNode> StackNodePtr;
 
+typedef std::shared_ptr<SimItem> SimItemPtr;
+
 #ifdef TEXT_ONLY_HTN
-
-#include <map>
-
-typedef std::shared_ptr<SimActorItem> SimActorItemPtr;
 
 typedef uint8_t uint8;
 
+#include <map>
 typedef std::map<int, UPlayerData*> PlayerMap;
 typedef std::pair<int, UPlayerData*> IntPlayerPair;
 typedef std::map<int, URelationship*> RelMap;
 typedef std::pair<int, URelationship*> IntRelPair;
 
 template <typename Iterator>
+UPlayerData* GetPlayer(Iterator& iterator)
+{
+	return iterator.second;
+};
+
+template <typename Iterator>
+URelationship* GetRel(Iterator& iterator)
+{
+	return iterator.second;
+};
+
+template <typename Iterator>
 int GetKey(Iterator &iterator)
 {
 	return iterator.first;
-};
-
-template <typename Iterator>
-UPlayerData* GetPlayer(Iterator &iterator)
-{
-	return iterator.second;
-};
-
-template <typename Iterator>
-URelationship* GetRel(Iterator &iterator)
-{
-	return iterator.second;
 };
 
 template <typename Container>
@@ -76,29 +77,27 @@ void RemoveCurrent(Container &container, Iterator iter)
 
 #include "Runtime/Core/Public/Containers/Map.h"
 
-typedef TSharedPtr<SimActorItem> SimActorItemPtr;
-
 typedef TMap<int, UPlayerData*> PlayerMap;
 typedef TPair<int, UPlayerData*> IntPlayerPair;
 typedef TMap<int, URelationship*> RelMap;
 typedef TPair<int, URelationship*> IntRelPair;
 
 template <typename Iterator>
-int GetKey(Iterator &iterator)
-{
-	return iterator.Key;
-};
-
-template <typename Iterator>
-UPlayerData* GetPlayer(Iterator &iterator)
+UPlayerData* GetPlayer(Iterator& iterator)
 {
 	return iterator.Value;
 };
 
 template <typename Iterator>
-URelationship* GetRel(Iterator &iterator)
+URelationship* GetRel(Iterator& iterator)
 {
 	return iterator.second;
+};
+
+template <typename Iterator>
+int GetKey(Iterator &iterator)
+{
+	return iterator.Key;
 };
 
 template <typename Container>
@@ -134,7 +133,7 @@ HTNPrimitive* GetRaw(HTNPrimitivePtr ptr);
 HTNCompound* GetRaw(HTNCompoundPtr ptr);
 HTNNode* GetRaw(HTNNodePtr ptr);
 HTNMethod* GetRaw(HTNMethodPtr ptr);
-SimActorItem* GetRaw(SimActorItemPtr ptr);
+SimItem* GetRaw(SimItemPtr ptr);
 
 HTNPrimitivePtr CastNodeToPrimitive(HTNNodePtr htnNodePtr);
 HTNCompoundPtr CastNodeToCompound(HTNNodePtr htnNodePtr);
@@ -142,7 +141,7 @@ HTNMethodPtr CastNodeToMethod(HTNNodePtr htnNodePtr);
 
 StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr);
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound);
-SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer);
+SimItemPtr MakeSharedSimItemPtr(AbstractItem* realItem, EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer);
 
 // Encapsulated because Unreal Engine uses a different exception system
 [[noreturn]] void ThrowException(const std::string& errorMessage);

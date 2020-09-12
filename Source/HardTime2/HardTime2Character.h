@@ -96,8 +96,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Stats)
 		void DeltaIntelligence(float delta);
 
-	UPROPERTY(Instanced)
-		UPlayerData* m_player;  //this pointer owns and maintains the m_player, but other objects such as world may also access it
+	UPlayerData* m_player;  //this pointer owns and maintains the m_player, but other objects such as world may also access it
 
 	UPROPERTY()
 		USimWorld* m_world;  //a reference to the single external world object used by the AI.

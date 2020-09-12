@@ -249,10 +249,10 @@ public:
 
 class RequestItemMethod : public HTNMethod
 {
-    UPlayerData* m_player;
+    AbstractPlayerData* m_player;
     EItemType m_itemType;
 public:
-    RequestItemMethod(UPlayerData* player, EItemType itemType);
+    RequestItemMethod(AbstractPlayerData* player, EItemType itemType);
     bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks() override;
 };
@@ -311,19 +311,19 @@ public:
 //***********************************************************
 class PickupItemAndAttackMethod : public HTNMethod
 {
-    SimActorItemPtr m_item;
-	UPlayerData* m_opponent;
+    SimItemPtr m_item;
+    AbstractPlayerData* m_opponent;
 public:
-    PickupItemAndAttackMethod(SimActorItemPtr item, UPlayerData* opponent);
+    PickupItemAndAttackMethod(SimItemPtr item, AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks() override;
 };
 
 class AttackImmediateMethod : public HTNMethod
 {
-	UPlayerData* m_opponent;
+    AbstractPlayerData* m_opponent;
 public:
-    AttackImmediateMethod(UPlayerData* opponent);
+    AttackImmediateMethod(AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks() override;
 };
@@ -331,18 +331,18 @@ public:
 class AttackCompound : public HTNCompound
 {
     HTNWorldState& m_htnWorldState;
-    UPlayerData* m_opponent;
+    AbstractPlayerData* m_opponent;
 public:
-	AttackCompound(HTNWorldState &htnWorldState, UPlayerData* opponent);
+	AttackCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
     virtual void CreateMethods() override;
 };
 
 class AttackMethod : public HTNMethod
 {
     HTNWorldState& m_htnWorldState;
-    UPlayerData* m_opponent;
+    AbstractPlayerData* m_opponent;
 public:
-    AttackMethod(HTNWorldState &htnWorldState, UPlayerData* opponent);
+    AttackMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks() override;
 };
@@ -359,9 +359,9 @@ public:
 class CombatCompound : public HTNCompound
 {
     HTNWorldState& m_htnWorldState;
-    UPlayerData* m_opponent;
+    AbstractPlayerData* m_opponent;
 public:
-    CombatCompound(HTNWorldState &htnWorldState, UPlayerData* opponent);
+    CombatCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
     virtual void CreateMethods() override;
 };
 
@@ -411,9 +411,9 @@ public:
 class CombatMethod : public HTNMethod
 {
     HTNWorldState& m_htnWorldState;
-    UPlayerData* m_opponent;
+    AbstractPlayerData* m_opponent;
 public:
-	CombatMethod(HTNWorldState &htnWorldState, UPlayerData* opponent);
+	CombatMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks() override;
 };
@@ -438,9 +438,9 @@ public:
 //***********************************************************
 class PickUpItemByPtrMethod : public HTNMethod
 {
-    SimActorItemPtr m_itemFocusPtr;
+    SimItemPtr m_itemFocusPtr;
 public:
-    PickUpItemByPtrMethod(SimActorItemPtr itemFocus);
+    PickUpItemByPtrMethod(SimItemPtr itemFocus);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks() override;
 };

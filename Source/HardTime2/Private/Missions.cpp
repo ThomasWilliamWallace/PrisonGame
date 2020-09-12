@@ -39,26 +39,13 @@ std::string MissionClass::MissionNarrative()
     return "ERROR: MISSION TYPE NOT RECOGNISED";
 }
 
-EMissions GetRandomMission()
-{
-	int random = rand() % 100;
-	if (random<25)
-	    return EMissions::increaseStrength;
-	else if (random<50)
-	    return EMissions::increaseAgility;
-	else if (random<75)
-	    return EMissions::increaseIntelligence;
-	else
-		return EMissions::bringItemToRoom;
-}
-
-MissionClass::MissionClass(EMissions mission, UPlayerData* owner, double objective):
+MissionClass::MissionClass(EMissions mission, AbstractPlayerData* owner, double objective):
 	m_mission(mission),
 	m_owner(owner),
 	m_objective(objective)
 {}
 
-MissionClass::MissionClass(EMissions mission, UPlayerData* owner, EItemType itemType, ELocations location):
+MissionClass::MissionClass(EMissions mission, AbstractPlayerData* owner, EItemType itemType, ELocations location):
 	m_mission(mission),
 	m_owner(owner),
 	m_itemType(itemType),
@@ -78,7 +65,7 @@ MissionClass::MissionClass(const MissionClass& missionClass) :
 	m_locationClass(missionClass.m_locationClass)
 {}
 
-MissionClass::MissionClass(UPlayerData* owner):
+MissionClass::MissionClass(AbstractPlayerData* owner):
 	m_mission(GetRandomMission()),
 	m_owner(owner)
 {

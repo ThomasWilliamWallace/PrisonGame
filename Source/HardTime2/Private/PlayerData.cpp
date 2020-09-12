@@ -19,8 +19,8 @@ void UPlayerData::PrintPlayer()
 {
 	std::stringstream ss;
     ss << "*** PLAYER " << " ***\n";
-	ss << "action=" << ActionToString(action) << "\n";
-	ss << "lastAction=" << ActionToString(lastAction) << "\n";
+	ss << "action=" << ActionToString(action->m_action) << "\n";
+	ss << "lastAction=" << ActionToString(lastAction->m_action) << "\n";
     ss << "location=" << locationClass.ToString() << "\n";
     ss << "lastLocation=" << lastLocationClass.ToString() << "\n";
 //    ss << "attacked=" << BoolToString(attacked) << "\n";
@@ -67,12 +67,12 @@ MissionClass CreateNewMission(UPlayerData* playerPtr)
             tempObjective = playerPtr->pStats.getIntelligence();
             break;
         case EMissions::bringItemToRoom:
-            return MissionClass(tempMission, playerPtr, GetRandomItemType(), GetRandomLocation());
+            return MissionClass(tempMission, &(playerPtr->abstractPlayerData), GetRandomItemType(), GetRandomLocation());
 		default:
 			throw std::invalid_argument("Selected an invalid mission type.");
     }
     tempObjective += 3; //todo ensure that the mission is achievable, ie 100 or below
-    return MissionClass(tempMission, playerPtr, tempObjective);
+    return MissionClass(tempMission, &(playerPtr->abstractPlayerData), tempObjective);
 }
 
 void UPlayerData::UpdateMissions(USimWorld &world)
@@ -83,7 +83,7 @@ void UPlayerData::UpdateMissions(USimWorld &world)
 		ss << " has completed his mission to " << missionClass.MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
 		pLog(ss, true);
         pStats.deltaSanity(5);
-		missionClass = MissionClass(this);
+		missionClass = MissionClass(&(this->abstractPlayerData));
 		pLog(missionClass.MissionNarrative(), true);
     }
 }
@@ -102,7 +102,7 @@ UPlayerData::UPlayerData()
 {
 	itemPtr = nullptr;
 	itemFocusPtr = nullptr;
-	action = EActions::goToGym;
+    action = std::make_shared<BaseAction>(EActions::goToGym);
 	pLog("Constructing UPlayerData");
 }
 
@@ -112,7 +112,7 @@ UPlayerData::UPlayerData(const FObjectInitializer& ObjectInitializer)
 
 	itemPtr = nullptr;
 	itemFocusPtr = nullptr;
-	action = EActions::goToGym;
+	action = std::make_shared<BaseAction>(EActions::goToGym);
 }
 
 class UWorld* UPlayerData::GetWorld() const
@@ -136,4 +136,12 @@ class UWorld* UPlayerData::GetWorld() const
 	}
 
 	return physicalCharacter->GetWorld();
+}
+
+bool OtherInReach(AbstractPlayerData& playerPtr, AbstractPlayerData& otherPlayerPtr, PlayerMap& playerMap)
+{
+    if ((otherPlayerPtr.locationClass.location == playerPtr.locationClass.location) && (&otherPlayerPtr != &playerPtr))
+        return true;
+    else
+        return false;
 }

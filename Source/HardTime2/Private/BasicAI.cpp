@@ -4,11 +4,12 @@
 #include "HTNDomain.h"
 #include "RequestHTNDomain.h"
 #include "SimWorld.h"
-#include "Actions.h"
+#include "AbstractAction.h"
 #include <sstream>
 #include "pLog.h"
 #include "Constants.h"
 #include <vector>
+#include "TranslateToHTNWorldState.h"
 
 EActions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
 {
@@ -34,7 +35,7 @@ EActions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
     }
 }
 
-EActions AIController::ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world)
+std::shared_ptr<BaseAction> AIController::ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world)
 {
 	int tempPlayerCount = playerMap.Num();
     std::vector<bool> playersInReach(tempPlayerCount);
@@ -44,7 +45,7 @@ EActions AIController::ChooseAction(UPlayerData* playerData, PlayerMap &playerMa
 	for (auto &playerIter : playerMap)
     {
 		UPlayerData* currPlayerData = playerIter.Value;
-        if (OtherInReach(playerData, currPlayerData, playerMap))
+        if (OtherInReach(playerData->abstractPlayerData, currPlayerData->abstractPlayerData, playerMap))
         {
             playersInReach[i] = true;
             countPlayersInReach += 1;
@@ -85,16 +86,16 @@ UPlayerData* AIController::TargetForMakeFriend(UPlayerData* playerData, PlayerMa
 }
 */
 
-EActions AIController::DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach)
+std::shared_ptr<BaseAction> AIController::DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach)
 {
-    return EActions::noAction;
+	return std::make_shared<BaseAction>(EActions::noAction);
 }
 
-EActions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld)
+std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld)
 {
 	pLog("Entering htnAIChooseAction");
 	//update worldstate from real world
-	HTNWorldState htnWorldState(playerData, playerMap, *(simWorld));
+	HTNWorldState const& htnWorldState = TranslateToHTNWorldState(playerData, *simWorld, playerMap, nullptr);
 
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
@@ -134,7 +135,7 @@ EActions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &pla
 		std::stringstream ss;
 		ss <<  ": Give up and return noAction";
 		pLog(ss, true);
-		return EActions::noAction; //If next step of the plan is still not valid, then return failure state
+		return std::make_shared<BaseAction>(EActions::noAction); //If next step of the plan is still not valid, then return failure state
 	} else {
 		pLog("Valid plan found!");
 		std::stringstream ss;
@@ -150,10 +151,10 @@ EActions AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &pla
 		lastPrimitiveAction = currentPlanStep;
 		htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2");
-		return currentPlanStep->Operate(playerData, *simWorld);
+		return currentPlanStep->Operate(&(playerData->abstractPlayerData));
 	}
 	pLog("Leaving htnAIChooseAction #3");
-	return EActions::noAction;
+	return std::make_shared<BaseAction>(EActions::noAction);
 }
 
 AIController::AIController(AI _algo):

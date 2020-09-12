@@ -332,7 +332,7 @@ void PickupItemMethod::CreateTasks()
     AddTask(new PickUpItemByTypePrim(m_itemType));
 }
 
-RequestItemMethod::RequestItemMethod(UPlayerData* player, EItemType itemType): HTNMethod("RequestItemMethod"), m_player(player), m_itemType(itemType)
+RequestItemMethod::RequestItemMethod(AbstractPlayerData* player, EItemType itemType): HTNMethod("RequestItemMethod"), m_player(player), m_itemType(itemType)
 {}
 
 bool RequestItemMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -413,7 +413,7 @@ void BringItemToLocationCompound::CreateMethods()
 }
 
 //***********************************************************
-PickupItemAndAttackMethod::PickupItemAndAttackMethod(SimActorItemPtr item, UPlayerData* opponent):
+PickupItemAndAttackMethod::PickupItemAndAttackMethod(SimItemPtr item, AbstractPlayerData* opponent):
     HTNMethod("PickupItemAndAttackMethod"),
     m_item(item),
     m_opponent(opponent)
@@ -431,7 +431,7 @@ bool PickupItemAndAttackMethod::Preconditions(HTNWorldState &htnWorldState)
 		}
 	}
 
-    return htnWorldState.IsInTheRoom(m_opponent)
+    return htnWorldState.IsInTheRoom(*m_opponent)
         && (m_item->m_locationClass.location == htnWorldState.m_location)
         && !carryingItemAlready;
 }
@@ -442,14 +442,14 @@ void PickupItemAndAttackMethod::CreateTasks()
     AddTask(new PunchPrim(m_opponent));
 }
 
-AttackImmediateMethod::AttackImmediateMethod(UPlayerData* opponent):
+AttackImmediateMethod::AttackImmediateMethod(AbstractPlayerData* opponent):
     HTNMethod("AttackImmediateMethod"),
     m_opponent(opponent)
 {}
 
 bool AttackImmediateMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    return htnWorldState.IsInTheRoom(m_opponent);
+    return htnWorldState.IsInTheRoom(*m_opponent);
 }
 
 void AttackImmediateMethod::CreateTasks()
@@ -457,7 +457,7 @@ void AttackImmediateMethod::CreateTasks()
     AddTask(new PunchPrim(m_opponent));
 }
 
-AttackCompound::AttackCompound(HTNWorldState &htnWorldState, UPlayerData* opponent):
+AttackCompound::AttackCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
     HTNCompound("AttackCompound"),
     m_htnWorldState(htnWorldState),
     m_opponent(opponent)
@@ -475,7 +475,7 @@ void AttackCompound::CreateMethods()
     AddMethod(new AttackImmediateMethod(m_opponent));
 }
 
-AttackMethod::AttackMethod(HTNWorldState &htnWorldState, UPlayerData* opponent):
+AttackMethod::AttackMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
     HTNMethod("AttackMethod"),
     m_htnWorldState(htnWorldState),
     m_opponent(opponent)
@@ -505,7 +505,7 @@ void EvadeMethod::CreateTasks()
     AddTask(new EvadePrim());
 }
 
-CombatCompound::CombatCompound(HTNWorldState &htnWorldState, UPlayerData* opponent):
+CombatCompound::CombatCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
     HTNCompound("CombatCompound"),
     m_htnWorldState(htnWorldState),
     m_opponent(opponent)
@@ -523,7 +523,7 @@ IncreaseStrengthMissionMethod::IncreaseStrengthMissionMethod(): HTNMethod("Incre
 
 bool IncreaseStrengthMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == EMissions::increaseStrength;
+	return htnWorldState.m_missionClass->m_mission == EMissions::increaseStrength;
 }
 
 void IncreaseStrengthMissionMethod::CreateTasks()
@@ -536,7 +536,7 @@ IncreaseAgilityMissionMethod::IncreaseAgilityMissionMethod(): HTNMethod("Increas
 
 bool IncreaseAgilityMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == EMissions::increaseAgility;
+	return htnWorldState.m_missionClass->m_mission == EMissions::increaseAgility;
 }
 
 void IncreaseAgilityMissionMethod::CreateTasks()
@@ -549,7 +549,7 @@ IncreaseIntelligenceMissionMethod::IncreaseIntelligenceMissionMethod(): HTNMetho
 
 bool IncreaseIntelligenceMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == EMissions::increaseIntelligence;
+	return htnWorldState.m_missionClass->m_mission == EMissions::increaseIntelligence;
 }
 
 void IncreaseIntelligenceMissionMethod::CreateTasks()
@@ -564,12 +564,12 @@ BringItemToRoomMissionMethod::BringItemToRoomMissionMethod(HTNWorldState &htnWor
 
 bool BringItemToRoomMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission == EMissions::bringItemToRoom;
+	return htnWorldState.m_missionClass->m_mission == EMissions::bringItemToRoom;
 }
 
 void BringItemToRoomMissionMethod::CreateTasks()
 {
-    AddTask(new BringItemToLocationCompound(m_htnWorldState, m_htnWorldState.m_missionClass.m_itemType, m_htnWorldState.m_missionClass.m_locationClass));
+    AddTask(new BringItemToLocationCompound(m_htnWorldState, m_htnWorldState.m_missionClass->m_itemType, m_htnWorldState.m_missionClass->m_locationClass));
 }
 
 DoMissionCompound::DoMissionCompound(HTNWorldState &htnWorldState):
@@ -586,7 +586,7 @@ void DoMissionCompound::CreateMethods()
 }
 
 //***********************************************************
-CombatMethod::CombatMethod(HTNWorldState &htnWorldState, UPlayerData* opponent):
+CombatMethod::CombatMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
     HTNMethod("CombatMethod"),
     m_htnWorldState(htnWorldState),
     m_opponent(opponent)
@@ -609,7 +609,7 @@ DoMissionMethod::DoMissionMethod(HTNWorldState &htnWorldState):
 
 bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return htnWorldState.m_missionClass.m_mission != EMissions::noMission;
+	return htnWorldState.m_missionClass->m_mission != EMissions::noMission;
 }
 
 void DoMissionMethod::CreateTasks()
@@ -631,7 +631,7 @@ void IncreaseIntelligenceMethod::CreateTasks()
 }
 
 //***********************************************************
-PickUpItemByPtrMethod::PickUpItemByPtrMethod(SimActorItemPtr itemFocusPtr):
+PickUpItemByPtrMethod::PickUpItemByPtrMethod(SimItemPtr itemFocusPtr):
     HTNMethod("PickUpItemByPtrMethod"),
     m_itemFocusPtr(itemFocusPtr)
 {}

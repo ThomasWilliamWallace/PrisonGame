@@ -1,9 +1,11 @@
 #pragma once
 
 #include "HTNPlanner.h"
+#include "EActions.h"
 #include "PlatformSpecific.h"
 
 class USimWorld;
+class BaseAction;
 
 enum class AI
 {
@@ -14,11 +16,11 @@ enum class AI
 class AIController
 {
     EActions ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap);
-    EActions DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach);
+    std::shared_ptr<BaseAction> DoNothingAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, std::vector<bool> playersInReach, int countPlayersInReach);
     //UPlayerData* TargetForMakeFriend(UPlayerData* playerData, PlayerMap &playerMap, bool playersInReach[], int countPlayersInReach);
 public:
-	EActions HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld);
-    EActions ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world);
+    std::shared_ptr<BaseAction> HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld);
+    std::shared_ptr<BaseAction> ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world);
     AIController(AI _algo);
     AIController();
 	HTNPrimitiveList htnPlan;

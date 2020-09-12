@@ -24,6 +24,11 @@ HTNMethod* GetRaw(HTNMethodPtr ptr)
     return ptr.get();
 }
 
+SimItem* GetRaw(SimItemPtr ptr)
+{
+    return ptr.get();
+}
+
 HTNPrimitivePtr CastNodeToPrimitive(HTNNodePtr htnNodePtr)
 {
     return std::static_pointer_cast<HTNPrimitive>(htnNodePtr);
@@ -49,6 +54,11 @@ HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
     return HTNNodePtr(&htnCompound);
 }
 
+SimItemPtr MakeSharedSimItemPtr(AbstractItem* realItem, EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer)
+{
+    return std::make_shared<SimItem>(realItem, itemType, location, carryingPlayer);
+}
+
 #ifdef TEXT_ONLY_HTN
 // Default case
 
@@ -57,31 +67,10 @@ HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound)
     throw errorMessage;
 }
 
-SimActorItem* GetRaw(SimActorItemPtr ptr)
-{
-    return ptr.get();
-}
-
-SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer)
-{
-    return std::make_shared<SimActorItem>(realItem, itemType, location, carryingPlayer);
-}
-
 #else
 // Unreal engine case
 
-#include "ActorItem.h"
 #include "Engine/GameEngine.h"
-
-SimActorItem* GetRaw(SimActorItemPtr ptr)
-{
-    return ptr.Get();
-}
-
-SimActorItemPtr MakeSharedSimActorItemPtr(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer)
-{
-	return MakeShared<SimActorItem>(realItem, itemType, location, carryingPlayer);
-}
 
     // TODO split the platform specific code into separate cpp files. The PlatformSpecific.cpp file can then be included from the appropriate location for different builds.
     // The TEXT_ONLY_HTN flag can then be done away with.
