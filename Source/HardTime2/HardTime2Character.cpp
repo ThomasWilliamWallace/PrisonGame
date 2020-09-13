@@ -79,6 +79,8 @@ void AHardTime2Character::Init()
 
 	std::string playerName = RandomName();
 	m_player->m_playerName = FName(playerName.c_str());
+
+	m_player->PrintPlayer();
 }
 
 AHardTime2Character::AHardTime2Character()

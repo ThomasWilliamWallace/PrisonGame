@@ -8,22 +8,19 @@
 
 std::string CharacterName(UPlayerData* playerPtr)
 {
-	if (playerPtr == nullptr)
+	if (playerPtr == nullptr) {
 		return "c_empty";
-	else
-		//return playerPtr->m_playerName;
-		return "No-Name";
+	}
+	else {
+		std::string string_name = TCHAR_TO_UTF8(*(playerPtr->m_playerName.ToString()));
+		return string_name;
+	}
 }
 
 void UPlayerData::PrintPlayer()
 {
 	std::stringstream ss;
     ss << "*** PLAYER " << " ***\n";
-	ss << "action=" << ActionToString(abstractPlayerData.action->m_action) << "\n";
-	ss << "lastAction=" << ActionToString(abstractPlayerData.lastAction->m_action) << "\n";
-    ss << "location=" << abstractPlayerData.locationClass.ToString() << "\n";
-    ss << "lastLocation=" << abstractPlayerData.lastLocationClass.ToString() << "\n";
-//    ss << "attacked=" << BoolToString(attacked) << "\n";
     ss << "playerTargetPtr=" << playerTargetPtr << "\n";
     ss << "item=";
     if (itemPtr != nullptr)
@@ -35,13 +32,6 @@ void UPlayerData::PrintPlayer()
         ss << itemFocusPtr->ToString() << "\n";
     else
         ss << "null\n";
-	ss << "missionClass=";
-	if (abstractPlayerData.missionClass.get() != nullptr) {
-		ss << abstractPlayerData.missionClass->MissionNarrative() << "\n";
-	}
-	else {
-		ss << "NULLPTR\n";
-	}
 	ss << "missionOffer=";
 	if (missionOffer.get() != nullptr) {
 		ss << missionOffer->MissionNarrative() << "\n";
@@ -55,6 +45,7 @@ void UPlayerData::PrintPlayer()
     ss << "\n";
 	pLog(ss);
 //    pStats.PrintStats();
+	abstractPlayerData.PrintPlayer();
 }
 
 void UPlayerData::UpdateMissions(USimWorld &world)

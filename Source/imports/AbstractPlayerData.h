@@ -21,6 +21,8 @@ public:
     
     virtual ~AbstractPlayerData() = default;
     virtual void PrintPlayer();
+
+    AbstractPlayerData();
 };
 
 std::string CharacterName(AbstractPlayerData* playerPtr);

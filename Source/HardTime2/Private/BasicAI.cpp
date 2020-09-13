@@ -94,6 +94,7 @@ std::shared_ptr<BaseAction> AIController::DoNothingAIChooseAction(UPlayerData* p
 std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld* simWorld)
 {
 	pLog("Entering htnAIChooseAction");
+	playerData->PrintPlayer();
 	//update worldstate from real world
 	std::unique_ptr<HTNWorldState> htnWorldState = TranslateToHTNWorldState(playerData, *simWorld, playerMap, nullptr);
 
