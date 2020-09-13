@@ -13,7 +13,7 @@
 
 EActions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
 {
-    if (playerData->locationClass.location == ELocations::mainHall)
+    if (playerData->abstractPlayerData.locationClass.location == ELocations::mainHall)
     {
         int random = RandPercent();
         if (random < 25)

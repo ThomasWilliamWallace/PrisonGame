@@ -17,7 +17,7 @@ public:
     bool attacked = false; //tracks whether an attack has disrupted his turn.
     std::string narrative; //printed at the end of each round, giving the update for this character
     std::string m_playerName = "No-name"; //name of the character, used in speech
-    std::shared_ptr<AbstractMission> missionClass = std::make_shared<AbstractMission>(this); //a mission currently assigned to the character
+    std::shared_ptr<AbstractMission> missionClass = std::make_shared<AbstractMission>(RandomMission::CreateRandomMission, this); //a mission currently assigned to the character
     
     virtual ~AbstractPlayerData() = default;
     virtual void PrintPlayer();

@@ -72,7 +72,7 @@ void AHardTime2Character::Init()
 	m_aiState = EAIState::noTask;
 	m_useCount = 0;
 
-	m_player->missionClass = MissionClass(&(m_player->abstractPlayerData));
+	m_player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(m_player->abstractPlayerData));
 	m_player->physicalCharacter = this;
 	m_player->aiController.algo = AI::htnAI;
 	m_player->aiController.lastActionInterrupted = false;
@@ -315,7 +315,7 @@ void AHardTime2Character::UpdateLocation(ELocations location)
 		pLog("M_PLAYER == NULLPTR, FAILED TO UPDATE LOCATION");
 		return;
 	}
-	m_player->locationClass.location = location;
+	m_player->abstractPlayerData.locationClass.location = location;
 	m_location = location;
 	std::stringstream ss;
 	ss << "Location=" << static_cast<int>(location);
@@ -470,10 +470,10 @@ void AHardTime2Character::Tick(float DeltaTime)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;
-		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry->m_playerMap, m_world);
+		m_player->abstractPlayerData.action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry->m_playerMap, m_world);
 		m_player->aiController.lastActionInterrupted = false;
 		pLog("HTN Planner chose an action:", true);
-		switch (m_player->action->m_action)
+		switch (m_player->abstractPlayerData.action->m_action)
 		{
 		case EActions::goToBedroom:
 			pLog("goToBedroom", true);

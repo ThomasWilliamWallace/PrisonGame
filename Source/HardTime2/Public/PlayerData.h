@@ -29,16 +29,9 @@ public:
 	int m_key; //players PlayerRegistry index
     int cash = 0; //cash, in dollars, no bounds.
     int sentence = 5; //days left in prison sentence, only bound is above -1.
-	std::shared_ptr<BaseAction> action = std::make_shared<BaseAction>(EActions::useRoom); //stores the current action being attempted. This is held till the end of the frame, as it may be interrupted by another action.
-	std::shared_ptr<BaseAction> lastAction = std::make_shared<BaseAction>(EActions::useRoom); //stores the last action taken. Useful for checking if hidden.
-    LocationClass locationClass; //location maps to a discrete set of locations, gym, library, circuit track, bed.
-    LocationClass lastLocationClass; //location the character was at when the turn began. Used by the print display.
-    bool attacked = false; //tracks whether an attack has disrupted his turn.
-    //std::string narrative; //printed at the end of each round, giving the update for this character
     FName m_playerName; //name of the character, used in speech.
-    MissionClass missionClass; //a mission currently assigned to the character
     AIController aiController; //controlling AI for this character
-    MissionClass missionOffer; // a mission being offered to 'playerTarget'
+    std::shared_ptr<MissionClass> missionOffer; // a mission being offered to 'playerTarget'
 
 	UPROPERTY()
 		AActorItem* itemPtr = nullptr; //pointer to an item carried by the player
@@ -68,7 +61,6 @@ public:
 };
 
 std::string CharacterName(UPlayerData* playerPtr);
-MissionClass CreateNewMission(UPlayerData* playerPtr);
 
 
 bool OtherInReach(AbstractPlayerData& playerPtr, AbstractPlayerData& otherPlayerPtr, PlayerMap& playerMap);

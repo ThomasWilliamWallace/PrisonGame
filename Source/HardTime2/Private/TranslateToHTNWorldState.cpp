@@ -30,7 +30,7 @@ std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, 
             {
                 attackers.push_back(&(playerMap[relIndex]->abstractPlayerData));
             }
-            if (playerMap[relIndex]->locationClass.location == playerPtr->locationClass.location && playerMap[relIndex] != playerPtr)
+            if (playerMap[relIndex]->abstractPlayerData.locationClass.location == playerPtr->abstractPlayerData.locationClass.location && playerMap[relIndex] != playerPtr)
             {
                 playersInTheRoom.push_back(&(playerMap[relIndex]->abstractPlayerData));
             }
