@@ -57,7 +57,7 @@ public:
 
 	virtual class UWorld* GetWorld() const override;
 
-	std::string CharacterName()
+	std::string CharacterName();
 	AbstractPlayerData abstractPlayerData = AbstractPlayerData();
 };
 
