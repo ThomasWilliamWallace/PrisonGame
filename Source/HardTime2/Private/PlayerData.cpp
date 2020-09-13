@@ -43,8 +43,9 @@ void UPlayerData::PrintPlayer()
 		ss << "NULLPTR\n";
 	}
 	ss << "missionOffer=";
-	if (abstractPlayerData.missionOffer.get() != nullptr) {
+	if (missionOffer.get() != nullptr) {
 		ss << missionOffer->MissionNarrative() << "\n";
+	}
 	else {
 		ss << "NULLPTR\n";
 	}
