@@ -57,10 +57,9 @@ public:
 
 	virtual class UWorld* GetWorld() const override;
 
+	std::string CharacterName()
 	AbstractPlayerData abstractPlayerData = AbstractPlayerData();
 };
-
-std::string CharacterName(UPlayerData* playerPtr);
 
 
 bool OtherInReach(AbstractPlayerData& playerPtr, AbstractPlayerData& otherPlayerPtr, PlayerMap& playerMap);

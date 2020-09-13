@@ -6,21 +6,16 @@
 #include "HardTime2Character.h"
 #include "pLog.h"
 
-std::string CharacterName(UPlayerData* playerPtr)
+std::string UPlayerData::CharacterName()
 {
-	if (playerPtr == nullptr) {
-		return "c_empty";
-	}
-	else {
-		std::string string_name = TCHAR_TO_UTF8(*(playerPtr->m_playerName.ToString()));
-		return string_name;
-	}
+	std::string string_name = TCHAR_TO_UTF8(*(m_playerName.ToString()));
+	return string_name;
 }
 
 void UPlayerData::PrintPlayer()
 {
 	std::stringstream ss;
-    ss << "*** PLAYER " << " ***\n";
+    ss << "*** PLAYER " << CharacterName() << " ***\n";
     ss << "playerTargetPtr=" << playerTargetPtr << "\n";
     ss << "item=";
     if (itemPtr != nullptr)
