@@ -1,11 +1,17 @@
 #pragma once
 
 #include "PlatformSpecific.h"
+#include "PlayerRegistry.generated.h"
 
-class PlayerRegistry{
+UCLASS()
+class UPlayerRegistry : public UObject
+{
+    GENERATED_BODY()
 
 public:
-    PlayerMap m_playerMap;
+    UPROPERTY()
+        TMap<int, UPlayerData*> m_playerMap;
+
     void RegisterPlayer(UPlayerData* playerData);
     void DeregisterPlayer(int key);
 };

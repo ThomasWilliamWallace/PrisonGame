@@ -13,6 +13,7 @@ class USimWorld : public UObject //represents the simulated world
 {
 	GENERATED_BODY()
 public:
+	USimWorld(const FObjectInitializer& ObjectInitializer);
 
 	UFUNCTION(BlueprintCallable, Category = UpdateWorld)
 		void AddItem(AActorItem* item);
@@ -41,5 +42,6 @@ public:
     USimWorld();
     std::vector< AActorItem* > items;
 
-	PlayerRegistry m_playerRegistry;
+	UPROPERTY()
+		UPlayerRegistry* m_playerRegistry;
 };

@@ -4,12 +4,23 @@
 #include <sstream>
 #include "pLog.h"
 
+USimWorld::USimWorld(const FObjectInitializer& ObjectInitializer):
+	Super(ObjectInitializer)
+{
+	weightsOccupied = nullptr;
+	circuitsOccupied = nullptr;
+	studyOccupied = nullptr;
+	bedOccupied = nullptr;
+	m_playerRegistry = NewObject<UPlayerRegistry>();
+}
+
 USimWorld::USimWorld()
 {
     weightsOccupied  = nullptr;
     circuitsOccupied = nullptr;
     studyOccupied    = nullptr;
     bedOccupied      = nullptr;
+	m_playerRegistry = NewObject<UPlayerRegistry>();
 }
 
 void USimWorld::Clean()
@@ -56,7 +67,7 @@ void USimWorld::AddPlayer(UPlayerData* playerData)
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::AddPlayer", true);
 		return;
 	}
-	m_playerRegistry.RegisterPlayer(playerData);
+	m_playerRegistry->RegisterPlayer(playerData);
 	std::stringstream ss;
 	ss << "player=" << playerData;
 	pLog(ss);
@@ -89,7 +100,7 @@ void USimWorld::RemovePlayer(UPlayerData* playerData)
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::RemovePlayer", true);
 		//return;
 	}
-	m_playerRegistry.DeregisterPlayer(playerData->m_key);
+	m_playerRegistry->DeregisterPlayer(playerData->m_key);
 }
 
 void USimWorld::UpdateCarriedItem(AActorItem* item, ACharacter* character)
@@ -127,7 +138,7 @@ void USimWorld::UpdateCarriedItem(AActorItem* item, ACharacter* character)
 		playerData = hardTime2Character->m_player;
 	}
 
-	for (auto &p : m_playerRegistry.m_playerMap)
+	for (auto &p : m_playerRegistry->m_playerMap)
 	{
 		if (playerData == p.Value)
 		{
