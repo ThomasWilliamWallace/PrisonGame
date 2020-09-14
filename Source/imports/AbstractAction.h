@@ -6,6 +6,7 @@
 #include "EActions.h"
 
 class AbstractMission;
+class AActorItem;
 
 std::string ActionToString(EActions action);
 
@@ -28,8 +29,8 @@ public:
 class PickUpItemByPtrAction : public BaseAction
 {
 public:
-    PickUpItemByPtrAction(AbstractItem* itemFocusPtr): BaseAction(EActions::pickUpItemByPtr), m_itemFocusPtr(itemFocusPtr) {};
-    AbstractItem* m_itemFocusPtr;
+    PickUpItemByPtrAction(RealItemType* itemFocusPtr): BaseAction(EActions::pickUpItemByPtr), m_itemFocusPtr(itemFocusPtr) {};
+    RealItemType* m_itemFocusPtr;
 };
 
 class PickUpItemByTypeAction : public BaseAction

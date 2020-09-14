@@ -308,7 +308,8 @@ void PickUpItemByTypePrim::Effect(HTNWorldState &htnWorldState)
 {
 	for (auto &item : htnWorldState.m_items)
 	{
-		if (item->m_itemType == m_itemType
+		if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
+            && item->m_itemType == m_itemType
             && item->m_locationClass.location == htnWorldState.m_location
 			&& item->m_carryingPlayer == nullptr)
 		{
@@ -324,7 +325,7 @@ bool PickUpItemByTypePrim::Preconditions(HTNWorldState const& htnWorldState)
 	for (auto &item : htnWorldState.m_items)
 	{
         if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
-            		&& item->m_itemType == m_itemType
+            && item->m_itemType == m_itemType
             && item->m_locationClass.location == htnWorldState.m_location
 			&& item->m_carryingPlayer == nullptr)
 		{

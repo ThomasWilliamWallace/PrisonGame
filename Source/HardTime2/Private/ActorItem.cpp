@@ -8,11 +8,6 @@ std::string AActorItem::ToString()
     return ItemTypeToString(m_itemType);
 }
 
-std::string SimActorItem::ToString()
-{
-	return ItemTypeToString(m_itemType);
-}
-
 // Called when the game starts or when spawned
 void AActorItem::BeginPlay()
 {

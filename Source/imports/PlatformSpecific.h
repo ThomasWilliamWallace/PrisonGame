@@ -19,6 +19,9 @@ typedef std::shared_ptr<StackNode> StackNodePtr;
 typedef std::shared_ptr<AbstractItem> AbstractItemPtr;
 typedef std::shared_ptr<SimItem> SimItemPtr;
 
+enum class EItemType : uint8;
+enum class ELocations : uint8;
+
 #ifdef TEXT_ONLY_HTN
 
 // Allow Unreal-specific macros to evaluate to nothing
@@ -78,6 +81,8 @@ void RemoveCurrent(Container &container, Iterator iter)
 	iter = container.erase(iter);
 };
 
+typedef AbstractItem RealItemType;
+
 #else
 
 #include "Runtime/Core/Public/Containers/Map.h"
@@ -132,10 +137,11 @@ void RemoveCurrent(Container &container, Iterator iter)
 	iter.RemoveCurrent();
 };
 
-#endif
+class AActorItem;
 
-enum class EItemType : uint8;
-enum class ELocations : uint8;
+typedef AActorItem RealItemType;
+
+#endif
 
 HTNPrimitive* GetRaw(HTNPrimitivePtr ptr);
 HTNCompound* GetRaw(HTNCompoundPtr ptr);
@@ -152,7 +158,7 @@ StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr);
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound);
 
 AbstractItemPtr MakeSharedAbstractItemPtr(EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer);
-SimItemPtr MakeSharedSimItemPtr(AbstractItem* realItem, EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer);
+SimItemPtr MakeSharedSimItemPtr(RealItemType* realItem, EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer);
 
 // Encapsulated because Unreal Engine uses a different exception system
 [[noreturn]] void ThrowException(const std::string& errorMessage);

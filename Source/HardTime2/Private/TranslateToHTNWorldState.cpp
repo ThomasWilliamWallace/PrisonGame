@@ -8,16 +8,14 @@
 std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simworld, PlayerMap& playerMap, UPlayerData* requester) {
     //TODO reflect players sensors rather than being hardwired to the world
 
-    std::vector<AbstractItem*> world_items;
+    std::vector<SimItem*> world_items;
     //    std::cout << "simworld.items:\n";
     for (auto& itemPtr : simworld.items)
     {
         //        std::cout << itemPtr << "\n";
-        world_items.push_back(new AbstractItem(itemPtr->m_itemType, itemPtr->m_locationClass.location));  //TODO memory management, TODO copy all data from real object
+        world_items.push_back(new SimItem(itemPtr));  //TODO memory management, TODO copy all data from real object
     }
     //    std::cout << "\n";
-
-    AActorItem* itemCarriedPtr = nullptr;
 
     std::vector<AbstractPlayerData*> attackers;
     std::vector<AbstractPlayerData*> playersInTheRoom;

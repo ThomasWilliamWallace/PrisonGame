@@ -4,9 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "AbstractItem.h"
 #include "EItemType.h"
+#include "PlayerData.h"
 #include "ActorItem.generated.h"
-
-class UPlayerData;
 
 UCLASS()
 class AActorItem : public AActor
@@ -25,21 +24,5 @@ public:
 
 	LocationClass m_locationClass;
 	UPlayerData* m_carryingPlayer;
-    std::string ToString();
-};
-
-class SimActorItem
-{
-public:
-	EItemType m_itemType;
-	LocationClass m_locationClass;
-	UPlayerData* m_carryingPlayer;
-	AActorItem& m_realItem;
-	SimActorItem(AActorItem& realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer = nullptr):
-		m_itemType(itemType),
-		m_locationClass(location),
-		m_carryingPlayer(carryingPlayer),
-		m_realItem(realItem)
-    {};
     std::string ToString();
 };

@@ -26,17 +26,9 @@ public:
 class SimItem : public AbstractItem
 {
 public:
-    SimItem(AbstractItem* realItem):
-        AbstractItem(realItem->m_itemType, realItem->m_locationClass.location, realItem->m_carryingPlayer),
-        m_realItem(realItem)
-    {};
-    SimItem(AbstractItem* realItem, EItemType itemE, ELocations location, AbstractPlayerData* carryingPlayer=nullptr):
-        AbstractItem(itemE, location, carryingPlayer),
-        m_realItem(realItem)
-    {};
-    SimItem(SimItem& item):
-        SimItem(item.m_realItem, item.m_itemType, item.m_locationClass.location, item.m_carryingPlayer)
-    {};
-    
-    AbstractItem* m_realItem;
+    SimItem(RealItemType* realItem);
+    SimItem(RealItemType* realItem, EItemType itemE, ELocations location, AbstractPlayerData* carryingPlayer = nullptr);
+    SimItem(SimItem& item);
+
+    RealItemType* m_realItem;
 };

@@ -152,8 +152,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void GoToLocation(ELocations location);
 
-	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
-		void PickUpItem(AActorItem* item);
+	//UFUNCTION(BlueprintCallable, Category = LowLevelAI)
+		void PickUpItemByPtr(std::shared_ptr<BaseAction> baseAction);
 
 	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void DropItem();
@@ -161,11 +161,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void UseRoom();
 
-	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
-		void RequestItem(AHardTime2Character* character);
+	//UFUNCTION(BlueprintCallable, Category = LowLevelAI)
+		void RequestItem(std::shared_ptr<BaseAction> baseAction);
 
-	UFUNCTION(BlueprintCallable, Category = LowLevelAI)
-		void Attack(AHardTime2Character* character);
+	//UFUNCTION(BlueprintCallable, Category = LowLevelAI)
+		void Attack(std::shared_ptr<BaseAction> baseAction);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
 		EAIState m_aiState;
@@ -245,16 +245,16 @@ public:
 		void DisplayStatus(const FString& displayString);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
-		void PickupItemAction(AActorItem* item);
+		void DoPickupItemAction(AActorItem* item);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
-		void DropItemAction();
+		void DoDropItemAction();
 
 	UFUNCTION(BlueprintCallable, Category = Action)
-		void RequestItemAction(AHardTime2Character* targetCharacter);
+		void DoRequestItemAction(AHardTime2Character* targetCharacter);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
-		void AttackAction(AHardTime2Character* targetCharacter);
+		void DoAttackAction(AHardTime2Character* targetCharacter);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = Action)
 		void AttackEffect(AHardTime2Character* targetCharacter);

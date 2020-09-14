@@ -4,6 +4,7 @@
 #include "Locations.h"
 #include <sstream>
 #include "HardTime2Character.h"
+#include "ActorItem.h"
 #include "pLog.h"
 
 std::string UPlayerData::CharacterName()
@@ -36,7 +37,7 @@ void UPlayerData::PrintPlayer()
 	}
     ss << "cash=" << cash << "\n";
     ss << "sentence=" << sentence << "\n";
-	ss << "m_key=" << m_key << "\n";
+	ss << "m_key=" << abstractPlayerData.m_key << "\n";
     ss << "\n";
 	pLog(ss);
 //    pStats.PrintStats();
@@ -49,9 +50,9 @@ void UPlayerData::UpdateMissions(USimWorld &world)
     if (tempMissionClass->IsMissionComplete(world))
     {
 		std::stringstream ss;
-		ss << " has completed his mission to " << abstractPlayerData.missionClass->MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
+		ss << " has completed his mission to " << abstractPlayerData.missionClass->MissionName() << " and now has sanity=" << FormatDouble(abstractPlayerData.pStats.getSanity()) << "!";
 		pLog(ss, true);
-        pStats.deltaSanity(5);
+		abstractPlayerData.pStats.deltaSanity(5);
         abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(this->abstractPlayerData));
 		pLog(tempMissionClass->MissionNarrative(), true);
     }
@@ -59,12 +60,12 @@ void UPlayerData::UpdateMissions(USimWorld &world)
 
 bool UPlayerData::IsRequestedRecently(UPlayerData* requestedPlayer, EItemType m_itemType)
 {
-	return (*(relMap.Find(requestedPlayer->m_key)))->isRequestedRecently;
+	return (*(relMap.Find(requestedPlayer->abstractPlayerData.m_key)))->isRequestedRecently;
 }
 
 void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 {
-	(*(relMap.Find(requestedPlayer->m_key)))->SetRecentlyRequested();
+	(*(relMap.Find(requestedPlayer->abstractPlayerData.m_key)))->SetRecentlyRequested();
 }
 
 UPlayerData::UPlayerData()

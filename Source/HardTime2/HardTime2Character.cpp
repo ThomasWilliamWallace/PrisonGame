@@ -328,8 +328,8 @@ void AHardTime2Character::DeltaHealth(float delta)
 {
 	pLog("AHardTime2Character::DeltaHealth", true);
 	std::stringstream ss;
-	m_player->pStats.deltaHealth(delta);
-	ss << "m_player->pStats.getHealth():" << m_player->pStats.getHealth() << "\n";
+	m_player->abstractPlayerData.pStats.deltaHealth(delta);
+	ss << "m_player->abstractPlayerData.pStats.getHealth():" << m_player->abstractPlayerData.pStats.getHealth() << "\n";
 	pLog(ss);
 }
 
@@ -337,8 +337,8 @@ void AHardTime2Character::DeltaStrength(float delta)
 {
 	pLog("AHardTime2Character::DeltaStrength", true);
 	std::stringstream ss;
-	m_player->pStats.deltaStrength(delta);
-	ss << "m_player->pStats.getStrength():" << m_player->pStats.getStrength() << "\n";
+	m_player->abstractPlayerData.pStats.deltaStrength(delta);
+	ss << "m_player->abstractPlayerData.pStats.getStrength():" << m_player->abstractPlayerData.pStats.getStrength() << "\n";
 	pLog(ss);
 }
 
@@ -346,8 +346,8 @@ void AHardTime2Character::DeltaAgility(float delta)
 {
 	pLog("AHardTime2Character::DeltaAgility", true);
 	std::stringstream ss;
-	m_player->pStats.deltaAgility(delta);
-	ss << "m_player->pStats.getAgility():" << m_player->pStats.getAgility() << "\n";
+	m_player->abstractPlayerData.pStats.deltaAgility(delta);
+	ss << "m_player->abstractPlayerData.pStats.getAgility():" << m_player->abstractPlayerData.pStats.getAgility() << "\n";
 	pLog(ss);
 }
 
@@ -355,8 +355,8 @@ void AHardTime2Character::DeltaIntelligence(float delta)
 {
 	pLog("AHardTime2Character::DeltaIntelligence", true);
 	std::stringstream ss;
-	m_player->pStats.deltaIntelligence(delta);
-	ss << "m_player->pStats.getIntelligence():" << m_player->pStats.getIntelligence() << "\n";
+	m_player->abstractPlayerData.pStats.deltaIntelligence(delta);
+	ss << "m_player->abstractPlayerData.pStats.getIntelligence():" << m_player->abstractPlayerData.pStats.getIntelligence() << "\n";
 	pLog(ss);
 }
 
@@ -422,9 +422,11 @@ void AHardTime2Character::GoToLocation(ELocations location)
 	UpdateStatus();
 }
 
-void AHardTime2Character::PickUpItem(AActorItem* item)
+void AHardTime2Character::PickUpItemByPtr(std::shared_ptr<BaseAction> baseAction)
 {
-	m_targetItem = item;
+	PickUpItemByPtrAction* pickUpItemByPtrAction = static_cast<PickUpItemByPtrAction*>(baseAction.get());
+	AActorItem* m_realItem = static_cast<AActorItem*>(pickUpItemByPtrAction->m_itemFocusPtr);
+	m_targetItem = m_realItem;
 	m_aiCommand = EAICommand::pickupItem;
 	m_aiState = EAIState::newCommand;
 	UpdateStatus();
@@ -444,21 +446,39 @@ void AHardTime2Character::UseRoom()
 	UpdateStatus();
 }
 
-void AHardTime2Character::RequestItem(AHardTime2Character* character)
+void AHardTime2Character::RequestItem(std::shared_ptr<BaseAction> baseAction)
 {
-	m_targetPlayer = character;
-	m_targetItem = character->m_carriedItem;
-	m_aiCommand = EAICommand::requestItem;
-	m_aiState = EAIState::newCommand;
-	UpdateStatus();
+	RequestItemAction* requestItemAction = static_cast<RequestItemAction*>(baseAction.get());
+	for (TObjectIterator<AHardTime2Character> ActorItr; ActorItr; ++ActorItr)  //Doesn't work- TODO fix this
+	{
+		if (ActorItr->m_player->abstractPlayerData.m_key == requestItemAction->m_targetPlayer->m_key)
+		{
+			m_targetPlayer = *ActorItr;
+			m_targetItem = m_targetPlayer->m_carriedItem;
+			m_aiCommand = EAICommand::requestItem;
+			m_aiState = EAIState::newCommand;
+			UpdateStatus();
+			break;
+		}
+	}
+	ThrowException("Target player of RequestItemAction not found using key");
 }
 
-void AHardTime2Character::Attack(AHardTime2Character* character)
+void AHardTime2Character::Attack(std::shared_ptr<BaseAction> baseAction)
 {
-	m_targetPlayer = character;
-	m_aiCommand = EAICommand::attack;
-	m_aiState = EAIState::newCommand;
-	UpdateStatus();
+	AttackAction* attackAction = static_cast<AttackAction*>(baseAction.get());
+	for (TObjectIterator<AHardTime2Character> ActorItr; ActorItr; ++ActorItr)  //Doesn't work- TODO fix this
+	{
+		if (ActorItr->m_player->abstractPlayerData.m_key == attackAction->m_targetPlayer->m_key)
+		{
+			m_targetPlayer = *ActorItr;
+			m_aiCommand = EAICommand::attack;
+			m_aiState = EAIState::newCommand;
+			UpdateStatus();
+			break;
+		}
+	}
+	ThrowException("Target player of AttackAction not found using key");
 }
 
 // Called every frame
@@ -475,6 +495,7 @@ void AHardTime2Character::Tick(float DeltaTime)
 		m_player->abstractPlayerData.action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry->m_playerMap, m_world);
 		m_player->aiController.lastActionInterrupted = false;
 		pLog("HTN Planner chose an action:", true);
+		if (m_player->abstractPlayerData.action == nullptr) { ThrowException("Nullptr action returned by HTN planner"); }
 		switch (m_player->abstractPlayerData.action->m_action)
 		{
 		case EActions::goToBedroom:
@@ -502,12 +523,12 @@ void AHardTime2Character::Tick(float DeltaTime)
 			DropItem();
 			break;
 		case EActions::pickUpItemByPtr:
-			pLog("pickUpItem", true);
-			PickUpItem(m_player->itemFocusPtr);
+			pLog("pickUpItemByPtr", true);
+			PickUpItemByPtr(m_player->abstractPlayerData.action);
 			break;
 		case EActions::requestItem:
 			pLog("requestItem", true);
-			RequestItem(m_player->playerTargetPtr->physicalCharacter);
+			RequestItem(m_player->abstractPlayerData.action);
 			break;
 		case EActions::useRoom:
 			pLog("useRoom", true);
@@ -515,7 +536,7 @@ void AHardTime2Character::Tick(float DeltaTime)
 			break;
 		case EActions::attack:
 			pLog("attack", true);
-			Attack(m_player->playerTargetPtr->physicalCharacter);
+			Attack(m_player->abstractPlayerData.action);
 			break;
 		default:
 			pLog("NoAction", true);
@@ -586,7 +607,7 @@ void AHardTime2Character::OnNewCommand_Implementation()
 		case EAICommand::dropItem:
 			if (m_carriedItem != nullptr)
 			{
-				DropItemAction();
+				DoDropItemAction();
 			}
 			m_aiState = EAIState::cooldown;
 			UpdateStatus();
@@ -722,7 +743,7 @@ void AHardTime2Character::PickUpItemMoveCompleted(FAIRequestID a, const FPathFol
 
 	m_aiState = EAIState::cooldown;
 	UpdateStatus();
-	PickupItemAction(m_targetItem);
+	DoPickupItemAction(m_targetItem);
 }
 
 void AHardTime2Character::RequestItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
@@ -736,7 +757,7 @@ void AHardTime2Character::RequestItemMoveCompleted(FAIRequestID a, const FPathFo
 
 	m_aiState = EAIState::commandInProgress;
 	UpdateStatus();
-	RequestItemAction(m_targetPlayer);
+	DoRequestItemAction(m_targetPlayer);
 }
 
 void AHardTime2Character::AttackMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
@@ -750,7 +771,7 @@ void AHardTime2Character::AttackMoveCompleted(FAIRequestID a, const FPathFollowi
 
 	m_aiState = EAIState::commandInProgress;
 	UpdateStatus();
-	AttackAction(m_targetPlayer);
+	DoAttackAction(m_targetPlayer);
 }
 
 void AHardTime2Character::OnUsingRoom_Implementation()
@@ -823,7 +844,7 @@ void AHardTime2Character::UpdateStatus()
 	DisplayStatus(status);
 }
 
-void AHardTime2Character::PickupItemAction(AActorItem* item)
+void AHardTime2Character::DoPickupItemAction(AActorItem* item)
 {
 	if (item->m_carryingPlayer != nullptr || m_carriedItem != nullptr)
 	{
@@ -880,7 +901,7 @@ void AHardTime2Character::PickupItemAction(AActorItem* item)
 	}
 }
 
-void AHardTime2Character::DropItemAction()
+void AHardTime2Character::DoDropItemAction()
 {
 	if (m_carriedItem == nullptr)
 	{
@@ -914,7 +935,7 @@ void AHardTime2Character::DropItemAction()
 	}
 }
 
-void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter)
+void AHardTime2Character::DoRequestItemAction(AHardTime2Character* targetCharacter)
 {
 	if (targetCharacter->m_carriedItem == nullptr)
 	{
@@ -941,7 +962,7 @@ void AHardTime2Character::RequestItemAction(AHardTime2Character* targetCharacter
 void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Character* requestingCharacter, const FText &question)
 {
 	pLog("RespondToItemRequest", true);
-	DropItemAction();
+	DoDropItemAction();
 	SetLastActionInterrupted(true);
 	requestingCharacter->RequestItemHandleResponse(this);
 }
@@ -952,9 +973,9 @@ void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetC
 	m_player->SetRequested(targetCharacter->m_player);
 	if (m_targetItem->m_carryingPlayer == nullptr)
 	{
-		DropItemAction();
+		DoDropItemAction();
 		pLog("Item pickedup");
-		PickupItemAction(m_targetItem);
+		DoPickupItemAction(m_targetItem);
 		m_aiState = EAIState::cooldown;
 		UpdateStatus();
 	} else {
@@ -965,7 +986,7 @@ void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetC
 	}
 }
 
-void AHardTime2Character::AttackAction(AHardTime2Character* targetCharacter)
+void AHardTime2Character::DoAttackAction(AHardTime2Character* targetCharacter)
 {
 	pLog("ENTERING AHardTime2Character::AttackAction");
 	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();

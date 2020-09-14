@@ -4,7 +4,6 @@
 #include "PStats.h"
 #include "Missions.h"
 #include "BasicAI.h"
-#include "ActorItem.h"
 #include "AbstractAction.h"
 #include "Constants.h"
 #include "Object.h"
@@ -17,6 +16,7 @@
 class USimWorld;
 class AActorItem;
 class AHardTime2Character;
+class MissionClass;
 
 UCLASS(BlueprintType, Blueprintable)
 class UPlayerData : public UObject
@@ -24,9 +24,6 @@ class UPlayerData : public UObject
 	GENERATED_BODY()
 
 public:
-    PStats pStats;
-
-	int m_key; //players PlayerRegistry index
     int cash = 0; //cash, in dollars, no bounds.
     int sentence = 5; //days left in prison sentence, only bound is above -1.
     FName m_playerName; //name of the character, used in speech.
