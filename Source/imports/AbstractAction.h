@@ -6,7 +6,9 @@
 #include "EActions.h"
 
 class AbstractMission;
+#ifndef TEXT_ONLY_HTN
 class AActorItem;
+#endif
 
 std::string ActionToString(EActions action);
 

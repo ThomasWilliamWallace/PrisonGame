@@ -8,12 +8,12 @@
 std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simworld, PlayerMap& playerMap, UPlayerData* requester) {
     //TODO reflect players sensors rather than being hardwired to the world
 
-    std::vector<SimItem*> world_items;
+    std::vector<std::shared_ptr<SimItem>> world_items;
     //    std::cout << "simworld.items:\n";
     for (auto& itemPtr : simworld.items)
     {
         //        std::cout << itemPtr << "\n";
-        world_items.push_back(new SimItem(itemPtr));  //TODO memory management, TODO copy all data from real object
+        world_items.push_back(std::make_shared<SimItem>(itemPtr));  //TODO copy all data from real object
     }
     //    std::cout << "\n";
 

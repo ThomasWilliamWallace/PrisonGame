@@ -19,6 +19,10 @@ typedef std::shared_ptr<StackNode> StackNodePtr;
 typedef std::shared_ptr<AbstractItem> AbstractItemPtr;
 typedef std::shared_ptr<SimItem> SimItemPtr;
 
+#ifdef TEXT_ONLY_HTN
+typedef uint8_t uint8;
+#endif
+
 enum class EItemType : uint8;
 enum class ELocations : uint8;
 
@@ -31,8 +35,6 @@ enum class ELocations : uint8;
 #include <map>
 
 class Relationship;
-
-typedef uint8_t uint8;
 
 typedef std::map<int, AbstractPlayerData*> PlayerMap;
 typedef std::pair<int, AbstractPlayerData*> IntPlayerPair;
