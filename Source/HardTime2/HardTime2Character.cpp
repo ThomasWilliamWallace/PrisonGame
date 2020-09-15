@@ -22,6 +22,7 @@
 #include "Runtime/Engine/Classes/Components/StaticMeshComponent.h"
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/Core/Public/Internationalization/Text.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AHardTime2Character
@@ -449,16 +450,21 @@ void AHardTime2Character::UseRoom()
 void AHardTime2Character::RequestItem(std::shared_ptr<BaseAction> baseAction)
 {
 	RequestItemAction* requestItemAction = static_cast<RequestItemAction*>(baseAction.get());
-	for (TObjectIterator<AHardTime2Character> ActorItr; ActorItr; ++ActorItr)  //Doesn't work- TODO fix this
+
+	TArray<AActor*> foundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHardTime2Character::StaticClass(), foundActors);
+
+	for (AActor* actor : foundActors)
 	{
-		if (ActorItr->m_player->abstractPlayerData.m_key == requestItemAction->m_targetPlayer->m_key)
+		AHardTime2Character* targetPlayer = static_cast<AHardTime2Character*>(actor);
+		if (targetPlayer->m_player->abstractPlayerData.m_key == requestItemAction->m_targetPlayer->m_key)
 		{
-			m_targetPlayer = *ActorItr;
+			m_targetPlayer = targetPlayer;
 			m_targetItem = m_targetPlayer->m_carriedItem;
 			m_aiCommand = EAICommand::requestItem;
 			m_aiState = EAIState::newCommand;
 			UpdateStatus();
-			break;
+			return;
 		}
 	}
 	ThrowException("Target player of RequestItemAction not found using key");
@@ -467,15 +473,20 @@ void AHardTime2Character::RequestItem(std::shared_ptr<BaseAction> baseAction)
 void AHardTime2Character::Attack(std::shared_ptr<BaseAction> baseAction)
 {
 	AttackAction* attackAction = static_cast<AttackAction*>(baseAction.get());
-	for (TObjectIterator<AHardTime2Character> ActorItr; ActorItr; ++ActorItr)  //Doesn't work- TODO fix this
+
+	TArray<AActor*> foundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHardTime2Character::StaticClass(), foundActors);
+
+	for (AActor* actor : foundActors)
 	{
-		if (ActorItr->m_player->abstractPlayerData.m_key == attackAction->m_targetPlayer->m_key)
+		AHardTime2Character* targetPlayer = static_cast<AHardTime2Character*>(actor);
+		if (targetPlayer->m_player->abstractPlayerData.m_key == attackAction->m_targetPlayer->m_key)
 		{
-			m_targetPlayer = *ActorItr;
+			m_targetPlayer = targetPlayer;
 			m_aiCommand = EAICommand::attack;
 			m_aiState = EAIState::newCommand;
 			UpdateStatus();
-			break;
+			return;
 		}
 	}
 	ThrowException("Target player of AttackAction not found using key");
