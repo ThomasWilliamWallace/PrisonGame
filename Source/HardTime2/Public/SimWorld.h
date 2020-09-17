@@ -40,7 +40,7 @@ public:
 
     void Clean();
     USimWorld();
-    std::vector< AActorItem* > items;
+    std::vector< RealItemType* > items;
 
 	UPROPERTY()
 		UPlayerRegistry* m_playerRegistry;

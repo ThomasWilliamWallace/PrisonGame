@@ -3,17 +3,18 @@
 #include "SimWorld.h"
 #include "PlayerRegistry.h"
 #include "ActorItem.h"
+#include "pLog.h"
 #include <vector>
 
 std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simworld, PlayerMap& playerMap, UPlayerData* requester) {
     //TODO reflect players sensors rather than being hardwired to the world
 
-    std::vector<std::shared_ptr<SimItem>> world_items;
+    std::vector<RealItemType*> world_items;
     //    std::cout << "simworld.items:\n";
     for (auto& itemPtr : simworld.items)
     {
         //        std::cout << itemPtr << "\n";
-        world_items.push_back(std::make_shared<SimItem>(itemPtr));  //TODO copy all data from real object
+        world_items.push_back(itemPtr);
     }
     //    std::cout << "\n";
 
@@ -41,5 +42,7 @@ std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, 
         requesterAbstractPlayerData = &(requester->abstractPlayerData);
     }
 
-    return std::make_unique<HTNWorldState>(&(playerPtr->abstractPlayerData), playerMap, world_items, requesterAbstractPlayerData, attackers, playersInTheRoom);
+    std::unique_ptr<HTNWorldState> temp = std::make_unique<HTNWorldState>(&(playerPtr->abstractPlayerData), playerMap, world_items, requesterAbstractPlayerData, attackers, playersInTheRoom);
+    pLog("TEST TEST TEST");
+    return temp;
 }

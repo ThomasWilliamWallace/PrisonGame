@@ -29,7 +29,7 @@ public:
     std::vector< AbstractPlayerData* > m_playersInTheRoom;
     bool IsInTheRoom(AbstractPlayerData const& playerPtr) const;
     HTNWorldState(HTNWorldState const& ws2);
-    HTNWorldState(AbstractPlayerData* playerPtr, PlayerMap& playerMap, std::vector<std::shared_ptr<SimItem>>& worldItems,
+    HTNWorldState(AbstractPlayerData* playerPtr, PlayerMap& playerMap, std::vector<RealItemType*>& realItems,
                   AbstractPlayerData* requester, std::vector<AbstractPlayerData*> attackers, std::vector<AbstractPlayerData*> playersInTheRoom);
     HTNWorldState& operator=(HTNWorldState const& ws2);
     void Print();
