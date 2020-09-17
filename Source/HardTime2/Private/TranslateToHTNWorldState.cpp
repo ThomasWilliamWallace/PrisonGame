@@ -42,7 +42,5 @@ std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, 
         requesterAbstractPlayerData = &(requester->abstractPlayerData);
     }
 
-    std::unique_ptr<HTNWorldState> temp = std::make_unique<HTNWorldState>(&(playerPtr->abstractPlayerData), playerMap, world_items, requesterAbstractPlayerData, attackers, playersInTheRoom);
-    pLog("TEST TEST TEST");
-    return temp;
+    return std::make_unique<HTNWorldState>(&(playerPtr->abstractPlayerData), playerMap, world_items, requesterAbstractPlayerData, attackers, playersInTheRoom);
 }
