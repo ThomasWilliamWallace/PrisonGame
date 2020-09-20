@@ -19,13 +19,13 @@ class UPlayerData
 	GENERATED_BODY()
 
 public:
-    int cash = 0; //cash, in dollars, no bounds.
-    int sentence = 5; //days left in prison sentence, only bound is above -1.
+    int cash; //cash, in dollars, no bounds.
+    int sentence; //days left in prison sentence, only bound is above -1.
     AIController aiController; //controlling AI for this character
     std::shared_ptr<MissionClass> missionOffer; // a mission being offered to 'playerTarget'
 
 	UPROPERTY()
-		RealItemType* itemPtr = nullptr; //pointer to an item carried by the player
+		RealItemType* itemPtr; //pointer to an item carried by the player
 
 	void UpdateMissions(USimWorld &world);
     void PrintPlayer();
@@ -37,7 +37,7 @@ public:
 		RelMap relMap; //Relationships have manual memory management, as they are kept in a TMap without UProperty(). TODO Change to unreal memory management
 
 	std::string CharacterName();
-	AbstractPlayerData abstractPlayerData = AbstractPlayerData();
+	AbstractPlayerData abstractPlayerData = AbstractPlayerData(this);
 };
 
 bool OtherInReach(AbstractPlayerData& playerPtr, AbstractPlayerData& otherPlayerPtr);

@@ -61,8 +61,12 @@ void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 
 UPlayerData::UPlayerData()
 {
+    cash = 0;
+    sentence = 5;
 	itemPtr = nullptr;
     abstractPlayerData.action = std::make_shared<BaseAction>(EActions::goToGym);
+    missionOffer = nullptr;
+    abstractPlayerData.missionClass = std::make_shared<MissionClass>(&abstractPlayerData);
 	pLog("Constructing UPlayerData");
 }
 

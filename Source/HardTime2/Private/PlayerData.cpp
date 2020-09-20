@@ -68,20 +68,19 @@ void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 	(*(relMap.Find(requestedPlayer->abstractPlayerData.m_key)))->SetRecentlyRequested();
 }
 
-UPlayerData::UPlayerData()
+UPlayerData::UPlayerData():
+	abstractPlayerData(this)
 {
-	itemPtr = nullptr;
-	itemFocusPtr = nullptr;
-    abstractPlayerData.action = std::make_shared<BaseAction>(EActions::goToGym);
 	pLog("Constructing UPlayerData");
-}
-
-UPlayerData::UPlayerData(const FObjectInitializer& ObjectInitializer)
-{
-	pLog("Constructing UPlayerData with FObjectInitializer");
-
+	cash = 0;
+	sentence = 5;
+	m_playerName = "No-name";
+	aiController = AI::doNothingAI;
+	missionOffer = nullptr;
 	itemPtr = nullptr;
+	playerTargetPtr = nullptr;
 	itemFocusPtr = nullptr;
+	physicalCharacter = nullptr;
     abstractPlayerData.action = std::make_shared<BaseAction>(EActions::goToGym);
 }
 

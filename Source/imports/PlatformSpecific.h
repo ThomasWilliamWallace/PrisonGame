@@ -9,6 +9,7 @@ struct StackNode;
 class AbstractItem;
 class SimItem;
 class AbstractPlayerData;
+class UPlayerData;
 
 typedef std::shared_ptr<HTNPrimitive> HTNPrimitivePtr;
 typedef std::shared_ptr<HTNCompound> HTNCompoundPtr;
@@ -18,6 +19,8 @@ typedef std::shared_ptr<StackNode> StackNodePtr;
 
 typedef std::shared_ptr<AbstractItem> AbstractItemPtr;
 typedef std::shared_ptr<SimItem> SimItemPtr;
+
+typedef UPlayerData ParentPlayerData;
 
 #ifdef TEXT_ONLY_HTN
 typedef uint8_t uint8;

@@ -16,12 +16,11 @@ class AbstractMission
 {
 protected:
     AbstractMission(AbstractPlayerData* owner);
-public:
     AbstractMission(RandomMission r, AbstractPlayerData* playerPtr);
     AbstractMission(EMissions mission, AbstractPlayerData* owner, double objective);
     AbstractMission(EMissions mission, AbstractPlayerData* owner, EItemType itemE, ELocations location);
     AbstractMission(const AbstractMission& missionClass);
-    
+public:
     EMissions m_mission;
     AbstractPlayerData* m_owner;
     double m_objective; //objective for stat increase missions

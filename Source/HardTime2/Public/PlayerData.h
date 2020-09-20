@@ -24,30 +24,29 @@ class UPlayerData : public UObject
 	GENERATED_BODY()
 
 public:
-    int cash = 0; //cash, in dollars, no bounds.
-    int sentence = 5; //days left in prison sentence, only bound is above -1.
+    int cash; //cash, in dollars, no bounds.
+    int sentence; //days left in prison sentence, only bound is above -1.
     FName m_playerName; //name of the character, used in speech.
     AIController aiController; //controlling AI for this character
     std::shared_ptr<MissionClass> missionOffer; // a mission being offered to 'playerTarget'
 
 	UPROPERTY()
-		AActorItem* itemPtr = nullptr; //pointer to an item carried by the player
+		AActorItem* itemPtr; //pointer to an item carried by the player
 
 	UPROPERTY()
-		UPlayerData* playerTargetPtr = nullptr; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
+		UPlayerData* playerTargetPtr; //index of the character being targetted. You must set this when attacking or assigning a mission to another player!
 
 	UPROPERTY()
-		AActorItem* itemFocusPtr = nullptr; //pointer to an item the player is trying to interact with
+		AActorItem* itemFocusPtr; //pointer to an item the player is trying to interact with
 
 	UPROPERTY()
-		AHardTime2Character* physicalCharacter = nullptr;
+		AHardTime2Character* physicalCharacter;
 
 	void UpdateMissions(USimWorld &world);
     void PrintPlayer();
 	bool IsRequestedRecently(UPlayerData* requestedPlayer, EItemType m_itemType);
 	void SetRequested(UPlayerData* requestedPlayer);
 	UPlayerData();
-	UPlayerData(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY()
 		TMap<int, URelationship*> relMap; //Relationships have manual memory management, as they are kept in a TMap without UProperty(). TODO Change to unreal memory management
@@ -55,7 +54,7 @@ public:
 	virtual class UWorld* GetWorld() const override;
 
 	std::string CharacterName();
-	AbstractPlayerData abstractPlayerData = AbstractPlayerData();
+	AbstractPlayerData abstractPlayerData;
 };
 
 

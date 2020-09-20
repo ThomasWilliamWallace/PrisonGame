@@ -14,7 +14,7 @@ bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, PlayerMap
 void DoAttackAction(UPlayerData* attackingPlayerPtr, PlayerMap &playerMap, USimWorld &world)
 {
     AttackAction* action = dynamic_cast<AttackAction*>(attackingPlayerPtr->abstractPlayerData.action.get());
-    UPlayerData* defendingPlayerPtr = dynamic_cast<UPlayerData*>(action->m_targetPlayer);
+    UPlayerData* defendingPlayerPtr = action->m_targetPlayer->m_parentPlayerData;
     RelMap relMap = defendingPlayerPtr->relMap;
     int key = attackingPlayerPtr->abstractPlayerData.m_key;
     URelationship* rel = relMap[key];
@@ -204,7 +204,6 @@ void DoPickUpItemAction(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld 
                 playerPtr->abstractPlayerData.narrative = "picked up a " + targetItem->ToString() + " in the " + targetItem->m_locationClass.ToString() + ".";
                 playerPtr->aiController.lastActionSucceeded = true;
             } else {
-                ThrowException("ERROR: tried to pick up a " + targetItem->ToString() + " but " + targetItem->m_carryingPlayer->m_playerName + " was already carrying it.");
                 playerPtr->abstractPlayerData.narrative = "ERROR: tried to pick up a " + targetItem->ToString() + " but " + targetItem->m_carryingPlayer->m_playerName + " was already carrying it.";
             }
         } else {
@@ -235,7 +234,7 @@ void DoDropItemAction(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld &w
 void DoRequestItemAction(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld &world)
 {
     RequestItemAction* action = dynamic_cast<RequestItemAction*>(playerPtr->abstractPlayerData.action.get());
-    UPlayerData* targetPlayer = dynamic_cast<UPlayerData*>(action->m_targetPlayer);
+    UPlayerData* targetPlayer = action->m_targetPlayer->m_parentPlayerData;
     if (targetPlayer == playerPtr)
     {
         ThrowException("ERROR: " + playerPtr->abstractPlayerData.m_playerName + " tried to request an item from himself.");
@@ -256,7 +255,6 @@ void DoRequestItemAction(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld
     }
     if (targetPlayer->abstractPlayerData.locationClass.location != playerPtr->abstractPlayerData.locationClass.location)
     {
-        ThrowException("ERROR: tried to request an item from " + targetPlayer->abstractPlayerData.m_playerName + ", but he isn't even in the same room.");
         playerPtr->abstractPlayerData.narrative = "ERROR: tried to request an item from " + targetPlayer->abstractPlayerData.m_playerName + ", but he isn't even in the same room.";
         return;
     }
