@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="Hardtime_split" Database="" Version="10.0.0">
+  <Project Name="htn_planner" Path="Source/htn_planner/htn_planner/htn_planner.project" Active="No"/>
+  <Project Name="hardtime_textworld" Path="Source/hardtime_textworld/hardtime_textworld.project" Active="Yes"/>
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Environment/>
+      <Project Name="hardtime_textworld" ConfigName="Debug"/>
+      <Project Name="htn_planner" ConfigName="Debug"/>
+      <Project Name="htn_planner" ConfigName="Debug"/>
+      <Project Name="hardtime_textworld" ConfigName="Debug"/>
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Environment/>
+      <Project Name="hardtime_textworld" ConfigName="Release"/>
+      <Project Name="htn_planner" ConfigName="Release"/>
+      <Project Name="htn_planner" ConfigName="Release"/>
+      <Project Name="hardtime_textworld" ConfigName="Release"/>
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>

@@ -31,15 +31,20 @@ enum class ELocations : uint8;
 // Allow Unreal-specific macros to evaluate to nothing
 #define UENUM(...)
 #define UMETA(DisplayName, ...)
+#define UCLASS(...)
+#define GENERATED_BODY(...)
+#define UFUNCTION(...)
+#define UPROPERTY(...)
 
 #include <map>
 
-class Relationship;
+class UPlayerData;
+class URelationship;
 
-typedef std::map<int, AbstractPlayerData*> PlayerMap;
-typedef std::pair<int, AbstractPlayerData*> IntPlayerPair;
-typedef std::map<int, Relationship*> RelMap;
-typedef std::pair<int, Relationship*> IntRelPair;
+typedef std::map<int, UPlayerData*> PlayerMap;
+typedef std::pair<int, UPlayerData*> IntPlayerPair;
+typedef std::map<int, URelationship*> RelMap;
+typedef std::pair<int, URelationship*> IntRelPair;
 
 template <typename Iterator>
 int GetKey(Iterator &iterator)
@@ -48,13 +53,13 @@ int GetKey(Iterator &iterator)
 };
 
 template <typename Iterator>
-AbstractPlayerData* GetPlayer(Iterator &iterator)
+UPlayerData* GetPlayer(Iterator &iterator)
 {
 	return iterator.second;
 };
 
 template <typename Iterator>
-Relationship* GetRel(Iterator &iterator)
+URelationship* GetRel(Iterator &iterator)
 {
 	return iterator.second;
 };
