@@ -260,7 +260,6 @@ void DoRequestItemAction(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld
     }
     if (targetPlayer->itemPtr == nullptr)
     {
-        ThrowException("ERROR: tried to request an item from " + targetPlayer->abstractPlayerData.m_playerName + ", but " + targetPlayer->abstractPlayerData.m_playerName + " is not carrying anything.");
         playerPtr->abstractPlayerData.narrative = "ERROR: tried to request an item from " + targetPlayer->abstractPlayerData.m_playerName + ", but " + targetPlayer->abstractPlayerData.m_playerName + " is not carrying anything.";
         return;
     }
