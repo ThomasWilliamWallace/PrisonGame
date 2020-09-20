@@ -41,14 +41,8 @@ std::shared_ptr<BaseAction> AIController::ChooseAction(UPlayerData& player, USim
     bool playersInReach[playerCount];
     int countPlayersInReach = 0;
     
-    int map_size = world.playerRegistry.m_playerMap.size();
-    std::cout << "map_size=" << map_size << "\n";
-    
     for (int i = 0; i < playerCount; i++)
     {
-        UPlayerData* playerNow = world.playerRegistry.m_playerMap[i];
-        AbstractPlayerData& abstractPlayerNow = playerNow->abstractPlayerData;
-        std::cout << "abstractPlayerNow.m_key=" << abstractPlayerNow.m_key << "\n";
         if (OtherInReach(player.abstractPlayerData, world.playerRegistry.m_playerMap[i]->abstractPlayerData))
         {
             playersInReach[i] = true;

@@ -237,22 +237,15 @@ void CleanUpFrame(const PlayerMap &playerMap)
 void Simulate()
 {
     // Setup
-    USimWorld world;  // TODO world.playerRegistry.m_playerMap.size != 0.  Looks like it somehow isn't getting constructed / initialized.
-    UPlayerRegistry& registry = world.playerRegistry;
-    PlayerMap& map = registry.m_playerMap;
-    int map_size = map.size();
+    USimWorld world;
+    UPlayerRegistry& playerRegistry = world.playerRegistry;
+    PlayerMap& playerMap = playerRegistry.m_playerMap;
     world.items.push_back(new Item(EItemType::extinguisher, ELocations::mainHall));
-    int map_size2 = map.size();
     world.items.push_back(new Item(EItemType::bottle      , ELocations::mainHall));
-    int map_size3 = map.size();
     world.items.push_back(new Item(EItemType::hammer      , ELocations::circuitTrack));
-    int map_size4 = map.size();
     world.items.push_back(new Item(EItemType::ball        , ELocations::mainHall));
-    int map_size5 = map.size();
     world.items.push_back(new Item(EItemType::mirror      , ELocations::bedroom));
-    int map_size6 = map.size();
     world.items.push_back(new Item(EItemType::rock        , ELocations::library));
-    int map_size7 = map.size();
     
     //Add players
     {
@@ -262,25 +255,18 @@ void Simulate()
         player->aiController = AIController(AI::htnAI);
         player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
         world.playerRegistry.RegisterPlayer(player);
-        map_size = map.size();
         
         player = new UPlayerData();
         player->abstractPlayerData.m_playerName = "Thomas";
         player->aiController = AIController(AI::humanAI);
         player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
         world.playerRegistry.RegisterPlayer(player);
-        map_size2 = map.size();
         
         player = new UPlayerData();
         player->aiController = AIController(AI::htnAI);
         player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
         world.playerRegistry.RegisterPlayer(player);
-        map_size3 = map.size();
     }
-    map_size4 = map.size();
-
-    std::cout << "map_size=" << map_size << ", map_size2"<< map_size2 << ", map_size3"<< map_size3 << ", map_size4"<< map_size4 << ", map_size5"<< map_size5 << ", map_size6"<< map_size6 << ", map_size7"<< map_size7 << "\n";
-    PlayerMap& playerMap = world.playerRegistry.m_playerMap;
     
     //print initial missions
     for(auto playerIter = playerMap.cbegin(); playerIter != playerMap.cend(); ++playerIter)
