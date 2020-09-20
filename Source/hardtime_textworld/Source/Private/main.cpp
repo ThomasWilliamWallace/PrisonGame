@@ -11,6 +11,7 @@
 #include "HTNPlanner.h"
 #include "pLog.h"
 #include "PlayerRegistry.h"
+#include "Names.h"
 
 void PriorityActions(int frame, PlayerMap &playerMap, USimWorld &world)
 {
@@ -252,6 +253,7 @@ void Simulate()
         UPlayerData* player;
 
         player = new UPlayerData();
+        player->abstractPlayerData.m_playerName = RandomName();
         player->aiController = AIController(AI::htnAI);
         player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
         world.playerRegistry.RegisterPlayer(player);
@@ -263,6 +265,7 @@ void Simulate()
         world.playerRegistry.RegisterPlayer(player);
         
         player = new UPlayerData();
+        player->abstractPlayerData.m_playerName = RandomName();
         player->aiController = AIController(AI::htnAI);
         player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
         world.playerRegistry.RegisterPlayer(player);
