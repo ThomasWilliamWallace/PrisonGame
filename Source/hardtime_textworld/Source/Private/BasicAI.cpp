@@ -10,6 +10,7 @@
 #include "Constants.h"
 #include <vector>
 #include "TranslateToHTNWorldState.h"
+#include <limits>
 
 EActions AIController::ChooseRoom(AbstractPlayerData& player)
 {
@@ -277,6 +278,12 @@ std::shared_ptr<BaseAction> AIController::htnAIChooseAction(UPlayerData& player,
     }
 }
 
+void resetInput()
+{
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach)
 {
     int playerCount = world.playerRegistry.m_playerMap.size();
@@ -288,124 +295,143 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
     while (true)
     {
         std::cout << "Choose action:";
-        std::cin >> input;
-        switch(input[0]){
-        case 'v':
-            std::cout << "Room contains:\n";
-            playersInRoom = 0;
-            for (int i = 0; i < playerCount; i++)
-            {
-                if (playerMap[i]->abstractPlayerData.locationClass.location == player.abstractPlayerData.locationClass.location)
+        if (!(std::cin >> input)) {
+            resetInput();
+            std::cout << "Invalid action!\n";
+        } else {
+            switch(input[0]){
+            case 'v':
+                std::cout << "Room contains:\n";
+                playersInRoom = 0;
+                for (int i = 0; i < playerCount; i++)
                 {
-                    std::cout << "Player \"" << playerMap[i]->abstractPlayerData.m_playerName << "\", (index=" << i << ")\n";
-                    playersInRoom += 1;
-                }
-            }
-            if (playersInRoom == 0)
-            {
-                std::cout << "No players in room.\n";
-            }
-            itemsInRoom = 0;
-            for (auto &item : world.items)
-            {
-                if (item->m_locationClass.location == player.abstractPlayerData.locationClass.location && item->m_carryingPlayer == nullptr)
-                {
-                    std::cout << "Item \"" << item->ToString() << "\", (index=" << itemsInRoom << ")\n";
-                    itemsInRoom += 1;
-                }
-            }
-            if (itemsInRoom == 0)
-            {
-                std::cout << "No items in room.\n";
-            }
-            std::cout << "\n";
-            break;
-        case 'q':
-            exit(0);
-        case 'h':
-            std::cout << "Commands:\n";
-            std::cout << "v: view room\n";
-            std::cout << "a: " << ActionToString(EActions::attack) << "\n";
-            std::cout << "e: " << ActionToString(EActions::evade) << "\n";
-            std::cout << "b: " << ActionToString(EActions::goToBedroom) << "\n";
-            std::cout << "c: " << ActionToString(EActions::goToCircuitTrack) << "\n";
-            std::cout << "g: " << ActionToString(EActions::goToGym) << "\n";
-            std::cout << "l: " << ActionToString(EActions::goToLibrary) << "\n";
-            std::cout << "m: " << ActionToString(EActions::goToMainHall) << "\n";
-            std::cout << "p: " << ActionToString(EActions::pickUpItemByPtr) << "\n";
-            std::cout << "d: " << ActionToString(EActions::dropItem) << "\n";
-            std::cout << "f: " << ActionToString(EActions::makeFriends) << "\n";
-            std::cout << "o: " << ActionToString(EActions::offerMission) << "\n";
-            std::cout << "u: " << ActionToString(EActions::useRoom) << "\n";
-            std::cout << "r: " << ActionToString(EActions::requestItem) << "\n";
-            std::cout << "h: display help\n";
-            std::cout << "q: quit\n";
-            break;
-        case 'a':
-            while (true)
-            {
-                std::cout << "Choose target player:";
-                std::cin >> targetPlayer;                
-                return std::make_shared<AttackAction>(&(playerMap[targetPlayer]->abstractPlayerData));
-            }
-        case 'e': return std::make_shared<BaseAction>(EActions::evade);
-        case 'b': return std::make_shared<BaseAction>(EActions::goToBedroom);
-        case 'c': return std::make_shared<BaseAction>(EActions::goToCircuitTrack);
-        case 'g': return std::make_shared<BaseAction>(EActions::goToGym);
-        case 'l': return std::make_shared<BaseAction>(EActions::goToLibrary);
-        case 'm': return std::make_shared<BaseAction>(EActions::goToMainHall);
-        case 'p': 
-            while (true)
-            {
-                std::cout << "Choose target item (-1 means no item):";
-                int targetItem;
-                std::cin >> targetItem;
-                if (targetItem == -1)
-                {
-                   ThrowException("Invalid itemfocusptr given");
-                } else {
-                    int itemCountInRoom = 0;
-                    int itemIndex = 0;
-                    for (auto &item : world.items)
+                    if (playerMap[i]->abstractPlayerData.locationClass.location == player.abstractPlayerData.locationClass.location)
                     {
-                        if (item->m_locationClass.location == player.abstractPlayerData.locationClass.location && item->m_carryingPlayer == nullptr)
-                        {
-                            if (itemCountInRoom == targetItem)
-                            {
-                                return std::make_shared<PickUpItemByPtrAction>(world.items.at(itemIndex));
-                            }
-                            itemCountInRoom += 1;
-                        }
-                        itemIndex += 1;
+                        std::cout << "Player \"" << playerMap[i]->abstractPlayerData.m_playerName << "\", (index=" << i << ")\n";
+                        playersInRoom += 1;
                     }
-                    std::cout << "ERROR: invalid target item index. Please enter a new action:\n";
-                    break;
                 }
+                if (playersInRoom == 0)
+                {
+                    std::cout << "No players in room.\n";
+                }
+                itemsInRoom = 0;
+                for (auto &item : world.items)
+                {
+                    if (item->m_locationClass.location == player.abstractPlayerData.locationClass.location && item->m_carryingPlayer == nullptr)
+                    {
+                        std::cout << "Item \"" << item->ToString() << "\", (index=" << itemsInRoom << ")\n";
+                        itemsInRoom += 1;
+                    }
+                }
+                if (itemsInRoom == 0)
+                {
+                    std::cout << "No items in room.\n";
+                }
+                std::cout << "\n";
+                break;
+            case 'q':
+                exit(0);
+            case 'h':
+                std::cout << "Commands:\n";
+                std::cout << "v: view room\n";
+                std::cout << "a: " << ActionToString(EActions::attack) << "\n";
+                std::cout << "e: " << ActionToString(EActions::evade) << "\n";
+                std::cout << "b: " << ActionToString(EActions::goToBedroom) << "\n";
+                std::cout << "c: " << ActionToString(EActions::goToCircuitTrack) << "\n";
+                std::cout << "g: " << ActionToString(EActions::goToGym) << "\n";
+                std::cout << "l: " << ActionToString(EActions::goToLibrary) << "\n";
+                std::cout << "m: " << ActionToString(EActions::goToMainHall) << "\n";
+                std::cout << "p: " << ActionToString(EActions::pickUpItemByPtr) << "\n";
+                std::cout << "d: " << ActionToString(EActions::dropItem) << "\n";
+                std::cout << "f: " << ActionToString(EActions::makeFriends) << "\n";
+                std::cout << "o: " << ActionToString(EActions::offerMission) << "\n";
+                std::cout << "u: " << ActionToString(EActions::useRoom) << "\n";
+                std::cout << "r: " << ActionToString(EActions::requestItem) << "\n";
+                std::cout << "h: display help\n";
+                std::cout << "q: quit\n";
+                break;
+            case 'a':
+                while (true)
+                {
+                    std::cout << "Choose target player:";
+                    if (!(std::cin >> targetPlayer)) {
+                        resetInput();
+                        std::cout << "Invalid target player!\n";
+                    } else {
+                        return std::make_shared<AttackAction>(&(playerMap[targetPlayer]->abstractPlayerData));
+                    }
+                }
+            case 'e': return std::make_shared<BaseAction>(EActions::evade);
+            case 'b': return std::make_shared<BaseAction>(EActions::goToBedroom);
+            case 'c': return std::make_shared<BaseAction>(EActions::goToCircuitTrack);
+            case 'g': return std::make_shared<BaseAction>(EActions::goToGym);
+            case 'l': return std::make_shared<BaseAction>(EActions::goToLibrary);
+            case 'm': return std::make_shared<BaseAction>(EActions::goToMainHall);
+            case 'p': 
+                while (true)
+                {
+                    int targetItem;
+                    std::cout << "Choose target item:";
+                    if (!(std::cin >> targetItem)) {
+                        resetInput();
+                        std::cout << "Invalid target item!\n";
+                    } else {
+                        int itemCountInRoom = 0;
+                        int itemIndex = 0;
+                        for (auto &item : world.items)
+                        {
+                            if (item->m_locationClass.location == player.abstractPlayerData.locationClass.location && item->m_carryingPlayer == nullptr)
+                            {
+                                if (itemCountInRoom == targetItem)
+                                {
+                                    return std::make_shared<PickUpItemByPtrAction>(world.items.at(itemIndex));
+                                }
+                                itemCountInRoom += 1;
+                            }
+                            itemIndex += 1;
+                        }
+                        std::cout << "ERROR: invalid target item index. Please enter a new action:\n";
+                        break;
+                    }
+                }
+                break;
+            case 'd': return  std::make_shared<BaseAction>(EActions::dropItem);
+            case 'f':
+                while (true)
+                {
+                    std::cout << "Choose target player:";
+                    if (!(std::cin >> targetPlayer)) {
+                        resetInput();
+                        std::cout << "Invalid target player!\n";
+                    } else {
+                        return std::make_shared<MakeFriendsAction>(&(playerMap[targetPlayer]->abstractPlayerData));
+                    }
+                }
+            case 'o':
+                while (true)
+                {
+                    std::cout << "Choose target player:";
+                    if (!(std::cin >> targetPlayer)) {
+                        resetInput();
+                        std::cout << "Invalid target player!\n";
+                    } else {
+                        return std::make_shared<OfferMissionAction>(&(playerMap[targetPlayer]->abstractPlayerData), std::make_shared<MissionClass>(&(player.abstractPlayerData)));
+                    }
+                }
+            case 'r':
+                while (true)
+                {
+                    std::cout << "Which player do you request from? ";
+                    if (!(std::cin >> targetPlayer)) {
+                        resetInput();
+                        std::cout << "Invalid target player!\n";
+                    } else {
+                        return std::make_shared<RequestItemAction>(&(playerMap[targetPlayer]->abstractPlayerData));
+                    }
+                }
+            case 'u': return std::make_shared<BaseAction>(EActions::useRoom);
             }
-            break;
-        case 'd': return  std::make_shared<BaseAction>(EActions::dropItem);
-        case 'f':
-            while (true)
-            {
-                std::cout << "Choose target player:";
-                std::cin >> targetPlayer;
-                return std::make_shared<MakeFriendsAction>(&(playerMap[targetPlayer]->abstractPlayerData));
-            }
-        case 'o':
-            while (true)
-            {
-                std::cout << "Choose target player:";
-                std::cin >> targetPlayer;
-                return std::make_shared<OfferMissionAction>(&(playerMap[targetPlayer]->abstractPlayerData), std::make_shared<MissionClass>(&(player.abstractPlayerData)));
-            }
-        case 'r':
-            while (true)
-            {
-                std::cout << "Which player do you request from? ";
-                std::cin >> targetPlayer;
-                return std::make_shared<RequestItemAction>(&(playerMap[targetPlayer]->abstractPlayerData));
-            }
-        case 'u': return std::make_shared<BaseAction>(EActions::useRoom);
         }
     }
     return std::make_shared<BaseAction>(EActions::noAction);
