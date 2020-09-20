@@ -258,7 +258,10 @@ std::shared_ptr<BaseAction> EvadePrim::Operate(AbstractPlayerData* playerData)
 }
 
 //***********************************************************
-PickUpItemByPtrPrim::PickUpItemByPtrPrim(SimItemPtr itemFocus) : HTNPrimitive("PickUpItemByPtrPrim"), m_itemFocus(itemFocus) {}
+PickUpItemByPtrPrim::PickUpItemByPtrPrim(SimItemPtr itemFocus) : HTNPrimitive("PickUpItemByPtrPrim"), m_itemFocus(itemFocus)
+{
+    check(itemFocus != nullptr)
+}
 
 void PickUpItemByPtrPrim::Effect(HTNWorldState &htnWorldState)
 {

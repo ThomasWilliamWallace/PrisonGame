@@ -18,7 +18,6 @@ enum class AI
 
 class AIController
 {
-    AI algo;
     HTNPrimitiveList htnPlan;
     EActions ChooseRoom(AbstractPlayerData& player);
     std::shared_ptr<BaseAction> DoNothingAIChooseAction(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);
@@ -29,6 +28,7 @@ class AIController
     void CreateMissionOffer(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);
     int TargetForMakeFriend(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);
 public:
+    AI algo;
     std::shared_ptr<BaseAction> ChooseAction(UPlayerData& player, USimWorld& world);
     AIController(AI _algo);
     AIController();

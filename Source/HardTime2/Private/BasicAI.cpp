@@ -101,7 +101,7 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-    if (lastActionInterrupted || ((lastPrimitiveAction != nullptr) && !(lastPrimitiveAction->LastActionSucceeded(*htnWorldState))))
+    if (lastActionInterrupted || ((playerData->abstractPlayerData.lastAction != nullptr) && !(playerData->abstractPlayerData.lastAction->LastActionSucceeded(*htnWorldState))))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
@@ -149,7 +149,6 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Emerald, ss.str().c_str());
 		HTNPrimitivePtr currentPlanStep = htnPlan.front();
-		lastPrimitiveAction = currentPlanStep;
 		htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2");
 		return currentPlanStep->Operate(&(playerData->abstractPlayerData));

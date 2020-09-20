@@ -503,6 +503,7 @@ void AHardTime2Character::Tick(float DeltaTime)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;
+		m_player->abstractPlayerData.lastAction = m_player->abstractPlayerData.action;
 		m_player->abstractPlayerData.action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry->m_playerMap, m_world);
 		m_player->aiController.lastActionInterrupted = false;
 		pLog("HTN Planner chose an action:", true);
