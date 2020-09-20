@@ -41,7 +41,7 @@ void UPlayerData::UpdateMissions(USimWorld &world)
     if (tempMissionClass->IsMissionComplete(world))
     {
 		std::stringstream ss;
-		ss << " has completed his mission to " << abstractPlayerData.missionClass->MissionName() << " and now has sanity=" << FormatDouble(abstractPlayerData.pStats.getSanity()) << "!";
+		ss << abstractPlayerData.m_playerName << " has completed his mission to " << abstractPlayerData.missionClass->MissionName() << " and now has sanity=" << FormatDouble(abstractPlayerData.pStats.getSanity()) << "!";
 		pLog(ss, true);
 		abstractPlayerData.pStats.deltaSanity(5);
         abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(this->abstractPlayerData));
