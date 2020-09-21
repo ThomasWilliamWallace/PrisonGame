@@ -3,10 +3,6 @@
 #include <vector>
 #include "HTNPlanner.h"
 #include "HTNWorldState.h"
-#include "AbstractAction.h"
-#include "AbstractItem.h"
-
-class AbstractPlayerData;
 
 //***********************************************************
 class StudyPrim : public HTNPrimitive

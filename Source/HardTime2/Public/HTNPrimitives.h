@@ -4,9 +4,6 @@
 #include "HTNPlanner.h"
 #include "HTNWorldState.h"
 
-class AActorItem;
-class USimWorld;
-
 //***********************************************************
 class StudyPrim : public HTNPrimitive
 {
