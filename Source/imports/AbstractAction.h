@@ -5,6 +5,8 @@
 #include "PlatformSpecific.h"
 #include "EActions.h"
 
+class HTNWorldState;
+
 class AbstractMission;
 #ifndef TEXT_ONLY_HTN
 class AActorItem;
@@ -17,8 +19,34 @@ class BaseAction
 public:
     BaseAction(EActions action): m_action(action) {};
     virtual std::string ToString();
+    virtual bool LastActionSucceeded(HTNWorldState const& htnWorldState); //returns true if this action appears to have succeeded.
     EActions m_action;
     virtual ~BaseAction() = default;
+};
+
+class GoToGymAction : public BaseAction
+{
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
+};
+
+class GoToLibraryAction : public BaseAction
+{
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
+};
+
+class GoToCircuitTrackAction : public BaseAction
+{
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
+};
+
+class GoToBedroomAction : public BaseAction
+{
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
+};
+
+class GoToMainHallAction : public BaseAction
+{
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 class AttackAction : public BaseAction
@@ -33,6 +61,7 @@ class PickUpItemByPtrAction : public BaseAction
 public:
     PickUpItemByPtrAction(RealItemType* itemFocusPtr): BaseAction(EActions::pickUpItemByPtr), m_itemFocusPtr(itemFocusPtr) {};
     RealItemType* m_itemFocusPtr;
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 class PickUpItemByTypeAction : public BaseAction
@@ -40,13 +69,23 @@ class PickUpItemByTypeAction : public BaseAction
 public:
     PickUpItemByTypeAction(EItemType itemType): BaseAction(EActions::pickUpItemByType), m_itemType(itemType) {};
     EItemType m_itemType;
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 class RequestItemAction : public BaseAction
 {
 public:
-    RequestItemAction(AbstractPlayerData* targetPlayer): BaseAction(EActions::requestItem), m_targetPlayer(targetPlayer) {};
+    RequestItemAction(AbstractPlayerData* targetPlayer, EItemType itemType);
+    RequestItemAction(AbstractPlayerData* targetPlayer);
     AbstractPlayerData* m_targetPlayer;
+    bool m_itemTypeSpecified;
+    EItemType m_itemType;
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
+};
+
+class DropItemAction : public BaseAction
+{
+	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 class MakeFriendsAction : public BaseAction

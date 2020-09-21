@@ -10,6 +10,7 @@
 #include "Constants.h"
 #include <vector>
 #include "TranslateToHTNWorldState.h"
+#include "HTNPrimitives.h"
 
 EActions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
 {
@@ -158,11 +159,13 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 }
 
 AIController::AIController(AI _algo):
-	algo(_algo)
+	algo(_algo),
+	lastActionInterrupted(false)
 {
 }
 
 AIController::AIController() :
-	algo(AI::doNothingAI)
+	algo(AI::doNothingAI),
+	lastActionInterrupted(false)
 {
 }

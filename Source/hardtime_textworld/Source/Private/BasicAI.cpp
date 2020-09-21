@@ -427,7 +427,12 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                         resetInput();
                         std::cout << "Invalid target player!\n";
                     } else {
-                        return std::make_shared<RequestItemAction>(&(playerMap[targetPlayer]->abstractPlayerData));
+                        UPlayerData* playerData = playerMap[targetPlayer];
+                        if (playerData != nullptr) {
+                            return std::make_shared<RequestItemAction>(&(playerData->abstractPlayerData));
+                        } else {
+                            std::cout << "Invalid- target player is nullptr";
+                        }
                     }
                 }
             case 'u': return std::make_shared<BaseAction>(EActions::useRoom);

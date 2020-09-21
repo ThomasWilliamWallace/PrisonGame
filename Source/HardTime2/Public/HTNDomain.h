@@ -408,6 +408,24 @@ public:
 };
 
 //***********************************************************
+class PickUpUnneccessaryItemCompound : public HTNCompound
+{
+    HTNWorldState& m_htnWorldState;
+public:
+    PickUpUnneccessaryItemCompound(HTNWorldState &htnWorldState);
+    virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
+};
+
+class PickUpUnneccessaryItemMethod : public HTNMethod
+{
+    HTNWorldState& m_htnWorldState;
+public:
+    PickUpUnneccessaryItemMethod(HTNWorldState &htnWorldState);
+    bool Preconditions(HTNWorldState &htnWorldState) override;
+    virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
+};
+
+//***********************************************************
 class CombatMethod : public HTNMethod
 {
     HTNWorldState& m_htnWorldState;

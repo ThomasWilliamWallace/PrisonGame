@@ -25,5 +25,5 @@ public:
     std::shared_ptr<BaseAction> ChooseAction(UPlayerData* playerData, PlayerMap &playerMap, USimWorld &world);
     AIController(AI _algo);
     AIController();
-    bool lastActionInterrupted = false;
+    bool lastActionInterrupted;
 };

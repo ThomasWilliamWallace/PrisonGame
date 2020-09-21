@@ -55,7 +55,6 @@ public:
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -66,7 +65,6 @@ public:
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -77,7 +75,6 @@ public:
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -88,7 +85,6 @@ public:
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -99,7 +95,6 @@ public:
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -142,7 +137,6 @@ public:
     bool Preconditions(HTNWorldState const& htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -154,7 +148,6 @@ public:
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -165,7 +158,6 @@ public:
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
@@ -178,5 +170,4 @@ public:
     bool Preconditions(HTNWorldState const& htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
 	std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
-	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
 };

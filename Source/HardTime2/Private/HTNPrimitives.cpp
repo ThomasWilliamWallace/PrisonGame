@@ -96,11 +96,6 @@ bool GoToGymPrim::Preconditions(HTNWorldState const& htnWorldState)
 	return htnWorldState.m_location == ELocations::mainHall;
 }
 
-bool GoToGymPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return htnWorldState.m_location == ELocations::gym;
-}
-
 std::shared_ptr<BaseAction> GoToGymPrim::Operate(AbstractPlayerData* playerData)
 {
 	return std::make_shared<BaseAction>(EActions::goToGym);
@@ -118,11 +113,6 @@ void GoToLibraryPrim::Effect(HTNWorldState &htnWorldState)
 bool GoToLibraryPrim::Preconditions(HTNWorldState const& htnWorldState)
 {
 	return htnWorldState.m_location == ELocations::mainHall;
-}
-
-bool GoToLibraryPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return htnWorldState.m_location == ELocations::library;
 }
 
 std::shared_ptr<BaseAction> GoToLibraryPrim::Operate(AbstractPlayerData* playerData)
@@ -144,11 +134,6 @@ bool GoToCircuitTrackPrim::Preconditions(HTNWorldState const& htnWorldState)
 	return htnWorldState.m_location == ELocations::mainHall;
 }
 
-bool GoToCircuitTrackPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return htnWorldState.m_location == ELocations::circuitTrack;
-}
-
 std::shared_ptr<BaseAction> GoToCircuitTrackPrim::Operate(AbstractPlayerData* playerData)
 {
 	return std::make_shared<BaseAction>(EActions::goToCircuitTrack);
@@ -168,11 +153,6 @@ bool GoToBedroomPrim::Preconditions(HTNWorldState const& htnWorldState)
 	return htnWorldState.m_location == ELocations::mainHall;
 }
 
-bool GoToBedroomPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return htnWorldState.m_location == ELocations::bedroom;
-}
-
 std::shared_ptr<BaseAction> GoToBedroomPrim::Operate(AbstractPlayerData* playerData)
 {
 	return std::make_shared<BaseAction>(EActions::goToBedroom);
@@ -190,11 +170,6 @@ void GoToMainHallPrim::Effect(HTNWorldState &htnWorldState)
 bool GoToMainHallPrim::Preconditions(HTNWorldState const& htnWorldState)
 {
 	return htnWorldState.m_location != ELocations::mainHall;
-}
-
-bool GoToMainHallPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return htnWorldState.m_location == ELocations::mainHall;
 }
 
 std::shared_ptr<BaseAction> GoToMainHallPrim::Operate(AbstractPlayerData* playerData)
@@ -294,11 +269,6 @@ bool PickUpItemByPtrPrim::Preconditions(HTNWorldState const& htnWorldState)
     return false;
 }
 
-bool PickUpItemByPtrPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return (htnWorldState.m_itemCarriedPtr == m_itemFocus);
-}
-
 std::shared_ptr<BaseAction> PickUpItemByPtrPrim::Operate(AbstractPlayerData* playerData)
 {
     return std::make_shared<PickUpItemByPtrAction>(m_itemFocus->m_realItem);
@@ -338,11 +308,6 @@ bool PickUpItemByTypePrim::Preconditions(HTNWorldState const& htnWorldState)
 	return false;
 }
 
-bool PickUpItemByTypePrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
-}
-
 std::shared_ptr<BaseAction> PickUpItemByTypePrim::Operate(AbstractPlayerData* playerData)
 {
     return std::make_shared<PickUpItemByTypeAction>(m_itemType);
@@ -361,11 +326,6 @@ void DropItemPrim::Effect(HTNWorldState &htnWorldState)
 bool DropItemPrim::Preconditions(HTNWorldState const& htnWorldState)
 {
 	return GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr; //TODO hook this into the actions code
-}
-
-bool DropItemPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr;
 }
 
 std::shared_ptr<BaseAction> DropItemPrim::Operate(AbstractPlayerData* playerData)
@@ -412,11 +372,6 @@ bool RequestItemPrim::Preconditions(HTNWorldState const& htnWorldState)
         }
     }
     return false; //TODO hook this into the actions code
-}
-
-bool RequestItemPrim::LastActionSucceeded(HTNWorldState const& htnWorldState)
-{
-	return (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr) && (htnWorldState.m_itemCarriedPtr->m_itemType == m_itemType);
 }
 
 std::shared_ptr<BaseAction> RequestItemPrim::Operate(AbstractPlayerData* playerData)
