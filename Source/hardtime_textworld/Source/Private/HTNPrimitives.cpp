@@ -371,7 +371,6 @@ bool RequestItemPrim::Preconditions(HTNWorldState const& htnWorldState)
 {
     if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr)
     {
-		pLog("GetRaw(htnWorldState.m_itemCarriedPtr) is not null", true);
         return false;
     }
     for (auto &item : htnWorldState.m_items)
