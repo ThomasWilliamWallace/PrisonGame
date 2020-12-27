@@ -858,19 +858,37 @@ void AHardTime2Character::UpdateStatus()
 
 void AHardTime2Character::DoPickupItemAction(AActorItem* item)
 {
-	if (item->m_carryingPlayer != nullptr || m_carriedItem != nullptr)
+	std::stringstream ss;
+	ss << "item=" << item << "\n";
+	pLog(ss);
+	if (item == nullptr) {
+		pLog("in here");
+	}
+	if (item != nullptr) {
+		pLog("in here 2");
+	}
+	if (m_carriedItem != nullptr || (item != nullptr && item->m_carryingPlayer != nullptr))
 	{
 		return;
 	};
 	bool canReachItem = false;
 	TArray <AActor*> overlappingActors;
-	GetOverlappingActors(overlappingActors, TSubclassOf <AActorItem>());
-	for (AActor* actor : overlappingActors)
-	{
-		if (actor == item)
+	GetOverlappingActors(overlappingActors, AActorItem::StaticClass());
+	if (item != nullptr) {
+		for (AActor* actor : overlappingActors)
 		{
+			if (actor == item)
+			{
+				canReachItem = true;
+				break;
+			}
+		}
+	}
+	else {
+        // Grab first item in reach
+		if (overlappingActors.Num() > 0) {
+			item = static_cast<AActorItem*>(overlappingActors[0]);
 			canReachItem = true;
-			break;
 		}
 	}
 	if (!canReachItem)
