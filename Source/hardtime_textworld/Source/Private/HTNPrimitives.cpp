@@ -1,10 +1,9 @@
 #include "HTNPrimitives.h"
 #include "Locations.h"
 #include "AbstractPlayerData.h"
-#include "PlatformSpecific.h"
 #include <stdexcept>
 #include "pLog.h"
-#include <assert.h>
+#include "PlatformSpecific.h"
 
 //***********************************************************
 StudyPrim::StudyPrim() : HTNPrimitive("StudyPrim") {}
@@ -238,7 +237,7 @@ std::shared_ptr<BaseAction> EvadePrim::Operate(AbstractPlayerData* playerData)
 //***********************************************************
 PickUpItemByPtrPrim::PickUpItemByPtrPrim(SimItemPtr itemFocus) : HTNPrimitive("PickUpItemByPtrPrim"), m_itemFocus(itemFocus)
 {
-    assert(itemFocus != nullptr);
+    check(itemFocus != nullptr);
 }
 
 void PickUpItemByPtrPrim::Effect(HTNWorldState &htnWorldState)
