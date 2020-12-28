@@ -265,6 +265,9 @@ public:
 		void RespondToItemRequest(AHardTime2Character* requestingCharacter, const FText &question);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
+		void AcceptItemRequest(AHardTime2Character* requestingCharacter);
+
+	UFUNCTION(BlueprintCallable, Category = Action)
 		void RequestItemHandleResponse(AHardTime2Character* targetCharacter);
 
 private:

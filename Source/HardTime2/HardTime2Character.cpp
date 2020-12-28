@@ -972,7 +972,7 @@ void AHardTime2Character::DoRequestItemAction(AHardTime2Character* targetCharact
 	}
 
 	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();
-	if (abs(displacement.Size()) > 140)
+	if (abs(displacement.Size()) > 500)
 	{
 		pLog("RequestItemAction: couldn't reach character.", true);
 		m_aiState = EAIState::cooldown;
@@ -986,8 +986,16 @@ void AHardTime2Character::DoRequestItemAction(AHardTime2Character* targetCharact
 }
 
 void AHardTime2Character::RespondToItemRequest_Implementation(AHardTime2Character* requestingCharacter, const FText &question)
-{
+{/*
 	pLog("RespondToItemRequest", true);
+	DoDropItemAction();
+	SetLastActionInterrupted(true);
+	requestingCharacter->RequestItemHandleResponse(this);*/
+}
+
+void AHardTime2Character::AcceptItemRequest(AHardTime2Character* requestingCharacter)
+{
+	pLog("AcceptItemRequest", true);
 	DoDropItemAction();
 	SetLastActionInterrupted(true);
 	requestingCharacter->RequestItemHandleResponse(this);
