@@ -23,6 +23,7 @@
 #include "Runtime/Engine/Classes/Components/SkeletalMeshComponent.h"
 #include "Runtime/Core/Public/Internationalization/Text.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Math/Vector.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AHardTime2Character
@@ -663,6 +664,9 @@ void AHardTime2Character::OnNewCommand_Implementation()
 					req.SetAcceptanceRadius(30);
 					req.SetUsePathfinding(true);
 					req.SetGoalActor(m_targetItem);
+					UActorComponent* targetItemMeshActorComponent = m_targetItem->GetComponentByClass(UStaticMeshComponent::StaticClass());
+					UStaticMeshComponent* targetItemMeshComp = Cast<UStaticMeshComponent>(targetItemMeshActorComponent);
+					req.SetGoalLocation(targetItemMeshComp->GetComponentLocation());
 					controller->MoveTo(req);
 				}
 				else
@@ -858,34 +862,26 @@ void AHardTime2Character::UpdateStatus()
 
 void AHardTime2Character::DoPickupItemAction(AActorItem* item)
 {
-	std::stringstream ss;
-	ss << "item=" << item << "\n";
-	pLog(ss);
-	if (item == nullptr) {
-		pLog("in here");
-	}
-	if (item != nullptr) {
-		pLog("in here 2");
-	}
 	if (m_carriedItem != nullptr || (item != nullptr && item->m_carryingPlayer != nullptr))
 	{
 		return;
 	};
 	bool canReachItem = false;
-	TArray <AActor*> overlappingActors;
-	GetOverlappingActors(overlappingActors, AActorItem::StaticClass());
 	if (item != nullptr) {
-		for (AActor* actor : overlappingActors)
+		UStaticMeshComponent* selfMeshComp = Cast<UStaticMeshComponent>(this->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+		UStaticMeshComponent* targetItemMeshComp = Cast<UStaticMeshComponent>(item->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+		float grabDistance = 500;
+		float grabDistanceSquared = grabDistance * grabDistance;
+		float itemDistanceSquared = (selfMeshComp->GetComponentLocation() - targetItemMeshComp->GetComponentLocation()).SizeSquared();
+		if (itemDistanceSquared < grabDistanceSquared)
 		{
-			if (actor == item)
-			{
-				canReachItem = true;
-				break;
-			}
+			canReachItem = true;
 		}
 	}
 	else {
         // Grab first item in reach
+		TArray <AActor*> overlappingActors;
+		GetOverlappingActors(overlappingActors, AActorItem::StaticClass());
 		if (overlappingActors.Num() > 0) {
 			item = static_cast<AActorItem*>(overlappingActors[0]);
 			canReachItem = true;
