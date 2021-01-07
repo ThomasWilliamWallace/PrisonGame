@@ -39,7 +39,7 @@ public:
 	UPROPERTY()
 		AActorItem* itemFocusPtr; //pointer to an item the player is trying to interact with
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = World)
 		AHardTime2Character* physicalCharacter;
 
 	void UpdateMissions(USimWorld &world);

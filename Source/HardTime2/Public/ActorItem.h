@@ -23,6 +23,8 @@ public:
 	virtual void BeginDestroy() override;
 
 	LocationClass m_locationClass;
-	UPlayerData* m_carryingPlayer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = World)
+    	UPlayerData* m_carryingPlayer;
     std::string ToString();
 };
