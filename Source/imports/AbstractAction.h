@@ -56,6 +56,13 @@ public:
     AbstractPlayerData* m_targetPlayer;
 };
 
+class EvadeAction : public BaseAction
+{
+public:
+    EvadeAction(AbstractPlayerData* evadePlayer) : BaseAction(EActions::evade), m_evadePlayer(evadePlayer) {};
+    AbstractPlayerData* m_evadePlayer;
+};
+
 class PickUpItemByPtrAction : public BaseAction
 {
 public:

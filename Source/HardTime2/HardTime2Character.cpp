@@ -493,11 +493,39 @@ void AHardTime2Character::Attack(std::shared_ptr<BaseAction> baseAction)
 	ThrowException("Target player of AttackAction not found using key");
 }
 
+void AHardTime2Character::Evade(std::shared_ptr<BaseAction> baseAction)
+{
+	EvadeAction* evadeAction = static_cast<EvadeAction*>(baseAction.get());
+
+	TArray<AActor*> foundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHardTime2Character::StaticClass(), foundActors);
+
+	for (AActor* actor : foundActors)
+	{
+		AHardTime2Character* targetPlayer = static_cast<AHardTime2Character*>(actor);
+		if (targetPlayer->m_player->abstractPlayerData.m_key == evadeAction->m_evadePlayer->m_key)
+		{
+			m_targetPlayer = targetPlayer;
+			m_aiCommand = EAICommand::evade;
+			m_aiState = EAIState::newCommand;
+			UpdateStatus();
+			return;
+		}
+	}
+	ThrowException("Target player of evadeAction not found using key");
+}
+
 // Called every frame
 void AHardTime2Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	UpdateStatus();
 	m_player->UpdateMissions(*m_world);
+
+	if (isStunned)
+	{
+		return;
+	}
 
 	//Planning
 	if (m_player->aiController.algo == AI::htnAI && readyForNewAction)
@@ -550,6 +578,10 @@ void AHardTime2Character::Tick(float DeltaTime)
 		case EActions::attack:
 			pLog("attack", true);
 			Attack(m_player->abstractPlayerData.action);
+			break;
+		case EActions::evade:
+			pLog("evade", true);
+			Evade(m_player->abstractPlayerData.action);
 			break;
 		default:
 			pLog("NoAction", true);
@@ -651,7 +683,7 @@ void AHardTime2Character::OnNewCommand_Implementation()
 			break;
 		case EAICommand::pickupItem:
 			pLog("ENTERING EAICommand::pickupItem", true);
-			if (m_carriedItem == nullptr && m_targetItem != nullptr)
+			if (m_targetItem != nullptr)
 			{
 				pLog("ATTEMPTING TO GO TO ITEM!");
 				m_aiState = EAIState::commandInProgress;
@@ -725,6 +757,11 @@ void AHardTime2Character::OnNewCommand_Implementation()
 			else
 				throw std::invalid_argument("Failed to cast character controller as AIController.");
 			break;
+		case EAICommand::evade:
+			pLog("ATTEMPTING TO EVADE");
+			TriggerEvadeBehaviour(m_targetPlayer);
+			m_aiState = EAIState::commandInProgress;
+			break;
 		default:
 			throw std::invalid_argument("Unrecognised AI command.");
 	}
@@ -776,7 +813,7 @@ void AHardTime2Character::RequestItemMoveCompleted(FAIRequestID a, const FPathFo
 	DoRequestItemAction(m_targetPlayer);
 }
 
-void AHardTime2Character::AttackMoveCompleted(FAIRequestID a, const FPathFollowingResult &b)
+void AHardTime2Character::AttackMoveCompleted(FAIRequestID a, const FPathFollowingResult& b)
 {
 	pLog("AttackMoveCompleted", true);
 
@@ -787,7 +824,20 @@ void AHardTime2Character::AttackMoveCompleted(FAIRequestID a, const FPathFollowi
 
 	m_aiState = EAIState::commandInProgress;
 	UpdateStatus();
-	DoAttackAction(m_targetPlayer);
+	DoAttackActionUnreal(m_targetPlayer);
+}
+
+void AHardTime2Character::EvadeMoveCompleted(FAIRequestID a, const FPathFollowingResult& b)
+{
+	pLog("EvadeMoveCompleted", true);
+
+	AAIController* controller = Cast<AAIController>(GetController());
+	if (controller == nullptr)
+		throw std::invalid_argument("Cannot unbind evadeMoveDelegateHandle because controller is NULL.");
+	controller->GetPathFollowingComponent()->OnRequestFinished.Remove(evadeMoveDelegateHandle);
+
+	m_aiState = EAIState::noTask;
+	UpdateStatus();
 }
 
 void AHardTime2Character::OnUsingRoom_Implementation()
@@ -862,7 +912,10 @@ void AHardTime2Character::UpdateStatus()
 
 void AHardTime2Character::DoPickupItemAction(AActorItem* item)
 {
-	if (m_carriedItem != nullptr || (item != nullptr && item->m_carryingPlayer != nullptr))
+	if (m_carriedItem != nullptr) {
+		DoDropItemAction();
+	}
+	if (item != nullptr && item->m_carryingPlayer != nullptr)
 	{
 		return;
 	};
@@ -894,13 +947,21 @@ void AHardTime2Character::DoPickupItemAction(AActorItem* item)
 	}
 	UActorComponent* itemComp = item->GetComponentByClass(UStaticMeshComponent::StaticClass());
 	UStaticMeshComponent* itemMeshComp = Cast<UStaticMeshComponent>(itemComp);
+	itemComp = item->GetComponentByClass(UCapsuleComponent::StaticClass());
+	UCapsuleComponent* itemCapsule = Cast<UCapsuleComponent>(itemComp);
+
 	itemMeshComp->SetSimulatePhysics(false);
-	itemMeshComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-	UCapsuleComponent* capsule = GetCapsuleComponent();
-	capsule->IgnoreActorWhenMoving(item, true);
-	USkeletalMeshComponent* skeletalMesh = GetMesh();
-	skeletalMesh->IgnoreActorWhenMoving(item, true);
+	//itemCapsule->SetGenerateOverlapEvents(false);
+	itemMeshComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	itemMeshComp->SetGenerateOverlapEvents(false);
 	itemMeshComp->IgnoreActorWhenMoving(this, true);
+
+	USkeletalMeshComponent* skeletalMesh = GetMesh();
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+
+	capsule->IgnoreActorWhenMoving(item, true);
+	skeletalMesh->IgnoreActorWhenMoving(item, true);
+
 	FName socketName = "itemSocket";
 	FAttachmentTransformRules attachRules(EAttachmentRule::SnapToTarget, EAttachmentRule::SnapToTarget, EAttachmentRule::KeepWorld, true);
 	item->AttachToComponent(skeletalMesh, attachRules, socketName);
@@ -936,16 +997,23 @@ void AHardTime2Character::DoDropItemAction()
 	}
 	UActorComponent* itemComp = m_carriedItem->GetComponentByClass(UStaticMeshComponent::StaticClass());
 	UStaticMeshComponent* itemMeshComp = Cast<UStaticMeshComponent>(itemComp);
+	itemComp = m_carriedItem->GetComponentByClass(UCapsuleComponent::StaticClass());
+	UCapsuleComponent* itemCapsule = Cast<UCapsuleComponent>(itemComp);
+
 	FDetachmentTransformRules rules(EDetachmentRule::KeepWorld, false);
 	itemMeshComp->DetachFromComponent(rules);
 	itemMeshComp->ClearMoveIgnoreActors();
-	UCapsuleComponent* capsule = GetCapsuleComponent();
-	capsule->ClearMoveIgnoreActors();
-	USkeletalMeshComponent* skeletalMesh = GetMesh();
-	skeletalMesh->ClearMoveIgnoreActors();
 	itemMeshComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 	itemMeshComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Overlap);
 	itemMeshComp->SetSimulatePhysics(true);
+	itemMeshComp->SetGenerateOverlapEvents(true);
+	//itemCapsule->SetGenerateOverlapEvents(true);
+
+	USkeletalMeshComponent* skeletalMesh = GetMesh();
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+
+	capsule->ClearMoveIgnoreActors();
+	skeletalMesh->ClearMoveIgnoreActors();
 
 	m_carriedItem->m_carryingPlayer = nullptr;
 	m_carriedItem = nullptr;
@@ -1022,15 +1090,13 @@ void AHardTime2Character::RequestItemHandleResponse(AHardTime2Character* targetC
 
 void AHardTime2Character::DoAttackAction(AHardTime2Character* targetCharacter)
 {
-	pLog("ENTERING AHardTime2Character::AttackAction");
-	FVector displacement = GetActorLocation() - targetCharacter->GetActorLocation();
-	if (abs(displacement.Size()) > 200)
-	{
-		pLog("AttackAction: couldn't reach character.", true);
-	} else {
-		targetCharacter->DeltaHealth(-1);
-		AttackEffect(targetCharacter);
-	}
+	pLog("ENTERING AHardTime2Character::AttackAction", true);
+	std::stringstream ss;
+	ss << "targetCharacter = " << TCHAR_TO_UTF8(*(targetCharacter->m_player->m_playerName.ToString())) << "\n";
+	pLog(ss, true);
+	targetCharacter->DeltaHealth(-1);
+	targetCharacter->m_player->relMap[this->m_player->abstractPlayerData.m_key]->deltaAggro(50);
+	AttackEffect(targetCharacter);
 	m_aiState = EAIState::cooldown;
 	UpdateStatus();
 }

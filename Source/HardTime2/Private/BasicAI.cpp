@@ -122,7 +122,7 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 		pLog(ss, true);}
 
 		HTNWorldState htnWorldStateDFSCopy(*htnWorldState);
-		HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
+		HTNCompound* missionPtr = new PrisonerBehaviourCompound();
 		htnPlan = HTNIterative(htnWorldStateDFSCopy, *missionPtr, 0);
 
 		//once again, check if next step of the plan is valid.

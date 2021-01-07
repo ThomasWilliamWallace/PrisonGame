@@ -215,7 +215,7 @@ std::shared_ptr<BaseAction> PunchPrim::Operate(AbstractPlayerData* playerData)
 }
 
 //***********************************************************
-EvadePrim::EvadePrim() : HTNPrimitive("EvadePrim") {}
+EvadePrim::EvadePrim(AbstractPlayerData* opponent) : HTNPrimitive("EvadePrim"), m_evadePlayer(opponent) {}
 
 void EvadePrim::Effect(HTNWorldState &htnWorldState)
 {
@@ -229,7 +229,7 @@ bool EvadePrim::Preconditions(HTNWorldState const& htnWorldState)
 
 std::shared_ptr<BaseAction> EvadePrim::Operate(AbstractPlayerData* playerData)
 {
-    return std::make_shared<BaseAction>(EActions::evade);
+    return std::make_shared<EvadeAction>(m_evadePlayer);
 }
 
 //***********************************************************
@@ -259,8 +259,7 @@ bool PickUpItemByPtrPrim::Preconditions(HTNWorldState const& htnWorldState)
 		ThrowException("Failed to find relevant SimItem in PickUpItemByPtrPrim::preconditions");
     }
     //TODO hook this into the actions code
-    if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
-      && GetRaw(currentSimItem) != nullptr
+    if (GetRaw(currentSimItem) != nullptr
       && htnWorldState.m_location == currentSimItem->m_locationClass.location
       && currentSimItem->m_carryingPlayer == nullptr)
     {
@@ -297,8 +296,7 @@ bool PickUpItemByTypePrim::Preconditions(HTNWorldState const& htnWorldState)
 {
 	for (auto &item : htnWorldState.m_items)
 	{
-        if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
-            && item->m_itemType == m_itemType
+        if (item->m_itemType == m_itemType
             && item->m_locationClass.location == htnWorldState.m_location
 			&& item->m_carryingPlayer == nullptr)
 		{
@@ -355,11 +353,11 @@ void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
 
 bool RequestItemPrim::Preconditions(HTNWorldState const& htnWorldState)
 {
-    if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr)
+    /*if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr)
     {
 		pLog("GetRaw(htnWorldState.m_itemCarriedPtr) is not null", true);
         return false;
-    }
+    }*/
     for (auto &item : htnWorldState.m_items)
     {
         if (item->m_carryingPlayer == m_requestedPlayer

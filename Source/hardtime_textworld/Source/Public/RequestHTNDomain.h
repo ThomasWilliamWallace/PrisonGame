@@ -74,17 +74,15 @@ public:
 //***********************************************************
 class StartMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
 public:
-    StartMethod(HTNWorldState &htnWorldState);
+    StartMethod();
     bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class StartCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
 public:
-    StartCompound(HTNWorldState &htnWorldState);
+    StartCompound();
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };

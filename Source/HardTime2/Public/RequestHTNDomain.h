@@ -13,9 +13,9 @@ class AcceptItemRequestPrim : public HTNPrimitive
 {
 public:
     AcceptItemRequestPrim();
-    bool Preconditions(HTNWorldState &htnWorldState) override;
+    bool Preconditions(HTNWorldState const& htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    Actions Operate(UPlayerData* playerPtr, USimWorld &world) override;
+    std::shared_ptr<BaseAction> Operate(UPlayerData* playerPtr, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -23,9 +23,9 @@ class DeclineItemRequestPrim : public HTNPrimitive
 {
 public:
     DeclineItemRequestPrim();
-    bool Preconditions(HTNWorldState &htnWorldState) override;
+    bool Preconditions(HTNWorldState const& htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    Actions Operate(UPlayerData* playerPtr, USimWorld &world) override;
+    std::shared_ptr<BaseAction> Operate(UPlayerData* playerPtr, USimWorld &world) override;
 };
 
 //***********************************************************
@@ -35,7 +35,7 @@ public:
     NeedItemDeclineRequestMethod(AActorItem* requestedItem);
     AActorItem* m_requestedItem;
     bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual void CreateTasks() override;
+    virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class AcceptItemRequestMethod : public HTNMethod
@@ -43,7 +43,7 @@ class AcceptItemRequestMethod : public HTNMethod
 public:
     AcceptItemRequestMethod();
     bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual void CreateTasks() override;
+    virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class DeclineItemRequestMethod : public HTNMethod
@@ -51,7 +51,7 @@ class DeclineItemRequestMethod : public HTNMethod
 public:
     DeclineItemRequestMethod();
     bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual void CreateTasks() override;
+    virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class RespondToItemRequestCompound : public HTNCompound
@@ -59,7 +59,7 @@ class RespondToItemRequestCompound : public HTNCompound
     AActorItem* m_requestedItem;
 public:
     RespondToItemRequestCompound(AActorItem* requestedItem);
-    virtual void CreateMethods() override;
+    virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 
 class RespondToItemRequestMethod : public HTNMethod
@@ -67,25 +67,23 @@ class RespondToItemRequestMethod : public HTNMethod
 public:
     RespondToItemRequestMethod(AActorItem* requestedItem);
     bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual void CreateTasks() override;
+    virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
 class StartMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
 public:
-    StartMethod(HTNWorldState &htnWorldState, PlayerMap &playerMap);
+    StartMethod(PlayerMap &playerMap);
     bool Preconditions(HTNWorldState &htnWorldState) override;
-    virtual void CreateTasks() override;
+    virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class StartCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
     PlayerMap m_playerMap;
 public:
-    StartCompound(HTNWorldState &htnWorldState, PlayerMap &playerMap);
-    virtual void CreateMethods() override;
+    StartCompound(PlayerMap &playerMap);
+    virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 */

@@ -118,8 +118,9 @@ public:
 //***********************************************************
 class EvadePrim : public HTNPrimitive
 {
+	AbstractPlayerData* m_evadePlayer;
 public:
-    EvadePrim();
+    EvadePrim(AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;

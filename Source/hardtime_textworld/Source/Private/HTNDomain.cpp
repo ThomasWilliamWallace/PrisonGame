@@ -353,9 +353,8 @@ void RequestItemMethod::CreateTasks(HTNWorldState const& htnWorldState)
     AddTask(new RequestItemPrim(m_player, m_itemType));
 }
 
-GetItemCompound::GetItemCompound(HTNWorldState &htnWorldState, EItemType itemType):
+GetItemCompound::GetItemCompound(EItemType itemType):
     HTNCompound("GetItemCompound(" + ItemTypeToString(itemType) + ")"),
-    m_htnWorldState(htnWorldState),
     m_itemType(itemType)
 {}
 
@@ -363,16 +362,15 @@ void GetItemCompound::CreateMethods(HTNWorldState const& htnWorldState)
 {
     AddMethod(new HaveItemMethod(m_itemType));
     AddMethod(new PickupItemMethod(m_itemType));
-    for (auto &p : m_htnWorldState.m_playersInTheRoom)
+    for (auto &p : htnWorldState.m_playersInTheRoom)
     {
         AddMethod(new RequestItemMethod(p, m_itemType));
     }
 }
 
 //***********************************************************
-GetBringAndDropItemMethod::GetBringAndDropItemMethod(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass):
+GetBringAndDropItemMethod::GetBringAndDropItemMethod(EItemType itemType, LocationClass &locationClass):
     HTNMethod("GetBringAndDropItemMethod"),
-    m_htnWorldState(htnWorldState),
     m_itemType(itemType),
     m_locationClass(locationClass)
 {}
@@ -384,7 +382,7 @@ bool GetBringAndDropItemMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void GetBringAndDropItemMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new GetItemCompound(m_htnWorldState, m_itemType));
+    AddTask(new GetItemCompound(m_itemType));
     
     switch(m_locationClass.location)
     {
@@ -408,16 +406,15 @@ void GetBringAndDropItemMethod::CreateTasks(HTNWorldState const& htnWorldState)
     AddTask(new DropItemPrim(true));
 }
 
-BringItemToLocationCompound::BringItemToLocationCompound(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass):
+BringItemToLocationCompound::BringItemToLocationCompound(EItemType itemType, LocationClass &locationClass):
     HTNCompound("BringItemToLocationCompound"),
-    m_htnWorldState(htnWorldState),
     m_itemType(itemType),
     m_locationClass(locationClass)
 {}
 
 void BringItemToLocationCompound::CreateMethods(HTNWorldState const& htnWorldState)
 {
-    AddMethod(new GetBringAndDropItemMethod(m_htnWorldState, m_itemType, m_locationClass));
+    AddMethod(new GetBringAndDropItemMethod(m_itemType, m_locationClass));
 }
 
 //***********************************************************
@@ -465,17 +462,16 @@ void AttackImmediateMethod::CreateTasks(HTNWorldState const& htnWorldState)
     AddTask(new PunchPrim(m_opponent));
 }
 
-AttackCompound::AttackCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
+AttackCompound::AttackCompound(AbstractPlayerData* opponent):
     HTNCompound("AttackCompound"),
-    m_htnWorldState(htnWorldState),
     m_opponent(opponent)
 {}
 
 void AttackCompound::CreateMethods(HTNWorldState const& htnWorldState)
 {
-    for (auto &item : m_htnWorldState.m_items)
+    for (auto &item : htnWorldState.m_items)
     {
-        if (item->m_locationClass.location == m_htnWorldState.m_location)
+        if (item->m_locationClass.location == htnWorldState.m_location)
         {
             AddMethod(new PickupItemAndAttackMethod(item, m_opponent));
         }
@@ -483,9 +479,8 @@ void AttackCompound::CreateMethods(HTNWorldState const& htnWorldState)
     AddMethod(new AttackImmediateMethod(m_opponent));
 }
 
-AttackMethod::AttackMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
+AttackMethod::AttackMethod(AbstractPlayerData* opponent):
     HTNMethod("AttackMethod"),
-    m_htnWorldState(htnWorldState),
     m_opponent(opponent)
 {}
 
@@ -496,23 +491,25 @@ bool AttackMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void AttackMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new AttackCompound(m_htnWorldState, m_opponent));
+    AddTask(new AttackCompound(m_opponent));
 }
 
 //***********************************************************
-EvadeMethod::EvadeMethod(): HTNMethod("EvadeMethod")
+EvadeMethod::EvadeMethod(AbstractPlayerData* opponent):
+    HTNMethod("EvadeMethod"),
+    m_opponent(opponent)
 {}
 
 bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    if (htnWorldState.m_health >= 67)
-    {
-        return false;
-    } else {
+    if (htnWorldState.m_health < 67) {
         for (auto &attacker : htnWorldState.m_attackers) {
-            if (htnWorldState.IsInTheRoom(*attacker))
-            {
-                return true;
+            if (attacker == m_opponent) {
+                if (htnWorldState.IsInTheRoom(*attacker)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     }
@@ -521,19 +518,18 @@ bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void EvadeMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new EvadePrim());
+    AddTask(new EvadePrim(m_opponent));
 }
 
-CombatCompound::CombatCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
+CombatCompound::CombatCompound(AbstractPlayerData* opponent):
     HTNCompound("CombatCompound"),
-    m_htnWorldState(htnWorldState),
     m_opponent(opponent)
 {}
 
 void CombatCompound::CreateMethods(HTNWorldState const& htnWorldState)
 {
-    AddMethod(new EvadeMethod());
-    AddMethod(new AttackMethod(m_htnWorldState, m_opponent));
+    AddMethod(new EvadeMethod(m_opponent));
+    AddMethod(new AttackMethod(m_opponent));
 }
 
 //***********************************************************
@@ -576,9 +572,8 @@ void IncreaseIntelligenceMissionMethod::CreateTasks(HTNWorldState const& htnWorl
     AddTask(new IncreaseIntelligenceCompound());
 }
 
-BringItemToRoomMissionMethod::BringItemToRoomMissionMethod(HTNWorldState &htnWorldState):
-    HTNMethod("BringItemToRoomMissionMethod"),
-    m_htnWorldState(htnWorldState)
+BringItemToRoomMissionMethod::BringItemToRoomMissionMethod():
+    HTNMethod("BringItemToRoomMissionMethod")
 {}
 
 bool BringItemToRoomMissionMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -588,12 +583,11 @@ bool BringItemToRoomMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void BringItemToRoomMissionMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new BringItemToLocationCompound(m_htnWorldState, m_htnWorldState.m_missionClass->m_itemType, m_htnWorldState.m_missionClass->m_locationClass));
+    AddTask(new BringItemToLocationCompound(htnWorldState.m_missionClass->m_itemType, htnWorldState.m_missionClass->m_locationClass));
 }
 
-DoMissionCompound::DoMissionCompound(HTNWorldState &htnWorldState):
-    HTNCompound("DoMissionCompound"),
-    m_htnWorldState(htnWorldState)
+DoMissionCompound::DoMissionCompound():
+    HTNCompound("DoMissionCompound")
 {}
 
 void DoMissionCompound::CreateMethods(HTNWorldState const& htnWorldState)
@@ -601,29 +595,27 @@ void DoMissionCompound::CreateMethods(HTNWorldState const& htnWorldState)
     AddMethod(new IncreaseStrengthMissionMethod());
     AddMethod(new IncreaseAgilityMissionMethod());
     AddMethod(new IncreaseIntelligenceMissionMethod());
-    AddMethod(new BringItemToRoomMissionMethod(m_htnWorldState));
+    AddMethod(new BringItemToRoomMissionMethod());
 }
 
 //***********************************************************
-PickUpUnneccessaryItemCompound::PickUpUnneccessaryItemCompound(HTNWorldState &htnWorldState):
-    HTNCompound("PickUpUnneccessaryItemCompound"),
-    m_htnWorldState(htnWorldState)
+PickUpUnneccessaryItemCompound::PickUpUnneccessaryItemCompound():
+    HTNCompound("PickUpUnneccessaryItemCompound")
 {}
 
 void PickUpUnneccessaryItemCompound::CreateMethods(HTNWorldState const& htnWorldState)
 {
-    for (auto &simItem : m_htnWorldState.m_items)
+    for (auto &simItem : htnWorldState.m_items)
     {
-        if (   simItem->m_locationClass.location == m_htnWorldState.m_location
+        if (   simItem->m_locationClass.location == htnWorldState.m_location
             && simItem->m_carryingPlayer == nullptr
         )
             AddMethod(new PickUpItemByPtrMethod(simItem));
     }
 }
 
-PickUpUnneccessaryItemMethod::PickUpUnneccessaryItemMethod(HTNWorldState &htnWorldState):
-    HTNMethod("PickUpUnneccessaryItemMethod"),
-    m_htnWorldState(htnWorldState)
+PickUpUnneccessaryItemMethod::PickUpUnneccessaryItemMethod():
+    HTNMethod("PickUpUnneccessaryItemMethod")
 {}
 
 bool PickUpUnneccessaryItemMethod::Preconditions(HTNWorldState & htnWorldState)
@@ -633,13 +625,12 @@ bool PickUpUnneccessaryItemMethod::Preconditions(HTNWorldState & htnWorldState)
 
 void PickUpUnneccessaryItemMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new PickUpUnneccessaryItemCompound(m_htnWorldState));
+    AddTask(new PickUpUnneccessaryItemCompound());
 }
 
 //***********************************************************
-CombatMethod::CombatMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent):
+CombatMethod::CombatMethod(AbstractPlayerData* opponent):
     HTNMethod("CombatMethod"),
-    m_htnWorldState(htnWorldState),
     m_opponent(opponent)
 {}
 
@@ -650,12 +641,11 @@ bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void CombatMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new CombatCompound(m_htnWorldState, m_opponent));
+    AddTask(new CombatCompound(m_opponent));
 }
 
-DoMissionMethod::DoMissionMethod(HTNWorldState &htnWorldState):
-    HTNMethod("DoMissionMethod"),
-    m_htnWorldState(htnWorldState)
+DoMissionMethod::DoMissionMethod():
+    HTNMethod("DoMissionMethod")
 {}
 
 bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -665,7 +655,7 @@ bool DoMissionMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void DoMissionMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new DoMissionCompound(m_htnWorldState));
+    AddTask(new DoMissionCompound());
 }
 
 IncreaseIntelligenceMethod::IncreaseIntelligenceMethod(): HTNMethod("IncreaseIntelligenceMethod")
@@ -714,18 +704,17 @@ void DropAnyItemImmediateMethod::CreateTasks(HTNWorldState const& htnWorldState)
 }
 
 //***********************************************************
-PrisonerBehaviourCompound::PrisonerBehaviourCompound(HTNWorldState &htnWorldState):
-    HTNCompound("PrisonerBehaviourCompound"),
-    m_htnWorldState(htnWorldState)
+PrisonerBehaviourCompound::PrisonerBehaviourCompound():
+    HTNCompound("PrisonerBehaviourCompound")
 {}
 
 void PrisonerBehaviourCompound::CreateMethods(HTNWorldState const& htnWorldState)
 {
-    for (auto &attacker : m_htnWorldState.m_attackers)
+    for (auto &attacker : htnWorldState.m_attackers)
     {
-        AddMethod(new CombatMethod(m_htnWorldState, attacker));
+        AddMethod(new CombatMethod(attacker));
     }
-    AddMethod(new DoMissionMethod(m_htnWorldState));
-    AddMethod(new PickUpUnneccessaryItemMethod(m_htnWorldState));
+    AddMethod(new DoMissionMethod());
+    AddMethod(new PickUpUnneccessaryItemMethod());
     AddMethod(new IncreaseIntelligenceMethod());
 }

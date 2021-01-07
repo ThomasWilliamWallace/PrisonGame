@@ -259,10 +259,9 @@ public:
 
 class GetItemCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
     EItemType m_itemType;
 public:
-    GetItemCompound(HTNWorldState &htnWorldState, EItemType itemType);
+    GetItemCompound(EItemType itemType);
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 
@@ -289,22 +288,20 @@ public:
 
 class GetBringAndDropItemMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
 	EItemType m_itemType;
 	LocationClass& m_locationClass;
 public:
-    GetBringAndDropItemMethod(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass);
+    GetBringAndDropItemMethod(EItemType itemType, LocationClass &locationClass);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class BringItemToLocationCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
     EItemType m_itemType;
     LocationClass& m_locationClass;
 public:
-    BringItemToLocationCompound(HTNWorldState &htnWorldState, EItemType itemType, LocationClass &locationClass); //be wary with this. Probably just refactor to pass locationClass by value rather than reference
+    BringItemToLocationCompound(EItemType itemType, LocationClass &locationClass); //be wary with this. Probably just refactor to pass locationClass by value rather than reference
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 
@@ -330,19 +327,17 @@ public:
 
 class AttackCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
     AbstractPlayerData* m_opponent;
 public:
-	AttackCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
+	AttackCompound(AbstractPlayerData* opponent);
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 
 class AttackMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
     AbstractPlayerData* m_opponent;
 public:
-    AttackMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
+    AttackMethod(AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
@@ -350,18 +345,18 @@ public:
 //***********************************************************
 class EvadeMethod : public HTNMethod
 {
+    AbstractPlayerData* m_opponent;
 public:
-    EvadeMethod();
+    EvadeMethod(AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class CombatCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
     AbstractPlayerData* m_opponent;
 public:
-    CombatCompound(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
+    CombatCompound(AbstractPlayerData* opponent);
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 
@@ -392,35 +387,31 @@ public:
 
 class BringItemToRoomMissionMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
 public:
-    BringItemToRoomMissionMethod(HTNWorldState &htnWorldState);
+    BringItemToRoomMissionMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class DoMissionCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
 public:
-	DoMissionCompound(HTNWorldState &htnWorldState);
+	DoMissionCompound();
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 
 //***********************************************************
 class PickUpUnneccessaryItemCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
 public:
-    PickUpUnneccessaryItemCompound(HTNWorldState &htnWorldState);
+    PickUpUnneccessaryItemCompound();
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };
 
 class PickUpUnneccessaryItemMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
 public:
-    PickUpUnneccessaryItemMethod(HTNWorldState &htnWorldState);
+    PickUpUnneccessaryItemMethod();
     bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
@@ -428,19 +419,17 @@ public:
 //***********************************************************
 class CombatMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
     AbstractPlayerData* m_opponent;
 public:
-	CombatMethod(HTNWorldState &htnWorldState, AbstractPlayerData* opponent);
+	CombatMethod(AbstractPlayerData* opponent);
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
 
 class DoMissionMethod : public HTNMethod
 {
-    HTNWorldState& m_htnWorldState;
 public:
-	DoMissionMethod(HTNWorldState &htnWorldState);
+	DoMissionMethod();
 	bool Preconditions(HTNWorldState &htnWorldState) override;
     virtual void CreateTasks(HTNWorldState const& htnWorldState) override;
 };
@@ -475,8 +464,7 @@ public:
 //***********************************************************
 class PrisonerBehaviourCompound : public HTNCompound
 {
-    HTNWorldState& m_htnWorldState;
 public:
-	PrisonerBehaviourCompound(HTNWorldState &htnWorldState);
+	PrisonerBehaviourCompound();
     virtual void CreateMethods(HTNWorldState const& htnWorldState) override;
 };

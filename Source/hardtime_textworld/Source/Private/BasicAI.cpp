@@ -250,7 +250,7 @@ std::shared_ptr<BaseAction> AIController::htnAIChooseAction(UPlayerData& player,
         //make new plan
         std::cout << player.abstractPlayerData.m_playerName << ": Make a new plan:\n";
         HTNWorldState htnWorldStateDFSCopy(htnWorldState);
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound(htnWorldStateDFSCopy);
+        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
         
         htnPlan = HTNIterative(htnWorldStateDFSCopy, *missionPtr, 0);
         for (auto &htnPrimitive : htnPlan)
@@ -480,7 +480,7 @@ bool AIController::RespondToOffer(UPlayerData& player, USimWorld& world, int req
         
         //update worldstate from real world
         HTNWorldState htnWorldState = TranslateToHTNWorldState(&player, world, world.playerRegistry.m_playerMap, playerMap[requesterIndex]);
-        HTNCompound* missionPtr = new StartCompound(htnWorldState);
+        HTNCompound* missionPtr = new StartCompound();
         
         htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
         for (auto &htnPrimitive : htnPlan)

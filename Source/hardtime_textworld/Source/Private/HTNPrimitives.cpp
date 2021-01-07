@@ -217,7 +217,7 @@ std::shared_ptr<BaseAction> PunchPrim::Operate(AbstractPlayerData* playerData)
 }
 
 //***********************************************************
-EvadePrim::EvadePrim() : HTNPrimitive("EvadePrim") {}
+EvadePrim::EvadePrim(AbstractPlayerData* opponent) : HTNPrimitive("EvadePrim"), m_evadePlayer(opponent) {}
 
 void EvadePrim::Effect(HTNWorldState &htnWorldState)
 {
@@ -231,7 +231,7 @@ bool EvadePrim::Preconditions(HTNWorldState const& htnWorldState)
 
 std::shared_ptr<BaseAction> EvadePrim::Operate(AbstractPlayerData* playerData)
 {
-    return std::make_shared<BaseAction>(EActions::evade);
+    return std::make_shared<EvadeAction>(m_evadePlayer);
 }
 
 //***********************************************************

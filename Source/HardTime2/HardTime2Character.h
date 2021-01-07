@@ -33,6 +33,7 @@ enum class EAICommand : uint8
 	useRoom				UMETA(DisplayName = "Use room"),
 	requestItem			UMETA(DisplayName = "Request item"),
 	attack				UMETA(DisplayName = "Attack"),
+	evade				UMETA(DisplayName = "Evade"),
 };
 
 UCLASS(config=Game)
@@ -74,6 +75,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Planning_AI)
 		bool readyForNewAction = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Physical)
+		bool isStunned = false;
 
 	UFUNCTION(BlueprintCallable, Category = Planning_AI)
 		void SetWorld(USimWorld* simWorld);
@@ -166,6 +170,8 @@ public:
 
 	//UFUNCTION(BlueprintCallable, Category = LowLevelAI)
 		void Attack(std::shared_ptr<BaseAction> baseAction);
+
+		void Evade(std::shared_ptr<BaseAction> baseAction);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LowLevelAI)
 		EAIState m_aiState;
@@ -238,8 +244,14 @@ public:
 	void RequestItemMoveCompleted(FAIRequestID a, const FPathFollowingResult &b);
 	FDelegateHandle requestItemMoveDelegateHandle;
 
-	void AttackMoveCompleted(FAIRequestID a, const FPathFollowingResult &b);
+	void AttackMoveCompleted(FAIRequestID a, const FPathFollowingResult& b);
 	FDelegateHandle attackMoveDelegateHandle;
+
+	void EvadeMoveCompleted(FAIRequestID a, const FPathFollowingResult& b);
+	FDelegateHandle evadeMoveDelegateHandle;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = Action)
+		void TriggerEvadeBehaviour(AHardTime2Character* evadeCharacter);
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void DisplayStatus(const FString& displayString);
@@ -252,6 +264,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Action)
 		void DoRequestItemAction(AHardTime2Character* targetCharacter);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = Action)
+		void DoAttackActionUnreal(AHardTime2Character* targetCharacter);
 
 	UFUNCTION(BlueprintCallable, Category = Action)
 		void DoAttackAction(AHardTime2Character* targetCharacter);

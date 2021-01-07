@@ -110,7 +110,7 @@ void RespondToItemRequestCompound::CreateMethods(HTNWorldState const& htnWorldSt
 }
 
 //***********************************************************
-StartMethod::StartMethod(HTNWorldState &htnWorldState): HTNMethod("StartMethod"), m_htnWorldState(htnWorldState)
+StartMethod::StartMethod(): HTNMethod("StartMethod")
 {
 }
 
@@ -121,16 +121,16 @@ bool StartMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void StartMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    std::shared_ptr<AbstractItem> requestedItem = m_htnWorldState.m_itemCarriedPtr;
-    AddTask(new PrisonerBehaviourCompound(m_htnWorldState));
+    std::shared_ptr<AbstractItem> requestedItem = htnWorldState.m_itemCarriedPtr;
+    AddTask(new PrisonerBehaviourCompound());
     AddTask(new RespondToItemRequestCompound(requestedItem));
 }
 
-StartCompound::StartCompound(HTNWorldState &htnWorldState): HTNCompound("StartCompound"), m_htnWorldState(htnWorldState)
+StartCompound::StartCompound(): HTNCompound("StartCompound")
 {
 }
 
 void StartCompound::CreateMethods(HTNWorldState const& htnWorldState)
 {
-    AddMethod(new StartMethod(m_htnWorldState));
+    AddMethod(new StartMethod());
 }
