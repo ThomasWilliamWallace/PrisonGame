@@ -120,6 +120,7 @@ void URelationship::SetRecentlyRequested()
 		tm.SetTimer(
 			requestCooldownTimer, this, &URelationship::RequestCooldownTimerElapsed, cooldownTime, false);
 	}
+	pLog("Got past the timer section", true);
 }
 
 void URelationship::RequestCooldownTimerElapsed()

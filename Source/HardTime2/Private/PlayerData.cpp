@@ -54,7 +54,8 @@ void UPlayerData::UpdateMissions(USimWorld &world)
 		pLog(ss, true);
 		abstractPlayerData.pStats.deltaSanity(5);
         abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(this->abstractPlayerData));
-		pLog(tempMissionClass->MissionNarrative(), true);
+		pLog("Old mission: " + tempMissionClass->MissionNarrative(), true);
+		pLog("New mission: " + static_cast<MissionClass*>(abstractPlayerData.missionClass.get())->MissionNarrative(), true);
     }
 }
 
