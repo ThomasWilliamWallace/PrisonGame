@@ -16,7 +16,7 @@ public:
     AcceptItemRequestPrim();
     bool Preconditions(HTNWorldState const& htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
+    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -26,7 +26,7 @@ public:
     DeclineItemRequestPrim();
     bool Preconditions(HTNWorldState const& htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
-    std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData) override;
+    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************

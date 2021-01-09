@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdio.h>
-#include "AbstractPlayerData.h"
 #include "PlayerRegistry.h"
 #include "Item.h"
 

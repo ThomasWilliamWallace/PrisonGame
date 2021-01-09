@@ -4,5 +4,5 @@
 
 class Item : public AbstractItem {
 public:
-    Item(EItemType itemE, ELocations location, AbstractPlayerData* carryingPlayer=nullptr): AbstractItem(itemE, location, carryingPlayer) {};
+    Item(EItemType itemE, ELocations location, UPlayerData* carryingPlayer=nullptr): AbstractItem(itemE, location, carryingPlayer) {};
 };

@@ -1,35 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="hardtime_textworld" Version="10.0.0" InternalType="Console">
   <VirtualDirectory Name="Public">
-    <File Name="Source/Public/Relationship.h"/>
-    <File Name="Source/Public/PlayerData.h"/>
     <File Name="Source/Public/TranslateToHTNWorldState.h"/>
     <File Name="Source/Public/SimWorld.h"/>
     <File Name="Source/Public/RequestHTNDomain.h"/>
+    <File Name="Source/Public/Relationship.h"/>
+    <File Name="Source/Public/PStats.h"/>
+    <File Name="Source/Public/pLog.h"/>
     <File Name="Source/Public/PlayerRegistry.h"/>
+    <File Name="Source/Public/PlayerData.h"/>
+    <File Name="Source/Public/PlatformSpecific.h"/>
     <File Name="Source/Public/Names.h"/>
     <File Name="Source/Public/Missions.h"/>
+    <File Name="Source/Public/Locations.h"/>
     <File Name="Source/Public/Item.h"/>
+    <File Name="Source/Public/HTNWorldState.h"/>
     <File Name="Source/Public/HTNPrimitives.h"/>
+    <File Name="Source/Public/HTNPlanner.h"/>
     <File Name="Source/Public/HTNDomain.h"/>
+    <File Name="Source/Public/EMissions.h"/>
+    <File Name="Source/Public/ELocations.h"/>
+    <File Name="Source/Public/EItemType.h"/>
+    <File Name="Source/Public/EActions.h"/>
+    <File Name="Source/Public/Constants.h"/>
     <File Name="Source/Public/BasicAI.h"/>
     <File Name="Source/Public/Actions.h"/>
+    <File Name="Source/Public/AbstractItem.h"/>
+    <File Name="Source/Public/AbstractAction.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="Private">
-    <File Name="Source/Private/Relationship.cpp"/>
-    <File Name="Source/Private/PlayerData.cpp"/>
-    <File Name="Source/Private/PlayerRegistry.cpp"/>
     <File Name="Source/Private/TranslateToHTNWorldState.cpp"/>
     <File Name="Source/Private/SimWorld.cpp"/>
     <File Name="Source/Private/RequestHTNDomain.cpp"/>
+    <File Name="Source/Private/Relationship.cpp"/>
+    <File Name="Source/Private/PStats.cpp"/>
+    <File Name="Source/Private/pLog.cpp"/>
+    <File Name="Source/Private/PlayerRegistry.cpp"/>
+    <File Name="Source/Private/PlayerData.cpp"/>
+    <File Name="Source/Private/PlatformSpecific.cpp"/>
     <File Name="Source/Private/Names.cpp"/>
     <File Name="Source/Private/Missions.cpp"/>
     <File Name="Source/Private/main.cpp"/>
+    <File Name="Source/Private/Locations.cpp"/>
     <File Name="Source/Private/Item.cpp"/>
+    <File Name="Source/Private/HTNWorldState.cpp"/>
     <File Name="Source/Private/HTNPrimitives.cpp"/>
+    <File Name="Source/Private/HTNPlanner.cpp"/>
     <File Name="Source/Private/HTNDomain.cpp"/>
+    <File Name="Source/Private/Constants.cpp"/>
     <File Name="Source/Private/BasicAI.cpp"/>
     <File Name="Source/Private/Actions.cpp"/>
+    <File Name="Source/Private/AbstractItem.cpp"/>
+    <File Name="Source/Private/AbstractAction.cpp"/>
   </VirtualDirectory>
   <Plugins>
     <Plugin Name="qmake">
@@ -53,12 +75,8 @@
     <Configuration Name="Debug" CompilerType="MinGW ( TDM-GCC-64 )" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-g;-O0;-std=c++17;-Wall;-D TEXT_ONLY_HTN" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="./Source/Public/"/>
-        <IncludePath Value="./../htn_planner/htn_planner/Public"/>
       </Compiler>
-      <Linker Options="" Required="yes">
-        <LibraryPath Value=".\..\htn_planner\htn_planner\Debug"/>
-        <Library Value="libhtn_planner"/>
-      </Linker>
+      <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <BuildSystem Name="Default"/>

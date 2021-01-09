@@ -1,5 +1,4 @@
 #include "PlayerRegistry.h"
-#include "AbstractPlayerData.h"
 
 void UPlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
 {
@@ -9,7 +8,7 @@ void UPlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
         addKey += 1;
     }
     Add(m_playerMap, addKey, addPlayerData);
-    addPlayerData->abstractPlayerData.m_key = addKey;
+    addPlayerData->m_key = addKey;
     
     //add relationships
     for(auto &playerIter : m_playerMap)

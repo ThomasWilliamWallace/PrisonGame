@@ -7,7 +7,7 @@
 
 std::string UPlayerData::CharacterName()
 {
-	return abstractPlayerData.m_playerName;
+	return m_playerName;
 }
 
 void UPlayerData::PrintPlayer()
@@ -20,6 +20,12 @@ void UPlayerData::PrintPlayer()
     } else {
         ss << "null\n";
     }
+    if (missionClass.get() != nullptr) {
+        ss << missionClass->MissionNarrative() << "\n";
+    }
+    else {
+        ss << "NULLPTR\n";
+    }
 	ss << "missionOffer=";
 	if (missionOffer.get() != nullptr) {
 		ss << missionOffer->MissionNarrative() << "\n";
@@ -28,51 +34,63 @@ void UPlayerData::PrintPlayer()
 	}
     ss << "cash=" << cash << "\n";
     ss << "sentence=" << sentence << "\n";
-	ss << "m_key=" << abstractPlayerData.m_key << "\n";
+	ss << "m_key=" << m_key << "\n";
+    ss << "action=" << action->ToString() << "\n";
+    ss << "lastAction=" << lastAction->ToString() << "\n";
+    ss << "location=" << locationClass.ToString() << "\n";
+    ss << "lastLocation=" << lastLocationClass.ToString() << "\n";
+    ss << "attacked=" << BoolToString(attacked) << "\n";
+    ss << "narrative=" << narrative << "\n";
     ss << "\n";
 	pLog(ss);
-//    pStats.PrintStats();
-	abstractPlayerData.PrintPlayer();
+    pStats.PrintStats();
 }
 
 void UPlayerData::UpdateMissions(USimWorld &world)
 {
-    MissionClass* tempMissionClass = static_cast<MissionClass*>(abstractPlayerData.missionClass.get());
+    MissionClass* tempMissionClass = static_cast<MissionClass*>(missionClass.get());
     if (tempMissionClass->IsMissionComplete(world))
     {
 		std::stringstream ss;
-		ss << abstractPlayerData.m_playerName << " has completed his mission to " << abstractPlayerData.missionClass->MissionName() << " and now has sanity=" << FormatDouble(abstractPlayerData.pStats.getSanity()) << "!";
+		ss << m_playerName << " has completed his mission to " << missionClass->MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
 		pLog(ss, true);
-		abstractPlayerData.pStats.deltaSanity(5);
-        abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(this->abstractPlayerData));
-		pLog(abstractPlayerData.missionClass->MissionNarrative(), true);
+		pStats.deltaSanity(5);
+        missionClass = std::make_shared<MissionClass>(this);
+		pLog(missionClass->MissionNarrative(), true);
     }
 }
 
 bool UPlayerData::IsRequestedRecently(UPlayerData* requestedPlayer, EItemType m_itemType)
 {
-	return relMap.find(requestedPlayer->abstractPlayerData.m_key)->second->isRequestedRecently;
+	return relMap.find(requestedPlayer->m_key)->second->isRequestedRecently;
 }
 
 void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 {
-	relMap.find(requestedPlayer->abstractPlayerData.m_key)->second->SetRecentlyRequested();
+	relMap.find(requestedPlayer->m_key)->second->SetRecentlyRequested();
 }
 
+
+// Member variables set in constructor to work with Unreal Engine.
 UPlayerData::UPlayerData()
 {
+	pLog("Constructing UPlayerData");
     cash = 0;
     sentence = 5;
 	itemPtr = nullptr;
-    abstractPlayerData.action = std::make_shared<BaseAction>(EActions::goToGym);
+    action = std::make_shared<BaseAction>(EActions::useRoom);
     missionOffer = nullptr;
-    abstractPlayerData.missionClass = std::make_shared<MissionClass>(&abstractPlayerData);
-	pLog("Constructing UPlayerData");
+    missionClass = std::make_shared<MissionClass>(this);
+    lastAction = std::make_shared<BaseAction>(EActions::useRoom);
+    attacked = false;
+    narrative = "Narrative not set";
+    m_playerName = "No-name";
+    missionClass = nullptr;
 }
 
-bool OtherInReach(AbstractPlayerData& playerPtr, AbstractPlayerData& otherPlayerPtr)
+bool UPlayerData::OtherInReach(UPlayerData& otherPlayerPtr)
 {
-    if (otherPlayerPtr.locationClass.location == playerPtr.locationClass.location) {
+    if (otherPlayerPtr.locationClass.location == locationClass.location) {
         return true;
     } else {
         return false;

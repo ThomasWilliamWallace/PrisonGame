@@ -1,5 +1,5 @@
 #include "TranslateToHTNWorldState.h"
-#include "AbstractPlayerData.h"
+#include "PlayerData.h"
 #include "SimWorld.h"
 #include "PlayerRegistry.h"
 #include "Item.h"
@@ -19,8 +19,8 @@ HTNWorldState TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simwor
     
     AbstractItemPtr itemCarriedPtr = nullptr;
     
-    std::vector<AbstractPlayerData*> attackers;
-    std::vector<AbstractPlayerData*> playersInTheRoom;
+    std::vector<UPlayerData*> attackers;
+    std::vector<UPlayerData*> playersInTheRoom;
     for (auto relIter = playerPtr->relMap.cbegin(); relIter != playerPtr->relMap.cend(); ++relIter)
     {
         int relIndex = relIter->first;
@@ -28,20 +28,23 @@ HTNWorldState TranslateToHTNWorldState(UPlayerData* playerPtr, USimWorld& simwor
         if (rel != nullptr) {
             if (rel->getAggro()>29)
             {
-                attackers.push_back(&(playerMap[relIndex]->abstractPlayerData));
+                attackers.push_back(playerMap[relIndex]);
             }
-            if (playerMap[relIndex]->abstractPlayerData.locationClass.location == playerPtr->abstractPlayerData.locationClass.location && playerMap[relIndex] != playerPtr)
+            if (playerMap[relIndex]->locationClass.location == playerPtr->locationClass.location && playerMap[relIndex] != playerPtr)
             {
-                playersInTheRoom.push_back(&(playerMap[relIndex]->abstractPlayerData));
+                playersInTheRoom.push_back(playerMap[relIndex]);
             }
         }
     }
     
-    AbstractPlayerData* requesterPlayerData = nullptr;
+    UPlayerData* requesterPlayerData = nullptr;
     if (requester != nullptr) {
-        requesterPlayerData = &(requester->abstractPlayerData);
+        requesterPlayerData = requester;
     }
     
-    return HTNWorldState(&(playerPtr->abstractPlayerData), playerMap, world_items, requesterPlayerData, attackers, playersInTheRoom);
+    return HTNWorldState(playerPtr, playerMap, world_items, requesterPlayerData, attackers, playersInTheRoom,
+                        playerPtr->pStats.getHealth(), playerPtr->pStats.getSanity(),
+                        playerPtr->pStats.getStrength(), playerPtr->pStats.getAgility(), playerPtr->pStats.getIntelligence()
+                        );
 }
 

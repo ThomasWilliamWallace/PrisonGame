@@ -1,6 +1,6 @@
 #include "RequestHTNDomain.h"
 #include "Locations.h"
-#include "AbstractPlayerData.h"
+#include "PlayerData.h"
 #include "SimWorld.h"
 #include "HTNDomain.h"
 
@@ -20,7 +20,7 @@ void AcceptItemRequestPrim::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-std::shared_ptr<BaseAction> AcceptItemRequestPrim::Operate(AbstractPlayerData* playerData)
+std::shared_ptr<BaseAction> AcceptItemRequestPrim::Operate(UPlayerData* playerData)
 {
     return std::make_shared<BaseAction>(EActions::acceptRequest);
 }
@@ -38,7 +38,7 @@ void DeclineItemRequestPrim::Effect(HTNWorldState &htnWorldState)
     return;
 }
 
-std::shared_ptr<BaseAction> DeclineItemRequestPrim::Operate(AbstractPlayerData* playerData)
+std::shared_ptr<BaseAction> DeclineItemRequestPrim::Operate(UPlayerData* playerData)
 {
     return std::make_shared<BaseAction>(EActions::declineRequest);
 }

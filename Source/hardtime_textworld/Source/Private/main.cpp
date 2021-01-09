@@ -2,7 +2,7 @@
 #include <iomanip> // setprecision
 #include <sstream>
 #include "Constants.h"
-#include "AbstractPlayerData.h"
+#include "PlayerData.h"
 #include "Missions.h"
 #include "Actions.h"
 #include "Locations.h"
@@ -20,7 +20,7 @@ void PriorityActions(int frame, PlayerMap &playerMap, USimWorld &world)
     {
         UPlayerData* playerData = dynamic_cast<UPlayerData*>(playerIter->second);
         playerData->aiController.lastActionSucceeded = false;
-        action = playerData->abstractPlayerData.action->m_action;
+        action = playerData->action->m_action;
         
         switch(action)
         {
@@ -50,7 +50,7 @@ void PriorityActions(int frame, PlayerMap &playerMap, USimWorld &world)
             case EActions::dropItem:
                 break;
             case EActions::evade:
-                playerData->abstractPlayerData.narrative = "evade";
+                playerData->narrative = "evade";
                 break;
             case EActions::requestItem:
                 break;
@@ -66,10 +66,10 @@ void PriorityActions(int frame, PlayerMap &playerMap, USimWorld &world)
 
 void Act(UPlayerData* playerPtr, int frame, PlayerMap &playerMap, USimWorld &world)
 {
-    EActions action = playerPtr->abstractPlayerData.action->m_action;
-    if (playerPtr->abstractPlayerData.attacked && action != EActions::attack && action != EActions::evade)
+    EActions action = playerPtr->action->m_action;
+    if (playerPtr->attacked && action != EActions::attack && action != EActions::evade)
     {
-        playerPtr->abstractPlayerData.narrative = "attempted action " + ActionToString(action) + " but was attacked and lost their turn.";
+        playerPtr->narrative = "attempted action " + ActionToString(action) + " but was attacked and lost their turn.";
         return;
     }
     
@@ -80,81 +80,81 @@ void Act(UPlayerData* playerPtr, int frame, PlayerMap &playerMap, USimWorld &wor
         case EActions::evade:
             break;
         case EActions::goToBedroom:
-            if (playerPtr->abstractPlayerData.locationClass.location == ELocations::bedroom)
+            if (playerPtr->locationClass.location == ELocations::bedroom)
             {
-                playerPtr->abstractPlayerData.narrative = "tries to go to the bedroom, but is already there!";
+                playerPtr->narrative = "tries to go to the bedroom, but is already there!";
             } else
             {
-                if (playerPtr->abstractPlayerData.locationClass.location == ELocations::mainHall)
+                if (playerPtr->locationClass.location == ELocations::mainHall)
                 {
-                    playerPtr->abstractPlayerData.narrative = "goes to the bedroom.";
-                    playerPtr->abstractPlayerData.locationClass.location = ELocations::bedroom;
+                    playerPtr->narrative = "goes to the bedroom.";
+                    playerPtr->locationClass.location = ELocations::bedroom;
                     playerPtr->aiController.lastActionSucceeded = true;
                 } else
                 {
-                    playerPtr->abstractPlayerData.narrative = "tries to go to the bedroom, but is too far away.";
+                    playerPtr->narrative = "tries to go to the bedroom, but is too far away.";
                 }
             }
             break;
         case EActions::goToCircuitTrack:
-            if (playerPtr->abstractPlayerData.locationClass.location == ELocations::circuitTrack)
+            if (playerPtr->locationClass.location == ELocations::circuitTrack)
             {
-                playerPtr->abstractPlayerData.narrative = "tries to go to the circuit track, but is already there!";
+                playerPtr->narrative = "tries to go to the circuit track, but is already there!";
             } else
             {
-                if (playerPtr->abstractPlayerData.locationClass.location == ELocations::mainHall)
+                if (playerPtr->locationClass.location == ELocations::mainHall)
                 {
-                    playerPtr->abstractPlayerData.narrative = "goes to the circuit track.";
-                    playerPtr->abstractPlayerData.locationClass.location = ELocations::circuitTrack;
+                    playerPtr->narrative = "goes to the circuit track.";
+                    playerPtr->locationClass.location = ELocations::circuitTrack;
                     playerPtr->aiController.lastActionSucceeded = true;
                 } else
                 {
-                    playerPtr->abstractPlayerData.narrative = "tries to go to the circuit track, but is too far away.";
+                    playerPtr->narrative = "tries to go to the circuit track, but is too far away.";
                 }
             }
             break;
         case EActions::goToGym:
-            if (playerPtr->abstractPlayerData.locationClass.location == ELocations::gym)
+            if (playerPtr->locationClass.location == ELocations::gym)
             {
-                playerPtr->abstractPlayerData.narrative = "tries to go to the gym, but is already there!";
+                playerPtr->narrative = "tries to go to the gym, but is already there!";
             } else
             {
-                if (playerPtr->abstractPlayerData.locationClass.location == ELocations::mainHall)
+                if (playerPtr->locationClass.location == ELocations::mainHall)
                 {
-                    playerPtr->abstractPlayerData.narrative = "goes to the gym.";
-                    playerPtr->abstractPlayerData.locationClass.location = ELocations::gym;
+                    playerPtr->narrative = "goes to the gym.";
+                    playerPtr->locationClass.location = ELocations::gym;
                     playerPtr->aiController.lastActionSucceeded = true;
                 } else
                 {
-                    playerPtr->abstractPlayerData.narrative = "tries to go to the gym, but is too far away.";
+                    playerPtr->narrative = "tries to go to the gym, but is too far away.";
                 }
             }
             break;
         case EActions::goToLibrary:
-            if (playerPtr->abstractPlayerData.locationClass.location == ELocations::library)
+            if (playerPtr->locationClass.location == ELocations::library)
             {
-                playerPtr->abstractPlayerData.narrative = "tries to go to the library, but is already there!";
+                playerPtr->narrative = "tries to go to the library, but is already there!";
             } else
             {
-                if (playerPtr->abstractPlayerData.locationClass.location == ELocations::mainHall)
+                if (playerPtr->locationClass.location == ELocations::mainHall)
                 {
-                    playerPtr->abstractPlayerData.narrative = "goes to the library.";
-                    playerPtr->abstractPlayerData.locationClass.location = ELocations::library;
+                    playerPtr->narrative = "goes to the library.";
+                    playerPtr->locationClass.location = ELocations::library;
                     playerPtr->aiController.lastActionSucceeded = true;
                 } else
                 {
-                    playerPtr->abstractPlayerData.narrative = "tries to go to the library, but is too far away.";
+                    playerPtr->narrative = "tries to go to the library, but is too far away.";
                 }
             }
             break;
         case EActions::goToMainHall:
-            if (playerPtr->abstractPlayerData.locationClass.location == ELocations::mainHall)
+            if (playerPtr->locationClass.location == ELocations::mainHall)
             {
-                playerPtr->abstractPlayerData.narrative = "tries to go to the main hall, but is already there!";
+                playerPtr->narrative = "tries to go to the main hall, but is already there!";
             } else
             {
-                playerPtr->abstractPlayerData.narrative = "goes to the main hall.";
-                playerPtr->abstractPlayerData.locationClass.location = ELocations::mainHall;
+                playerPtr->narrative = "goes to the main hall.";
+                playerPtr->locationClass.location = ELocations::mainHall;
                 playerPtr->aiController.lastActionSucceeded = true;
             }
             break;
@@ -181,17 +181,17 @@ void Act(UPlayerData* playerPtr, int frame, PlayerMap &playerMap, USimWorld &wor
             break;
         case EActions::acceptRequest:
             ThrowException("ERROR: 'ACCEPT REQUEST' IS NOT AN MAIN TURN ACTION");
-            playerPtr->abstractPlayerData.narrative = "ERROR: 'ACCEPT REQUEST' IS NOT AN MAIN TURN ACTION";
+            playerPtr->narrative = "ERROR: 'ACCEPT REQUEST' IS NOT AN MAIN TURN ACTION";
             playerPtr->aiController.lastActionSucceeded = false;
             break;
         case EActions::declineRequest:
             ThrowException("ERROR: 'DECLINE REQUEST' IS NOT AN MAIN TURN ACTION");
-            playerPtr->abstractPlayerData.narrative = "ERROR: 'DECLINE REQUEST' IS NOT AN MAIN TURN ACTION";
+            playerPtr->narrative = "ERROR: 'DECLINE REQUEST' IS NOT AN MAIN TURN ACTION";
             playerPtr->aiController.lastActionSucceeded = false;
             break;
         case EActions::noAction:
             ThrowException("ERROR NO ACTION.");
-            playerPtr->abstractPlayerData.narrative = "ERROR NO ACTION.";
+            playerPtr->narrative = "ERROR NO ACTION.";
             playerPtr->aiController.lastActionSucceeded = false;
             break;
     }
@@ -203,7 +203,7 @@ void Display(PlayerMap &playerMap, int frame)
     for(auto playerIter = playerMap.cbegin(); playerIter != playerMap.cend(); ++playerIter)
     {
         UPlayerData* playerData = dynamic_cast<UPlayerData*>(playerIter->second);
-        ss << frame << ": " << playerData->abstractPlayerData.m_playerName << " tries to " << playerData->abstractPlayerData.action->ToString() << " while in the " << playerData->abstractPlayerData.lastLocationClass.ToString() << ": " << playerData->abstractPlayerData.narrative << "\n";
+        ss << frame << ": " << playerData->m_playerName << " tries to " << playerData->action->ToString() << " while in the " << playerData->lastLocationClass.ToString() << ": " << playerData->narrative << "\n";
     }
     pLog(ss, true);
 }
@@ -228,10 +228,10 @@ void CleanUpFrame(const PlayerMap &playerMap)
     for(auto playerIter = playerMap.cbegin(); playerIter != playerMap.cend(); ++playerIter)
     {
         UPlayerData* playerData = dynamic_cast<UPlayerData*>(playerIter->second);
-        playerData->abstractPlayerData.narrative = "";
-        playerData->abstractPlayerData.attacked = false;
-        playerData->abstractPlayerData.lastAction = playerData->abstractPlayerData.action;
-        playerData->abstractPlayerData.lastLocationClass.location = playerData->abstractPlayerData.locationClass.location;
+        playerData->narrative = "";
+        playerData->attacked = false;
+        playerData->lastAction = playerData->action;
+        playerData->lastLocationClass.location = playerData->locationClass.location;
     }
 }
 
@@ -253,21 +253,21 @@ void Simulate()
         UPlayerData* player;
 
         player = new UPlayerData();
-        player->abstractPlayerData.m_playerName = RandomName();
+        player->m_playerName = RandomName();
         player->aiController = AIController(AI::htnAI);
-        player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
+        player->missionClass = std::make_shared<MissionClass>(player);
         world.playerRegistry.RegisterPlayer(player);
         
         player = new UPlayerData();
-        player->abstractPlayerData.m_playerName = "Thomas";
+        player->m_playerName = "Thomas";
         player->aiController = AIController(AI::humanAI);
-        player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
+        player->missionClass = std::make_shared<MissionClass>(player);
         world.playerRegistry.RegisterPlayer(player);
         
         player = new UPlayerData();
-        player->abstractPlayerData.m_playerName = RandomName();
+        player->m_playerName = RandomName();
         player->aiController = AIController(AI::htnAI);
-        player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(player->abstractPlayerData));
+        player->missionClass = std::make_shared<MissionClass>(player);
         world.playerRegistry.RegisterPlayer(player);
     }
     
@@ -275,7 +275,7 @@ void Simulate()
     for(auto playerIter = playerMap.cbegin(); playerIter != playerMap.cend(); ++playerIter)
     {
         UPlayerData* player = dynamic_cast<UPlayerData*>(playerIter->second);
-        pLog(player->abstractPlayerData.missionClass->MissionNarrative(), true);
+        pLog(player->missionClass->MissionNarrative(), true);
     }
     
     // loop one time step at a time
@@ -288,7 +288,7 @@ void Simulate()
         for(auto playerIter = playerMap.cbegin(); playerIter != playerMap.cend(); ++playerIter)
         {
             UPlayerData* playerData = dynamic_cast<UPlayerData*>(playerIter->second);
-            playerData->abstractPlayerData.action = playerData->aiController.ChooseAction(*playerData, world);
+            playerData->action = playerData->aiController.ChooseAction(*playerData, world);
         }
         
         PriorityActions(frame, playerMap, world); //mainly for resolving clashes and attacks, ie conflict.

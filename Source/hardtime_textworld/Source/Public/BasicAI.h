@@ -19,7 +19,7 @@ enum class AI
 class AIController
 {
     HTNPrimitiveList htnPlan;
-    EActions ChooseRoom(AbstractPlayerData& player);
+    EActions ChooseRoom(UPlayerData& player);
     std::shared_ptr<BaseAction> DoNothingAIChooseAction(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);
     std::shared_ptr<BaseAction> RandomAIChooseAction(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);
     std::shared_ptr<BaseAction> aggroAIChooseAction(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);

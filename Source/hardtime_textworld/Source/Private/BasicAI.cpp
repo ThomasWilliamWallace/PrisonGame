@@ -1,5 +1,5 @@
 #include "BasicAI.h"
-#include "AbstractPlayerData.h"
+#include "PlayerData.h"
 #include <stdexcept>
 #include "HTNDomain.h"
 #include "RequestHTNDomain.h"
@@ -12,7 +12,7 @@
 #include "TranslateToHTNWorldState.h"
 #include <limits>
 
-EActions AIController::ChooseRoom(AbstractPlayerData& player)
+EActions AIController::ChooseRoom(UPlayerData& player)
 {
     if (player.locationClass.location == ELocations::mainHall)
     {
@@ -44,7 +44,7 @@ std::shared_ptr<BaseAction> AIController::ChooseAction(UPlayerData& player, USim
     
     for (int i = 0; i < playerCount; i++)
     {
-        if (OtherInReach(player.abstractPlayerData, world.playerRegistry.m_playerMap[i]->abstractPlayerData))
+        if (player.OtherInReach(*(world.playerRegistry.m_playerMap[i])))
         {
             playersInReach[i] = true;
             countPlayersInReach += 1;
@@ -82,7 +82,7 @@ void AIController::CreateMissionOffer(UPlayerData& player, USimWorld& world, boo
         {
             if (random <= (100 * (target + 1) / countPlayersInReach))
             {
-                player.missionOffer = std::make_shared<MissionClass>(&(player.abstractPlayerData));
+                player.missionOffer = std::make_shared<MissionClass>(&player);
                 return;
             }
             target += 1;
@@ -121,7 +121,7 @@ std::shared_ptr<BaseAction> AIController::RandomAIChooseAction(UPlayerData& play
     int playerCount = world.playerRegistry.m_playerMap.size();
     if (countPlayersInReach > 0)
     {
-        if (RandPercent() < player.abstractPlayerData.pStats.aggression)
+        if (RandPercent() < player.pStats.aggression)
         {
             // attack --a random target in the room
             int target = 0;
@@ -132,7 +132,7 @@ std::shared_ptr<BaseAction> AIController::RandomAIChooseAction(UPlayerData& play
                 {
                     if (random <= (100 * (target + 1) / countPlayersInReach))
                     {
-                        return std::make_shared<AttackAction>(&(playerMap[i]->abstractPlayerData));
+                        return std::make_shared<AttackAction>(playerMap[i]);
                     }
                     target += 1;
                 }
@@ -143,19 +143,19 @@ std::shared_ptr<BaseAction> AIController::RandomAIChooseAction(UPlayerData& play
             return std::make_shared<BaseAction>(EActions::evade);
         } else if (RandPercent() < 35)
         {
-            return std::make_shared<MakeFriendsAction>(&(playerMap[TargetForMakeFriend(player, world, playersInReach, countPlayersInReach)]->abstractPlayerData));
+            return std::make_shared<MakeFriendsAction>(playerMap[TargetForMakeFriend(player, world, playersInReach, countPlayersInReach)]);
         } else if (RandPercent() < 50)
         {
-            return std::make_shared<OfferMissionAction>(&(player.abstractPlayerData), std::make_shared<MissionClass>(&(player.abstractPlayerData)));
+            return std::make_shared<OfferMissionAction>(&player, std::make_shared<MissionClass>(&player));
         } else
         {
-            return std::make_shared<BaseAction>(ChooseRoom(player.abstractPlayerData));
+            return std::make_shared<BaseAction>(ChooseRoom(player));
         }
     } else if (RandPercent() < 80) {
         return std::make_shared<BaseAction>(EActions::useRoom);
     } else
     {
-        return std::make_shared<BaseAction>(ChooseRoom(player.abstractPlayerData));
+        return std::make_shared<BaseAction>(ChooseRoom(player));
     }
     return std::make_shared<BaseAction>(EActions::noAction);
 }
@@ -169,13 +169,13 @@ std::shared_ptr<BaseAction> AIController::aggroAIChooseAction(UPlayerData& playe
         double aggros[playerCount];
         for (int i = 0; i < playerCount; i++)
         {
-            aggros[i] = player.relMap[i]->getAggro() * player.abstractPlayerData.pStats.aggression/100;
+            aggros[i] = player.relMap[i]->getAggro() * player.pStats.aggression/100;
         }
         
         double fears[playerCount];
         for (int i = 0; i < playerCount; i++)
         {
-            fears[i] = player.relMap[i]->getFear() * (1-(player.abstractPlayerData.pStats.proud/100));
+            fears[i] = player.relMap[i]->getFear() * (1-(player.pStats.proud/100));
         }
         
         double friendlinesses[playerCount];
@@ -199,31 +199,31 @@ std::shared_ptr<BaseAction> AIController::aggroAIChooseAction(UPlayerData& playe
             }
         }
 
-        if (RandPercent() < (c_aggro_scale * max_aggro * player.abstractPlayerData.pStats.aggression / 100))
+        if (RandPercent() < (c_aggro_scale * max_aggro * player.pStats.aggression / 100))
         {
 			if (RandPercent() < 25)
 			{
 				return std::make_shared<BaseAction>(EActions::evade);
 			} else
 			{
-				return std::make_shared<AttackAction>(&(playerMap[max_aggro_index]->abstractPlayerData));
+				return std::make_shared<AttackAction>(playerMap[max_aggro_index]);
 			}
         } else if (RandPercent() < 20)
         {
-            return std::make_shared<MakeFriendsAction>(&(playerMap[TargetForMakeFriend(player, world, playersInReach, countPlayersInReach)]->abstractPlayerData));
+            return std::make_shared<MakeFriendsAction>(playerMap[TargetForMakeFriend(player, world, playersInReach, countPlayersInReach)]);
         } else if (RandPercent() < 60)
         {
-            return std::make_shared<OfferMissionAction>(&(player.abstractPlayerData), std::make_shared<MissionClass>(&(player.abstractPlayerData)));
+            return std::make_shared<OfferMissionAction>(&player, std::make_shared<MissionClass>(&player));
         } else
         {
-            return std::make_shared<BaseAction>(ChooseRoom(player.abstractPlayerData));
+            return std::make_shared<BaseAction>(ChooseRoom(player));
         }
     } else if (RandPercent() < 80)
     {
         return std::make_shared<BaseAction>(EActions::useRoom);
     } else
     {
-        return std::make_shared<BaseAction>(ChooseRoom(player.abstractPlayerData));
+        return std::make_shared<BaseAction>(ChooseRoom(player));
     }
     return std::make_shared<BaseAction>(EActions::noAction);
 }
@@ -248,7 +248,7 @@ std::shared_ptr<BaseAction> AIController::htnAIChooseAction(UPlayerData& player,
     if (!hasValidPlan)
     {
         //make new plan
-        std::cout << player.abstractPlayerData.m_playerName << ": Make a new plan:\n";
+        std::cout << player.m_playerName << ": Make a new plan:\n";
         HTNWorldState htnWorldStateDFSCopy(htnWorldState);
         HTNCompound* missionPtr = new PrisonerBehaviourCompound();
         
@@ -268,13 +268,13 @@ std::shared_ptr<BaseAction> AIController::htnAIChooseAction(UPlayerData& player,
     
     if (!hasValidPlan)
     {
-        std::cout << player.abstractPlayerData.m_playerName << ": Give up and return noAction\n";
+        std::cout << player.m_playerName << ": Give up and return noAction\n";
         return std::make_shared<BaseAction>(EActions::noAction); //If next step of the plan is still not valid, then return failure state
     } else {
         //continue with current plan
         HTNPrimitivePtr currentPlanStep = htnPlan.front();
         htnPlan.pop_front();
-        return currentPlanStep->Operate(&(player.abstractPlayerData));
+        return currentPlanStep->Operate(&(player));
     }
 }
 
@@ -305,9 +305,9 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                 playersInRoom = 0;
                 for (int i = 0; i < playerCount; i++)
                 {
-                    if (playerMap[i]->abstractPlayerData.locationClass.location == player.abstractPlayerData.locationClass.location)
+                    if (playerMap[i]->locationClass.location == player.locationClass.location)
                     {
-                        std::cout << "Player \"" << playerMap[i]->abstractPlayerData.m_playerName << "\", (index=" << i << ")\n";
+                        std::cout << "Player \"" << playerMap[i]->m_playerName << "\", (index=" << i << ")\n";
                         playersInRoom += 1;
                     }
                 }
@@ -318,7 +318,7 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                 itemsInRoom = 0;
                 for (auto &item : world.items)
                 {
-                    if (item->m_locationClass.location == player.abstractPlayerData.locationClass.location && item->m_carryingPlayer == nullptr)
+                    if (item->m_locationClass.location == player.locationClass.location && item->m_carryingPlayer == nullptr)
                     {
                         std::cout << "Item \"" << item->ToString() << "\", (index=" << itemsInRoom << ")\n";
                         itemsInRoom += 1;
@@ -359,7 +359,7 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                         resetInput();
                         std::cout << "Invalid target player!\n";
                     } else {
-                        return std::make_shared<AttackAction>(&(playerMap[targetPlayer]->abstractPlayerData));
+                        return std::make_shared<AttackAction>(playerMap[targetPlayer]);
                     }
                 }
             case 'e': return std::make_shared<BaseAction>(EActions::evade);
@@ -381,7 +381,7 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                         int itemIndex = 0;
                         for (auto &item : world.items)
                         {
-                            if (item->m_locationClass.location == player.abstractPlayerData.locationClass.location && item->m_carryingPlayer == nullptr)
+                            if (item->m_locationClass.location == player.locationClass.location && item->m_carryingPlayer == nullptr)
                             {
                                 if (itemCountInRoom == targetItem)
                                 {
@@ -405,7 +405,7 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                         resetInput();
                         std::cout << "Invalid target player!\n";
                     } else {
-                        return std::make_shared<MakeFriendsAction>(&(playerMap[targetPlayer]->abstractPlayerData));
+                        return std::make_shared<MakeFriendsAction>(playerMap[targetPlayer]);
                     }
                 }
             case 'o':
@@ -416,7 +416,7 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                         resetInput();
                         std::cout << "Invalid target player!\n";
                     } else {
-                        return std::make_shared<OfferMissionAction>(&(playerMap[targetPlayer]->abstractPlayerData), std::make_shared<MissionClass>(&(player.abstractPlayerData)));
+                        return std::make_shared<OfferMissionAction>(playerMap[targetPlayer], std::make_shared<MissionClass>(&player));
                     }
                 }
             case 'r':
@@ -429,7 +429,7 @@ std::shared_ptr<BaseAction> AIController::humanAIChooseAction(UPlayerData& playe
                     } else {
                         UPlayerData* playerData = playerMap[targetPlayer];
                         if (playerData != nullptr) {
-                            return std::make_shared<RequestItemAction>(&(playerData->abstractPlayerData));
+                            return std::make_shared<RequestItemAction>(playerData);
                         } else {
                             std::cout << "Invalid- target player is nullptr";
                         }
@@ -476,7 +476,7 @@ bool AIController::RespondToOffer(UPlayerData& player, USimWorld& world, int req
         }
     } else {
         //lastActionSucceeded = false;
-        std::cout << player.abstractPlayerData.m_playerName << ": Asked for item, make a new plan:\n";
+        std::cout << player.m_playerName << ": Asked for item, make a new plan:\n";
         
         //update worldstate from real world
         HTNWorldState htnWorldState = TranslateToHTNWorldState(&player, world, world.playerRegistry.m_playerMap, playerMap[requesterIndex]);
@@ -504,7 +504,7 @@ bool AIController::RespondToOffer(UPlayerData& player, USimWorld& world, int req
             //continue with current plan
             HTNPrimitivePtr currentPlanStep = htnPlan.back();
             htnPlan.pop_back();
-            std::shared_ptr<BaseAction> responseAction = currentPlanStep->Operate(&(player.abstractPlayerData));
+            std::shared_ptr<BaseAction> responseAction = currentPlanStep->Operate(&player);
             switch(responseAction->m_action)
             {
                 case EActions::acceptRequest:

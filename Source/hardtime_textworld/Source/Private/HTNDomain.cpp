@@ -3,6 +3,8 @@
 #include "HTNPrimitives.h"
 #include "pLog.h"
 #include "PlatformSpecific.h"
+#include "EMissions.h"
+#include "Missions.h"
 
 //***********************************************************
 AlreadyInLibraryMethod::AlreadyInLibraryMethod(): HTNMethod("AlreadyInLibraryMethod")
@@ -340,7 +342,7 @@ void PickupItemMethod::CreateTasks(HTNWorldState const& htnWorldState)
     }
 }
 
-RequestItemMethod::RequestItemMethod(AbstractPlayerData* player, EItemType itemType): HTNMethod("RequestItemMethod"), m_player(player), m_itemType(itemType)
+RequestItemMethod::RequestItemMethod(UPlayerData* player, EItemType itemType): HTNMethod("RequestItemMethod"), m_player(player), m_itemType(itemType)
 {}
 
 bool RequestItemMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -418,7 +420,7 @@ void BringItemToLocationCompound::CreateMethods(HTNWorldState const& htnWorldSta
 }
 
 //***********************************************************
-PickupItemAndAttackMethod::PickupItemAndAttackMethod(SimItemPtr item, AbstractPlayerData* opponent):
+PickupItemAndAttackMethod::PickupItemAndAttackMethod(SimItemPtr item, UPlayerData* opponent):
     HTNMethod("PickupItemAndAttackMethod"),
     m_item(item),
     m_opponent(opponent)
@@ -447,7 +449,7 @@ void PickupItemAndAttackMethod::CreateTasks(HTNWorldState const& htnWorldState)
     AddTask(new PunchPrim(m_opponent));
 }
 
-AttackImmediateMethod::AttackImmediateMethod(AbstractPlayerData* opponent):
+AttackImmediateMethod::AttackImmediateMethod(UPlayerData* opponent):
     HTNMethod("AttackImmediateMethod"),
     m_opponent(opponent)
 {}
@@ -462,7 +464,7 @@ void AttackImmediateMethod::CreateTasks(HTNWorldState const& htnWorldState)
     AddTask(new PunchPrim(m_opponent));
 }
 
-AttackCompound::AttackCompound(AbstractPlayerData* opponent):
+AttackCompound::AttackCompound(UPlayerData* opponent):
     HTNCompound("AttackCompound"),
     m_opponent(opponent)
 {}
@@ -479,7 +481,7 @@ void AttackCompound::CreateMethods(HTNWorldState const& htnWorldState)
     AddMethod(new AttackImmediateMethod(m_opponent));
 }
 
-AttackMethod::AttackMethod(AbstractPlayerData* opponent):
+AttackMethod::AttackMethod(UPlayerData* opponent):
     HTNMethod("AttackMethod"),
     m_opponent(opponent)
 {}
@@ -495,7 +497,7 @@ void AttackMethod::CreateTasks(HTNWorldState const& htnWorldState)
 }
 
 //***********************************************************
-EvadeMethod::EvadeMethod(AbstractPlayerData* opponent):
+EvadeMethod::EvadeMethod(UPlayerData* opponent):
     HTNMethod("EvadeMethod"),
     m_opponent(opponent)
 {}
@@ -521,7 +523,7 @@ void EvadeMethod::CreateTasks(HTNWorldState const& htnWorldState)
     AddTask(new EvadePrim(m_opponent));
 }
 
-CombatCompound::CombatCompound(AbstractPlayerData* opponent):
+CombatCompound::CombatCompound(UPlayerData* opponent):
     HTNCompound("CombatCompound"),
     m_opponent(opponent)
 {}
@@ -629,7 +631,7 @@ void PickUpUnneccessaryItemMethod::CreateTasks(HTNWorldState const& htnWorldStat
 }
 
 //***********************************************************
-CombatMethod::CombatMethod(AbstractPlayerData* opponent):
+CombatMethod::CombatMethod(UPlayerData* opponent):
     HTNMethod("CombatMethod"),
     m_opponent(opponent)
 {}

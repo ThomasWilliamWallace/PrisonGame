@@ -2,10 +2,10 @@
 
 #include <algorithm>
 #include "PlatformSpecific.h"
-#include "AbstractPlayerData.h"
 #include "AbstractAction.h"
 
 class USimWorld;
+class UPlayerData;
 
 bool OtherInReach(UPlayerData* playerPtr, UPlayerData* otherPlayerPtr, PlayerMap &playerMap);
 
