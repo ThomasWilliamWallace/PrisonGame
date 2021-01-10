@@ -100,7 +100,7 @@ void USimWorld::RemovePlayer(UPlayerData* playerData)
 		pLog("ERROR: playerData IS NOT VALID DURING USimWorld::RemovePlayer", true);
 		//return;
 	}
-	m_playerRegistry->DeregisterPlayer(playerData->abstractPlayerData.m_key);
+	m_playerRegistry->DeregisterPlayer(playerData->m_key);
 }
 
 void USimWorld::UpdateCarriedItem(AActorItem* item, ACharacter* character)

@@ -10,7 +10,6 @@ class HTNMethod;
 struct StackNode;
 class AbstractItem;
 class SimItem;
-class AbstractPlayerData;
 class UPlayerData;
 
 typedef std::shared_ptr<HTNPrimitive> HTNPrimitivePtr;
@@ -173,8 +172,8 @@ HTNMethodPtr CastNodeToMethod(HTNNodePtr htnNodePtr);
 StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr);
 HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound);
 
-AbstractItemPtr MakeSharedAbstractItemPtr(EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer);
-SimItemPtr MakeSharedSimItemPtr(RealItemType* realItem, EItemType itemType, ELocations location, AbstractPlayerData* carryingPlayer);
+AbstractItemPtr MakeSharedAbstractItemPtr(EItemType itemType, ELocations location, UPlayerData* carryingPlayer);
+SimItemPtr MakeSharedSimItemPtr(RealItemType* realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer);
 
 // Encapsulated because Unreal Engine uses a different exception system
 [[noreturn]] void ThrowException(const std::string& errorMessage);

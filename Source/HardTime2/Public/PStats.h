@@ -1,21 +1,34 @@
 #pragma once
 
-#include <stdio.h>
-#include <iostream>
-#include "Locations.h"
+#include "UObject/Object.h"
+#include "PStats.generated.h"
 
-class PStats //the abilities of the character. Generally linear and bound between 0 and 100.
+UCLASS(BlueprintType, Blueprintable)
+class UPStats : public UObject
 {
-    double health = 70; //physical health. When it reaches 0, a death may be triggered.
-    double sanity = 70; //mental health. When it reaches 0, a breakdown is triggered.
-    
-    double strength = 0; //improves your health and fight damage
-    double agility = 0; //improves your speed
-    double intelligence = 0; //improves your ability to use items such as computers
-    double charisma = 0; //ability to influence others socially
-    double reputation = 0; //reputation for fearsome deeds
-    double respect = 0; //reputation for effectiveness
-    
+    GENERATED_BODY()
+
+public:
+    UPStats(const FObjectInitializer& ObjectInitializer);
+    private:
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float health = 70; //physical health. When it reaches 0, a death may be triggered.
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float sanity = 70; //mental health. When it reaches 0, a breakdown is triggered.
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float strength = 50; //improves your health and fight damage
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float agility = 80; //improves your speed
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float intelligence = 30; //improves your ability to use items such as computers
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float charisma = 40; //ability to influence others socially
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float reputation = 20; //reputation for fearsome deeds
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        float respect = 60; //reputation for effectiveness
+
 public:
     // *** PERSONALITY TRAITS START ***
     int loyalty = rand() % 100; //loyal characters will stick by their friends, and make new friends slower.
@@ -43,7 +56,7 @@ public:
     double getCharisma();
     double getReputation();
     double getRespect();
-    
+
     void deltaHealth(double delta);
     void deltaSanity(double delta);
     void deltaStrength(double delta);
@@ -52,9 +65,8 @@ public:
     void deltaCharisma(double delta);
     void deltaReputation(double delta);
     void deltaRespect(double delta);
-    
+
     void PrintStats();
-    PStats();
 };
 
 double transformStat(double inputStat);

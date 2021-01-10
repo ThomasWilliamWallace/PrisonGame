@@ -52,7 +52,7 @@ void UPlayerData::UpdateMissions(USimWorld &world)
     if (tempMissionClass->IsMissionComplete(world))
     {
 		std::stringstream ss;
-		ss << m_playerName << " has completed his mission to " << missionClass->MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
+		ss << CharacterName() << " has completed his mission to " << missionClass->MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
 		pLog(ss, true);
 		pStats.deltaSanity(5);
         missionClass = std::make_shared<MissionClass>(this);
@@ -85,7 +85,6 @@ UPlayerData::UPlayerData()
     attacked = false;
     narrative = "Narrative not set";
     m_playerName = "No-name";
-    missionClass = nullptr;
 }
 
 bool UPlayerData::OtherInReach(UPlayerData& otherPlayerPtr)

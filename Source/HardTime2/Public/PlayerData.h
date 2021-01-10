@@ -6,11 +6,10 @@
 #include "BasicAI.h"
 #include "AbstractAction.h"
 #include "Constants.h"
-#include "Object.h"
+#include "UObject/Object.h"
 #include "PlatformSpecific.h"
 #include "Relationship.h"
 #include "Runtime/Core/Public/UObject/NameTypes.h"
-#include "AbstractPlayerData.h"
 #include "PlayerData.generated.h"
 
 class USimWorld;
@@ -24,9 +23,22 @@ class UPlayerData : public UObject
 	GENERATED_BODY()
 
 public:
+
+    int m_key; //players PlayerRegistry index
+    std::shared_ptr<BaseAction> action; //stores the current action being attempted. This is held till the end of the frame, as it may be interrupted by another action.
+    std::shared_ptr<BaseAction> lastAction; //stores the last action taken. Useful for checking if hidden.
+    LocationClass locationClass; //location maps to a discrete set of locations, gym, library, circuit track, bed.
+    LocationClass lastLocationClass; //location the character was at when the turn began. Used by the print display.
+    bool attacked = false; //tracks whether an attack has disrupted his turn.
+    std::string narrative; //printed at the end of each round, giving the update for this character
+    FName m_playerName; //name of the character, used in speech.
+    std::shared_ptr<MissionClass> missionClass; //a mission currently assigned to the character
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		UPStats* pStats;
+
     int cash; //cash, in dollars, no bounds.
     int sentence; //days left in prison sentence, only bound is above -1.
-    FName m_playerName; //name of the character, used in speech.
     AIController aiController; //controlling AI for this character
     std::shared_ptr<MissionClass> missionOffer; // a mission being offered to 'playerTarget'
 
@@ -54,8 +66,8 @@ public:
 	virtual class UWorld* GetWorld() const override;
 
 	std::string CharacterName();
-	AbstractPlayerData abstractPlayerData;
+
+    bool OtherInReach(UPlayerData& otherPlayerPtr, PlayerMap& playerMap);
 };
 
 
-bool OtherInReach(AbstractPlayerData& playerPtr, AbstractPlayerData& otherPlayerPtr, PlayerMap& playerMap);

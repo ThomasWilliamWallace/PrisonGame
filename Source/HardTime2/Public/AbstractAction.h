@@ -7,7 +7,7 @@
 
 class HTNWorldState;
 
-class AbstractMission;
+class MissionClass;
 #ifndef TEXT_ONLY_HTN
 class AActorItem;
 #endif
@@ -52,15 +52,15 @@ class GoToMainHallAction : public BaseAction
 class AttackAction : public BaseAction
 {
 public:
-    AttackAction(AbstractPlayerData* targetPlayer): BaseAction(EActions::attack), m_targetPlayer(targetPlayer) {};
-    AbstractPlayerData* m_targetPlayer;
+    AttackAction(UPlayerData* targetPlayer): BaseAction(EActions::attack), m_targetPlayer(targetPlayer) {};
+    UPlayerData* m_targetPlayer;
 };
 
 class EvadeAction : public BaseAction
 {
 public:
-    EvadeAction(AbstractPlayerData* evadePlayer) : BaseAction(EActions::evade), m_evadePlayer(evadePlayer) {};
-    AbstractPlayerData* m_evadePlayer;
+    EvadeAction(UPlayerData* evadePlayer) : BaseAction(EActions::evade), m_evadePlayer(evadePlayer) {};
+    UPlayerData* m_evadePlayer;
 };
 
 class PickUpItemByPtrAction : public BaseAction
@@ -82,9 +82,9 @@ public:
 class RequestItemAction : public BaseAction
 {
 public:
-    RequestItemAction(AbstractPlayerData* targetPlayer, EItemType itemType);
-    RequestItemAction(AbstractPlayerData* targetPlayer);
-    AbstractPlayerData* m_targetPlayer;
+    RequestItemAction(UPlayerData* targetPlayer, EItemType itemType);
+    RequestItemAction(UPlayerData* targetPlayer);
+    UPlayerData* m_targetPlayer;
     bool m_itemTypeSpecified;
     EItemType m_itemType;
 	bool LastActionSucceeded(HTNWorldState const& htnWorldState) override;
@@ -98,14 +98,14 @@ class DropItemAction : public BaseAction
 class MakeFriendsAction : public BaseAction
 {
 public:
-    MakeFriendsAction(AbstractPlayerData* targetPlayer): BaseAction(EActions::makeFriends), m_targetPlayer(targetPlayer) {};
-    AbstractPlayerData* m_targetPlayer;
+    MakeFriendsAction(UPlayerData* targetPlayer): BaseAction(EActions::makeFriends), m_targetPlayer(targetPlayer) {};
+    UPlayerData* m_targetPlayer;
 };
 
 class OfferMissionAction : public BaseAction
 {
 public:
-    OfferMissionAction(AbstractPlayerData* targetPlayer, std::shared_ptr<AbstractMission> offeredMission): BaseAction(EActions::offerMission), m_targetPlayer(targetPlayer), m_offeredMission(offeredMission) {};
-    AbstractPlayerData* m_targetPlayer;
-    std::shared_ptr<AbstractMission> m_offeredMission;
+    OfferMissionAction(UPlayerData* targetPlayer, std::shared_ptr<MissionClass> offeredMission): BaseAction(EActions::offerMission), m_targetPlayer(targetPlayer), m_offeredMission(offeredMission) {};
+    UPlayerData* m_targetPlayer;
+    std::shared_ptr<MissionClass> m_offeredMission;
 };

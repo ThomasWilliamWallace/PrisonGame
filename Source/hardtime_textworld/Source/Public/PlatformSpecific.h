@@ -11,7 +11,6 @@ struct StackNode;
 class AbstractItem;
 class SimItem;
 class UPlayerData;
-class UPlayerData;
 
 typedef std::shared_ptr<HTNPrimitive> HTNPrimitivePtr;
 typedef std::shared_ptr<HTNCompound> HTNCompoundPtr;

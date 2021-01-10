@@ -37,7 +37,7 @@ public:
     HTNPrimitive(std::string name);
     virtual bool Preconditions(HTNWorldState const& htnWorldState); //must be true before this task can occur in the plan.
     virtual void Effect(HTNWorldState &htnWorldState); //simplified, predicted effect of taking this action. Will be applied to the simulated world during planning.
-    virtual std::shared_ptr<BaseAction> Operate(AbstractPlayerData* playerData);  //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
+    virtual std::shared_ptr<BaseAction> Operate(UPlayerData* playerData);  //actual code that will be run to control the player when taking this action. Sets the player registers, and returns an action.
     virtual ~HTNPrimitive() override = default;
 };
 

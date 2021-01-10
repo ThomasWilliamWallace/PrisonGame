@@ -9,7 +9,7 @@ void UPlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
         addKey += 1;
     } while (Contains(m_playerMap, addKey));
     Add(m_playerMap, addKey, addPlayerData);
-    addPlayerData->abstractPlayerData.m_key = addKey;
+    addPlayerData->m_key = addKey;
     
     //add relationships
     for(auto &playerIter : m_playerMap)

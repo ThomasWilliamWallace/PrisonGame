@@ -6,6 +6,7 @@
 #include "HTNWorldState.h"
 #include "PlayerData.h"
 
+class UPlayerData;
 class USimWorld;
 /*
 //***********************************************************

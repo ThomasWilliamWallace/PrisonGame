@@ -5,6 +5,7 @@
 #include "AbstractItem.h"
 #include "EItemType.h"
 #include "PlayerData.h"
+#include <string>
 #include "ActorItem.generated.h"
 
 UCLASS()
