@@ -46,3 +46,4 @@
 .build-debug/
 .codelite
 /out/build/x64-Debug (default)
+/out/build/x64-Debug

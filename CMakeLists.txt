@@ -3,14 +3,15 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-project ("HardTime2")
+project ("hardtime_textworld")
 
 # Compiler flags
+add_compile_definitions(TEXT_ONLY_HTN)
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -g -O0 -Wall -D TEXT_ONLY_HTN")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -g -O0 -Wall")
 endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std:c++17 -D TEXT_ONLY_HTN")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std:c++17")
 endif()
 
 # GTest
@@ -29,6 +30,7 @@ FetchContent_MakeAvailable(googletest)
 set(ht2tw_folder "${CMAKE_SOURCE_DIR}/Source/hardtime_textworld/Source")
 set(ht2tw_public "${ht2tw_folder}/Public")
 set(ht2tw_private "${ht2tw_folder}/Private")
+set(ht2tw_tests "${ht2tw_folder}/tests")
 
 # Header and source variables
 set(ht2tw_header_files
@@ -67,7 +69,6 @@ set(ht2tw_source_files
 	"${ht2tw_private}/HTNPrimitives.cpp"
 	"${ht2tw_private}/HTNWorldState.cpp"
 	"${ht2tw_private}/Item.cpp"
-	"${ht2tw_private}/main.cpp"
 	"${ht2tw_private}/BasicAI.cpp"
 	"${ht2tw_private}/Constants.cpp"
 	"${ht2tw_private}/Relationship.cpp"
@@ -86,10 +87,22 @@ set(ht2tw_source_files
 )
 
 # Main executable
-add_executable (${PROJECT_NAME} "${ht2tw_header_files}" "${ht2tw_source_files}")
+add_executable (${PROJECT_NAME} "${ht2tw_private}/main.cpp" "${ht2tw_header_files}" "${ht2tw_source_files}")
 target_include_directories(${PROJECT_NAME} PRIVATE ${ht2tw_public} ${ht2tw_private})
 
 # Unit tests
-add_executable(tests "${ht2tw_folder}/tests.cpp")
+add_executable (tests "${ht2tw_tests}/tests.cpp" "${ht2tw_header_files}" "${ht2tw_source_files}")
+#add_executable(tests
+#	"${ht2tw_tests}/tests.cpp"
+#	"${ht2tw_public}/HTNWorldState.h"
+#	"${ht2tw_public}/HTNPlanner.h"
+#	"${ht2tw_public}/HTNDomain.h"
+#	"${ht2tw_public}/Locations.h"
+#	"${ht2tw_public}/SimWorld.h"
+#	"${ht2tw_public}/EItemType.h"
+#	"${ht2tw_public}/pLog.h"
+#	"${ht2tw_public}/PlayerData.h"
+#)
+target_include_directories(tests PRIVATE ${ht2tw_public} ${ht2tw_private})
 target_link_libraries(tests gtest_main)
 add_test(NAME example_test COMMAND tests)
