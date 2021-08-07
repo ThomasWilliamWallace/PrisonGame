@@ -38,8 +38,8 @@ EActions AIController::ChooseRoom(UPlayerData& player)
 
 std::shared_ptr<BaseAction> AIController::ChooseAction(UPlayerData& player, USimWorld& world)
 {
-    int playerCount = world.playerRegistry.m_playerMap.size();
-    bool playersInReach[playerCount];
+    const int playerCount = world.playerRegistry.m_playerMap.size();
+    bool* playersInReach = new bool[playerCount];
     int countPlayersInReach = 0;
     
     for (int i = 0; i < playerCount; i++)
@@ -166,19 +166,19 @@ std::shared_ptr<BaseAction> AIController::aggroAIChooseAction(UPlayerData& playe
     PlayerMap& playerMap = world.playerRegistry.m_playerMap;
     if (countPlayersInReach > 0)
     {
-        double aggros[playerCount];
+        double* aggros = new double[playerCount];
         for (int i = 0; i < playerCount; i++)
         {
             aggros[i] = player.relMap[i]->getAggro() * player.pStats.aggression/100;
         }
         
-        double fears[playerCount];
+        double* fears = new double[playerCount];
         for (int i = 0; i < playerCount; i++)
         {
             fears[i] = player.relMap[i]->getFear() * (1-(player.pStats.proud/100));
         }
         
-        double friendlinesses[playerCount];
+        double* friendlinesses = new double[playerCount];
         for (int i = 0; i < playerCount; i++)
         {
             friendlinesses[i] = player.relMap[i]->getFriendliness(); // multiply by a friendliness personality constant?
