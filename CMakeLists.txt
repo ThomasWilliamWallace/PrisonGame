@@ -5,19 +5,32 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("HardTime2")
 
+# Compiler flags
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -g -O0 -Wall -D TEXT_ONLY_HTN")
+endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std:c++17 -D TEXT_ONLY_HTN")
+endif()
+
+# GTest
+enable_testing()
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  # Specify the commit you depend on and update it regularly.
+  URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+# Set path variables
 set(ht2tw_folder "${CMAKE_SOURCE_DIR}/Source/hardtime_textworld/Source")
 set(ht2tw_public "${ht2tw_folder}/Public")
 set(ht2tw_private "${ht2tw_folder}/Private")
-set(ht2tw_cmake_test "${ht2tw_folder}/cmake_test")
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -Wall -D TEXT_ONLY_HTN")
-endif()
-
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D TEXT_ONLY_HTN")
-endif()
-
+# Header and source variables
 set(ht2tw_header_files
 	"${ht2tw_public}/AbstractAction.h"
 	"${ht2tw_public}/AbstractItem.h"
@@ -72,14 +85,11 @@ set(ht2tw_source_files
 	"${ht2tw_private}/PlatformSpecific.cpp"
 )
 
-# Add source to this project's executable.
+# Main executable
 add_executable (${PROJECT_NAME} "${ht2tw_header_files}" "${ht2tw_source_files}")
-
-target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
-
 target_include_directories(${PROJECT_NAME} PRIVATE ${ht2tw_public} ${ht2tw_private})
 
-# TODO: Add tests and install targets if needed.
-
-# Include sub-projects.
-#add_subdirectory ("hardtime_textworld_cmake")
+# Unit tests
+add_executable(tests "${ht2tw_folder}/tests.cpp")
+target_link_libraries(tests gtest_main)
+add_test(NAME example_test COMMAND tests)
