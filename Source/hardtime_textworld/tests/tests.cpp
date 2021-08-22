@@ -124,10 +124,11 @@ namespace tests {
         EXPECT_EQ(pickUpItemByPtrPrim->m_itemFocus->m_realItem, extinguisher_in_hall);
     }
     */
-    class EmptyWorld : public ::testing::Test
+    class EmptyScenario : public ::testing::Test
     {
     protected:
         std::shared_ptr<USimWorld> world = std::make_shared<USimWorld>();
+        UPlayerData* player;
 
         virtual void SetUp()
         {
@@ -135,8 +136,6 @@ namespace tests {
             PlayerMap& playerMap = playerRegistry.m_playerMap;
 
             //Add players
-            UPlayerData* player;
-
             player = new UPlayerData();
 
             player->m_playerName = "Thomas";
@@ -146,11 +145,11 @@ namespace tests {
 
         virtual void TearDown()
         {
+            // UPlayerData memory will be freed by playerRegistry in world.
         }
     };
 
-    TEST_F(EmptyWorld, DefaultGoStudyFromCentre) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, DefaultGoStudyFromCentre) {
 
         HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
@@ -160,8 +159,8 @@ namespace tests {
         ASSERT_EQ(htnPlan[1]->m_name, "StudyPrim");
     }
 
-    TEST_F(EmptyWorld, DefaultGoStudyFromPeriphery) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, DefaultGoStudyFromPeriphery) {
+
         player->locationClass = ELocations::circuitTrack;
 
         HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
@@ -173,8 +172,8 @@ namespace tests {
         ASSERT_EQ(htnPlan[2]->m_name, "StudyPrim");
     }
 
-    TEST_F(EmptyWorld, DefaultPickUpItemFromCentre) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, DefaultPickUpItemFromCentre) {
+
         world->items.push_back(new Item(EItemType::hammer, ELocations::mainHall));
         Item* hammer_in_hall = world->items[0];
 
@@ -187,8 +186,8 @@ namespace tests {
         ASSERT_EQ(pickUpItemByPtrPrim->m_itemFocus->m_realItem, hammer_in_hall);
     }
 
-    TEST_F(EmptyWorld, DefaultPickUpItemFromPeriphery) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, DefaultPickUpItemFromPeriphery) {
+
         player->locationClass = ELocations::gym;
         world->items.push_back(new Item(EItemType::bottle, ELocations::gym));
         Item* bottle_in_gym = world->items[0];
@@ -202,8 +201,8 @@ namespace tests {
         ASSERT_EQ(pickUpItemByPtrPrim->m_itemFocus->m_realItem, bottle_in_gym);
     }
 
-    TEST_F(EmptyWorld, ItemsOutOfSightAreIgnored) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, ItemsOutOfSightAreIgnored) {
+
         world->items.push_back(new Item(EItemType::ball, ELocations::library));
         world->items.push_back(new Item(EItemType::bottle, ELocations::gym));
         world->items.push_back(new Item(EItemType::sword, ELocations::circuitTrack));
@@ -217,8 +216,8 @@ namespace tests {
         ASSERT_EQ(htnPlan[1]->m_name, "StudyPrim");
     }
 
-    TEST_F(EmptyWorld, MissionTakeItemToPlaceFromCentre) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, MissionTakeItemToPlaceFromCentre) {
+
         player->missionClass = std::make_shared<MissionClass>(MissionClass(EMissions::bringItemToRoom, player, EItemType::extinguisher, ELocations::circuitTrack));
         world->items.push_back(new Item(EItemType::ball, ELocations::mainHall));
         world->items.push_back(new Item(EItemType::extinguisher, ELocations::mainHall));
@@ -235,8 +234,8 @@ namespace tests {
         ASSERT_EQ(htnPlan[2]->m_name, "DropItemPrim");
     }
 
-    TEST_F(EmptyWorld, MissionTakeItemToPlaceFromPeriphery) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, MissionTakeItemToPlaceFromPeriphery) {
+
         player->locationClass = ELocations::bedroom;
         player->missionClass = std::make_shared<MissionClass>(MissionClass(EMissions::bringItemToRoom, player, EItemType::extinguisher, ELocations::circuitTrack));
         world->items.push_back(new Item(EItemType::ball, ELocations::bedroom));
@@ -255,16 +254,43 @@ namespace tests {
         ASSERT_EQ(htnPlan[3]->m_name, "DropItemPrim");
     }
 
-    TEST_F(EmptyWorld, FightWhenAttacked) {
-        UPlayerData* attacker = new UPlayerData();
-        attacker->m_playerName = "Jack";
-        attacker->missionClass = std::make_shared<MissionClass>(attacker);
-        world->playerRegistry.RegisterPlayer(attacker);
-        attacker->locationClass = ELocations::library;
+    class UnderAttackScenario : public ::testing::Test
+    {
+    protected:
+        std::shared_ptr<USimWorld> world = std::make_shared<USimWorld>();
+        UPlayerData* defender;
+        UPlayerData* attacker;
 
-        UPlayerData* defender = world->playerRegistry.m_playerMap[0];
-        defender->locationClass = ELocations::library;
-        defender->relMap[1]->deltaAggro(30);
+        virtual void SetUp()
+        {
+            UPlayerRegistry& playerRegistry = world->playerRegistry;
+            PlayerMap& playerMap = playerRegistry.m_playerMap;
+
+            //Add players
+            defender = new UPlayerData();
+
+            defender->m_playerName = "Thomas";
+            defender->missionClass = std::make_shared<MissionClass>(defender);
+            world->playerRegistry.RegisterPlayer(defender);
+
+            attacker = new UPlayerData();
+            attacker->m_playerName = "Jack";
+            attacker->missionClass = std::make_shared<MissionClass>(attacker);
+            world->playerRegistry.RegisterPlayer(attacker);
+            attacker->locationClass = ELocations::library;
+
+            defender = world->playerRegistry.m_playerMap[0];
+            defender->locationClass = ELocations::library;
+            defender->relMap[attacker->m_key]->deltaAggro(30);
+        }
+
+        virtual void TearDown()
+        {
+            // UPlayerData memory will be freed by playerRegistry in world.
+        }
+    };
+
+    TEST_F(UnderAttackScenario, FightWhenAttacked) {
 
         HTNPrimitiveList htnPlan = test_helper::plan_from_world(defender, *world);
 
@@ -276,19 +302,10 @@ namespace tests {
         ASSERT_EQ(attackAction->m_targetPlayer, attacker);
     }
 
-    TEST_F(EmptyWorld, PickUpWeaponAndFightWhenAttacked) {
-        UPlayerData* attacker = new UPlayerData();
-        attacker->m_playerName = "Jack";
-        attacker->missionClass = std::make_shared<MissionClass>(attacker);
-        world->playerRegistry.RegisterPlayer(attacker);
-        attacker->locationClass = ELocations::library;
+    TEST_F(UnderAttackScenario, PickUpWeaponAndFightWhenAttacked) {
 
         world->items.push_back(new Item(EItemType::bat, ELocations::library));
         Item* bat_in_library = world->items[0];
-
-        UPlayerData* defender = world->playerRegistry.m_playerMap[0];
-        defender->locationClass = ELocations::library;
-        defender->relMap[1]->deltaAggro(30);
 
         HTNPrimitiveList htnPlan = test_helper::plan_from_world(defender, *world);
 
@@ -303,17 +320,8 @@ namespace tests {
         ASSERT_EQ(attackAction->m_targetPlayer, attacker);
     }
 
-    TEST_F(EmptyWorld, EvadeWhenAttackedAndLosing) {
-        UPlayerData* attacker = new UPlayerData();
-        attacker->m_playerName = "Jack";
-        attacker->missionClass = std::make_shared<MissionClass>(attacker);
-        world->playerRegistry.RegisterPlayer(attacker);
-        attacker->locationClass = ELocations::library;
-
-        UPlayerData* defender = world->playerRegistry.m_playerMap[0];
-        defender->locationClass = ELocations::library;
+    TEST_F(UnderAttackScenario, EvadeWhenAttackedAndLosing) {
         defender->pStats.deltaHealth(-4);
-        defender->relMap[1]->deltaAggro(30);
 
         HTNPrimitiveList htnPlan = test_helper::plan_from_world(defender, *world);
 
@@ -325,8 +333,8 @@ namespace tests {
         ASSERT_EQ(evadeAction->m_evadePlayer, attacker);
     }
 
-    TEST_F(EmptyWorld, IncreaseIntelligenceMissionWhenInLibrary) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, IncreaseIntelligenceMissionWhenInLibrary) {
+
         player->locationClass = ELocations::library;
         player->missionClass = std::make_shared<MissionClass>(EMissions::increaseIntelligence, player, 1);
 
@@ -337,8 +345,8 @@ namespace tests {
         ASSERT_EQ(htnPlan[0]->m_name, "StudyPrim");
     }
 
-    TEST_F(EmptyWorld, IncreaseIntelligenceMissionWhenInCentre) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, IncreaseIntelligenceMissionWhenInCentre) {
+
         player->locationClass = ELocations::mainHall;
         player->missionClass = std::make_shared<MissionClass>(EMissions::increaseIntelligence, player, 1);
 
@@ -350,8 +358,8 @@ namespace tests {
         ASSERT_EQ(htnPlan[1]->m_name, "StudyPrim");
     }
 
-    TEST_F(EmptyWorld, IncreaseIntelligenceMissionWhenInPeriphery) {
-        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+    TEST_F(EmptyScenario, IncreaseIntelligenceMissionWhenInPeriphery) {
+
         player->locationClass = ELocations::gym;
         player->missionClass = std::make_shared<MissionClass>(EMissions::increaseIntelligence, player, 1);
 
