@@ -31,6 +31,9 @@ UPStats::UPStats(const FObjectInitializer& ObjectInitializer):
     proud = rand() % 100;
     forgiving = rand() % 100;
     discreet = rand() % 100;
+
+    cash = 0;
+    sentence = 10;
 }
 
 double UPStats::getHealth()
@@ -139,6 +142,8 @@ void UPStats::PrintStats()
     ss << "proud=" << proud << "\n";
     ss << "forgiving=" << forgiving << "\n";
     ss << "discreet=" << discreet << "\n";
+    ss << "cash=" << cash << "\n";
+    ss << "sentence=" << sentence << "\n";
     ss << "\n";
     pLog(ss, true);
 }

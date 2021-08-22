@@ -37,8 +37,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		UPStats* pStats;
 
-    int cash; //cash, in dollars, no bounds.
-    int sentence; //days left in prison sentence, only bound is above -1.
     AIController aiController; //controlling AI for this character
     std::shared_ptr<MissionClass> missionOffer; // a mission being offered to 'playerTarget'
 

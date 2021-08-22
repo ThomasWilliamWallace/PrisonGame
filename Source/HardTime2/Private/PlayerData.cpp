@@ -42,8 +42,6 @@ void UPlayerData::PrintPlayer()
 	} else {
 		ss << "NULLPTR\n";
 	}
-    ss << "cash=" << cash << "\n";
-    ss << "sentence=" << sentence << "\n";
 	ss << "m_key=" << m_key << "\n";
     ss << "action=" << action->ToString() << "\n";
     ss << "lastAction=" << lastAction->ToString() << "\n";
@@ -85,8 +83,6 @@ void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 UPlayerData::UPlayerData()
 {
 	pLog("Constructing UPlayerData");
-	cash = 0;
-	sentence = 5;
 	itemPtr = nullptr;
     action = std::make_shared<BaseAction>(EActions::useRoom);
     missionOffer = nullptr;

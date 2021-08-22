@@ -29,6 +29,11 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
         float respect = 60; //reputation for effectiveness
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        int cash; //cash, in dollars, no bounds.
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+        int sentence; //days left in prison sentence, only bound is above -1.
+
 public:
     // *** PERSONALITY TRAITS START ***
     int loyalty = rand() % 100; //loyal characters will stick by their friends, and make new friends slower.
