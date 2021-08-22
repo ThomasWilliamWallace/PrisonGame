@@ -255,6 +255,26 @@ namespace tests {
         ASSERT_EQ(htnPlan[3]->m_name, "DropItemPrim");
     }
 
+    // If the item is already in the correct place, the planner will still attempt to move it to the same place.
+    // This behaviour is being kept, as the responsibility for checking mission termination is not part of the planner. To bring it in here would be duplication.
+    TEST_F(EmptyScenario, MissionTakeItemToPlaceButAlreadyThere) {
+
+        player->locationClass = ELocations::bedroom;
+        player->missionClass = std::make_shared<MissionClass>(MissionClass(EMissions::bringItemToRoom, player, EItemType::extinguisher, ELocations::bedroom));
+        world->items.push_back(new Item(EItemType::ball, ELocations::bedroom));
+        world->items.push_back(new Item(EItemType::extinguisher, ELocations::bedroom));
+        Item* extinguisher_in_bedroom = world->items[1];
+
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
+
+        // Check resulting plan
+        ASSERT_EQ(size(htnPlan), 2);
+        ASSERT_EQ(htnPlan[0]->m_name, "PickUpItemByPtrPrim");
+        std::shared_ptr<PickUpItemByPtrPrim> pickUpItemByPtrPrim = std::static_pointer_cast<PickUpItemByPtrPrim>(htnPlan[0]);
+        ASSERT_EQ(pickUpItemByPtrPrim->m_itemFocus->m_realItem, extinguisher_in_bedroom);
+        ASSERT_EQ(htnPlan[1]->m_name, "DropItemPrim");
+    }
+
     class UnderAttackScenario: public EmptyScenario
     {
     protected:
