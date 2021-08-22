@@ -4,6 +4,7 @@
 cmake_minimum_required (VERSION 3.8)
 
 project ("hardtime_textworld")
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT tests)
 
 # Compiler flags
 add_compile_definitions(TEXT_ONLY_HTN)
@@ -27,7 +28,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # Set path variables
-set(ht2tw_folder "${CMAKE_SOURCE_DIR}/Source/hardtime_textworld/Source")
+set(ht2tw_folder "${CMAKE_SOURCE_DIR}")
 set(ht2tw_public "${ht2tw_folder}/Public")
 set(ht2tw_private "${ht2tw_folder}/Private")
 set(ht2tw_tests "${ht2tw_folder}/tests")

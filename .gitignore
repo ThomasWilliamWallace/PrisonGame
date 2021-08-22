@@ -44,6 +44,6 @@
 *.mk
 
 .build-debug/
-.codelite
 /out/build/x64-Debug (default)
 /out/build/x64-Debug
+Source/hardtime_textworld/vs_project
