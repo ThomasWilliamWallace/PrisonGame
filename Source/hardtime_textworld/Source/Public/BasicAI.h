@@ -28,7 +28,7 @@ class AIController
     void CreateMissionOffer(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);
     int TargetForMakeFriend(UPlayerData& player, USimWorld& world, bool playersInReach[], int countPlayersInReach);
 public:
-    AI algo;
+    AI algo = AI::htnAI;
     std::shared_ptr<BaseAction> ChooseAction(UPlayerData& player, USimWorld& world);
     AIController(AI _algo);
     AIController();
