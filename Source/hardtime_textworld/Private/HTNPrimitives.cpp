@@ -261,15 +261,15 @@ bool PickUpItemByPtrPrim::Preconditions(HTNWorldState const& htnWorldState)
 		ThrowException("Failed to find relevant SimItem in PickUpItemByPtrPrim::preconditions");
     }
     //TODO hook this into the actions code
-    bool line1 = GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr;
-    bool line2 = GetRaw(currentSimItem) != nullptr;
-    bool line3 = htnWorldState.m_location == currentSimItem->m_locationClass.location;
-    bool line4 = currentSimItem->m_carryingPlayer == nullptr;
+    //bool is_already_carrying_an_item = GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr;
+    check(GetRaw(currentSimItem) != nullptr);
+    bool item_is_in_the_same_room = htnWorldState.m_location == currentSimItem->m_locationClass.location;
+    bool item_is_already_being_carried = currentSimItem->m_carryingPlayer == nullptr;
 //    if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
 //      && GetRaw(currentSimItem) != nullptr
 //      && htnWorldState.m_location == currentSimItem->m_locationClass.location
 //      && currentSimItem->m_carryingPlayer == nullptr)
-    if (line1 && line2 && line3 && line4)
+    if (item_is_in_the_same_room && item_is_already_being_carried)
     {
         return true;
     }

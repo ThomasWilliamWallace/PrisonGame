@@ -189,9 +189,11 @@ void DoPickUpItemAction(UPlayerData* playerPtr, PlayerMap &playerMap, USimWorld 
     Item* targetItem = dynamic_cast<Item*>(action->m_itemFocusPtr);
     if (playerPtr->itemPtr != nullptr)
     {
-        ThrowException("ERROR: tried to pick up an item, but was already carrying something.");
-        playerPtr->narrative = "ERROR: tried to pick up an item, but was already carrying something.";
-        return;
+        playerPtr->itemPtr->m_locationClass.location = playerPtr->locationClass.location;
+        playerPtr->narrative = "Dropped a " + playerPtr->itemPtr->ToString() + " in the " + playerPtr->itemPtr->m_locationClass.ToString() + ".\n";
+        playerPtr->itemPtr->m_carryingPlayer = nullptr;
+        playerPtr->itemPtr = nullptr;
+        playerPtr->aiController.lastActionSucceeded = true;
     }
     
     if (targetItem != nullptr)
