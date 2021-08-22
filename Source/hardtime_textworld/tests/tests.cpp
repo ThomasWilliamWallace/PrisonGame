@@ -18,6 +18,23 @@
 //#include "Names.h"
 
 
+namespace test_helper {
+
+    HTNPrimitiveList plan_from_world(UPlayerData* player, USimWorld& world)
+    {
+        //update worldstate from real world
+        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, world, world.playerRegistry.m_playerMap, nullptr);
+
+        //make new plan
+        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
+        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+
+        return htnPlan;
+    }
+
+}  // namespace test_helper
+
+
 namespace tests {
     /*
     class InitialWorldState : public ::testing::Test
@@ -135,12 +152,7 @@ namespace tests {
     TEST_F(EmptyWorld, DefaultGoStudyFromCentre) {
         UPlayerData* player = world->playerRegistry.m_playerMap[0];
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, *world, world->playerRegistry.m_playerMap, nullptr);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 2);
@@ -152,12 +164,7 @@ namespace tests {
         UPlayerData* player = world->playerRegistry.m_playerMap[0];
         player->locationClass = ELocations::circuitTrack;
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, *world, world->playerRegistry.m_playerMap, nullptr);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 3);
@@ -171,12 +178,7 @@ namespace tests {
         world->items.push_back(new Item(EItemType::hammer, ELocations::mainHall));
         Item* hammer_in_hall = world->items[0];
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, *world, world->playerRegistry.m_playerMap, nullptr);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 1);
@@ -191,12 +193,7 @@ namespace tests {
         world->items.push_back(new Item(EItemType::bottle, ELocations::gym));
         Item* bottle_in_gym = world->items[0];
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, *world, world->playerRegistry.m_playerMap, nullptr);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 1);
@@ -212,12 +209,7 @@ namespace tests {
         world->items.push_back(new Item(EItemType::sword, ELocations::circuitTrack));
         world->items.push_back(new Item(EItemType::pipe, ELocations::bedroom));
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, *world, world->playerRegistry.m_playerMap, nullptr);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 2);
@@ -232,12 +224,7 @@ namespace tests {
         world->items.push_back(new Item(EItemType::extinguisher, ELocations::mainHall));
         Item* extinguisher_in_hall = world->items[1];
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, *world, world->playerRegistry.m_playerMap, nullptr);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 3);
@@ -256,12 +243,7 @@ namespace tests {
         world->items.push_back(new Item(EItemType::extinguisher, ELocations::bedroom));
         Item* extinguisher_in_bedroom = world->items[1];
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(player, *world, world->playerRegistry.m_playerMap, nullptr);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 4);
@@ -282,14 +264,9 @@ namespace tests {
 
         UPlayerData* defender = world->playerRegistry.m_playerMap[0];
         defender->locationClass = ELocations::library;
+        defender->relMap[1]->deltaAggro(30);
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(defender, *world, world->playerRegistry.m_playerMap, nullptr);
-        htnWorldState.m_attackers.push_back(attacker);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(defender, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 1);
@@ -311,14 +288,9 @@ namespace tests {
 
         UPlayerData* defender = world->playerRegistry.m_playerMap[0];
         defender->locationClass = ELocations::library;
+        defender->relMap[1]->deltaAggro(30);
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(defender, *world, world->playerRegistry.m_playerMap, nullptr);
-        htnWorldState.m_attackers.push_back(attacker);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(defender, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 2);
@@ -341,14 +313,9 @@ namespace tests {
         UPlayerData* defender = world->playerRegistry.m_playerMap[0];
         defender->locationClass = ELocations::library;
         defender->pStats.deltaHealth(-4);
+        defender->relMap[1]->deltaAggro(30);
 
-        //update worldstate from real world
-        HTNWorldState htnWorldState = TranslateToHTNWorldState(defender, *world, world->playerRegistry.m_playerMap, nullptr);
-        htnWorldState.m_attackers.push_back(attacker);
-
-        //make new plan
-        HTNCompound* missionPtr = new PrisonerBehaviourCompound();
-        HTNPrimitiveList htnPlan = HTNIterative(htnWorldState, *missionPtr, 0);
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(defender, *world);
 
         // Check resulting plan
         ASSERT_EQ(size(htnPlan), 1);
@@ -356,6 +323,45 @@ namespace tests {
         std::shared_ptr<EvadePrim> evadePrim = std::static_pointer_cast<EvadePrim>(htnPlan[0]);
         std::shared_ptr<EvadeAction> evadeAction = std::static_pointer_cast<EvadeAction>(evadePrim->Operate(defender));
         ASSERT_EQ(evadeAction->m_evadePlayer, attacker);
+    }
+
+    TEST_F(EmptyWorld, IncreaseIntelligenceMissionWhenInLibrary) {
+        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+        player->locationClass = ELocations::library;
+        player->missionClass = std::make_shared<MissionClass>(EMissions::increaseIntelligence, player, 1);
+
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
+
+        // Check resulting plan
+        ASSERT_EQ(size(htnPlan), 1);
+        ASSERT_EQ(htnPlan[0]->m_name, "StudyPrim");
+    }
+
+    TEST_F(EmptyWorld, IncreaseIntelligenceMissionWhenInCentre) {
+        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+        player->locationClass = ELocations::mainHall;
+        player->missionClass = std::make_shared<MissionClass>(EMissions::increaseIntelligence, player, 1);
+
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
+
+        // Check resulting plan
+        ASSERT_EQ(size(htnPlan), 2);
+        ASSERT_EQ(htnPlan[0]->m_name, "GoToLibraryPrim");
+        ASSERT_EQ(htnPlan[1]->m_name, "StudyPrim");
+    }
+
+    TEST_F(EmptyWorld, IncreaseIntelligenceMissionWhenInPeriphery) {
+        UPlayerData* player = world->playerRegistry.m_playerMap[0];
+        player->locationClass = ELocations::gym;
+        player->missionClass = std::make_shared<MissionClass>(EMissions::increaseIntelligence, player, 1);
+
+        HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
+
+        // Check resulting plan
+        ASSERT_EQ(size(htnPlan), 3);
+        ASSERT_EQ(htnPlan[0]->m_name, "GoToMainHallPrim");
+        ASSERT_EQ(htnPlan[1]->m_name, "GoToLibraryPrim");
+        ASSERT_EQ(htnPlan[2]->m_name, "StudyPrim");
     }
 
 }  // tests namespace
