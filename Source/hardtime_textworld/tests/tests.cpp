@@ -140,6 +140,7 @@ namespace tests {
 
             player->m_playerName = "Thomas";
             player->missionClass = std::make_shared<MissionClass>(player);
+            player->locationClass = ELocations::mainHall;
             world->playerRegistry.RegisterPlayer(player);
         }
 
@@ -148,7 +149,7 @@ namespace tests {
             // UPlayerData memory will be freed by playerRegistry in world.
         }
     };
-
+    
     TEST_F(EmptyScenario, DefaultGoStudyFromCentre) {
 
         HTNPrimitiveList htnPlan = test_helper::plan_from_world(player, *world);
@@ -254,33 +255,22 @@ namespace tests {
         ASSERT_EQ(htnPlan[3]->m_name, "DropItemPrim");
     }
 
-    class UnderAttackScenario : public ::testing::Test
+    class UnderAttackScenario: public EmptyScenario
     {
     protected:
-        std::shared_ptr<USimWorld> world = std::make_shared<USimWorld>();
         UPlayerData* defender;
         UPlayerData* attacker;
 
         virtual void SetUp()
         {
-            UPlayerRegistry& playerRegistry = world->playerRegistry;
-            PlayerMap& playerMap = playerRegistry.m_playerMap;
-
-            //Add players
-            defender = new UPlayerData();
-
-            defender->m_playerName = "Thomas";
-            defender->missionClass = std::make_shared<MissionClass>(defender);
-            world->playerRegistry.RegisterPlayer(defender);
-
+            EmptyScenario::SetUp();
             attacker = new UPlayerData();
             attacker->m_playerName = "Jack";
             attacker->missionClass = std::make_shared<MissionClass>(attacker);
             world->playerRegistry.RegisterPlayer(attacker);
-            attacker->locationClass = ELocations::library;
+            attacker->locationClass = ELocations::mainHall;
 
-            defender = world->playerRegistry.m_playerMap[0];
-            defender->locationClass = ELocations::library;
+            defender = player;
             defender->relMap[attacker->m_key]->deltaAggro(30);
         }
 
@@ -301,10 +291,10 @@ namespace tests {
         std::shared_ptr<AttackAction> attackAction = std::static_pointer_cast<AttackAction>(punchPrim->Operate(defender));
         ASSERT_EQ(attackAction->m_targetPlayer, attacker);
     }
-
+    
     TEST_F(UnderAttackScenario, PickUpWeaponAndFightWhenAttacked) {
 
-        world->items.push_back(new Item(EItemType::bat, ELocations::library));
+        world->items.push_back(new Item(EItemType::bat, ELocations::mainHall));
         Item* bat_in_library = world->items[0];
 
         HTNPrimitiveList htnPlan = test_helper::plan_from_world(defender, *world);
@@ -371,5 +361,5 @@ namespace tests {
         ASSERT_EQ(htnPlan[1]->m_name, "GoToLibraryPrim");
         ASSERT_EQ(htnPlan[2]->m_name, "StudyPrim");
     }
-
+    
 }  // tests namespace
