@@ -1,8 +1,10 @@
 #pragma once
 
 #include <iostream>
-#include "ActorItem.h"
 #include "EMissions.h"
+#include "EItemType.h"
+#include "ELocations.h"
+#include "Locations.h"
 
 class UPlayerData;
 class USimWorld;

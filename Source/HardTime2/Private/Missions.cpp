@@ -2,6 +2,7 @@
 #include "PlayerData.h"
 #include "SimWorld.h"
 #include "Constants.h"
+#include "ActorItem.h"
 
 MissionClass::MissionClass(RandomMission r, UPlayerData* playerPtr):
     MissionClass(playerPtr)

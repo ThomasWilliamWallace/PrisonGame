@@ -4,7 +4,6 @@
 #include "PStats.h"
 #include "Missions.h"
 #include "BasicAI.h"
-#include "ActorItem.h"
 #include "AbstractAction.h"
 #include "Constants.h"
 #include "Object.h"
