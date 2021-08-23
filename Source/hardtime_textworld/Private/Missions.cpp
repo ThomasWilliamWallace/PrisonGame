@@ -2,7 +2,6 @@
 #include "PlayerData.h"
 #include "SimWorld.h"
 #include "Constants.h"
-#include "ActorItem.h"
 
 MissionClass::MissionClass(RandomMission r, UPlayerData* playerPtr):
     MissionClass(playerPtr)
@@ -22,13 +21,13 @@ MissionClass::MissionClass(UPlayerData* owner):
     case EMissions::noMission:
         return;
     case EMissions::increaseAgility:
-        m_objective = owner->pStats->getAgility();
+        m_objective = owner->pStats.getAgility();
         break;
     case EMissions::increaseStrength:
-        m_objective = owner->pStats->getStrength();
+        m_objective = owner->pStats.getStrength();
         break;
     case EMissions::increaseIntelligence:
-        m_objective = owner->pStats->getIntelligence();
+        m_objective = owner->pStats.getIntelligence();
         break;
     case EMissions::bringItemToRoom:
         m_itemType = GetRandomItemType();
@@ -72,11 +71,11 @@ bool MissionClass::IsMissionComplete(USimWorld &world)
 	switch (m_mission)
 	{
     case EMissions::increaseAgility:
-        return (m_objective <= m_owner->pStats->getAgility());
+        return (m_objective <= m_owner->pStats.getAgility());
     case EMissions::increaseStrength:
-        return (m_objective <= m_owner->pStats->getStrength());
+        return (m_objective <= m_owner->pStats.getStrength());
     case EMissions::increaseIntelligence:
-        return (m_objective <= m_owner->pStats->getIntelligence());
+        return (m_objective <= m_owner->pStats.getIntelligence());
 	case EMissions::bringItemToRoom:
 		for (auto &item : world.items)
 		{
@@ -101,13 +100,13 @@ std::string MissionClass::MissionNarrative()
         case EMissions::noMission:
             return "No Mission\n";
         case EMissions::increaseAgility:
-            return "Mission: " + m_owner->CharacterName() + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats->getAgility()) + ")";
+            return "Mission: " + m_owner->m_playerName + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getAgility()) + ")";
         case EMissions::increaseStrength:
-            return "Mission: " + m_owner->CharacterName() + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats->getStrength()) + ")";
+            return "Mission: " + m_owner->m_playerName + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getStrength()) + ")";
         case EMissions::increaseIntelligence:
-            return "Mission: " + m_owner->CharacterName() + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats->getIntelligence()) + ")";
+            return "Mission: " + m_owner->m_playerName + " must " + MissionName() + " to " + FormatDouble(m_objective) + ". (current=" + FormatDouble(m_owner->pStats.getIntelligence()) + ")";
         case EMissions::bringItemToRoom:
-            return "Mission: " + m_owner->CharacterName() + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".";
+            return "Mission: " + m_owner->m_playerName + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".";
     }
     ThrowException("ERROR: MISSION TYPE NOT RECOGNISED");
 }

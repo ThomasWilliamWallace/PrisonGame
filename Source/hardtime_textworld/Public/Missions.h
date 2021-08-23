@@ -1,10 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include "Item.h"
 #include "EMissions.h"
-#include "EItemType.h"
-#include "ELocations.h"
-#include "Locations.h"
 
 class UPlayerData;
 class USimWorld;
@@ -23,7 +21,7 @@ public:
 	MissionClass(EMissions mission, UPlayerData* owner, double objective);
 	MissionClass(EMissions mission, UPlayerData* owner, EItemType itemE, ELocations location);
 
-	bool IsMissionComplete(USimWorld &world);
+    bool IsMissionComplete(USimWorld &world);
     std::string MissionNarrative();
 public:
     EMissions m_mission;

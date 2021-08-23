@@ -14,7 +14,7 @@
 
 EActions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
 {
-    if (playerData->abstractPlayerData.locationClass.location == ELocations::mainHall)
+    if (playerData->locationClass.location == ELocations::mainHall)
     {
         int random = RandPercent();
         if (random < 25)
@@ -46,7 +46,7 @@ std::shared_ptr<BaseAction> AIController::ChooseAction(UPlayerData* playerData, 
 	for (auto &playerIter : playerMap)
     {
 		UPlayerData* currPlayerData = playerIter.Value;
-        if (OtherInReach(playerData->abstractPlayerData, currPlayerData->abstractPlayerData, playerMap))
+        if (playerData->OtherInReach(*currPlayerData, playerMap))
         {
             playersInReach[i] = true;
             countPlayersInReach += 1;
@@ -102,7 +102,7 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 	bool hasValidPlan = false;
 	// check if next step of the plan is valid.
 
-    if (lastActionInterrupted || ((playerData->abstractPlayerData.lastAction != nullptr) && !(playerData->abstractPlayerData.lastAction->LastActionSucceeded(*htnWorldState))))
+    if (lastActionInterrupted || ((playerData->lastAction != nullptr) && !(playerData->lastAction->LastActionSucceeded(*htnWorldState))))
 	{
 		pLog("Last Action did not succeed", true);
 		hasValidPlan = false;
@@ -152,7 +152,7 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 		HTNPrimitivePtr currentPlanStep = htnPlan.front();
 		htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2");
-		return currentPlanStep->Operate(&(playerData->abstractPlayerData));
+		return currentPlanStep->Operate(playerData);
 	}
 	pLog("Leaving htnAIChooseAction #3");
 	return std::make_shared<BaseAction>(EActions::noAction);

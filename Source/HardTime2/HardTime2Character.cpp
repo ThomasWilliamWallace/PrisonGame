@@ -74,7 +74,7 @@ void AHardTime2Character::Init()
 	m_aiState = EAIState::noTask;
 	m_useCount = 0;
 
-	m_player->abstractPlayerData.missionClass = std::make_shared<MissionClass>(&(m_player->abstractPlayerData));
+	m_player->missionClass = std::make_shared<MissionClass>(m_player);
 	m_player->physicalCharacter = this;
 	m_player->aiController.algo = AI::htnAI;
 	m_player->aiController.lastActionInterrupted = false;
@@ -83,32 +83,6 @@ void AHardTime2Character::Init()
 	m_player->m_playerName = FName(playerName.c_str());
 
 	m_player->PrintPlayer();
-}
-
-AHardTime2Character::AHardTime2Character()
-{
-	pLog("AHardTime2Character::AHardTime2Character");
-
-	if (CameraBoom == nullptr)
-	{
-		// Create a camera boom (pulls in towards the player if there is a collision)
-		CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
-	}
-	InitCameraBoom();
-
-	if (FollowCamera == nullptr)
-	{
-		// Create a follow camera
-		FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	}
-	InitCamera();
-
-	if (m_player == nullptr)
-	{
-		m_player = CreateDefaultSubobject<UPlayerData>(TEXT("PlayerData"));
-	}
-
-	Init();
 }
 
 AHardTime2Character::AHardTime2Character(const FObjectInitializer& ObjectInitializer):
@@ -319,7 +293,7 @@ void AHardTime2Character::UpdateLocation(ELocations location)
 		pLog("M_PLAYER == NULLPTR, FAILED TO UPDATE LOCATION");
 		return;
 	}
-	m_player->abstractPlayerData.locationClass.location = location;
+	m_player->locationClass.location = location;
 	m_location = location;
 	std::stringstream ss;
 	ss << "Location=" << static_cast<int>(location);
@@ -330,8 +304,8 @@ void AHardTime2Character::DeltaHealth(float delta)
 {
 	pLog("AHardTime2Character::DeltaHealth", true);
 	std::stringstream ss;
-	m_player->abstractPlayerData.pStats.deltaHealth(delta);
-	ss << "m_player->abstractPlayerData.pStats.getHealth():" << m_player->abstractPlayerData.pStats.getHealth() << "\n";
+	m_player->pStats->deltaHealth(delta);
+	ss << "m_player->abstractPlayerData.pStats.getHealth():" << m_player->pStats->getHealth() << "\n";
 	pLog(ss);
 }
 
@@ -339,8 +313,8 @@ void AHardTime2Character::DeltaStrength(float delta)
 {
 	pLog("AHardTime2Character::DeltaStrength", true);
 	std::stringstream ss;
-	m_player->abstractPlayerData.pStats.deltaStrength(delta);
-	ss << "m_player->abstractPlayerData.pStats.getStrength():" << m_player->abstractPlayerData.pStats.getStrength() << "\n";
+	m_player->pStats->deltaStrength(delta);
+	ss << "m_player->abstractPlayerData.pStats.getStrength():" << m_player->pStats->getStrength() << "\n";
 	pLog(ss);
 }
 
@@ -348,8 +322,8 @@ void AHardTime2Character::DeltaAgility(float delta)
 {
 	pLog("AHardTime2Character::DeltaAgility", true);
 	std::stringstream ss;
-	m_player->abstractPlayerData.pStats.deltaAgility(delta);
-	ss << "m_player->abstractPlayerData.pStats.getAgility():" << m_player->abstractPlayerData.pStats.getAgility() << "\n";
+	m_player->pStats->deltaAgility(delta);
+	ss << "m_player->abstractPlayerData.pStats.getAgility():" << m_player->pStats->getAgility() << "\n";
 	pLog(ss);
 }
 
@@ -357,8 +331,8 @@ void AHardTime2Character::DeltaIntelligence(float delta)
 {
 	pLog("AHardTime2Character::DeltaIntelligence", true);
 	std::stringstream ss;
-	m_player->abstractPlayerData.pStats.deltaIntelligence(delta);
-	ss << "m_player->abstractPlayerData.pStats.getIntelligence():" << m_player->abstractPlayerData.pStats.getIntelligence() << "\n";
+	m_player->pStats->deltaIntelligence(delta);
+	ss << "m_player->abstractPlayerData.pStats.getIntelligence():" << m_player->pStats->getIntelligence() << "\n";
 	pLog(ss);
 }
 
@@ -458,7 +432,7 @@ void AHardTime2Character::RequestItem(std::shared_ptr<BaseAction> baseAction)
 	for (AActor* actor : foundActors)
 	{
 		AHardTime2Character* targetPlayer = static_cast<AHardTime2Character*>(actor);
-		if (targetPlayer->m_player->abstractPlayerData.m_key == requestItemAction->m_targetPlayer->m_key)
+		if (targetPlayer->m_player->m_key == requestItemAction->m_targetPlayer->m_key)
 		{
 			m_targetPlayer = targetPlayer;
 			m_targetItem = m_targetPlayer->m_carriedItem;
@@ -481,7 +455,7 @@ void AHardTime2Character::Attack(std::shared_ptr<BaseAction> baseAction)
 	for (AActor* actor : foundActors)
 	{
 		AHardTime2Character* targetPlayer = static_cast<AHardTime2Character*>(actor);
-		if (targetPlayer->m_player->abstractPlayerData.m_key == attackAction->m_targetPlayer->m_key)
+		if (targetPlayer->m_player->m_key == attackAction->m_targetPlayer->m_key)
 		{
 			m_targetPlayer = targetPlayer;
 			m_aiCommand = EAICommand::attack;
@@ -503,7 +477,7 @@ void AHardTime2Character::Evade(std::shared_ptr<BaseAction> baseAction)
 	for (AActor* actor : foundActors)
 	{
 		AHardTime2Character* targetPlayer = static_cast<AHardTime2Character*>(actor);
-		if (targetPlayer->m_player->abstractPlayerData.m_key == evadeAction->m_evadePlayer->m_key)
+		if (targetPlayer->m_player->m_key == evadeAction->m_evadePlayer->m_key)
 		{
 			m_targetPlayer = targetPlayer;
 			m_aiCommand = EAICommand::evade;
@@ -532,12 +506,12 @@ void AHardTime2Character::Tick(float DeltaTime)
 	{
 		m_player->PrintPlayer();
 		readyForNewAction = false;
-		m_player->abstractPlayerData.lastAction = m_player->abstractPlayerData.action;
-		m_player->abstractPlayerData.action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry->m_playerMap, m_world);
+		m_player->lastAction = m_player->action;
+		m_player->action = m_player->aiController.HTNAIChooseAction(m_player, m_world->m_playerRegistry->m_playerMap, m_world);
 		m_player->aiController.lastActionInterrupted = false;
 		pLog("HTN Planner chose an action:", true);
-		if (m_player->abstractPlayerData.action == nullptr) { ThrowException("Nullptr action returned by HTN planner"); }
-		switch (m_player->abstractPlayerData.action->m_action)
+		if (m_player->action == nullptr) { ThrowException("Nullptr action returned by HTN planner"); }
+		switch (m_player->action->m_action)
 		{
 		case EActions::goToBedroom:
 			pLog("goToBedroom", true);
@@ -565,11 +539,11 @@ void AHardTime2Character::Tick(float DeltaTime)
 			break;
 		case EActions::pickUpItemByPtr:
 			pLog("pickUpItemByPtr", true);
-			PickUpItemByPtr(m_player->abstractPlayerData.action);
+			PickUpItemByPtr(m_player->action);
 			break;
 		case EActions::requestItem:
 			pLog("requestItem", true);
-			RequestItem(m_player->abstractPlayerData.action);
+			RequestItem(m_player->action);
 			break;
 		case EActions::useRoom:
 			pLog("useRoom", true);
@@ -577,11 +551,11 @@ void AHardTime2Character::Tick(float DeltaTime)
 			break;
 		case EActions::attack:
 			pLog("attack", true);
-			Attack(m_player->abstractPlayerData.action);
+			Attack(m_player->action);
 			break;
 		case EActions::evade:
 			pLog("evade", true);
-			Evade(m_player->abstractPlayerData.action);
+			Evade(m_player->action);
 			break;
 		default:
 			pLog("NoAction", true);
@@ -1095,7 +1069,7 @@ void AHardTime2Character::DoAttackAction(AHardTime2Character* targetCharacter)
 	ss << "targetCharacter = " << TCHAR_TO_UTF8(*(targetCharacter->m_player->m_playerName.ToString())) << "\n";
 	pLog(ss, true);
 	targetCharacter->DeltaHealth(-1);
-	targetCharacter->m_player->relMap[this->m_player->abstractPlayerData.m_key]->deltaAggro(50);
+	targetCharacter->m_player->relMap[this->m_player->m_key]->deltaAggro(50);
 	AttackEffect(targetCharacter);
 	m_aiState = EAIState::cooldown;
 	UpdateStatus();

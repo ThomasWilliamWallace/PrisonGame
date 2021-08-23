@@ -58,7 +58,6 @@ class AHardTime2Character : public ACharacter
 public:
 
 	AHardTime2Character(const FObjectInitializer& ObjectInitializer);
-	AHardTime2Character();
 
 	virtual void BeginDestroy() override;
 
@@ -100,7 +99,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Stats)
 		void DeltaIntelligence(float delta);
 
-	UPROPERTY(Instanced)
+	UPROPERTY(Instanced, VisibleAnywhere, BlueprintReadOnly)
 	    UPlayerData* m_player;  //this pointer owns and maintains the m_player, but other objects such as world may also access it
 
 	UPROPERTY()

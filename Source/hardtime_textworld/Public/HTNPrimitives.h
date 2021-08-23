@@ -50,7 +50,7 @@ class GoToGymPrim : public HTNPrimitive
 public:
     GoToGymPrim();
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
-	void Effect(HTNWorldState &htnWorldState) override;
+    void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
@@ -60,7 +60,7 @@ class GoToLibraryPrim : public HTNPrimitive
 public:
     GoToLibraryPrim();
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
-	void Effect(HTNWorldState &htnWorldState) override;
+    void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
@@ -70,7 +70,7 @@ class GoToCircuitTrackPrim : public HTNPrimitive
 public:
     GoToCircuitTrackPrim();
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
-	void Effect(HTNWorldState &htnWorldState) override;
+    void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
@@ -80,7 +80,7 @@ class GoToBedroomPrim : public HTNPrimitive
 public:
     GoToBedroomPrim();
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
-	void Effect(HTNWorldState &htnWorldState) override;
+    void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
@@ -90,7 +90,7 @@ class GoToMainHallPrim : public HTNPrimitive
 public:
     GoToMainHallPrim();
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
-	void Effect(HTNWorldState &htnWorldState) override;
+    void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
@@ -131,7 +131,7 @@ class PickUpItemByPtrPrim : public HTNPrimitive
 {
 public:
     PickUpItemByPtrPrim(SimItemPtr itemFocus);
-	SimItemPtr m_itemFocus;
+    SimItemPtr m_itemFocus;
     bool Preconditions(HTNWorldState const& htnWorldState) override;
     void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
@@ -142,7 +142,7 @@ class PickUpItemByTypePrim : public HTNPrimitive
 {
 public:
     PickUpItemByTypePrim(EItemType itemType);
-	EItemType m_itemType;
+    EItemType m_itemType;
 	bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
     std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
@@ -152,10 +152,11 @@ public:
 class DropItemPrim : public HTNPrimitive
 {
 public:
-    DropItemPrim();
-	bool Preconditions(HTNWorldState const& htnWorldState) override;
+    DropItemPrim(bool keepItem);
+    bool Preconditions(HTNWorldState const& htnWorldState) override;
 	void Effect(HTNWorldState &htnWorldState) override;
-	std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
+    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
+    bool m_keepItem;
 };
 
 //***********************************************************

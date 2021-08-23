@@ -1,13 +1,12 @@
 #include "PlayerRegistry.h"
-#include "PlayerData.h"
 
 void UPlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
 {
     //add to player registry
     int addKey = 0;
-    do {
+    while (Contains(m_playerMap, addKey)) {
         addKey += 1;
-    } while (Contains(m_playerMap, addKey));
+    }
     Add(m_playerMap, addKey, addPlayerData);
     addPlayerData->m_key = addKey;
     
@@ -19,8 +18,8 @@ void UPlayerRegistry::RegisterPlayer(UPlayerData* addPlayerData)
         
         if (addKey != otherKey)
         {
-            Add(addPlayerData->relMap, otherKey, NewObject<URelationship>(addPlayerData, URelationship::StaticClass(), FName(*(FString::Printf(TEXT("Rel_%d_%d"), otherKey, addKey)))));
-            Add(otherPlayerData->relMap, addKey, NewObject<URelationship>(otherPlayerData, URelationship::StaticClass(), FName(*(FString::Printf(TEXT("Rel_%d_%d"), addKey, otherKey)))));
+            Add(addPlayerData->relMap, otherKey, new URelationship());  //TODO memory management
+            Add(otherPlayerData->relMap, addKey, new URelationship());
         }
     }
 }
@@ -29,21 +28,14 @@ void UPlayerRegistry::DeregisterPlayer(int removeKey)
 {
     UPlayerData* removePlayerData = m_playerMap[removeKey];
     RelMap& removeRelMap = removePlayerData->relMap;
-
-	URelationship* rel1;
-	URelationship* rel2;
     
     //remove relationships
-	for (auto relIter = removeRelMap.CreateIterator(); relIter; ++relIter)
+    for (auto const& relIter : removeRelMap)
     {
-        int otherKey = GetKey(*relIter);
+        int otherKey = relIter.first;
         UPlayerData* otherPlayerData = m_playerMap[otherKey];
 
-		rel1 = *(otherPlayerData->relMap.Find(removeKey));
         Remove(otherPlayerData->relMap, removeKey);
-
-		rel2 = relIter->Value;
-		RemoveCurrent(removeRelMap, relIter);
     }
     
     //remove from player registry

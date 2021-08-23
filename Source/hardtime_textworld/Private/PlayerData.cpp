@@ -3,30 +3,20 @@
 #include "SimWorld.h"
 #include "Locations.h"
 #include <sstream>
-#include "HardTime2Character.h"
-#include "ActorItem.h"
 #include "pLog.h"
 
 std::string UPlayerData::CharacterName()
 {
-	std::string string_name = TCHAR_TO_UTF8(*(m_playerName.ToString()));
-	return string_name;
+	return m_playerName;
 }
 
 void UPlayerData::PrintPlayer()
 {
 	std::stringstream ss;
     ss << "*** PLAYER " << CharacterName() << " ***\n";
-    ss << "playerTargetPtr=" << playerTargetPtr << "\n";
     ss << "item=";
     if (itemPtr != nullptr) {
         ss << itemPtr->ToString() << "\n";
-    } else {
-        ss << "null\n";
-    }
-    ss << "itemFocus=";
-    if (itemFocusPtr != nullptr) {
-        ss << itemFocusPtr->ToString() << "\n";
     } else {
         ss << "null\n";
     }
@@ -42,6 +32,8 @@ void UPlayerData::PrintPlayer()
 	} else {
 		ss << "NULLPTR\n";
 	}
+    ss << "cash=" << cash << "\n";
+    ss << "sentence=" << sentence << "\n";
 	ss << "m_key=" << m_key << "\n";
     ss << "action=" << action->ToString() << "\n";
     ss << "lastAction=" << lastAction->ToString() << "\n";
@@ -51,7 +43,7 @@ void UPlayerData::PrintPlayer()
     ss << "narrative=" << narrative << "\n";
     ss << "\n";
 	pLog(ss);
-    pStats->PrintStats();
+    pStats.PrintStats();
 }
 
 void UPlayerData::UpdateMissions(USimWorld &world)
@@ -60,29 +52,31 @@ void UPlayerData::UpdateMissions(USimWorld &world)
     if (tempMissionClass->IsMissionComplete(world))
     {
 		std::stringstream ss;
-		ss << CharacterName() << " has completed his mission to " << missionClass->MissionName() << " and now has sanity=" << FormatDouble(pStats->getSanity()) << "!";
+		ss << CharacterName() << " has completed his mission to " << missionClass->MissionName() << " and now has sanity=" << FormatDouble(pStats.getSanity()) << "!";
 		pLog(ss, true);
-		pStats->deltaSanity(5);
+		pStats.deltaSanity(5);
         missionClass = std::make_shared<MissionClass>(this);
-		pLog("Old mission: " + tempMissionClass->MissionNarrative(), true);
-		pLog("New mission: " + missionClass->MissionNarrative(), true);
+		pLog(missionClass->MissionNarrative(), true);
     }
 }
 
 bool UPlayerData::IsRequestedRecently(UPlayerData* requestedPlayer, EItemType m_itemType)
 {
-	return (*(relMap.Find(requestedPlayer->m_key)))->isRequestedRecently;
+	return relMap.find(requestedPlayer->m_key)->second->isRequestedRecently;
 }
 
 void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 {
-	(*(relMap.Find(requestedPlayer->m_key)))->SetRecentlyRequested();
+	relMap.find(requestedPlayer->m_key)->second->SetRecentlyRequested();
 }
+
 
 // Member variables set in constructor to work with Unreal Engine.
 UPlayerData::UPlayerData()
 {
 	pLog("Constructing UPlayerData");
+    cash = 0;
+    sentence = 5;
 	itemPtr = nullptr;
     action = std::make_shared<BaseAction>(EActions::useRoom);
     missionOffer = nullptr;
@@ -90,42 +84,12 @@ UPlayerData::UPlayerData()
     lastAction = std::make_shared<BaseAction>(EActions::useRoom);
     attacked = false;
     narrative = "Narrative not set";
-	m_playerName = "No-name";
-	aiController = AI::doNothingAI;
-	itemPtr = nullptr;
-	playerTargetPtr = nullptr;
-	itemFocusPtr = nullptr;
-	physicalCharacter = nullptr;
-    action = std::make_shared<BaseAction>(EActions::goToGym);
-    pStats = CreateDefaultSubobject<UPStats>(TEXT("PlayerStats"));
+    m_playerName = "No-name";
 }
 
-class UWorld* UPlayerData::GetWorld() const
+bool UPlayerData::OtherInReach(UPlayerData& otherPlayerPtr)
 {
-	if (!IsValid(this))
-	{
-		pLog("!IsValid(this) inside UPlayerData::GetWorld()", true);
-		return nullptr;
-	}
-
-	if (!IsValid(physicalCharacter))
-	{
-		pLog("!IsValid(physicalCharacter) inside UPlayerData::GetWorld()", true);
-		return nullptr;
-	}
-
-	if (nullptr == physicalCharacter->GetWorld())
-	{
-		pLog("nullptr == physicalCharacter->GetWorld() inside UPlayerData::GetWorld()", true);
-		return nullptr;
-	}
-
-	return physicalCharacter->GetWorld();
-}
-
-bool UPlayerData::OtherInReach(UPlayerData& otherPlayerPtr, PlayerMap& playerMap)
-{
-    if ((otherPlayerPtr.locationClass.location == locationClass.location) && (&otherPlayerPtr != this)) {
+    if (otherPlayerPtr.locationClass.location == locationClass.location) {
         return true;
     } else {
         return false;

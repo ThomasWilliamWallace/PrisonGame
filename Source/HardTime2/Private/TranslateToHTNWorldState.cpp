@@ -18,8 +18,8 @@ std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, 
     }
     //    std::cout << "\n";
 
-    std::vector<AbstractPlayerData*> attackers;
-    std::vector<AbstractPlayerData*> playersInTheRoom;
+    std::vector<UPlayerData*> attackers;
+    std::vector<UPlayerData*> playersInTheRoom;
     for (const IntRelPair& pair : playerPtr->relMap)
     {
         int relIndex = pair.Key;
@@ -27,20 +27,23 @@ std::unique_ptr<HTNWorldState> TranslateToHTNWorldState(UPlayerData* playerPtr, 
         if (rel != nullptr) {
             if (rel->getAggro() > 29)
             {
-                attackers.push_back(&(playerMap[relIndex]->abstractPlayerData));
+                attackers.push_back(playerMap[relIndex]);
             }
-            if (playerMap[relIndex]->abstractPlayerData.locationClass.location == playerPtr->abstractPlayerData.locationClass.location && playerMap[relIndex] != playerPtr)
+            if (playerMap[relIndex]->locationClass.location == playerPtr->locationClass.location && playerMap[relIndex] != playerPtr)
             {
-                playersInTheRoom.push_back(&(playerMap[relIndex]->abstractPlayerData));
+                playersInTheRoom.push_back(playerMap[relIndex]);
             }
         }
     }
 
-    AbstractPlayerData* requesterAbstractPlayerData = nullptr;
-    if (requester != nullptr)
-    {
-        requesterAbstractPlayerData = &(requester->abstractPlayerData);
+    UPlayerData* requesterPlayerData = nullptr;
+    if (requester != nullptr) {
+        requesterPlayerData = requester;
     }
 
-    return std::make_unique<HTNWorldState>(&(playerPtr->abstractPlayerData), playerMap, world_items, requesterAbstractPlayerData, attackers, playersInTheRoom);
+    return std::make_unique<HTNWorldState>(playerPtr, playerMap, world_items, requesterPlayerData, attackers, playersInTheRoom,
+                        playerPtr->pStats->getHealth(), playerPtr->pStats->getSanity(),
+                        playerPtr->pStats->getStrength(), playerPtr->pStats->getAgility(), playerPtr->pStats->getIntelligence()
+                        );
 }
+

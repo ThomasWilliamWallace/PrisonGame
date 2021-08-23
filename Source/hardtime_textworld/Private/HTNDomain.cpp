@@ -5,7 +5,6 @@
 #include "PlatformSpecific.h"
 #include "EMissions.h"
 #include "Missions.h"
-#include "ActorItem.h"
 
 //***********************************************************
 AlreadyInLibraryMethod::AlreadyInLibraryMethod(): HTNMethod("AlreadyInLibraryMethod")
@@ -24,7 +23,7 @@ GoToNearbyLibraryMethod::GoToNearbyLibraryMethod(): HTNMethod("GoToNearbyLibrary
 
 bool GoToNearbyLibraryMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToNearbyLibraryMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -37,7 +36,7 @@ GoToDistantLibraryMethod::GoToDistantLibraryMethod(): HTNMethod("GoToDistantLibr
 
 bool GoToDistantLibraryMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToDistantLibraryMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -73,7 +72,7 @@ GoToNearbyGymMethod::GoToNearbyGymMethod(): HTNMethod("GoToNearbyGymMethod")
 
 bool GoToNearbyGymMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToNearbyGymMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -86,7 +85,7 @@ GoToDistantGymMethod::GoToDistantGymMethod(): HTNMethod("GoToDistantGymMethod")
 
 bool GoToDistantGymMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToDistantGymMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -122,7 +121,7 @@ GoToNearbyCircuitTrackMethod::GoToNearbyCircuitTrackMethod(): HTNMethod("GoToNea
 
 bool GoToNearbyCircuitTrackMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToNearbyCircuitTrackMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -135,7 +134,7 @@ GoToDistantCircuitTrackMethod::GoToDistantCircuitTrackMethod(): HTNMethod("GoToD
 
 bool GoToDistantCircuitTrackMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToDistantCircuitTrackMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -171,7 +170,7 @@ GoToNearbyBedroomMethod::GoToNearbyBedroomMethod(): HTNMethod("GoToNearbyBedroom
 
 bool GoToNearbyBedroomMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToNearbyBedroomMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -184,7 +183,7 @@ GoToDistantBedroomMethod::GoToDistantBedroomMethod(): HTNMethod("GoToDistantBedr
 
 bool GoToDistantBedroomMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToDistantBedroomMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -209,7 +208,7 @@ GoToAndIncreaseHealthMethod::GoToAndIncreaseHealthMethod(): HTNMethod("GoToAndIn
 
 bool GoToAndIncreaseHealthMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToAndIncreaseHealthMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -232,7 +231,7 @@ GoToAndIncreaseStrengthMethod::GoToAndIncreaseStrengthMethod(): HTNMethod("GoToA
 
 bool GoToAndIncreaseStrengthMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToAndIncreaseStrengthMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -255,7 +254,7 @@ GoToAndIncreaseAgilityMethod::GoToAndIncreaseAgilityMethod(): HTNMethod("GoToAnd
 
 bool GoToAndIncreaseAgilityMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToAndIncreaseAgilityMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -278,7 +277,7 @@ GoToAndIncreaseIntelligenceMethod::GoToAndIncreaseIntelligenceMethod(): HTNMetho
 
 bool GoToAndIncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void GoToAndIncreaseIntelligenceMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -318,16 +317,16 @@ PickupItemMethod::PickupItemMethod(EItemType itemType): HTNMethod("PickupItemMet
 
 bool PickupItemMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	for (auto &item : htnWorldState.m_items)
-	{
-		if (item->m_itemType == m_itemType
+    for (auto &item : htnWorldState.m_items)
+    {
+        if (item->m_itemType == m_itemType
           && item->m_locationClass.location == htnWorldState.m_location
-			&& (item->m_carryingPlayer == nullptr))
-		{
-			return true;
-		}
-	}
-	return false;
+          && (item->m_carryingPlayer == nullptr))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void PickupItemMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -386,27 +385,27 @@ bool GetBringAndDropItemMethod::Preconditions(HTNWorldState &htnWorldState)
 void GetBringAndDropItemMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
     AddTask(new GetItemCompound(m_itemType));
-
-	switch (m_locationClass.location)
-	{
-	case ELocations::bedroom:
-		AddTask(new GoToBedroomCompound());
-		break;
-	case ELocations::circuitTrack:
-		AddTask(new GoToCircuitTrackCompound());
-		break;
-	case ELocations::gym:
-		AddTask(new GoToGymCompound());
-		break;
-	case ELocations::library:
-		AddTask(new GoToLibraryCompound());
-		break;
-	case ELocations::mainHall:
+    
+    switch(m_locationClass.location)
+    {
+        case ELocations::bedroom:
+            AddTask(new GoToBedroomCompound());
+            break;
+        case ELocations::circuitTrack:
+            AddTask(new GoToCircuitTrackCompound());
+            break;
+        case ELocations::gym:
+            AddTask(new GoToGymCompound());
+            break;
+        case ELocations::library:
+            AddTask(new GoToLibraryCompound());
+            break;
+        case ELocations::mainHall:
             AddTask(new GoToMainHallPrim());
-		break;
-	}
-
-    AddTask(new DropItemPrim());
+            break;
+    }
+    
+    AddTask(new DropItemPrim(true));
 }
 
 BringItemToLocationCompound::BringItemToLocationCompound(EItemType itemType, LocationClass &locationClass):
@@ -429,16 +428,16 @@ PickupItemAndAttackMethod::PickupItemAndAttackMethod(SimItemPtr item, UPlayerDat
 
 bool PickupItemAndAttackMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	bool carryingItemAlready = false;
-	for (auto &item : htnWorldState.m_items)
-	{
-		if ((item->m_carryingPlayer) == htnWorldState.m_ptrToSelf)
-		{
-			carryingItemAlready = true;
-			break;
-		}
-	}
-
+    bool carryingItemAlready = false;
+    for (auto &item : htnWorldState.m_items)
+    {
+        if ((item->m_carryingPlayer) == htnWorldState.m_ptrToSelf)
+        {
+            carryingItemAlready = true;
+            break;
+        }
+    }
+    
     return htnWorldState.IsInTheRoom(*m_opponent)
         && (m_item->m_locationClass.location == htnWorldState.m_location)
         && !carryingItemAlready;
@@ -471,14 +470,14 @@ AttackCompound::AttackCompound(UPlayerData* opponent):
 {}
 
 void AttackCompound::CreateMethods(HTNWorldState const& htnWorldState)
-		{
+{
     for (auto &item : htnWorldState.m_items)
     {
         if (item->m_locationClass.location == htnWorldState.m_location)
         {
             AddMethod(new PickupItemAndAttackMethod(item, m_opponent));
-		}
-	}
+        }
+    }
     AddMethod(new AttackImmediateMethod(m_opponent));
 }
 
@@ -489,7 +488,7 @@ AttackMethod::AttackMethod(UPlayerData* opponent):
 
 bool AttackMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void AttackMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -505,10 +504,14 @@ EvadeMethod::EvadeMethod(UPlayerData* opponent):
 
 bool EvadeMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-    if (htnWorldState.m_health < 69) {
-        for (auto& attacker : htnWorldState.m_attackers) {
+    if (htnWorldState.m_health < 67) {
+        for (auto &attacker : htnWorldState.m_attackers) {
             if (attacker == m_opponent) {
-                return true;
+                if (htnWorldState.IsInTheRoom(*attacker)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
     }
@@ -635,7 +638,7 @@ CombatMethod::CombatMethod(UPlayerData* opponent):
 
 bool CombatMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void CombatMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -662,7 +665,7 @@ IncreaseIntelligenceMethod::IncreaseIntelligenceMethod(): HTNMethod("IncreaseInt
 
 bool IncreaseIntelligenceMethod::Preconditions(HTNWorldState &htnWorldState)
 {
-	return true;
+    return true;
 }
 
 void IncreaseIntelligenceMethod::CreateTasks(HTNWorldState const& htnWorldState)
@@ -687,8 +690,9 @@ void PickUpItemByPtrMethod::CreateTasks(HTNWorldState const& htnWorldState)
 }
 
 //***********************************************************
-DropAnyItemImmediateMethod::DropAnyItemImmediateMethod():
-    HTNMethod("DropAnyItemImmediateMethod")
+DropAnyItemImmediateMethod::DropAnyItemImmediateMethod(bool keepItem):
+    HTNMethod("DropAnyItemImmediateMethod"),
+    m_keepItem(keepItem)
 {}
 
 bool DropAnyItemImmediateMethod::Preconditions(HTNWorldState &htnWorldState)
@@ -698,7 +702,7 @@ bool DropAnyItemImmediateMethod::Preconditions(HTNWorldState &htnWorldState)
 
 void DropAnyItemImmediateMethod::CreateTasks(HTNWorldState const& htnWorldState)
 {
-    AddTask(new DropItemPrim());
+    AddTask(new DropItemPrim(m_keepItem));
 }
 
 //***********************************************************
@@ -714,5 +718,5 @@ void PrisonerBehaviourCompound::CreateMethods(HTNWorldState const& htnWorldState
     }
     AddMethod(new DoMissionMethod());
     AddMethod(new PickUpUnneccessaryItemMethod());
-	AddMethod(new IncreaseIntelligenceMethod());
+    AddMethod(new IncreaseIntelligenceMethod());
 }
