@@ -39,4 +39,5 @@ Cons:
 Conclusion:
 	Have all htn_planner code interface with the outside world through the createHTNWorldState function.
 	Most of the programming problems I'm having are due to trying to share code between two languages- standard C++, and Unreal Engine C++.
-	This sharing is just not viable. Instead, maintain a clear boundary between the two codebases.
+	Instead, maintain a clear boundary between the two codebases.
+	It's inevitable that we will need to have code to explicitly convert between the Unreal objects and the htn_planner objects.
