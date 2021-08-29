@@ -53,21 +53,23 @@ set(ht2tw_header_files
 	"${ht2tw_public}/RequestHTNDomain.h"
 	"${ht2tw_public}/SimWorld.h"
 	"${ht2tw_public}/TranslateToHTNWorldState.h"
+	
+	"${ht2tw_public}/AbstractAction.h"
+	"${ht2tw_public}/AbstractItem.h"
+	"${ht2tw_public}/Constants.h"
+	"${ht2tw_public}/EActions.h"
+	"${ht2tw_public}/EItemType.h"
+	"${ht2tw_public}/ELocations.h"
+	"${ht2tw_public}/EMissions.h"
+	"${ht2tw_public}/HTNWorldState.h"
+	"${ht2tw_public}/Locations.h"
+	"${ht2tw_public}/PlatformSpecific.h"
+	"${ht2tw_public}/pLog.h"
+	"${ht2tw_public}/PStats.h"
 	)
 set(htn_planner_header_files
-	"${htn_planner_public}/AbstractAction.h"
-	"${htn_planner_public}/AbstractItem.h"
-	"${htn_planner_public}/Constants.h"
-	"${htn_planner_public}/EActions.h"
-	"${htn_planner_public}/EItemType.h"
-	"${htn_planner_public}/ELocations.h"
-	"${htn_planner_public}/EMissions.h"
 	"${htn_planner_public}/HTNPlanner.h"
-	"${htn_planner_public}/HTNWorldState.h"
-	"${htn_planner_public}/Locations.h"
-	"${htn_planner_public}/PlatformSpecific.h"
-	"${htn_planner_public}/pLog.h"
-	"${htn_planner_public}/PStats.h"
+	"${htn_planner_public}/IHTNWorldState.h"
 	)
 set(ht2tw_source_files
 	"${ht2tw_private}/Actions.cpp"
@@ -83,17 +85,19 @@ set(ht2tw_source_files
 	"${ht2tw_private}/RequestHTNDomain.cpp"
 	"${ht2tw_private}/SimWorld.cpp"
 	"${ht2tw_private}/TranslateToHTNWorldState.cpp"
+	
+	"${ht2tw_private}/AbstractAction.cpp"
+	"${ht2tw_private}/AbstractItem.cpp"
+	"${ht2tw_private}/Constants.cpp"
+	"${ht2tw_private}/HTNWorldState.cpp"
+	"${ht2tw_private}/Locations.cpp"
+	"${ht2tw_private}/PlatformSpecific.cpp"
+	"${ht2tw_private}/pLog.cpp"
+	"${ht2tw_private}/PStats.cpp"
 )
 set(htn_planner_source_files
-	"${htn_planner_private}/AbstractAction.cpp"
-	"${htn_planner_private}/AbstractItem.cpp"
-	"${htn_planner_private}/Constants.cpp"
 	"${htn_planner_private}/HTNPlanner.cpp"
-	"${htn_planner_private}/HTNWorldState.cpp"
-	"${htn_planner_private}/Locations.cpp"
-	"${htn_planner_private}/PlatformSpecific.cpp"
-	"${htn_planner_private}/pLog.cpp"
-	"${htn_planner_private}/PStats.cpp"
+	"${htn_planner_private}/IHTNWorldState.cpp"
 )
 
 # Main executable

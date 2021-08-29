@@ -69,9 +69,12 @@ Unreal should contain:
 	All game code by default.
 	Because it's easier for textworld to include code from Unreal,
 		and then ignore the unreal-specific macro, than vice versa.
+	implementation class for HTNWorldState
+	implementation class for translateToHTNWorldState
 	
 Textworld will:
 	Include any shared code from Unreal, and then ignore Unreal-specific macros.
 	Textworld will override anything that needs changed- this is easier than in Unreal.
 	Textworld overriding or adapting things is also good from a performance standpoint.
 		As textworld can handle a layer of function indirection, but we prefer to keep the fastest speeds for Unreal.
+	implementation class for translateToHTNWorldState

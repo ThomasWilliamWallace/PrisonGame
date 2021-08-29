@@ -4,19 +4,22 @@
 #include <stdexcept>
 #include "pLog.h"
 #include "PlatformSpecific.h"
+#include "HTNWorldState.h"
 
 //***********************************************************
 StudyPrim::StudyPrim() : HTNPrimitive("StudyPrim") {}
 
-void StudyPrim::Effect(HTNWorldState &htnWorldState)
+void StudyPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_intelligence += 1;
+    HTNWorldState & state = static_cast<HTNWorldState &>(iHTNWorldState);
+    state.m_intelligence += 1;
     return;
 }
 
-bool StudyPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool StudyPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::library;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::library;
 }
 
 std::shared_ptr<BaseAction> StudyPrim::Operate(UPlayerData* playerData)
@@ -27,15 +30,17 @@ std::shared_ptr<BaseAction> StudyPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 SleepPrim::SleepPrim() : HTNPrimitive("SleepPrim") {}
 
-void SleepPrim::Effect(HTNWorldState &htnWorldState)
+void SleepPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_health += 1;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_health += 1;
     return;
 }
 
-bool SleepPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool SleepPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::bedroom;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::bedroom;
 }
 
 std::shared_ptr<BaseAction> SleepPrim::Operate(UPlayerData* playerData)
@@ -46,15 +51,17 @@ std::shared_ptr<BaseAction> SleepPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 UseGymPrim::UseGymPrim() : HTNPrimitive("UseGymPrim") {}
 
-void UseGymPrim::Effect(HTNWorldState &htnWorldState)
+void UseGymPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_strength += 1;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_strength += 1;
     return;
 }
 
-bool UseGymPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool UseGymPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::gym;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::gym;
 }
 
 std::shared_ptr<BaseAction> UseGymPrim::Operate(UPlayerData* playerData)
@@ -65,15 +72,17 @@ std::shared_ptr<BaseAction> UseGymPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 RunCircuitsPrim::RunCircuitsPrim() : HTNPrimitive("RunCircuitsPrim") {}
 
-void RunCircuitsPrim::Effect(HTNWorldState &htnWorldState)
+void RunCircuitsPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_agility += 1;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_agility += 1;
     return;
 }
 
-bool RunCircuitsPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool RunCircuitsPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::circuitTrack;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::circuitTrack;
 }
 
 std::shared_ptr<BaseAction> RunCircuitsPrim::Operate(UPlayerData* playerData)
@@ -84,15 +93,17 @@ std::shared_ptr<BaseAction> RunCircuitsPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 GoToGymPrim::GoToGymPrim() : HTNPrimitive("GoToGymPrim") {}
 
-void GoToGymPrim::Effect(HTNWorldState &htnWorldState)
+void GoToGymPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_location = ELocations::gym;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_location = ELocations::gym;
     return;
 }
 
-bool GoToGymPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool GoToGymPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::mainHall;
 }
 
 std::shared_ptr<BaseAction> GoToGymPrim::Operate(UPlayerData* playerData)
@@ -103,15 +114,17 @@ std::shared_ptr<BaseAction> GoToGymPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 GoToLibraryPrim::GoToLibraryPrim() : HTNPrimitive("GoToLibraryPrim") {}
 
-void GoToLibraryPrim::Effect(HTNWorldState &htnWorldState)
+void GoToLibraryPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_location = ELocations::library;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_location = ELocations::library;
     return;
 }
 
-bool GoToLibraryPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool GoToLibraryPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::mainHall;
 }
 
 std::shared_ptr<BaseAction> GoToLibraryPrim::Operate(UPlayerData* playerData)
@@ -122,15 +135,17 @@ std::shared_ptr<BaseAction> GoToLibraryPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 GoToCircuitTrackPrim::GoToCircuitTrackPrim() : HTNPrimitive("GoToCircuitTrackPrim") {}
 
-void GoToCircuitTrackPrim::Effect(HTNWorldState &htnWorldState)
+void GoToCircuitTrackPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_location = ELocations::circuitTrack;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_location = ELocations::circuitTrack;
     return;
 }
 
-bool GoToCircuitTrackPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool GoToCircuitTrackPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::mainHall;
 }
 
 std::shared_ptr<BaseAction> GoToCircuitTrackPrim::Operate(UPlayerData* playerData)
@@ -141,15 +156,17 @@ std::shared_ptr<BaseAction> GoToCircuitTrackPrim::Operate(UPlayerData* playerDat
 //***********************************************************
 GoToBedroomPrim::GoToBedroomPrim() : HTNPrimitive("GoToBedroomPrim") {}
 
-void GoToBedroomPrim::Effect(HTNWorldState &htnWorldState)
+void GoToBedroomPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_location = ELocations::bedroom;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_location = ELocations::bedroom;
     return;
 }
 
-bool GoToBedroomPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool GoToBedroomPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location == ELocations::mainHall;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location == ELocations::mainHall;
 }
 
 std::shared_ptr<BaseAction> GoToBedroomPrim::Operate(UPlayerData* playerData)
@@ -160,15 +177,17 @@ std::shared_ptr<BaseAction> GoToBedroomPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 GoToMainHallPrim::GoToMainHallPrim() : HTNPrimitive("GoToMainHallPrim") {}
 
-void GoToMainHallPrim::Effect(HTNWorldState &htnWorldState)
+void GoToMainHallPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_location = ELocations::mainHall;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_location = ELocations::mainHall;
     return;
 }
 
-bool GoToMainHallPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool GoToMainHallPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.m_location != ELocations::mainHall;
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.m_location != ELocations::mainHall;
 }
 
 std::shared_ptr<BaseAction> GoToMainHallPrim::Operate(UPlayerData* playerData)
@@ -179,13 +198,14 @@ std::shared_ptr<BaseAction> GoToMainHallPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 DrinkPrim::DrinkPrim() : HTNPrimitive("DrinkPrim") {}
 
-void DrinkPrim::Effect(HTNWorldState &htnWorldState)
+void DrinkPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_intelligence -= 1;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_intelligence -= 1;
     return;
 }
 
-bool DrinkPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool DrinkPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
     return true;
 }
@@ -198,17 +218,19 @@ std::shared_ptr<BaseAction> DrinkPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 PunchPrim::PunchPrim(UPlayerData* opponent) : HTNPrimitive("PunchPrim"), m_targetPlayer(opponent) {}
 
-void PunchPrim::Effect(HTNWorldState &htnWorldState)
+void PunchPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    if (htnWorldState.m_itemCarriedPtr != nullptr)
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    if (state.m_itemCarriedPtr != nullptr)
     {
-        htnWorldState.m_itemsToKeep.push_back(htnWorldState.m_itemCarriedPtr);
+        state.m_itemsToKeep.push_back(state.m_itemCarriedPtr);
     }
 }
 
-bool PunchPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool PunchPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return htnWorldState.IsInTheRoom(*m_targetPlayer);
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return state.IsInTheRoom(*m_targetPlayer);
 }
 
 std::shared_ptr<BaseAction> PunchPrim::Operate(UPlayerData* playerData)
@@ -219,12 +241,13 @@ std::shared_ptr<BaseAction> PunchPrim::Operate(UPlayerData* playerData)
 //***********************************************************
 EvadePrim::EvadePrim(UPlayerData* opponent) : HTNPrimitive("EvadePrim"), m_evadePlayer(opponent) {}
 
-void EvadePrim::Effect(HTNWorldState &htnWorldState)
+void EvadePrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_evading = 1;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_evading = 1;
 }
 
-bool EvadePrim::Preconditions(HTNWorldState const& htnWorldState)
+bool EvadePrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
     return true;
 }
@@ -240,16 +263,18 @@ PickUpItemByPtrPrim::PickUpItemByPtrPrim(SimItemPtr itemFocus) : HTNPrimitive("P
     check(itemFocus != nullptr);
 }
 
-void PickUpItemByPtrPrim::Effect(HTNWorldState &htnWorldState)
+void PickUpItemByPtrPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    m_itemFocus->m_carryingPlayer = htnWorldState.m_ptrToSelf;
-    htnWorldState.m_itemCarriedPtr = m_itemFocus;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    m_itemFocus->m_carryingPlayer = state.m_ptrToSelf;
+    state.m_itemCarriedPtr = m_itemFocus;
 }
 
-bool PickUpItemByPtrPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool PickUpItemByPtrPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    SimItemPtr currentSimItem = nullptr; //if we are re-checking the preconditions, we need to find the simulated item in htnWorldState, rather than use the old simulated item m_itemFocus
-    for (auto &simItem : htnWorldState.m_items)
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    SimItemPtr currentSimItem = nullptr; //if we are re-checking the preconditions, we need to find the simulated item in iHTNWorldState, rather than use the old simulated item m_itemFocus
+    for (auto &simItem : state.m_items)
     {
         if (simItem->m_realItem == m_itemFocus->m_realItem)
         {
@@ -261,13 +286,13 @@ bool PickUpItemByPtrPrim::Preconditions(HTNWorldState const& htnWorldState)
 		ThrowException("Failed to find relevant SimItem in PickUpItemByPtrPrim::preconditions");
     }
     //TODO hook this into the actions code
-    //bool is_already_carrying_an_item = GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr;
+    //bool is_already_carrying_an_item = GetRaw(state.m_itemCarriedPtr) == nullptr;
     check(GetRaw(currentSimItem) != nullptr);
-    bool item_is_in_the_same_room = htnWorldState.m_location == currentSimItem->m_locationClass.location;
+    bool item_is_in_the_same_room = state.m_location == currentSimItem->m_locationClass.location;
     bool item_is_already_being_carried = currentSimItem->m_carryingPlayer == nullptr;
-//    if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
+//    if (GetRaw(state.m_itemCarriedPtr) == nullptr
 //      && GetRaw(currentSimItem) != nullptr
-//      && htnWorldState.m_location == currentSimItem->m_locationClass.location
+//      && state.m_location == currentSimItem->m_locationClass.location
 //      && currentSimItem->m_carryingPlayer == nullptr)
     if (item_is_in_the_same_room && item_is_already_being_carried)
     {
@@ -284,29 +309,31 @@ std::shared_ptr<BaseAction> PickUpItemByPtrPrim::Operate(UPlayerData* playerData
 //***********************************************************
 PickUpItemByTypePrim::PickUpItemByTypePrim(EItemType itemType) : HTNPrimitive("PickUpItemByTypePrim"), m_itemType(itemType) {}
 
-void PickUpItemByTypePrim::Effect(HTNWorldState &htnWorldState)
+void PickUpItemByTypePrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    for (auto &item : htnWorldState.m_items)
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    for (auto &item : state.m_items)
     {
-		if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
+		if (GetRaw(state.m_itemCarriedPtr) == nullptr
             && item->m_itemType == m_itemType
-            && item->m_locationClass.location == htnWorldState.m_location
+            && item->m_locationClass.location == state.m_location
             && item->m_carryingPlayer == nullptr)
         {
-            item->m_carryingPlayer = htnWorldState.m_ptrToSelf;
-            htnWorldState.m_itemCarriedPtr = item;
+            item->m_carryingPlayer = state.m_ptrToSelf;
+            state.m_itemCarriedPtr = item;
             return;
         }
     }
 }
 
-bool PickUpItemByTypePrim::Preconditions(HTNWorldState const& htnWorldState)
+bool PickUpItemByTypePrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    for (auto &item : htnWorldState.m_items)
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    for (auto &item : state.m_items)
     {
-        if (GetRaw(htnWorldState.m_itemCarriedPtr) == nullptr
+        if (GetRaw(state.m_itemCarriedPtr) == nullptr
             && item->m_itemType == m_itemType
-            && item->m_locationClass.location == htnWorldState.m_location
+            && item->m_locationClass.location == state.m_location
             && item->m_carryingPlayer == nullptr)
         {
             return true;
@@ -323,20 +350,22 @@ std::shared_ptr<BaseAction> PickUpItemByTypePrim::Operate(UPlayerData* playerDat
 //***********************************************************
 DropItemPrim::DropItemPrim(bool keepItem) : HTNPrimitive("DropItemPrim"), m_keepItem(keepItem) {}
 
-void DropItemPrim::Effect(HTNWorldState &htnWorldState)
+void DropItemPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    htnWorldState.m_itemCarriedPtr->m_locationClass.location = htnWorldState.m_location;
-    htnWorldState.m_itemCarriedPtr->m_carryingPlayer = nullptr;
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    state.m_itemCarriedPtr->m_locationClass.location = state.m_location;
+    state.m_itemCarriedPtr->m_carryingPlayer = nullptr;
     if (m_keepItem)
     {
-        htnWorldState.m_itemsToKeep.push_back(htnWorldState.m_itemCarriedPtr);
+        state.m_itemsToKeep.push_back(state.m_itemCarriedPtr);
     }
-    htnWorldState.m_itemCarriedPtr = nullptr;
+    state.m_itemCarriedPtr = nullptr;
 }
 
-bool DropItemPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool DropItemPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    return GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr; //TODO hook this into the actions code
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    return GetRaw(state.m_itemCarriedPtr) != nullptr; //TODO hook this into the actions code
 }
 
 std::shared_ptr<BaseAction> DropItemPrim::Operate(UPlayerData* playerData)
@@ -353,28 +382,30 @@ RequestItemPrim::RequestItemPrim(UPlayerData* requestedPlayer, EItemType itemTyp
     assert(m_requestedPlayer != nullptr);
 }
 
-void RequestItemPrim::Effect(HTNWorldState &htnWorldState)
+void RequestItemPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
-    for (auto &item : htnWorldState.m_items)
+    HTNWorldState& state = static_cast<HTNWorldState&>(iHTNWorldState);
+    for (auto &item : state.m_items)
     {
         if (item->m_carryingPlayer == m_requestedPlayer)
         {
-            htnWorldState.m_itemCarriedPtr = item;
+            state.m_itemCarriedPtr = item;
             break;
         }
     }
-    htnWorldState.m_itemCarriedPtr->m_carryingPlayer = m_requestedPlayer;
+    state.m_itemCarriedPtr->m_carryingPlayer = m_requestedPlayer;
 }
 
-bool RequestItemPrim::Preconditions(HTNWorldState const& htnWorldState)
+bool RequestItemPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
-    if (GetRaw(htnWorldState.m_itemCarriedPtr) != nullptr)
+    HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
+    if (GetRaw(state.m_itemCarriedPtr) != nullptr)
     {
         return false;
     }
-    for (auto &item : htnWorldState.m_items)
+    for (auto &item : state.m_items)
     {
-        if (item->m_carryingPlayer == m_requestedPlayer && item->m_itemType == m_itemType && htnWorldState.IsInTheRoom(*(item->m_carryingPlayer)))
+        if (item->m_carryingPlayer == m_requestedPlayer && item->m_itemType == m_itemType && state.IsInTheRoom(*(item->m_carryingPlayer)))
         {
             return true;
         }
