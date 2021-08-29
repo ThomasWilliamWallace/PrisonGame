@@ -41,3 +41,37 @@ Conclusion:
 	Most of the programming problems I'm having are due to trying to share code between two languages- standard C++, and Unreal Engine C++.
 	Instead, maintain a clear boundary between the two codebases.
 	It's inevitable that we will need to have code to explicitly convert between the Unreal objects and the htn_planner objects.
+	
+
+
+Htn_planner should contain:
+	HTNPlanner.h
+	abstract class for HTNWorldState
+	abstract class / entrypoint for translateToHTNWorldState
+	means for output:
+		planner outputs a list of shared_ptrs to HTNPrimitives
+		An HTNPrimitive has got 'preconditions' and 'effect on HTNWorldState'.
+			these both deal only with HTNWorldState.
+		An HTNPrimitive also has an 'Operate' function.
+			This is meant to trigger the real-world effect of the HTNPrimitive.
+			This code will differ between Unreal and textworld, preventing code sharing.
+			Two ways to deal with this:
+				1: output a command, which is then interpreted by further, simulation-specific code.
+					This is the current approach, outputting a 'BaseAction'.
+				2: 'Operate' contains the actual code.
+					This removes a layer of indirection.
+					But we need to populate 'Operate' differently in Unreal and in textworld.
+					We can define 'Operate' in Unreal,
+						and then include it into textworld,
+							where we override 'Operate'.
+						
+Unreal should contain:
+	All game code by default.
+	Because it's easier for textworld to include code from Unreal,
+		and then ignore the unreal-specific macro, than vice versa.
+	
+Textworld will:
+	Include any shared code from Unreal, and then ignore Unreal-specific macros.
+	Textworld will override anything that needs changed- this is easier than in Unreal.
+	Textworld overriding or adapting things is also good from a performance standpoint.
+		As textworld can handle a layer of function indirection, but we prefer to keep the fastest speeds for Unreal.
