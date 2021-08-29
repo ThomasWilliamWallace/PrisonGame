@@ -1,0 +1,42 @@
+Aim:
+	Run htn_planner code in Unreal Engine.
+	Run htn_planner code in unit tests.
+	Optional: htn_planner code is usable outside of Unreal Engine.
+
+Inheritance:
+Pros:
+	n/a
+Cons:
+	Cannot mix virtual functions with Unreal Engine objects, due to RTTI incompatibility.
+	(Unreal uses it's own implementation of virtual table methods, and an object cannot inherit from an Unreal Object and a non-unreal object.)
+	This rules out Unreal inheriting from htn_planner base classes.
+
+Composition:
+Pros:
+	Htn_planner classes can be included in Unreal objects via composition.
+Cons:
+	All Unreal code must go:
+		item->item_data->item_type
+	Instead of:
+		item->item_type
+	It will also prevent blueprint access of this data.
+
+Adaptor classes:
+Pros:
+	Htn_planner and Unreal can access data members simply, like:
+		item->get_item_type()
+Cons:
+	Requires large amounts of adaptor boilerplate to be written, defining getter functions for all planner-relevant data.
+	
+Have all htn_planner code interface with the outside world of Unreal / textworld via a createHTNWorldState function (and a similar output format):
+Pros:
+	htn_planner is totally isolated from Unreal Engine.
+	All Unreal code dealing with htn_planner is isolated to one place
+Cons:
+	Have to maintain separate code for htn_planner objects and external Unreal / textworld objects.
+		Can mitigate this somewhat by importing htn_planner code into textworld.
+		
+Conclusion:
+	Have all htn_planner code interface with the outside world through the createHTNWorldState function.
+	Most of the programming problems I'm having are due to trying to share code between two languages- standard C++, and Unreal Engine C++.
+	This sharing is just not viable. Instead, maintain a clear boundary between the two codebases.
