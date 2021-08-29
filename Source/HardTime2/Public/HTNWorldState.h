@@ -6,10 +6,11 @@
 #include "Constants.h"
 #include "PlatformSpecific.h"
 #include "AbstractItem.h"
+#include "IHTNWorldState.h"
 
 class MissionClass;
 
-class HTNWorldState
+class HTNWorldState : public IHTNWorldState
 {
 public:
     UPlayerData* m_ptrToSelf;
@@ -33,5 +34,6 @@ public:
                   UPlayerData* requester, std::vector<UPlayerData*> attackers, std::vector<UPlayerData*> playersInTheRoom,
                   float health, float sanity, float strength, float agility, float intelligence);
     HTNWorldState& operator=(HTNWorldState const& ws2);
-    void Print();
+    void Print() override;
+    HTNWorldState* clone() const;
 };
