@@ -5,12 +5,13 @@
 #include "HTNPlanner.h"
 #include "IHTNWorldState.h"
 #include "PlayerData.h"
+#include "HTNPrimitives.h"  //import the Primitive class
 
 class UPlayerData;
 class USimWorld;
 /*
 //***********************************************************
-class AcceptItemRequestPrim : public HTNPrimitive
+class AcceptItemRequestPrim : public Primitive
 {
 public:
     AcceptItemRequestPrim();
@@ -19,7 +20,7 @@ public:
 };
 
 //***********************************************************
-class DeclineItemRequestPrim : public HTNPrimitive
+class DeclineItemRequestPrim : public Primitive
 {
 public:
     DeclineItemRequestPrim();

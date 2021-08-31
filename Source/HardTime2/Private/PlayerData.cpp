@@ -83,11 +83,9 @@ void UPlayerData::SetRequested(UPlayerData* requestedPlayer)
 UPlayerData::UPlayerData()
 {
 	pLog("Constructing UPlayerData");
-	itemPtr = nullptr;
-    action = std::make_shared<BaseAction>(EActions::useRoom);
     missionOffer = nullptr;
     missionClass = std::make_shared<MissionClass>(this);
-    lastAction = std::make_shared<BaseAction>(EActions::useRoom);
+    lastAction = std::make_shared<BaseAction>(EActions::noAction);
     attacked = false;
     narrative = "Narrative not set";
 	m_playerName = "No-name";
@@ -96,7 +94,7 @@ UPlayerData::UPlayerData()
 	playerTargetPtr = nullptr;
 	itemFocusPtr = nullptr;
 	physicalCharacter = nullptr;
-    action = std::make_shared<BaseAction>(EActions::goToGym);
+    action = std::make_shared<BaseAction>(EActions::noAction);
     pStats = CreateDefaultSubobject<UPStats>(TEXT("PlayerStats"));
 }
 

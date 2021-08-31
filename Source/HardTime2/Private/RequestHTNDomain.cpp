@@ -4,9 +4,10 @@
 #include "SimWorld.h"
 #include "HTNDomain.h"
 #include "HTNWorldState.h"
+#include "EActions.h"
 /*
 //Start HTNPrimitives****************************************
-AcceptItemRequestPrim::AcceptItemRequestPrim() : HTNPrimitive("AcceptItemRequest") {}
+AcceptItemRequestPrim::AcceptItemRequestPrim() : Primitive("AcceptItemRequest", EActions::acceptRequest) {}
 
 void AcceptItemRequestPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -28,7 +29,7 @@ bool AcceptItemRequestPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-DeclineItemRequestPrim::DeclineItemRequestPrim() : HTNPrimitive("DeclineItemRequest") {}
+DeclineItemRequestPrim::DeclineItemRequestPrim() : Primitive("DeclineItemRequest", EActions::declineRequest) {}
 
 void DeclineItemRequestPrim::Effect(IHTNWorldState &iHTNWorldState)
 {

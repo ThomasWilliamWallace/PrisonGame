@@ -546,8 +546,20 @@ void AHardTime2Character::Tick(float DeltaTime)
 			pLog("requestItem", true);
 			RequestItem(m_player->action);
 			break;
-		case EActions::useRoom:
-			pLog("useRoom", true);
+		case EActions::study:
+			pLog("study", true);
+			UseRoom();
+			break;
+		case EActions::workOut:
+			pLog("workOut", true);
+			UseRoom();
+			break;
+		case EActions::runCircuits:
+			pLog("runCircuits", true);
+			UseRoom();
+			break;
+		case EActions::sleep:
+			pLog("sleep", true);
 			UseRoom();
 			break;
 		case EActions::attack:

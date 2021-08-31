@@ -12,8 +12,16 @@ std::string ActionToString(EActions action)
             return "Evade";
         case EActions::attack:
             return "Attack";
-        case EActions::useRoom:
-            return "UseRoom";
+        case EActions::study:
+            return "study";
+        case EActions::workOut:
+            return "workOut";
+        case EActions::runCircuits:
+            return "runCircuits";
+        case EActions::sleep:
+            return "sleep";
+        case EActions::drink:
+            return "drink";
         case EActions::goToGym:
             return "GoToGym";
         case EActions::goToBedroom:
@@ -41,7 +49,7 @@ std::string ActionToString(EActions action)
         case EActions::declineRequest:
             return "declineRequest";
         case EActions::noAction:
-            ThrowException("ERROR NO ACTION");
+            return "noAction";
     }
     ThrowException("ERROR UnrecognisedAction");
     return "ERROR UnrecognisedAction";

@@ -8,12 +8,16 @@ UENUM(BlueprintType, Blueprintable)
 enum class EActions : uint8
 {
     attack,
-    useRoom,
+    study,
+    workOut,
+    runCircuits,
+    sleep,
     goToLibrary,
     goToGym,
     goToCircuitTrack,
     goToBedroom,
     goToMainHall,
+    drink,
     evade,
     makeFriends,
     offerMission,

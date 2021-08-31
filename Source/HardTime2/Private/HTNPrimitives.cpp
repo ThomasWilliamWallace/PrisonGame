@@ -10,7 +10,7 @@
 #include "PlatformSpecificForPlanner.h"
 
 //***********************************************************
-DoNothingPrim::DoNothingPrim() : HTNPrimitive("DoNothingPrim") {}
+DoNothingPrim::DoNothingPrim() : Primitive("DoNothingPrim", EActions::noAction) {}
 
 void DoNothingPrim::Effect(IHTNWorldState& iHTNWorldState)
 {
@@ -23,7 +23,7 @@ bool DoNothingPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-StudyPrim::StudyPrim() : HTNPrimitive("StudyPrim") {}
+StudyPrim::StudyPrim() : Primitive("StudyPrim", EActions::study) {}
 
 void StudyPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -39,7 +39,7 @@ bool StudyPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-SleepPrim::SleepPrim() : HTNPrimitive("SleepPrim") {}
+SleepPrim::SleepPrim() : Primitive("SleepPrim", EActions::sleep) {}
 
 void SleepPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -55,7 +55,7 @@ bool SleepPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-UseGymPrim::UseGymPrim() : HTNPrimitive("UseGymPrim") {}
+UseGymPrim::UseGymPrim() : Primitive("UseGymPrim", EActions::workOut) {}
 
 void UseGymPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -71,7 +71,7 @@ bool UseGymPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-RunCircuitsPrim::RunCircuitsPrim() : HTNPrimitive("RunCircuitsPrim") {}
+RunCircuitsPrim::RunCircuitsPrim() : Primitive("RunCircuitsPrim", EActions::runCircuits) {}
 
 void RunCircuitsPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -87,7 +87,7 @@ bool RunCircuitsPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-GoToGymPrim::GoToGymPrim() : HTNPrimitive("GoToGymPrim") {}
+GoToGymPrim::GoToGymPrim() : Primitive("GoToGymPrim", EActions::goToGym) {}
 
 void GoToGymPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -103,7 +103,7 @@ bool GoToGymPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-GoToLibraryPrim::GoToLibraryPrim() : HTNPrimitive("GoToLibraryPrim") {}
+GoToLibraryPrim::GoToLibraryPrim() : Primitive("GoToLibraryPrim", EActions::goToLibrary) {}
 
 void GoToLibraryPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -119,7 +119,7 @@ bool GoToLibraryPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-GoToCircuitTrackPrim::GoToCircuitTrackPrim() : HTNPrimitive("GoToCircuitTrackPrim") {}
+GoToCircuitTrackPrim::GoToCircuitTrackPrim() : Primitive("GoToCircuitTrackPrim", EActions::goToCircuitTrack) {}
 
 void GoToCircuitTrackPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -135,7 +135,7 @@ bool GoToCircuitTrackPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-GoToBedroomPrim::GoToBedroomPrim() : HTNPrimitive("GoToBedroomPrim") {}
+GoToBedroomPrim::GoToBedroomPrim() : Primitive("GoToBedroomPrim", EActions::goToBedroom) {}
 
 void GoToBedroomPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -151,7 +151,7 @@ bool GoToBedroomPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-GoToMainHallPrim::GoToMainHallPrim() : HTNPrimitive("GoToMainHallPrim") {}
+GoToMainHallPrim::GoToMainHallPrim() : Primitive("GoToMainHallPrim", EActions::goToMainHall) {}
 
 void GoToMainHallPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -167,7 +167,7 @@ bool GoToMainHallPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-DrinkPrim::DrinkPrim() : HTNPrimitive("DrinkPrim") {}
+DrinkPrim::DrinkPrim() : Primitive("DrinkPrim", EActions::drink) {}
 
 void DrinkPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -182,7 +182,7 @@ bool DrinkPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-PunchPrim::PunchPrim(UPlayerData* opponent) : HTNPrimitive("PunchPrim"), m_targetPlayer(opponent) {}
+PunchPrim::PunchPrim(UPlayerData* opponent) : Primitive("PunchPrim", EActions::attack), m_targetPlayer(opponent) {}
 
 void PunchPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -196,7 +196,7 @@ bool PunchPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-EvadePrim::EvadePrim(UPlayerData* opponent) : HTNPrimitive("EvadePrim"), m_evadePlayer(opponent) {}
+EvadePrim::EvadePrim(UPlayerData* opponent) : Primitive("EvadePrim", EActions::evade), m_evadePlayer(opponent) {}
 
 void EvadePrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -210,7 +210,7 @@ bool EvadePrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-PickUpItemByPtrPrim::PickUpItemByPtrPrim(SimItemPtr itemFocus) : HTNPrimitive("PickUpItemByPtrPrim"), m_itemFocus(itemFocus)
+PickUpItemByPtrPrim::PickUpItemByPtrPrim(SimItemPtr itemFocus) : Primitive("PickUpItemByPtrPrim", EActions::pickUpItemByPtr), m_itemFocus(itemFocus)
 {
     check(itemFocus != nullptr);
 }
@@ -248,7 +248,7 @@ bool PickUpItemByPtrPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-PickUpItemByTypePrim::PickUpItemByTypePrim(EItemType itemType) : HTNPrimitive("PickUpItemByTypePrim"), m_itemType(itemType) {}
+PickUpItemByTypePrim::PickUpItemByTypePrim(EItemType itemType) : Primitive("PickUpItemByTypePrim", EActions::pickUpItemByType), m_itemType(itemType) {}
 
 void PickUpItemByTypePrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -283,7 +283,7 @@ bool PickUpItemByTypePrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 }
 
 //***********************************************************
-DropItemPrim::DropItemPrim() : HTNPrimitive("DropItemPrim") {}
+DropItemPrim::DropItemPrim() : Primitive("DropItemPrim", EActions::dropItem) {}
 
 void DropItemPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
@@ -301,7 +301,7 @@ bool DropItemPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 
 //***********************************************************
 RequestItemPrim::RequestItemPrim(UPlayerData* requestedPlayer, EItemType itemType):
-	HTNPrimitive("RequestItemPrim"),
+	Primitive("RequestItemPrim", EActions::requestItem),
 	m_itemType(itemType),
     m_requestedPlayer(requestedPlayer)
 {}

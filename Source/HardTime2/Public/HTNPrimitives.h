@@ -4,11 +4,20 @@
 #include "HTNPlanner.h"
 #include "IHTNWorldState.h"
 #include "PlatformSpecific.h"
+#include "EActions.h"
 
 class UPlayerData;
 
+// The only purpose of this class is to allow us to set the type on primitives without writing an enum-to-int cast.
+// Maybe this can be replaced by removing the separate htn_planner primitive / Unreal action distinction.
+class Primitive : public HTNPrimitive
+{
+public:
+	Primitive(std::string name, EActions type): HTNPrimitive(name, static_cast<int>(type)) {};
+};
+
 //***********************************************************
-class DoNothingPrim : public HTNPrimitive
+class DoNothingPrim : public Primitive
 {
 public:
 	DoNothingPrim();
@@ -17,7 +26,7 @@ public:
 };
 
 //***********************************************************
-class StudyPrim : public HTNPrimitive
+class StudyPrim : public Primitive
 {
 public:
     StudyPrim();
@@ -26,7 +35,7 @@ public:
 };
 
 //***********************************************************
-class SleepPrim : public HTNPrimitive
+class SleepPrim : public Primitive
 {
 public:
     SleepPrim();
@@ -35,7 +44,7 @@ public:
 };
 
 //***********************************************************
-class UseGymPrim : public HTNPrimitive
+class UseGymPrim : public Primitive
 {
 public:
     UseGymPrim();
@@ -44,7 +53,7 @@ public:
 };
 
 //***********************************************************
-class RunCircuitsPrim : public HTNPrimitive
+class RunCircuitsPrim : public Primitive
 {
 public:
     RunCircuitsPrim();
@@ -53,7 +62,7 @@ public:
 };
 
 //***********************************************************
-class GoToGymPrim : public HTNPrimitive
+class GoToGymPrim : public Primitive
 {
 public:
     GoToGymPrim();
@@ -62,7 +71,7 @@ public:
 };
 
 //***********************************************************
-class GoToLibraryPrim : public HTNPrimitive
+class GoToLibraryPrim : public Primitive
 {
 public:
     GoToLibraryPrim();
@@ -71,7 +80,7 @@ public:
 };
 
 //***********************************************************
-class GoToCircuitTrackPrim : public HTNPrimitive
+class GoToCircuitTrackPrim : public Primitive
 {
 public:
     GoToCircuitTrackPrim();
@@ -80,7 +89,7 @@ public:
 };
 
 //***********************************************************
-class GoToBedroomPrim : public HTNPrimitive
+class GoToBedroomPrim : public Primitive
 {
 public:
     GoToBedroomPrim();
@@ -89,7 +98,7 @@ public:
 };
 
 //***********************************************************
-class GoToMainHallPrim : public HTNPrimitive
+class GoToMainHallPrim : public Primitive
 {
 public:
     GoToMainHallPrim();
@@ -98,7 +107,7 @@ public:
 };
 
 //***********************************************************
-class DrinkPrim : public HTNPrimitive
+class DrinkPrim : public Primitive
 {
 public:
     DrinkPrim();
@@ -107,7 +116,7 @@ public:
 };
 
 //***********************************************************
-class PunchPrim : public HTNPrimitive
+class PunchPrim : public Primitive
 {
 public:
 	UPlayerData* m_targetPlayer;
@@ -117,7 +126,7 @@ public:
 };
 
 //***********************************************************
-class EvadePrim : public HTNPrimitive
+class EvadePrim : public Primitive
 {
 public:
 	UPlayerData* m_evadePlayer;
@@ -127,7 +136,7 @@ public:
 };
 
 //***********************************************************
-class PickUpItemByPtrPrim : public HTNPrimitive
+class PickUpItemByPtrPrim : public Primitive
 {
 public:
     PickUpItemByPtrPrim(SimItemPtr itemFocus);
@@ -137,7 +146,7 @@ public:
 };
 
 //***********************************************************
-class PickUpItemByTypePrim : public HTNPrimitive
+class PickUpItemByTypePrim : public Primitive
 {
 public:
     PickUpItemByTypePrim(EItemType itemType);
@@ -147,7 +156,7 @@ public:
 };
 
 //***********************************************************
-class DropItemPrim : public HTNPrimitive
+class DropItemPrim : public Primitive
 {
 public:
     DropItemPrim();
@@ -156,7 +165,7 @@ public:
 };
 
 //***********************************************************
-class RequestItemPrim : public HTNPrimitive
+class RequestItemPrim : public Primitive
 {
 	EItemType m_itemType;
 public:
