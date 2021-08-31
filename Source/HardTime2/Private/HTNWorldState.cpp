@@ -162,3 +162,8 @@ bool HTNWorldState::IsInTheRoom(UPlayerData const& playerPtr) const
     }
     return false;
 }
+
+HTNWorldState* HTNWorldState::clone() const
+{
+    return new HTNWorldState(*this);
+}
