@@ -11,6 +11,9 @@
 #include <vector>
 #include "TranslateToHTNWorldState.h"
 #include "HTNPrimitives.h"
+#include "HTNNode.h"
+#include "EActions.h"
+#include "PlatformSpecificForPlanner.h"
 
 EActions AIController::ChooseRoom(UPlayerData* playerData, PlayerMap &playerMap)
 {
@@ -152,7 +155,7 @@ std::shared_ptr<BaseAction> AIController::HTNAIChooseAction(UPlayerData* playerD
 		HTNPrimitivePtr currentPlanStep = htnPlan.front();
 		htnPlan.pop_front();
 		pLog("Leaving htnAIChooseAction #2");
-		return currentPlanStep->Operate(playerData);
+		return TranslatePrimitiveToAction(currentPlanStep);
 	}
 	pLog("Leaving htnAIChooseAction #3");
 	return std::make_shared<BaseAction>(EActions::noAction);
@@ -168,4 +171,69 @@ AIController::AIController() :
 	algo(AI::doNothingAI),
 	lastActionInterrupted(false)
 {
+}
+
+std::shared_ptr<BaseAction> TranslatePrimitiveToAction(HTNPrimitivePtr htnPrimitivePtr)
+{
+	auto prim = htnPrimitivePtr;
+	if (typeid(prim) == typeid(DoNothingPrim)) {
+		return std::make_shared<BaseAction>(EActions::noAction);
+	}
+	else if (typeid(prim) == typeid(StudyPrim)) {
+		return std::make_shared<BaseAction>(EActions::useRoom);
+	}
+	else if (typeid(prim) == typeid(SleepPrim)) {
+		return std::make_shared<BaseAction>(EActions::useRoom);
+	}
+	else if (typeid(prim) == typeid(UseGymPrim)) {
+		return std::make_shared<BaseAction>(EActions::useRoom);
+	}
+	else if (typeid(prim) == typeid(RunCircuitsPrim)) {
+		return std::make_shared<BaseAction>(EActions::useRoom);
+	}
+	else if (typeid(prim) == typeid(GoToGymPrim)) {
+		return std::make_shared<BaseAction>(EActions::goToGym);
+	}
+	else if (typeid(prim) == typeid(GoToLibraryPrim)) {
+		return std::make_shared<BaseAction>(EActions::goToLibrary);
+	}
+	else if (typeid(prim) == typeid(GoToCircuitTrackPrim)) {
+		return std::make_shared<BaseAction>(EActions::goToCircuitTrack);
+	}
+	else if (typeid(prim) == typeid(GoToBedroomPrim)) {
+		return std::make_shared<BaseAction>(EActions::goToBedroom);
+	}
+	else if (typeid(prim) == typeid(GoToMainHallPrim)) {
+		return std::make_shared<BaseAction>(EActions::goToMainHall);
+	}
+	else if (typeid(prim) == typeid(DrinkPrim)) {
+		return std::make_shared<BaseAction>(EActions::noAction);
+	}
+	else if (typeid(prim) == typeid(PunchPrim)) {
+		PunchPrim* punchPrim = static_cast<PunchPrim*>(htnPrimitivePtr.get());
+		return std::make_shared<AttackAction>(punchPrim->m_targetPlayer);
+	}
+	else if (typeid(prim) == typeid(EvadePrim)) {
+		EvadePrim* evadePrim = static_cast<EvadePrim*>(htnPrimitivePtr.get());
+		return std::make_shared<EvadeAction>(evadePrim->m_evadePlayer);
+	}
+	else if (typeid(prim) == typeid(PickUpItemByPtrPrim)) {
+		PickUpItemByPtrPrim* pickUpItemByPtrPrim = static_cast<PickUpItemByPtrPrim*>(htnPrimitivePtr.get());
+		return std::make_shared<PickUpItemByPtrAction>(pickUpItemByPtrPrim->m_itemFocus->m_realItem);
+	}
+	else if (typeid(prim) == typeid(PickUpItemByTypePrim)) {
+		PickUpItemByTypePrim* pickUpItemByTypePrim = static_cast<PickUpItemByTypePrim*>(htnPrimitivePtr.get());
+		return std::make_shared<PickUpItemByTypeAction>(pickUpItemByTypePrim->m_itemType);
+	}
+	else if (typeid(prim) == typeid(DropItemPrim)) {
+		return std::make_shared<BaseAction>(EActions::dropItem);
+	}
+	else if (typeid(prim) == typeid(RequestItemPrim)) {
+		RequestItemPrim* requestItemPrim = static_cast<RequestItemPrim*>(htnPrimitivePtr.get());
+		return std::make_shared<RequestItemAction>(requestItemPrim->m_requestedPlayer);
+	}
+	else {
+		ThrowException("Primitive from htn_planner could not be converted to an Action.");
+	}
+	return std::make_shared<BaseAction>(EActions::noAction);
 }

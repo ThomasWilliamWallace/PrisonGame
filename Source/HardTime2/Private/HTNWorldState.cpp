@@ -5,6 +5,7 @@
 #include "pLog.h"
 #include <sstream>
 #include "Missions.h"
+#include "PlatformSpecificForPlanner.h"
 
 //***********************************************************
 HTNWorldState::HTNWorldState(UPlayerData* playerPtr, PlayerMap& playerMap, std::vector<RealItemType*>& realItems,
@@ -56,7 +57,7 @@ HTNWorldState::HTNWorldState(HTNWorldState const& ws2):
 {
     for (auto &item : ws2.m_items)
     {
-        m_items.emplace_back(std::make_shared<SimItem>(*(item.get())));
+        m_items.emplace_back(std::make_shared<SimItem>(*(item)));
         m_items.back()->m_realItem = item->m_realItem;
         if (ws2.m_itemCarriedPtr != nullptr && ws2.m_itemCarriedPtr->m_realItem == item->m_realItem)
         {
@@ -89,7 +90,7 @@ HTNWorldState& HTNWorldState::operator=(HTNWorldState const& ws2)
     m_items.clear();
     for (auto &item : ws2.m_items)
     {
-        m_items.emplace_back(std::make_shared<SimItem>(*(item.get())));
+        m_items.emplace_back(std::make_shared<SimItem>(*(item)));
         m_items.back()->m_realItem = item->m_realItem;
         if (ws2.m_itemCarriedPtr == item)
         {
@@ -118,7 +119,7 @@ void HTNWorldState::Print()
     ss << "m_evading:" << m_evading << "\n";
     ss << "m_location:" << static_cast<int>(m_location) << "\n";
     ss << "m_ptrToSelf:" << m_ptrToSelf << "\n";
-    ss << "m_itemCarriedPtr:" << GetRaw(m_itemCarriedPtr) << "\n";
+    ss << "m_itemCarriedPtr:" << m_itemCarriedPtr << "\n";
     ss << "m_requester:" << m_requester << "\n";
     for (auto &simItem : m_items)
     {

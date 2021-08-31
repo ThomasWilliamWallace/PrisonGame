@@ -22,11 +22,6 @@ void AcceptItemRequestPrim::Effect(IHTNWorldState &iHTNWorldState)
     return;
 }
 
-std::shared_ptr<BaseAction> AcceptItemRequestPrim::Operate(UPlayerData* playerPtr, USimWorld &world)
-{
-    return std::make_shared<BaseAction>(EActions::acceptRequest);
-}
-
 bool AcceptItemRequestPrim::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
     return true;
@@ -38,11 +33,6 @@ DeclineItemRequestPrim::DeclineItemRequestPrim() : HTNPrimitive("DeclineItemRequ
 void DeclineItemRequestPrim::Effect(IHTNWorldState &iHTNWorldState)
 {
     return;
-}
-
-std::shared_ptr<BaseAction> DeclineItemRequestPrim::Operate(UPlayerData* playerPtr, USimWorld &world)
-{
-    return std::make_shared<BaseAction>(EActions::declineRequest);
 }
 
 bool DeclineItemRequestPrim::Preconditions(IHTNWorldState const& iHTNWorldState)

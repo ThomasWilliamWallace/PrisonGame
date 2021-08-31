@@ -3,6 +3,18 @@
 #include <vector>
 #include "HTNPlanner.h"
 #include "IHTNWorldState.h"
+#include "PlatformSpecific.h"
+
+class UPlayerData;
+
+//***********************************************************
+class DoNothingPrim : public HTNPrimitive
+{
+public:
+	DoNothingPrim();
+	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
+	void Effect(IHTNWorldState& iHTNWorldState) override;
+};
 
 //***********************************************************
 class StudyPrim : public HTNPrimitive
@@ -11,7 +23,6 @@ public:
     StudyPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -21,7 +32,6 @@ public:
     SleepPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -31,7 +41,6 @@ public:
     UseGymPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -41,7 +50,6 @@ public:
     RunCircuitsPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -51,7 +59,6 @@ public:
     GoToGymPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -61,7 +68,6 @@ public:
     GoToLibraryPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -71,7 +77,6 @@ public:
     GoToCircuitTrackPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -81,7 +86,6 @@ public:
     GoToBedroomPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -91,7 +95,6 @@ public:
     GoToMainHallPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -101,29 +104,26 @@ public:
     DrinkPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
 class PunchPrim : public HTNPrimitive
 {
-    UPlayerData* m_targetPlayer;
 public:
+	UPlayerData* m_targetPlayer;
     PunchPrim(UPlayerData* opponent);
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
 class EvadePrim : public HTNPrimitive
 {
-	UPlayerData* m_evadePlayer;
 public:
+	UPlayerData* m_evadePlayer;
     EvadePrim(UPlayerData* opponent);
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -134,7 +134,6 @@ public:
 	SimItemPtr m_itemFocus;
     bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
     void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -145,7 +144,6 @@ public:
 	EItemType m_itemType;
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
@@ -155,17 +153,15 @@ public:
     DropItemPrim();
 	bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
 	void Effect(IHTNWorldState &iHTNWorldState) override;
-	std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };
 
 //***********************************************************
 class RequestItemPrim : public HTNPrimitive
 {
-	UPlayerData* m_requestedPlayer;
-    EItemType m_itemType;
+	EItemType m_itemType;
 public:
+	UPlayerData* m_requestedPlayer;
     RequestItemPrim(UPlayerData* requestedPlayer, EItemType itemType);
     bool Preconditions(IHTNWorldState const& iHTNWorldState) override;
     void Effect(IHTNWorldState &iHTNWorldState) override;
-    std::shared_ptr<BaseAction> Operate(UPlayerData* playerData) override;
 };

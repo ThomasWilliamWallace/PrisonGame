@@ -3,6 +3,7 @@
 #include "HTNPlanner.h"
 #include "EActions.h"
 #include "PlatformSpecific.h"
+#include "HTNNode.h"
 
 class USimWorld;
 class BaseAction;
@@ -27,3 +28,5 @@ public:
     AIController();
     bool lastActionInterrupted;
 };
+
+std::shared_ptr<BaseAction> TranslatePrimitiveToAction(HTNPrimitivePtr htnPrimitivePtr);

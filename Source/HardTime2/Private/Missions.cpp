@@ -3,6 +3,7 @@
 #include "SimWorld.h"
 #include "Constants.h"
 #include "ActorItem.h"
+#include "PlatformSpecificForPlanner.h"
 
 MissionClass::MissionClass(RandomMission r, UPlayerData* playerPtr):
     MissionClass(playerPtr)
@@ -110,6 +111,7 @@ std::string MissionClass::MissionNarrative()
             return "Mission: " + m_owner->CharacterName() + " must bring a " + ItemTypeToString(m_itemType) + " to the " + m_locationClass.ToString() + ".";
     }
     ThrowException("ERROR: MISSION TYPE NOT RECOGNISED");
+    return "ERROR: MISSION TYPE NOT RECOGNISED";
 }
 
 std::string MissionClass::MissionName()
@@ -128,6 +130,7 @@ std::string MissionClass::MissionName()
             return "no mission";
     }
     ThrowException("UnrecognisedMission");
+    return "UnrecognisedMission";
 }
 
 EMissions GetRandomMission()

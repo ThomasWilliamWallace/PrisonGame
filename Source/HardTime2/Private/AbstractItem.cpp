@@ -1,5 +1,6 @@
 #include "AbstractItem.h"
 #include "PlayerData.h"
+#include "PlatformSpecificForPlanner.h"
 
 // Unreal version needs this include
 #ifndef TEXT_ONLY_HTN
@@ -64,6 +65,7 @@ std::string ItemTypeToString(EItemType itemType)
 		return "Syringe";
 	}
 	ThrowException("ERROR: NO ITEM NAME");
+	return "ERROR: NO ITEM NAME";
 }
 
 EItemType GetRandomItemType()

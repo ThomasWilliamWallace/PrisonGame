@@ -9,5 +9,6 @@ public class HardTime2EditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 		ExtraModuleNames.Add("HardTime2");
+		//ExtraModuleNames.Add("htn_planner");
 	}
 }

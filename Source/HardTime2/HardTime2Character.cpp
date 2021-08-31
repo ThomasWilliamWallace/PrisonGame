@@ -24,6 +24,7 @@
 #include "Runtime/Core/Public/Internationalization/Text.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "Math/Vector.h"
+#include "PlatformSpecificForPlanner.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AHardTime2Character

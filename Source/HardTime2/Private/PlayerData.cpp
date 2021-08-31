@@ -30,14 +30,14 @@ void UPlayerData::PrintPlayer()
     } else {
         ss << "null\n";
     }
-    if (missionClass.get() != nullptr) {
+    if (missionClass != nullptr) {
         ss << missionClass->MissionNarrative() << "\n";
     }
     else {
         ss << "NULLPTR\n";
     }
 	ss << "missionOffer=";
-	if (missionOffer.get() != nullptr) {
+	if (missionOffer != nullptr) {
 		ss << missionOffer->MissionNarrative() << "\n";
 	} else {
 		ss << "NULLPTR\n";

@@ -2,11 +2,11 @@
 #include "Locations.h"
 #include "HTNPrimitives.h"
 #include "pLog.h"
-#include "PlatformSpecific.h"
 #include "EMissions.h"
 #include "Missions.h"
 #include "ActorItem.h"
 #include "HTNWorldState.h"
+#include "PlayerData.h"
 
 //***********************************************************
 AlreadyInLibraryMethod::AlreadyInLibraryMethod(): HTNMethod("AlreadyInLibraryMethod")
@@ -307,7 +307,7 @@ HaveItemMethod::HaveItemMethod(EItemType itemType): HTNMethod("HaveItemMethod"),
 bool HaveItemMethod::Preconditions(IHTNWorldState const& iHTNWorldState)
 {
     HTNWorldState const& state = static_cast<HTNWorldState const&>(iHTNWorldState);
-    if (GetRaw(state.m_itemCarriedPtr) != nullptr
+    if (state.m_itemCarriedPtr != nullptr
         && state.m_itemCarriedPtr->m_itemType == m_itemType)
     {
         return true;

@@ -3,6 +3,8 @@
 #include <vector>
 #include "HTNPlanner.h"
 #include "IHTNWorldState.h"
+#include "EItemType.h"
+#include "PlatformSpecific.h"
 
 class LocationClass;
 

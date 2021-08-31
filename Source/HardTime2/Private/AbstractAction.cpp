@@ -2,6 +2,7 @@
 #include "HTNWorldState.h"
 #include "EItemType.h"
 #include "Missions.h"
+#include "PlatformSpecificForPlanner.h"
 
 std::string ActionToString(EActions action)
 {
@@ -43,6 +44,7 @@ std::string ActionToString(EActions action)
             ThrowException("ERROR NO ACTION");
     }
     ThrowException("ERROR UnrecognisedAction");
+    return "ERROR UnrecognisedAction";
 }
 
 std::string BaseAction::ToString() {

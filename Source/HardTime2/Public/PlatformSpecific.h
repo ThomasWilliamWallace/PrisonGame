@@ -2,26 +2,12 @@
 #include <memory>
 #include <string>
 
-
-class HTNNode;
-class HTNPrimitive;
-class HTNCompound;
-class HTNMethod;
-struct StackNode;
 class AbstractItem;
 class SimItem;
 class UPlayerData;
 
-typedef std::shared_ptr<HTNPrimitive> HTNPrimitivePtr;
-typedef std::shared_ptr<HTNCompound> HTNCompoundPtr;
-typedef std::shared_ptr<HTNNode> HTNNodePtr;
-typedef std::shared_ptr<HTNMethod> HTNMethodPtr;
-typedef std::shared_ptr<StackNode> StackNodePtr;
-
 typedef std::shared_ptr<AbstractItem> AbstractItemPtr;
 typedef std::shared_ptr<SimItem> SimItemPtr;
-
-typedef UPlayerData ParentPlayerData;
 
 #ifdef TEXT_ONLY_HTN
 typedef uint8_t uint8;
@@ -95,13 +81,10 @@ void RemoveCurrent(Container &container, Iterator iter)
 
 typedef AbstractItem RealItemType;
 
-#define check(X) assert(X)
-
 #else
 
 #include "Runtime/Core/Public/Containers/Map.h"
 
-#define assert(X) check(X)
 class UPlayerData;
 class URelationship;
 
@@ -158,22 +141,5 @@ typedef AActorItem RealItemType;
 
 #endif
 
-HTNPrimitive* GetRaw(HTNPrimitivePtr ptr);
-HTNCompound* GetRaw(HTNCompoundPtr ptr);
-HTNNode* GetRaw(HTNNodePtr ptr);
-HTNMethod* GetRaw(HTNMethodPtr ptr);
-AbstractItem* GetRaw(AbstractItemPtr ptr);
-SimItem* GetRaw(SimItemPtr ptr);
-
-HTNPrimitivePtr CastNodeToPrimitive(HTNNodePtr htnNodePtr);
-HTNCompoundPtr CastNodeToCompound(HTNNodePtr htnNodePtr);
-HTNMethodPtr CastNodeToMethod(HTNNodePtr htnNodePtr);
-
-StackNodePtr MakeSharedStackNodePtr(HTNNodePtr htnNodePtr, bool isOr);
-HTNNodePtr MakeShareableCompound(HTNCompound &htnCompound);
-
 AbstractItemPtr MakeSharedAbstractItemPtr(EItemType itemType, ELocations location, UPlayerData* carryingPlayer);
 SimItemPtr MakeSharedSimItemPtr(RealItemType* realItem, EItemType itemType, ELocations location, UPlayerData* carryingPlayer);
-
-// Encapsulated because Unreal Engine uses a different exception system
-[[noreturn]] void ThrowException(const std::string& errorMessage);
